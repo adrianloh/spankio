@@ -1,0 +1,69 @@
+<html>
+<head>
+    <title>{{ escape(username) }}</title>
+    <!-- Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Condiment' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Averia+Serif+Libre:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
+    <link href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+    <!-- JQuery -->
+    <!--    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js"></script> -->
+    <!-- NOTE: Version 1.6.4 of JQuery is required by Total Control -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/js/contextMenu/jquery.contextmenu.css" />
+    <script type="text/javascript" src="/js/contextMenu/jquery.contextmenu.js"></script>
+
+    <!-- 360 Player -->
+    <link rel="stylesheet" type="text/css" href="/360player/360player.css" />
+    <script type="text/javascript" src="/360player/berniecode-animator.js"></script>
+    <script type="text/javascript" src="/360player/soundmanager2.js"></script>
+    <link rel="stylesheet" type="text/css" href="/360player/flashblock.css" />
+    <script type="text/javascript" src="/360player/360player.js"></script>
+
+    <!-- Total Control Music Player -->
+    <!-- NOTE: Total Control and 360 both rely on SoundManager2, we loaded it for 360,
+        Total Control will rely on the same instance.
+    -->
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+    <link type="text/css" href="/TotalControl/javascripts/jscrollpane/style/jquery.jscrollpane.css" rel="stylesheet" media="all" />
+    <script type="text/javascript" src="/TotalControl/javascripts/jscrollpane/script/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="/TotalControl/javascripts/jscrollpane/script/jquery.jscrollpane.js"></script>
+    <script type="text/javascript" src="/TotalControl/TotalControl.js"></script>
+
+    <script type="text/javascript" src="/js/livesearch.js"></script>
+
+    <!-- Mine -->
+    <link rel="stylesheet" type="text/css" href="/css/index.css" />
+    <script type="text/javascript" src="/js/index.js"></script>
+
+</head>
+<body>
+<div class="st-scroll">
+    <div id="lightBox">
+        <div id="blockHead"></div>
+        <img id="closeButton" src="/img/close.png" />
+        <div id="lyricsTitle"></div>
+        <pre id="lyricsText"></pre>
+    </div>
+    <div id="searchForm">
+        <div id="track_count_current"></div>
+        <div id="track_count_total"></div>
+        <form id="searchLyrics">
+                <input type="text" name="lyrics" id="lyrics" size="120" value="" class="text-input"/>
+                <input type="submit" name="submit" class="button" id="submit_btn" value="Search"/>
+        </form>
+    </div>
+    <section id="resultsTotal">
+		<img id="prev_page" src="/img/arrow.png" />
+		<img id="next_page" src="/img/arrow.png" />
+    </section>
+    <br/>
+    <section id="resultsSection"></section>
+    <ul id="total-playlist"></ul>
+</div>
+</body>
+</html>

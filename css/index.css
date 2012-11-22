@@ -1,0 +1,336 @@
+html.busy, html.busy * {
+	cursor: wait;
+}
+BODY
+{
+	background: url(https://lh5.googleusercontent.com/-IK5ie7TDN-U/UK52LAxvTPI/AAAAAAAAVYo/RXpAyu6KUCk/s0/oldpaper.jpg) no-repeat fixed center center;
+	background-position: -20% 20%;
+	background-size: cover;
+	font-size: 12px;
+	line-height: 1.5em;
+	font-weight: 300;
+	text-align: center;
+	overflow: hidden;
+}
+A
+{
+	color: #FFFFFF;
+	text-decoration: none;
+	-webkit-transition: color 0.3s ease-out;
+	-moz-transition: color 0.3s ease-out;
+	-o-transition: color 0.3s ease-out;
+	transition: color 0.3s ease-out;
+}
+A:hover
+{
+	color: #000;
+}
+
+/* Disable the blur border around selected/focused elements */
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+/* Disable the bullet thing on list items */
+ul
+{
+	margin-top: 92;
+	list-style-type: none;
+	/*list-style-position: inside;
+	list-style-image: url('/static/img/finger.png');
+	*/
+}
+
+/* The search form
+==================================================*/
+FORM
+{
+	position: fixed;
+	font-size: 68px;
+	font-weight: 900;
+	width: 80%;
+	top: 5%;
+	left: 10%;
+	margin: 0 auto;
+}
+INPUT[type="text"], TEXTAREA
+{
+	font: 62.5%/1 Oswald;
+	text-shadow: -0.07em 0 red, 0.07em 0 cyan;		/* This creates the 3D effect, pretty easy, eh? */
+	letter-spacing: 0px;							/* make sure the letters don't overlap */
+	height: 80px;
+	width: 700px;
+	padding: 3px 20px 5px;
+/*The Fallback*/
+	background-color: rgba(255, 255, 255, 1);
+	border: 4px solid black;
+	color: #000000;
+}
+INPUT::-webkit-input-placeholder
+{
+	color: #222;
+}
+INPUT:-moz-placeholder
+{
+	color: #222;
+}
+INPUT:-ms-input-placeholder
+{
+	color: #222;
+}
+#searchForm {
+	z-index:200;
+	position:fixed;
+	top: 0px;
+	left:0px;
+	width:100%;
+	height:15%;
+	background: url(https://lh5.googleusercontent.com/-76GWCdpGT9c/UK52MIV1bFI/AAAAAAAAVYs/E8tq7ECxTxw/s0/bg3.jpg) -300px;
+	-moz-box-shadow: 0 020px 20px rgba(0, 0, 0, 0.7);
+	-webkit-box-shadow: 0 020px 20px rgba(0, 0, 0, 0.7);
+	box-shadow: 0 020px 20px rgba(0, 0, 0, 0.7);
+}
+.btn
+{
+	width: 40px;
+	height: 40px;
+	background: url(/static/img/subscribe.png) no-repeat 0 0 !important;
+	border: none !important;
+	text-indent: -9999px;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+
+/* Navigation & Page Number
+==================================================*/
+#pageNumber {
+	display:none;
+	z-index:500;
+	position: fixed;
+	letter-spacing: -1.8px;
+	color: #ffffff;
+	font: 150px "Oswald";
+	left: 7%;
+	top: 7%;
+}
+#track_count_current {
+	z-index: 501;
+	position: fixed;
+	letter-spacing: -1.8px;
+	color: rgb(255, 255, 255);
+	font: 51px "Oswald";
+	left: 16%;
+	top: -1.5%;
+}
+#track_count_total {
+	z-index: 500;
+	position: fixed;
+	letter-spacing: -1.8px;
+	color: rgb(0, 0, 0);
+	font: 51px "Oswald";
+	left: 24%;
+	top: -1.5%;
+}
+#prev_page{
+	z-index:500;
+	position: fixed;
+	left: 7%;
+	top: 7%;
+	cursor: pointer;
+	-moz-transform:rotate(7deg); /* Firefox */
+	-webkit-transform:scale(0.72) rotate(7deg); /* Safari and Chrome */
+}
+#next_page{
+	z-index:500;
+	position: fixed;
+	left: 18%;
+	top: 8%;
+	cursor: pointer;
+	-moz-transform:scale(0.5) rotate(170deg); /* Firefox */
+	-webkit-transform:scale(0.7) rotate(170deg); /* Safari and Chrome */
+}
+
+/* MusixMatch Results section
+==================================================*/
+.trackEntry {
+	min-height: 130px;
+	width: 600px;
+	padding-top: 25px;
+	padding-right: 200px;
+	margin-bottom: auto;
+	background: url(/img/tape1.png) no-repeat fixed -50px -110px;
+}
+
+.trackName
+{
+	color: #111111;
+	font: 500 33px Condiment;
+}
+.trackArtist
+{
+	letter-spacing: -1.8px;
+	color: #f3efb5;
+	font: italic 700 24px "Averia Serif Libre";
+	margin-top: -20px;
+	cursor:pointer;
+}
+#resultsSection
+{
+	text-shadow: 2px 2px 2px rgba(151, 24, 64, 0.2);
+	position: absolute;
+	width: 120%;
+	top: 15%;
+	left: 0px;
+	text-align: center;
+	line-height: 20px;
+	-webkit-backface-visibility: hidden;
+	height: 100%;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+/* The iTunes player
+==================================================*/
+
+#total-playlist {
+	-moz-box-shadow: 5px 10px 100px rgba(0, 0, 0, 0.87);
+	-webkit-box-shadow: 5px 10px 100px rgba(0, 0, 0, 0.87);
+	box-shadow: 5px 10px 100px rgba(0, 0, 0, 0.87);
+	float: right;
+	margin-right: 50px;
+	margin-top: 20%;
+}
+
+/* The thing that pops up to display lyrics
+==================================================*/
+#lightBox {
+	background: white;
+	opacity: 1;
+	z-index: 9999;
+	position: fixed;
+	left: 10%;
+	top: 16%;
+	width: 70%;
+	height: 78%;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	-moz-box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
+	-webkit-box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
+	box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
+}
+#lyricsTitle {
+	text-shadow: 0 1px 0 #ccc,
+	 0 2px 0 #c9c9c9,
+	 0 3px 0 #bbb,
+	 0 4px 0 #b9b9b9,
+	 0 5px 0 #aaa,
+	 0 6px 0 #aaa,
+	 0 6px 1px rgba(0,0,0,.1),
+	 0 0 5px rgba(0,0,0,.1),
+	 0 1px 3px rgba(0,0,0,.3),
+	 0 3px 5px rgba(0,0,0,.2),
+	 0 5px 10px rgba(0,0,0,.25),
+	 0 10px 10px rgba(0,0,0,.2),
+	 0 20px 20px rgba(0,0,0,.15);
+	left: 13%;
+	top: 19%;
+	height: 66px;
+	width: 60%;
+	font: 70px Oswald;
+	letter-spacing: -2px;
+	text-align: left;
+	text-overflow: ellipsis;
+	position: fixed;
+	line-height: 53px;
+	color: rgb(255, 255, 255);
+	font-weight: 700;
+	z-index: 10;
+}
+#lyricstext {
+	font: 15px/23px "Arvo";
+	letter-spacing: 0px;
+	margin-top: 30%;
+	display: inline-block;
+}
+#closeButton {
+	cursor:pointer;
+	position: fixed;
+	left: 8%;
+	top:33%;
+}
+#blockhead {
+	color: white;
+	position: fixed;
+	width: 225px;
+	left: 12%;
+	z-index: 10;
+	height: 20px;
+	letter-spacing: -20px;
+	top: 25%;
+	font-size: 158px;	
+	text-shadow: 0 1px 0 #ccc,
+	 0 2px 0 #c9c9c9,
+	 0 3px 0 #bbb,
+	 0 4px 0 #b9b9b9,
+	 0 5px 0 #aaa,
+	 0 6px 1px rgba(0,0,0,.1),
+	 0 0 5px rgba(0,0,0,.1),
+	 0 1px 3px rgba(0,0,0,.3),
+	 0 3px 5px rgba(0,0,0,.2),
+	 0 5px 10px rgba(0,0,0,.25),
+	 0 10px 10px rgba(0,0,0,.2),
+	 0 20px 20px rgba(0,0,0,.15);
+}
+
+/* List items of tracks from VK
+==================================================*/
+.vkMessage {
+	font: bold 18px "PT Sans Narrow";
+	letter-spacing: 3px;
+	margin-top: -68px;
+	margin-bottom: 22px;
+}
+.vkTrackEntry {
+	background-color: silver;
+    height:50px;
+	width: 90%;
+	margin-bottom: 2px;
+}
+.vkDownloadLink {
+	font: 16px "PT Sans Narrow";
+	letter-spacing: 0px;
+	color: #4e6af1;
+	text-overflow:ellipsis;
+}
+.lickButton {
+	cursor: pointer;
+	margin-right: 10px;
+}
+
+.highlight {
+	background-color: red;
+}
+
+#playlists-list {
+	display:none;
+	height: 500;
+	width: 193px;
+	background-color: white;
+	position: absolute;
+	left: -218px;
+	top: -92px;
+	padding: 10px;
+	border: solid;
+	border-color: #D7D7D7;
+	border-width: 1px;
+}
+
+
+
+
+
+
