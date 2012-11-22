@@ -1,1 +1,1 @@
-web: ./venv/bin/gunicorn -k tornado --workers=4 --bind=0.0.0.0:$PORT hello
+web: python hello.py
