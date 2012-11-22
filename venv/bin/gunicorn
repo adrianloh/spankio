@@ -1,4 +1,4 @@
-#!/Users/adrianloh/Desktop/site/soundgarden-heroku/venv/bin/python
+#!/usr/bin/python
 # EASY-INSTALL-ENTRY-SCRIPT: 'gunicorn==0.16.1','console_scripts','gunicorn'
 __requires__ = 'gunicorn==0.16.1'
 import sys
