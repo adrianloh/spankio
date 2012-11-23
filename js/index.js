@@ -278,7 +278,7 @@
 
 		$("#lyrics").livesearch({
 			searchCallback: $.searchByWire,
-			innerText: "Open your ears",
+			innerText: "KEEP CALM AND OPEN YOUR EARS",
 			queryDelay:250,
 			minimumSearchLength: 3
 		});
