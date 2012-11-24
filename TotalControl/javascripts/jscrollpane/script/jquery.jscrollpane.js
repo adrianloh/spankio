@@ -56,7 +56,7 @@
 
 (function($,window,undefined){
 
-	$.fn.jScrollPane = function(settings)
+	$.fn.jScrollPane = function(jspPane, settings)
 	{
 		// JScrollPane "class" - public methods are available through $('selector').data('jsp')
 		function JScrollPane(elem, s)
@@ -104,7 +104,7 @@
 
 					elem.width(paneWidth);
 					
-					pane = $('<div class="jspPane" />').css('padding', originalPadding).append(elem.children());
+					pane = $('<div class="'+jspPane+'" />').css('padding', originalPadding).append(elem.children());
 					container = $('<div class="jspContainer" />')
 						.css({
 							'width': paneWidth + 'px',
@@ -805,7 +805,7 @@
 				// loop through parents adding the offset top of any elements that are relatively positioned between
 				// the focused element and the jspPane so we can get the true distance from the top
 				// of the focused element to the top of the scrollpane...
-				while (!e.is('.jspPane')) {
+				while (!e.is('.'+jspPane)) {
 					eleTop += e.position().top;
 					eleLeft += e.position().left;
 					e = e.offsetParent();

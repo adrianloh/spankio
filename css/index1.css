@@ -3,7 +3,7 @@ html.busy, html.busy * {
 }
 BODY
 {
-	background: url(https://lh5.googleusercontent.com/-IK5ie7TDN-U/UK52LAxvTPI/AAAAAAAAVYo/RXpAyu6KUCk/s0/oldpaper.jpg) no-repeat fixed center center;
+/*	background: url(https://lh5.googleusercontent.com/-IK5ie7TDN-U/UK52LAxvTPI/AAAAAAAAVYo/RXpAyu6KUCk/s0/oldpaper.jpg) no-repeat fixed center center;*/
 	background-position: -20% 20%;
 	background-size: cover;
 	font-size: 12px;
@@ -25,26 +25,13 @@ A:hover
 {
 	color: #000;
 }
-#gridpattern {
-	position: fixed;
-	background-size: 4px 4px;
-	background-image: -webkit-repeating-linear-gradient(45deg, rgba(0, 0, 0, .5), rgba(173, 0, 0, .5) 1px, transparent 2px, transparent 15px), -webkit-repeating-linear-gradient(-90deg, rgba(155, 0, 0, 0.46), rgb(0, 0, 0) 1px, transparent 2px, transparent 15px);
-	width: 110%;
-	height: 110%;
-	top: -10px;
-	right: -10px;
-}​
+
 /* Disable the blur border around selected/focused elements */
 input:focus,
 select:focus,
 textarea:focus,
 button:focus {
     outline: none;
-}
-
-ul.results-list {
-	margin-top: 28;	
-	list-style-type: none;
 }
 
 /* Disable the bullet thing on list items */
@@ -81,7 +68,6 @@ INPUT[type="text"], TEXTAREA
 	background-color: rgba(255, 255, 255, 1);
 	border: 4px solid black;
 	color: #000000;
-	-webkit-transform: rotate(-3deg);
 }
 INPUT::-webkit-input-placeholder
 {
@@ -101,11 +87,8 @@ INPUT:-ms-input-placeholder
 	top: 0px;
 	left:0px;
 	width:100%;
-	height:17%;
+	height:15%;
 /*	background: url(https://lh5.googleusercontent.com/-76GWCdpGT9c/UK52MIV1bFI/AAAAAAAAVYs/E8tq7ECxTxw/s0/bg3.jpg) -300px;*/
-	-moz-box-shadow: 0 020px 20px rgba(0, 0, 0, 0.7);
-	-webkit-box-shadow: 0 020px 20px rgba(0, 0, 0, 0.7);
-	box-shadow: 0 020px 20px rgba(0, 0, 0, 0.7);
 }
 .btn
 {
@@ -178,6 +161,7 @@ INPUT:-ms-input-placeholder
 	margin-bottom: auto;
 	background: url(/img/tape1.png) no-repeat fixed -50px -110px;
 }
+
 .trackName
 {
 	color: #111111;
@@ -196,7 +180,7 @@ INPUT:-ms-input-placeholder
 	text-shadow: 2px 2px 2px rgba(151, 24, 64, 0.2);
 	position: absolute;
 	width: 120%;
-	top: 17%;
+	top: 15%;
 	left: 0px;
 	text-align: center;
 	line-height: 20px;
@@ -210,21 +194,19 @@ INPUT:-ms-input-placeholder
 ==================================================*/
 
 #total-playlist {
-	position:absolute;
-	top: 12%;
-	left:  63%;
 	-moz-box-shadow: 5px 10px 100px rgba(0, 0, 0, 0.87);
 	-webkit-box-shadow: 5px 10px 100px rgba(0, 0, 0, 0.87);
 	box-shadow: 5px 10px 100px rgba(0, 0, 0, 0.87);
+	float: right;
+	margin-right: 50px;
+	margin-top: 20%;
 }
 
 /* The thing that pops up to display lyrics
 ==================================================*/
 #lightBox {
-	outline-color: black;
-	outline: 3px;
-	background-size: 2px 3px;
-	background-image: -webkit-repeating-linear-gradient(90deg, rgba(0, 0, 0, .7), rgb(255, 255, 255) 1px, transparent 2px, transparent 15px), -webkit-repeating-linear-gradient(-90deg, rgba(255, 255, 255, 0.6), rgb(0, 0, 0) 1px, transparent 2px, transparent 15px);
+	background: white;
+	opacity: 1;
 	z-index: 9999;
 	position: fixed;
 	left: 10%;
@@ -238,16 +220,13 @@ INPUT:-ms-input-placeholder
 	box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
 }
 h1 {
-	opacity: 0.96;
-	top: -249px;
-	position: fixed;
 	text-align: center;
 	text-indent: -.12em;
-	color: rgb(249, 253, 255);
+	color: #f4f1de;
 	font: 360px "anchor-web-1","anchor-web-2", 'Impact', sans-serif;
 	font-weight: 900;
 	line-height: 1;
-	text-shadow: #863027 .01em .01em 0, #863027 .02em .02em 0, #863027 .03em .03em 0, #863027 .04em .04em 0, #863027 .05em .05em 0, #863027 .06em .06em 0, #863027 .07em .07em 0, #863027 .08em .08em 0, #863027 .09em .09em 0, #863027 .1em .1em 0;
+	text-shadow: #863027 .01em .01em 0, #863027 .02em .02em 0, #863027 .03em .03em 0, #863027 .04em .04em 0, #863027 .05em .05em 0, #863027 .06em .06em 0, #863027 .07em .07em 0,	 #863027 .08em .08em 0, #863027 .09em .09em 0, #863027 .1em .1em 0;
 }
 #lyricsTitle {
 	text-shadow: 0 1px 0 #ccc,
@@ -278,8 +257,7 @@ h1 {
 	z-index: 10;
 }
 #lyricstext {
-	color: white;
-	font: 17px/26px "proxima-nova-1";
+	font: 15px/23px "Arvo";
 	letter-spacing: 0px;
 	margin-top: 30%;
 	display: inline-block;
@@ -317,7 +295,6 @@ h1 {
 /* List items of tracks from VK
 ==================================================*/
 .vkMessage {
-	color: white;
 	font: bold 18px "PT Sans Narrow";
 	letter-spacing: 3px;
 	margin-top: -68px;
@@ -345,7 +322,7 @@ h1 {
 }
 
 .playlist-bout-to-get-some {
-	background-color: #fdfd71 !important;
+	background-color: #fdfd71;
 }
 
 .playlist-row {
@@ -363,10 +340,9 @@ h1 {
 }
 
 #playlist-container {
-	background: url(/TotalControl/images/default-control-panel.png) no-repeat;
-	display:none;
-	padding-top: 72px;
-	height: 557px;
+	display:block;
+    padding-top:35px;
+    height: 596px;
     width: 193px;
     background-color: #ffffff;
     position: absolute;
@@ -376,11 +352,13 @@ h1 {
     border-color: #D7D7D7;
     border-width: 1px;
     overflow: auto;
-	-moz-box-shadow: -30px 10px 30px rgba(0, 0, 0, 0.57);
-	-webkit-box-shadow: -30px 10px 30px rgba(0, 0, 0, 0.57);
-	box-shadow: -30px 10px 30px rgba(0, 0, 0, 0.57);
-	opacity: 1;
 }
+
+.playlist-hide {
+	display: none;
+}
+
+
 
 
 

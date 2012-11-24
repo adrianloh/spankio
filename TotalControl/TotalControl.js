@@ -251,7 +251,7 @@ soundManager.url = '/TotalControl/javascripts/soundmanager/swf';
 								newSrc = newMp3;
 							}
 							var newRow = "<div onClick='' class='total-row can-play' ><div type='checkbox' onClick='' class='total-checked'></div><div class='total-not-playing'></div><div class='total-title' src='" + newSrc + "'>" + newTitle + "</div><div class='total-artist'>" + newArtist + "</div><div style='clear:both;'></div></div>";	
-							thisPlayer.find(".jspPane").append(newRow);
+							thisPlayer.find(".total_jspPane").append(newRow);
 						}
 						else if(supportOgg && browser != "Safari")
 						{
@@ -259,7 +259,7 @@ soundManager.url = '/TotalControl/javascripts/soundmanager/swf';
 							{
 								newSrc = newOgg;	
 								var newRow = "<div onClick='' class='total-row can-play' ><div type='checkbox' onClick='' class='total-checked'></div><div class='total-not-playing'></div><div class='total-title' src='" + newSrc + "'>" + newTitle + "</div><div class='total-artist'>" + newArtist + "</div><div style='clear:both;'></div></div>";
-								thisPlayer.find(".jspPane").append(newRow);
+								thisPlayer.find(".total_jspPane").append(newRow);
 							}
 						}
 						else if(supportMp3)
@@ -268,7 +268,7 @@ soundManager.url = '/TotalControl/javascripts/soundmanager/swf';
 							{
 								newSrc = newMp3;	
 								var newRow = "<div onClick='' class='total-row can-play' ><div type='checkbox' onClick='' class='total-checked'></div><div class='total-not-playing'></div><div class='total-title' src='" + newSrc + "'>" + newTitle + "</div><div class='total-artist'>" + newArtist + "</div><div style='clear:both;'></div></div>";
-								thisPlayer.find(".jspPane").append(newRow);
+								thisPlayer.find(".total_jspPane").append(newRow);
 							}
 						}
 						else
@@ -283,7 +283,7 @@ soundManager.url = '/TotalControl/javascripts/soundmanager/swf';
 							}
 							
 							var newRow = "<div onClick='' class='total-row can-play' ><div type='checkbox' onClick='' class='total-checked'></div><div class='total-not-playing'></div><div class='total-title' src='" + newSrc + "'>" + newTitle + "</div><div class='total-artist'>" + newArtist + "</div><div style='clear:both;'></div></div>";	
-							thisPlayer.find(".jspPane").append(newRow);
+							thisPlayer.find(".total_jspPane").append(newRow);
 						}
 						
 						
@@ -313,12 +313,17 @@ soundManager.url = '/TotalControl/javascripts/soundmanager/swf';
 		
 		if(options.addSongEnabled != true)
 		{
-			thisPlayer.find(".total-add-song").hide();	
+			thisPlayer.find(".total-add-song").hide();
 		}
 		else
 		{
 			thisPlayer.find(".total-add-song").live("click", function () {
-				$("#add-song-dialog").dialog("open");
+				var div = $("#playlist-container");
+				if (div.css("display")=='block') {
+					div.css("display", "none");
+				} else {
+					div.css("display", "block");
+				}
 			});
 		}
 		///////////////////////////////////////////////////////////////
@@ -419,14 +424,15 @@ soundManager.url = '/TotalControl/javascripts/soundmanager/swf';
 		// Set max height of playlist
 		thisPlayer.find(".total-playlist-songs").css("height", options.playlistHeight + "px");
 		////////////////////////////////////////////////////////////////
-		
+
+		 $('<div class="total_jspPane"></div>').appendTo(".total-playlist-songs");
 		// Attach custom scrollbar to playlist
-		thisPlayer.find(".total-playlist-songs").jScrollPane({
-			autoReinitialise: true,
-			scrollbarWidth: 0,
-			scrollbarMargin: 0
-		});
-		thisPlayer.find(".jspVerticalBar").css("margin-left", "0px");
+//		thisPlayer.find(".total-playlist-songs").jScrollPane("total_jspPane", {
+//			autoReinitialise: true,
+//			scrollbarWidth: 0,
+//			scrollbarMargin: 0
+//		});
+//		thisPlayer.find(".jspVerticalBar").css("margin-left", "0px");
 		////////////////////////////////////////////////////////////////
 		
 		
@@ -449,29 +455,31 @@ soundManager.url = '/TotalControl/javascripts/soundmanager/swf';
 		////////////////////////////////////////////////////////////////
 		
 		// Enable sortable playlist 
-		if(options.playlistSortable == true)
-		{
-			thisPlayer.find(".total-playlist-songs").sortable({ 
-				update : function () {
-					if(options.style = "default.css")
-					{
-						thisPlayer.find(".total-row").css("background-color" , "#FBFBFB");
-						thisPlayer.find(".total-row:odd").css("background-color" , "#F5F5F5");
-					}
-					if(options.style = "dark.css")
-					{
-						thisPlayer.find(".total-row").css("background-color" , "#CCCCCC");
-						thisPlayer.find(".total-row:odd").css("background-color" , "#999999");
-					}
-					if(options.style = "light.css")
-					{
-						thisPlayer.find(".total-row").css("background-color" , "#FBFBFB");
-						thisPlayer.find(".total-row:odd").css("background-color" , "#F5F5F5");
-					}
-				},
-				items: '.total-row'
-			});	
-		}
+//		if(options.playlistSortable == true)
+//		{
+//			thisPlayer.find(".total-playlist-songs").sortable({
+//				connectWith:"#playlist-container",
+//				update : function () {
+//					$(document).trigger("playlistDidChange");
+//					if(options.style = "default.css")
+//					{
+//						thisPlayer.find(".total-row").css("background-color" , "#FBFBFB");
+//						thisPlayer.find(".total-row:odd").css("background-color" , "#F5F5F5");
+//					}
+//					if(options.style = "dark.css")
+//					{
+//						thisPlayer.find(".total-row").css("background-color" , "#CCCCCC");
+//						thisPlayer.find(".total-row:odd").css("background-color" , "#999999");
+//					}
+//					if(options.style = "light.css")
+//					{
+//						thisPlayer.find(".total-row").css("background-color" , "#FBFBFB");
+//						thisPlayer.find(".total-row:odd").css("background-color" , "#F5F5F5");
+//					}
+//				},
+//				items: '.total-row'
+//			});
+//		}
 		////////////////////////////////////////////////////////////////
 		
 		// Enable checkboxes
@@ -1277,65 +1285,6 @@ soundManager.url = '/TotalControl/javascripts/soundmanager/swf';
 						
 					}
 			}
-		});
-
-		 // Highlight selected song
-		function highlightCurrent(selected_row) {
-			$(".total-row").filter(function (i) {
-				return $(this).css('background-color')=='rgb(1, 143, 239)'
-			}).css("background-color","#ffffff");
-			selected_row.css("background-color","018fef");
-		}
-
-		// Highlight on click
-		thisPlayer.find(".total-row").live("click", function (event) {
-			highlightCurrent($(this))
-		});
-
-		// Download/Remove song context menu
-		var playerContextMenu = [
-			 {'Lyrics':{
-				 onclick:function(menuItem,menu) {
-					 var div = $(this),
-						 mid = div.attr("mid"),
-						 title = div.children()[2].innerText,
-						 artist = div.children()[3].innerText;
-					 if (mid) {
-						 $.displayLyrics(title, artist, mid);
-					 } else {
-						 $.searchByWire(title + " " + artist)
-					 }
-				 },
-				 title:'This is the hover title',
-				 disabled:false
-			 }
-			 },
-			 {'Remove':{
-				 onclick:function(menuItem,menu) {
-						$(this).remove(); $(document).trigger("playlistDidChange");
-				 },
-				 disabled:false
-			 }
-			 },
-			{'Download':{
-				onclick:function(menuItem,menu) {
-					var url = $(this).children()[2].getAttribute("src");
-					$('<iframe width="0" height="0" frameborder="0" src="@"></iframe>'.replace("@",url)).appendTo("body");
-					setTimeout(function(){
-						$("iframe").remove();
-					},10000);
-				},
-				disabled:false
-			}
-			}
-		];
-
-		// Cheat the bind of context menu.
-		var cmenu = $("document").contextMenu(playerContextMenu,{theme:'osx'});
-		thisPlayer.find(".total-row").live("contextmenu", function (event) {
-			highlightCurrent($(this));
-			cmenu.show($(this), event);
-			return false;
 		});
 
 		var lastClickTime;

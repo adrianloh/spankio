@@ -14,25 +14,6 @@
 		if (number<=9999) { number = ("000"+number).slice(-4); }
 		return number;
 	}
-	var byProperty = function(prop) {
-		return function(a,b) {
-			if (typeof a[prop] == "number") {
-				return (a[prop] - b[prop]);
-			} else {
-				return ((a[prop] < b[prop]) ? -1 : ((a[prop] > b[prop]) ? 1 : 0));
-			}
-		};
-	};
-
-	var object_to_list = function(o) {
-		var mylist = [];
-		for(var key in o) {
-			if (o.hasOwnProperty(key)) {
-				mylist.push(o[key]);
-			}
-		}
-		return mylist;
-	};
 
 	$(document).ready(function () {
 
@@ -40,20 +21,33 @@
 			search_term = "",
 			store = {},
 			track_fragment = "",
-			current_playlist = "mainlibrary",
-			library = {mainlibrary:{rev:0, playlist:[]}};
+			current_playlist = "Main Library";
+
+		var username = $("title").text();
+		if (username=='Welcome!') {
+			username = "Guest";
+		}
 
 		var vk_search_in_progress = false,
 			mx_get_lyrics_in_progress = false;
 
-		// Hide the lightbox on first load
-		// $("#blockHead").html('&#9609;&#9609;&#9609;&#9609;&#9609;');
-		$("#lightBox").hide();
-		(new Image()).src = "/img/tape1.png";
-		(new Image()).src = "/img/lick.png";
-		(new Image()).src = "/TotalControl/images/default-lcd-screen_saving.png";
-		(new Image()).src = "/TotalControl/images/default-lcd-screen_unsaved.png";
+		$("#lightBox").jScrollPane("lightBox_jspPane", {
+			autoReinitialise: true,
+			scrollbarWidth: 0,
+			scrollbarMargin: 0
+		}).hide();
 
+		// Preload images
+		$.each([
+			"/img/tape1.png",
+			"/img/lick.png",
+			"/TotalControl/images/default-lcd-screen.png",
+			"/TotalControl/images/default-lcd-screen_unsaved.png"
+		], function(i, src) {
+			(new Image()).src = src
+		});
+
+		// Track our position along the lyrics results list
 		$("#resultsSection").scroll(function() {
 			var lower_bound = $(document).height(),
 				upper_bound = $("#searchForm").height()*5;
@@ -65,73 +59,103 @@
 			});
 		});
 
+		//
+		// ADD A NEW TRACK TO THE CURRENT PLAYLIST
+		//
 		var addToPlaylist = function(track, callback) {
 			var data = track_fragment.replace("@MID@", track.mid).replace("@ARTIST@", track.artist).replace("@TITLE@", track.title).replace("@URL@", track.url);
-			$(data).prependTo(".jspPane");
+			$(data).prependTo(".total_jspPane");
 			if (callback) {
 				callback();
 			}
 		};
 
-		var saveAttempt = 0;
-		$(document).bind("playlistDidChange", function saveCurrentPlaylist(e){
-			$(".total-lcd-screen").css("background-image","url(/TotalControl/images/default-lcd-screen_saving.png)");
+		//
+		// SAVE THE CURRENT PLAYLIST
+		//
+		$(document).bind("playlistDidChange", function saveCurrentPlaylist(e) {
 			var playlist = [];
+			playerLCD.loading();
 			$(".total-row").each(function(i,div) {
-				var track = {};
-				track.mid = div.getAttribute("mid");
-				track.title = div.children[2].innerText;
-				track.url = div.children[2].getAttribute("src");
-				track.artist = div.children[3].innerText;
-				playlist.push(track);
+				div = $(div);
+				playlist.push({
+					mid: div.attr("mid"),
+					artist: div.find(".total-artist").text(),
+					title: div.find(".total-title").text(),
+					url: div.find(".total-title").attr("src")
+				});
 			});
-			$(".total-song-amount").text(playlist.length + " Songs");
+			playerLCD.status(current_playlist, playlist.length);
+			var req_url = "/playlist/" + username + " PLAYLIST " + encodeURIComponent(current_playlist);
+			console.log("Saving to: ".concat(req_url));
 			$.ajax({
 				type:'PUT',
-				url: "/playlist/" + $("title").text() + "@" + current_playlist,
-				data:{rev:library[current_playlist].rev, playlist:JSON.stringify(playlist)},
+				url: req_url,
+				data:{data:JSON.stringify(playlist)},
 				success: function(data) {
-					var res = JSON.parse(data);
-					if (res.ok) {
-						var pname = res.id.split("_").slice(-1);
-						library[pname].rev = res.rev;
-						$(".total-lcd-screen").css("background-image","url(/TotalControl/images/default-lcd-screen.png)");
-						saveAttempt=0;
-					} else if (saveAttempt===0) {
-						saveAttempt++;
-						setTimeout(function(){
-							$(document).trigger("playlistDidChange");
-						},10000)
+					if (data) {
+						playerLCD.good()
 					} else {
-						$(".total-lcd-screen").css("background-image","url(/TotalControl/images/default-lcd-screen_unsaved.png)");
-						saveAttempt=0;
+						playerLCD.bad()
 					}
 				}
 			})
 		});
 
-		function populatePlaylist() {
-			var username = $("title").text();
-			if (username) {
-				var url = "/playlist/" + username + "@" + current_playlist;
-				$.getJSON(url, function(data) {
-					if (data.playlist.length>0) {
-						library[current_playlist].rev = data.rev;
-						library[current_playlist].playlist = data.playlist;
-						$(".total-row").html("");
-						$.each(data.playlist, function(i, track) {
-							addToPlaylist(track);
-						});
-						$(".total-song-amount").text(data.playlist.length + " Songs");
-					}
-				})
-			}
+		function createPlaylistItemWithName(name) {
+			$('<div class="playlist-row">' + name + '</div>').editable({editBy:'dblclick'}).droppable({
+				hoverClass: "playlist-bout-to-get-some",
+				drop: function( event, ui ) {
+					var this_playlist_name = $(this).text(),
+						dropped_track = $(ui)[0].draggable,
+						track = {mid: dropped_track.attr("mid"),
+								artist: dropped_track.find(".total-artist").text(),
+								title: dropped_track.find(".total-title").text(),
+								url: dropped_track.find(".total-title").attr("src")
+							},
+						req_url = "/playlist/" + username + " PLAYLIST " + encodeURIComponent(this_playlist_name);
+						$.ajax({
+						type:'PUT',
+						url: req_url,
+						data:{data:JSON.stringify(track)},
+						success: function(data) {
+							if (data) {
+								playerLCD.good();
+							} else {
+								playerLCD.bad();
+							}
+						}
+					});
+				}
+			}).appendTo("#playlist-container");
 		}
 
-		// Total player adds tracks to its playlist by naively appending
-		// div layers to itself. Get the div html fragment that we'll
-		// use later to add new songs to the playlist.
-		$.get("/static/track_fragment.txt", function(fragment) {
+		//
+		// LOAD A NEW PLAYLIST
+		//
+		$(".playlist-row").live("click", function loadPlaylistOnClick() {
+			playerLCD.loading();
+			var playlist_to_load = $(this).text();
+			console.log("Loading playlist --> " + playlist_to_load);
+			current_playlist = playlist_to_load;
+			var url = "/playlist/" + username + " PLAYLIST " + encodeURIComponent(playlist_to_load);
+			$.getJSON(url, function(tracklist) {
+				$(".total-row").remove();
+				tracklist = tracklist || [];
+				var total_songs = tracklist.length || 0;
+				$.each(tracklist, function(i, track) {
+					addToPlaylist(track);
+				});
+				playerLCD.status(playlist_to_load, total_songs);
+				playerLCD.good();
+			});
+		});
+
+		var playerLCD = "";
+		$.get("/static/track_fragment.txt", function getTotalSongFragment(fragment) {
+			// Total player adds tracks to its playlist by naively appending
+			// div layers to itself. Get the div html fragment that we'll
+			// use later to add new songs to the playlist.
 			track_fragment = fragment;
 			$("#total-playlist").totalControl({
 				style: "default.css",
@@ -148,13 +172,165 @@
 				miniPlayer:false,
 				isDraggable: true,
 				autoplayEnabled: false,
-				addSongEnabled: false
+				addSongEnabled: true
 			});
-			populatePlaylist();
-			$('<div id="playlists-list"></div>').appendTo("#total-playlist");
-			$.each(["Main Library","90s Hits", "Good Old Days", "Dance Bitches Dance"], function(i,o){
-				$('<div class="playlist-name">' + o + '</div>').appendTo("#playlists-list");
+
+			playerLCD = {
+				screen:$(".total-lcd-screen"),
+				status_line:$(".total-song-amount"),
+				good:function(){
+					this.screen.css("background-image","url(/TotalControl/images/default-lcd-screen.png)");
+				},
+				loading:function(){
+					this.screen.css("background-image","url(/TotalControl/images/default-lcd-screen_saving.png)");
+					return this.screen;
+				},
+				bad:function(){
+					this.screen.css("background-image","url(/TotalControl/images/default-lcd-screen_unsaved.png)");
+				},
+				status:function(playlist, total){
+					this.status_line.text(playlist + "      " + total + " Songs");
+				}
+			};
+
+			$('<div id="playlist-container"></div>').appendTo("#total-playlist");
+
+			//
+			// FIRST LOAD OF SAVED PLAYLISTS
+			//
+			$.getJSON("/playlist/" + username + " PLAYLIST ALL", function(data) {
+				$.each(data, function(i, playlist_name) {
+					createPlaylistItemWithName(playlist_name.split(" PLAYLIST ").slice(-1));
+				});
+				$(".playlist-row").filter(function(i) {
+					return $(this).text()=="Main Library";
+				}).trigger("click");
 			});
+
+			$(".total_jspPane").sortable({
+				update : function (e) {
+					$(document).trigger("playlistDidChange");
+				}
+			});
+
+			$(".total-row").draggable({
+				connectToSortable: ".total_jspPane",
+				helper: "clone",
+				revert: "invalid"
+			});
+
+			function highlightCurrentlySelectedItemInPlayer(selected_row) {
+				var klass = selected_row.attr("class").split(" ")[0];
+				$("."+klass).filter(function (i) {
+					return $(this).css('background-color')=='rgb(1, 143, 239)'
+				}).css("background-color","#ffffff");
+				selected_row.css("background-color","018fef");
+			}
+
+			//
+			//
+			// CONTEXT MENUS
+			//
+			//
+
+			// Download/Remove song context menu
+			var songListContextMenu = [
+				{'Lyrics':{
+					onclick:function(menuItem,menu) {
+						var div = $(this),
+							mid = div.attr("mid"),
+							title = div.children()[2].innerText,
+							artist = div.children()[3].innerText;
+						if (mid) {
+							$.displayLyrics(title, artist, mid);
+						} else {
+							$.searchByWire(title + " " + artist)
+						}
+					},
+					title:'This is the hover title',
+					disabled:false
+				}
+				},
+				{'Remove':{
+					onclick:function(menuItem,menu) {
+						$(this).remove();
+						$(document).trigger("playlistDidChange");
+					},
+					disabled:false
+				}
+				},
+				{'Download':{
+					onclick:function(menuItem,menu) {
+						var url = $(this).children()[2].getAttribute("src");
+						$('<iframe width="0" height="0" frameborder="0" src="@"></iframe>'.replace("@",url)).appendTo("body");
+						setTimeout(function(){
+							$("iframe").remove();
+						},10000);
+					},
+					disabled:false
+				}
+				}
+			];
+
+			var cmenu1 = $(document).contextMenu(songListContextMenu,{theme:'osx'});
+			$(".total-row").live("contextmenu", function (event) {
+				highlightCurrentlySelectedItemInPlayer($(this));
+				cmenu1.show($(this), event);
+				return false;
+			});
+
+			$(".playlist-row, .total-row").live("click", function (event) {
+				highlightCurrentlySelectedItemInPlayer($(this))
+			});
+
+			var playlistItemContextMenu = [
+				{'Delete':{
+					onclick:function(menuItem,menu) {
+						var that = $(this),
+							playlist_name_to_delete = that.text(),
+							req_url = "/playlist/" + username + " PLAYLIST " + encodeURIComponent(playlist_name_to_delete);
+						$.ajax({
+							type:'DELETE',
+							url: req_url,
+							success: function(data) {
+								that.remove();
+								$(".playlist-row").filter(function(i) {
+									return $(this).text()=="Main Library";
+								}).trigger("click");
+							}
+						});
+					},
+					disabled:false
+				}
+				}
+			];
+
+			var cmenu2 = $(document).contextMenu(playlistItemContextMenu,{theme:'osx'});
+			$(".playlist-row").live("contextmenu", function (event) {
+				highlightCurrentlySelectedItemInPlayer($(this));
+				cmenu2.show($(this), event);
+				return false;
+			});
+
+			var playlistContainerContextMenu = [
+				{'New...':{
+					onclick:function(menuItem,menu) {
+						var randString = hex_md5(String(new Date().getTime())).slice(0,10);
+						createPlaylistItemWithName("Playlist_" + randString);
+					},
+					title:'This is the hover title',
+					disabled:false
+				}
+				}
+			];
+
+			var cmenu3= $(document).contextMenu(playlistContainerContextMenu,{theme:'osx'});
+			$("#playlist-container").live("contextmenu", function (event) {
+				cmenu3.show($(this), event);
+				return false;
+			});
+
+
 		});
 
 		//
@@ -162,10 +338,9 @@
 		//
 		$("#closeButton").click(function() {
 			$("#lyricsText").text("");
-			$("#vk-results-list").each(function(i,o) {
-				$(o).remove();
-			});
+			$("#vk-results-list").html("");
 			$("#lightBox").slideUp('fast','swing');
+			$("#lightBox_jspPane").html("");
 			$(this).removeClass('busy');
 			vk_search_in_progress = false;
 			mx_get_lyrics_in_progress = false;
@@ -186,7 +361,7 @@
 
 		var searchVK = function(vksearch_q, mx_track_id) {
 			vk_search_in_progress = true;
-			$('<ul id="vk-results-list"></ul>').appendTo('#lightBox');
+			$('<ul id="vk-results-list"></ul>').appendTo('.lightBox_jspPane');
 			var xhr = $.ajax({
 				type: 'GET',
 				url: '/vksearch/'+encodeURIComponent(vksearch_q),
@@ -261,11 +436,10 @@
 					} else {
 						items.push('<li class="trackName">' + "Nothing found!" + '</li>');
 					}
-					$('<ul/>', {'class':'results-list', html:items.join('')}).appendTo('#resultsSection');
+					$('<ul/>', {'class':'results-list helix', html:items.join('')}).appendTo('#resultsSection');
+					//stroll.bind(".results_list");
 					$(".trackEntry").each(function() { wobble($(this),-7,5); });
 					$("#resultsSection").trigger("scroll");
-//						$("#prev_page").css('cursor','pointer');
-//						$("#next_page").css('cursor','pointer');
 				}
 			});
 			return false;
@@ -278,51 +452,26 @@
 
 		$("#lyrics").livesearch({
 			searchCallback: $.searchByWire,
-			innerText: "KEEP CALM AND OPEN YOUR EARS",
+			innerText: "Keep Calm and Open Your Ears",
 			queryDelay:250,
 			minimumSearchLength: 3
 		});
-
-		var loadMXResults = function() {
-			var data = {q:search_term, page:current_page};
-			$.ajax({
-				type: 'GET',
-				url: '/mxsearch/' + encodeURIComponent(JSON.stringify(data)),
-				success: function(response) {
-					var items = [],
-						tracks_available = response.message.header.available,
-						tracklist = response.message.body.track_list;
-					if (tracklist.length>0) {
-						$('<div/>', {'id':'pageNumber', 'class':'results-total', html:'Page: ' + current_page}).appendTo('#resultsTotal');
-						$.each(tracklist, function (i, o) {
-							var track = o.track;
-							var trackAttr = [];
-							trackAttr.push('<div class="trackName">'+ '<a class="lyricLink" href="#" track_id="' + track.track_id +'">'+ track.track_name.slice(0,45) +'</a>' +'</div>');
-							trackAttr.push('<div class="trackArtist">'+ track.artist_name +'</div>');
-							items.push('<li class="trackEntry">' + trackAttr.join('') + '</li>');
-						});
-					} else {
-						items.push('<li class="trackName">' + "Nothing found!" + '</li>');
-					}
-					$('<ul/>', {'class':'results-list', html:items.join('')}).appendTo('#resultsSection');
-					$(".trackEntry").each(function() { wobble($(this),-7,5); });
-					$("#prev_page").css('cursor','pointer');
-					$("#next_page").css('cursor','pointer');
-				}
-			});
-		};
 
 		// Add new songs to the playlist when the lick button is clicked.
 		$(".lickButton").live('click', function addThisToPlaylist() {
 			var attributes = ["mid", "title", "artist", "url"],
 				data = {},
 				that = $(this);
-			$.each(attributes, function(i, attr) {
-				data[attr] = that.attr(attr);
-			});
-			addToPlaylist(data, function () {
-				$(document).trigger("playlistDidChange");
-			});
+			try {
+				$.each(attributes, function(i, attr) {
+					data[attr] = that.attr(attr);
+				});
+				addToPlaylist(data, function () {
+					$(document).trigger("playlistDidChange");
+				});
+			} catch(err) {
+				console.log(err);
+			}
 			return false;
 		});
 
@@ -336,9 +485,11 @@
 					if (data.message.header.status_code==200) {
 						$("#lightBox").slideDown('fast','swing');
 						$("#lyricsTitle").text(title + " | " + artist);
-						var lyrics = "Lyrics not available.";
-						if (data.message.body.lyrics.lyrics_body) {
-							lyrics = data.message.body.lyrics.lyrics_body
+						//$("#lyricsTitle").fitText();
+						var lyrics = "Lyrics not available.",
+							returned_lyrics = data.message.body.lyrics.lyrics_body;
+						if (returned_lyrics) {
+							lyrics = returned_lyrics;
 						}
 						$("#lyricsText").text(lyrics);
 					} else {

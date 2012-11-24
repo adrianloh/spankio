@@ -7,42 +7,31 @@
     <link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow" rel="stylesheet" type="text/css">
     <link href='http://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+	
+	<link rel="stylesheet" type="text/css" href="/css/fonts.css" />
+	<link rel="stylesheet" type="text/css" href="/css/index.css" />
 
     <!-- JQuery -->
     <!--    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js"></script> -->
     <!-- NOTE: Version 1.6.4 of JQuery is required by Total Control -->
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.js"></script>
 
     <link rel="stylesheet" type="text/css" href="/js/contextMenu/jquery.contextmenu.css" />
-    <script type="text/javascript" src="/js/contextMenu/jquery.contextmenu.js"></script>
 
     <!-- 360 Player -->
     <link rel="stylesheet" type="text/css" href="/360player/360player.css" />
-    <script type="text/javascript" src="/360player/berniecode-animator.js"></script>
-    <script type="text/javascript" src="/360player/soundmanager2.js"></script>
     <link rel="stylesheet" type="text/css" href="/360player/flashblock.css" />
-    <script type="text/javascript" src="/360player/360player.js"></script>
 
     <!-- Total Control Music Player -->
     <!-- NOTE: Total Control and 360 both rely on SoundManager2, we loaded it for 360,
         Total Control will rely on the same instance.
     -->
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
     <link type="text/css" href="/TotalControl/javascripts/jscrollpane/style/jquery.jscrollpane.css" rel="stylesheet" media="all" />
-    <script type="text/javascript" src="/TotalControl/javascripts/jscrollpane/script/jquery.mousewheel.js"></script>
-    <script type="text/javascript" src="/TotalControl/javascripts/jscrollpane/script/jquery.jscrollpane.js"></script>
-    <script type="text/javascript" src="/TotalControl/TotalControl.js"></script>
-
-    <script type="text/javascript" src="/js/livesearch.js"></script>
-
-    <!-- Mine -->
-    <link rel="stylesheet" type="text/css" href="/css/index.css" />
-    <script type="text/javascript" src="/js/index.js"></script>
-
 </head>
 <body>
+<div id="gridpattern"></div>
 <div class="st-scroll">
+	<h1>Spank.io</h1>
     <div id="lightBox">
         <div id="blockHead"></div>
         <img id="closeButton" src="/img/close.png" />
@@ -57,13 +46,35 @@
                 <input type="submit" name="submit" class="button" id="submit_btn" value="Search"/>
         </form>
     </div>
-    <section id="resultsTotal">
-		<img id="prev_page" src="/img/arrow.png" />
-		<img id="next_page" src="/img/arrow.png" />
-    </section>
-    <br/>
+    <section id="resultsTotal"></section>
     <section id="resultsSection"></section>
     <ul id="total-playlist"></ul>
 </div>
 </body>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.js"></script>
+<script type="text/javascript" src="/js/contextMenu/jquery.contextmenu.js"></script>
+
+<!-- 360 Player -->
+<script type="text/javascript" src="/360player/berniecode-animator.js"></script>
+<script type="text/javascript" src="/360player/soundmanager2.js"></script>
+<script type="text/javascript" src="/360player/360player.js"></script>
+
+<!-- Total Control Music Player -->
+<!-- NOTE: Total Control and 360 both rely on SoundManager2, we loaded it for 360,
+        Total Control will rely on the same instance.
+    -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/TotalControl/javascripts/jscrollpane/script/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="/TotalControl/javascripts/jscrollpane/script/jquery.jscrollpane.js"></script>
+<script type="text/javascript" src="/TotalControl/TotalControl.js"></script>
+
+<script type="text/javascript" src="/js/livesearch.js"></script>
+<script type="text/javascript" src="/js/jquery.fittext.js"></script>
+<script type="text/javascript" src="/js/jquery.jeditable.mini.js"></script>
+<script type="text/javascript" src="/js/jquery.tinyscrollbar.min.js"></script>
+
+<script type="text/javascript" src="/js/md5-min.js"></script>
+
+<!-- Mine -->
+<script type="text/javascript" src="/js/index.js"></script>
 </html>

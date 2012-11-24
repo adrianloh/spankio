@@ -1,13 +1,14 @@
 #! /usr/bin/env python
 
 import os, re, time
-import simplejson as json
+import json
 import tornado.ioloop
 import tornado.web
 import tornado.gen
 import tornado.httpclient
 import tornado.curl_httpclient
 from urllib import urlencode, unquote
+import tornadoredis
 
 def extract(q, terms=(), delimiter=":"):
 	"""
@@ -52,6 +53,10 @@ def mx_parse_search(lyrics, page=1):
 def urldecode(string):
 	return unquote(string).decode('utf8')
 
+config = dict(host="pikachu.ec2.myredis.com", port=6449, password="mavN3nb59XyRTfmJtu", selected_db=0)
+RED = tornadoredis.Client(**config)
+RED.connect()
+
 async_client = tornado.curl_httpclient.CurlAsyncHTTPClient()
 
 VK_ACCESS_TOKEN = "b63e1d33bf6561b4bf6561b4b9bf4e0dd1bbf65bf6b5dabefccf0d187e2dbaa4ac0b03e"
@@ -70,41 +75,72 @@ class UsersHandler(tornado.web.RequestHandler):
 	def get(self, username):
 		self.render("soundgarden.html", username=username)
 
+class TestHandler(tornado.web.RequestHandler):
+
+	@tornado.web.asynchronous
+	@tornado.gen.engine
+	def get(self, owner_aid): # Expected string "/tracksearch/ownerid_aid.mp3"
+		req_url = "https://api.vkontakte.ru/method/audio.getById"
+		q = os.path.splitext(owner_aid)[0]
+		params = dict(access_token=VK_ACCESS_TOKEN, audios=q)
+		req = tornado.httpclient.HTTPRequest(req_url, user_agent=VK_AGENT, method="POST", body=urlencode(params), connect_timeout=10.0, request_timeout=10.0)
+		response = yield tornado.gen.Task(async_client.fetch, req)
+		tracks = json.loads(response.body)
+		# {response:[{track}, {track}, {track}]}
+		tracks = tracks['response']
+		if len(tracks)>0:
+			self.redirect(tracks[0]['url'])
+
 class PlaylistHandler(tornado.web.RequestHandler):
 
 	@tornado.gen.engine
 	@tornado.web.asynchronous
-	def get(self, s):
+	def get(self, redkey):
 		self.set_header("Content-Type", "application/json")
-		s = s.split("@")
-		username, playlist = s[0], s[-1]
-		library = {'rev':0, 'playlist':[]}
-		url = DB_BASE + username + "_playlist_" + playlist
-		try:
-			res = yield tornado.gen.Task(async_client.fetch, url, method="GET", connect_timeout=10.0, request_timeout=10.0)
-			res = json.loads(res.body)
-			if res.has_key("playlist"):
-				library['playlist'] = res['playlist']
-				library['rev'] = res['_rev']
-		except Exception as e:
-			print e
-		finally:
-			self.write(json.dumps(library))
-			self.finish()
+		redkey = urldecode(redkey)
+		if re.search("PLAYLIST ALL", redkey):
+			pattern = re.sub("ALL", "*", redkey)
+			playlists = yield tornado.gen.Task(RED.keys, pattern)
+			if playlists:
+				self.write(json.dumps(playlists))
+			else:
+				self.write(json.dumps(["Main Library"]))
+		else:
+			tracklist = yield tornado.gen.Task(RED.get, redkey)
+			if tracklist: self.write(tracklist if (tracklist is not None) else json.dumps([]))
+		self.finish()
 
 	@tornado.gen.engine
 	@tornado.web.asynchronous
-	def put(self, s):
-		s = s.split("@")
-		user, playlist_name = s[0], s[-1]
-		playlist = json.loads(self.get_argument("playlist"))
-		url = DB_BASE + user + "_playlist_" + playlist_name
-		body = {'playlist':playlist[::-1]}
-		rev = self.get_argument("rev")
-		if rev != "0": body['_rev'] = rev
-		time.sleep(3)
-		res = yield tornado.gen.Task(async_client.fetch, url, body=json.dumps(body), method="PUT", connect_timeout=10.0, request_timeout=10.0)
-		self.write(res.body)
+	def delete(self, redkey):
+		redkey = urldecode(redkey)
+		res = yield tornado.gen.Task(RED.delete, redkey)
+		self.write(str(res))
+		self.finish()
+
+	@tornado.gen.engine
+	@tornado.web.asynchronous
+	def put(self, redkey):
+		redkey = urldecode(redkey)
+		data = json.loads(self.get_argument("data"))
+		playlist = []
+		if isinstance(data, list):
+			playlist = data[::-1]
+		elif isinstance(data, dict):
+			print "Got a dict"
+			print data
+			res = yield tornado.gen.Task(RED.get, redkey)
+			if res is not None:
+				playlist = json.loads(res)
+				playlist.append(data)
+				print playlist
+				print "Adding to existing..."
+			else:
+				playlist = [data]
+				print "Adding to new playlist..."
+		if isinstance(playlist, list):
+			res = yield tornado.gen.Task(RED.set, redkey, str(json.dumps(playlist)))
+			if res: self.write("OK")
 		self.finish()
 
 class MXSearchHandler(tornado.web.RequestHandler):
@@ -119,7 +155,7 @@ class MXSearchHandler(tornado.web.RequestHandler):
 		params = mx_parse_search(search_string, page=page)
 		params['apikey'] = MX_API_KEY
 		params['format'] = 'json'
-		params['quorum_factor'] = 0.77	# Level of fuzzy logic
+		params['quorum_factor'] = 0.85	# Level of fuzzy logic
 		# Enabling these two options will sort by popularity
 		#params['g_common_track'] = 1
 		#params['s_track_rating'] = 'desc'
@@ -159,6 +195,12 @@ class VKSongByIdHandler(tornado.web.RequestHandler):
 		tracks = tracks['response']
 		if len(tracks)>0:
 			self.redirect("/track/"+tracks[0]['url'])
+		if not self._finished:
+			self.finish()
+
+	def finish(self, chunk=None):
+		if not self.request.connection.stream.closed():
+			super(VKSongByIdHandler, self).finish(chunk)
 
 class VKSongHandler(tornado.web.RequestHandler):
 
@@ -170,14 +212,19 @@ class VKSongHandler(tornado.web.RequestHandler):
 		filename = os.path.split(owner_aid)[-1]
 		self.set_header("Content-Disposition","attachment; filename=%s" % filename)
 		req = tornado.httpclient.HTTPRequest(url=owner_aid, user_agent=VK_AGENT, header_callback=self.header_callback, streaming_callback=self.streaming_callback)
-		self.properly_closed = False
 		try:
 			yield tornado.gen.Task(self.async_client.fetch, req)
 		except IOError, AssertionError:
 			pass
+		if not self._finished:
+			self.finish()
 
-	def on_connection_close(self):
-		self.flush()
+	def finish(self, chunk=None):
+		if not self.request.connection.stream.closed():
+			super(VKSongHandler, self).finish(chunk)
+
+#	def on_connection_close(self):
+#		self.flush()
 
 	def header_callback(self, data):
 		if re.search(r"Content-Length", data):
@@ -187,7 +234,7 @@ class VKSongHandler(tornado.web.RequestHandler):
 	def streaming_callback(self, data):
 		if not self.request.connection.stream.closed():
 			self.write(data)
-			self.flush()
+		self.flush()
 
 class VKSearchHandler(tornado.web.RequestHandler):
 
@@ -225,6 +272,7 @@ class VKSearchHandler(tornado.web.RequestHandler):
 site_root = os.path.dirname(os.path.abspath(__file__))
 application = tornado.web.Application([
 	(r"/", MainHandler),
+	(r"/test/(.*)", TestHandler),
 	(r"/users/(.*)", UsersHandler),
 	(r"/playlist/(.*)", PlaylistHandler),
 	(r"/mxsearch/(.*)", MXSearchHandler),
@@ -238,7 +286,7 @@ application = tornado.web.Application([
 	(r"/img/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/img"}),
 	(r"/TotalControl/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/TotalControl"}),
 	(r"/360player/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/360player"}),
-	])
+	], debug=True)
 
 if __name__ == "__main__":
 	if "OPENSHIFT_INTERNAL_IP" in os.environ:

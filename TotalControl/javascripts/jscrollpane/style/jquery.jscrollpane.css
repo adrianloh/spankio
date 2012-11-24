@@ -5,15 +5,27 @@
  * may not operate correctly without them.
  */
 
+.jspDrag {
+    background: #dbe9ff;
+    -o-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+.jspTrack {
+    background: #CCC;
+}
+
 .jspContainer
 {
 	overflow: hidden;
 	position: relative;
 }
 
-.jspPane
+.lightBox_jspPane
 {
-	position: absolute;
+    position: absolute;
 }
 
 .jspVerticalBar
