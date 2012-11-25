@@ -3,9 +3,9 @@ html.busy, html.busy * {
 }
 BODY
 {
-	background: url(https://lh5.googleusercontent.com/-IK5ie7TDN-U/UK52LAxvTPI/AAAAAAAAVYo/RXpAyu6KUCk/s0/oldpaper.jpg) no-repeat fixed center center;
+/*	background: url(https://lh5.googleusercontent.com/-IK5ie7TDN-U/UK52LAxvTPI/AAAAAAAAVYo/RXpAyu6KUCk/s0/oldpaper.jpg) no-repeat fixed center center;
 	background-position: -20% 20%;
-	background-size: cover;
+	background-size: cover;*/
 	font-size: 12px;
 	line-height: 1.5em;
 	font-weight: 300;
@@ -25,10 +25,30 @@ A:hover
 {
 	color: #000;
 }
+#__gridpattern {
+	background-color: black;
+	opacity: 0.4;
+	position: fixed;
+	width: 110%;
+	height: 110%;
+	top: -10px;
+	right: -10px;
+}
+
 #gridpattern {
 	position: fixed;
 	background-size: 4px 4px;
-	background-image: -webkit-repeating-linear-gradient(45deg, rgba(0, 0, 0, .5), rgba(173, 0, 0, .5) 1px, transparent 2px, transparent 15px), -webkit-repeating-linear-gradient(-90deg, rgba(155, 0, 0, 0.46), rgb(0, 0, 0) 1px, transparent 2px, transparent 15px);
+	background-image: -webkit-repeating-linear-gradient(90deg, rgba(0, 0, 0, .5), rgba(26, 1, 1, .5) 1px, transparent 2px, transparent 15px), -webkit-repeating-linear-gradient(-90deg, rgba(6, 106, 255, 0), rgb(0, 0, 0) 1px, transparent 2px, transparent 15px);
+	width: 110%;
+	height: 110%;
+	top: -10px;
+	right: -10px;
+}
+
+#___gridpattern {
+	position: fixed;
+	background-size: 4px 4px;
+	background-image: -webkit-repeating-linear-gradient(90deg, rgba(0, 0, 0, .5), rgba(173, 0, 0, .5) 1px, transparent 2px, transparent 15px), -webkit-repeating-linear-gradient(-90deg, rgba(155, 0, 0, 0.46), rgb(0, 0, 0) 1px, transparent 2px, transparent 15px);
 	width: 110%;
 	height: 110%;
 	top: -10px;
@@ -56,7 +76,14 @@ ul
 	list-style-image: url('/static/img/finger.png');
 	*/
 }
-
+iframe {
+	margin: 0;
+	border: none;
+	width: 110%;
+	height: 110%;
+	margin-top: -10px;
+	margin-left: -10px;
+}
 /* The search form
 ==================================================*/
 FORM
@@ -171,6 +198,12 @@ INPUT:-ms-input-placeholder
 /* MusixMatch Results section
 ==================================================*/
 .trackEntry {
+	width: 600px;
+	padding-top: 11px;
+	background-size: 4px 4px;
+	background-image: -webkit-repeating-linear-gradient(45deg, rgba(0, 0, 0, .5), rgba(173, 0, 0, .5) 1px, transparent 2px, transparent 15px), -webkit-repeating-linear-gradient(-90deg, rgba(155, 0, 0, 0.46), rgb(0, 0, 0) 1px, transparent 2px, transparent 15px);
+}
+._trackEntry {
 	min-height: 130px;
 	width: 600px;
 	padding-top: 25px;
@@ -178,18 +211,31 @@ INPUT:-ms-input-placeholder
 	margin-bottom: auto;
 	background: url(/img/tape1.png) no-repeat fixed -50px -110px;
 }
+.mxThumb {
+	margin-right: 15px;
+	border: solid 1px #000;
+	-moz-box-shadow: 1px 1px 5px #999;
+	-webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.92);
+	box-shadow: 1px 1px 5px #999;
+}
 .trackName
 {
 	color: #111111;
-	font: 500 33px Condiment;
+	font: 500 26px "proxima-nova-1";
+	display: inline-block;
+	vertical-align: 39;
+	background-color: rgb(36, 30, 30);
+	clear: left;
 }
 .trackArtist
 {
 	letter-spacing: -1.8px;
 	color: #f3efb5;
-	font: italic 700 24px "Averia Serif Libre";
-	margin-top: -20px;
+	font: italic 700 20px "Averia Serif Libre";
 	cursor:pointer;
+	vertical-align: 20;
+	background-color: rgb(104, 93, 93);
+	display: inline-block;
 }
 #resultsSection
 {
@@ -221,6 +267,7 @@ INPUT:-ms-input-placeholder
 /* The thing that pops up to display lyrics
 ==================================================*/
 #lightBox {
+    display: none;
 	outline-color: black;
 	outline: 3px;
 	background-size: 2px 3px;
@@ -238,6 +285,18 @@ INPUT:-ms-input-placeholder
 	box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
 }
 h1 {
+	opacity: 0.96;
+	top: -249px;
+	position: fixed;
+	text-align: center;
+	text-indent: -.12em;
+	color: rgb(249, 253, 255);
+	font: 360px "anchor-web-1","anchor-web-2", 'Impact', sans-serif;
+	font-weight: 900;
+	line-height: 1;
+	text-shadow: rgb(245, 25, 148) .01em .01em 0, rgb(245, 25, 148) .02em .02em 0, rgb(245, 25, 148) .03em .03em 0, rgb(245, 25, 148) .04em .04em 0, rgb(245, 25, 148) .05em .05em 0, rgb(245, 25, 148) .06em .06em 0, rgb(245, 25, 148) .07em .07em 0, rgb(245, 25, 148) .08em .08em 0, rgb(245, 25, 148) .09em .09em 0, rgb(245, 25, 148) .1em .1em 0;
+}
+#h1_oldTitle {
 	opacity: 0.96;
 	top: -249px;
 	position: fixed;

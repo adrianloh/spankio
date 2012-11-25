@@ -75,6 +75,11 @@ class UsersHandler(tornado.web.RequestHandler):
 	def get(self, username):
 		self.render("soundgarden.html", username=username)
 
+class FBChannelFileHandler(tornado.web.RequestHandler):
+
+	def get(self, username):
+		self.write('<script src="//connect.facebook.net/en_US/all.js"></script>')
+
 class TestHandler(tornado.web.RequestHandler):
 
 	@tornado.web.asynchronous
@@ -272,6 +277,7 @@ class VKSearchHandler(tornado.web.RequestHandler):
 site_root = os.path.dirname(os.path.abspath(__file__))
 application = tornado.web.Application([
 	(r"/", MainHandler),
+	(r"/channel.html", FBChannelFileHandler),
 	(r"/test/(.*)", TestHandler),
 	(r"/users/(.*)", UsersHandler),
 	(r"/playlist/(.*)", PlaylistHandler),
