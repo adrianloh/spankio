@@ -2,7 +2,7 @@ window.fbAsyncInit = function() {
 	// init the FB JS SDK
 	FB.init({
 		appId      : '	412279742177294', // App ID from the App Dashboard
-		channelUrl : '//xerxes.local:8888/channel.html', // Channel File for x-domain communication
+		channelUrl : '//spank.io/channel.html', // Channel File for x-domain communication
 		status     : true, // check the login status upon init?
 		cookie     : true, // set sessions cookies to allow your server to access the session?
 		xfbml      : true  // parse XFBML tags on this page?
