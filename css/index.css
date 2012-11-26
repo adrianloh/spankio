@@ -3,6 +3,7 @@ html.busy, html.busy * {
 }
 BODY
 {
+	background-color: rgb(65, 67, 117);
 /*	background: url(https://lh5.googleusercontent.com/-IK5ie7TDN-U/UK52LAxvTPI/AAAAAAAAVYo/RXpAyu6KUCk/s0/oldpaper.jpg) no-repeat fixed center center;
 	background-position: -20% 20%;
 	background-size: cover;*/

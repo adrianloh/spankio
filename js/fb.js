@@ -47,8 +47,9 @@ window.fbAsyncInit = function() {
 				}, {scope:'email, read_friendlists, publish_stream'});
 			}
 		}
-		$('<iframe src="/static/index3.html"></iframe>').appendTo("body");
+		//$('<iframe src="/static/index3.html"></iframe>').appendTo("body");
 	}
+//	$('<button id="fb-auth">Login</button>').appendTo("#searchForm");
 	$('<div id="fb-login" class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1"></div>').appendTo("#searchForm");
 	// run once with current status and whenever the status changes
 	FB.getLoginStatus(updateButton);
