@@ -50,12 +50,11 @@
 	function publishFBWall(title, snippet) {
 		FB.api('/me/feed', 'post',
 			{
-				message     : "I love thinkdiff.net for facebook app development tutorials",
-				link        : 'http://ithinkdiff.net',
+				message     : snippet,
+				link        : 'http://spank.io/tracksearch/-18147471_84769174.mp3',
 				picture     : 'http://thinkdiff.net/iphone/lucky7_ios.jpg',
 				name        : title,
-				description : 'Checkout iOS apps and games from iThinkdiff.net. I found some of them are just awesome!'
-
+				description : snippet
 			},
 			function(response) {
 				if (!response || response.error) {
@@ -69,24 +68,35 @@
 
 	$(document).ready(function () {
 
-		function doFBStuff() {
-			FB.getLoginStatus(function(response) {
-				if (response.status === 'connected') {
-					console.log(response);
-				} else if (response.status === 'not_authorized') {
-					// not_authorized
-				} else {
-					// not_logged_in
-				}
-			});
+		var selectedText = "";
+
+		function parsePost(o) {
+			var lyricsTextDiv = $(o),
+				postTitle = lyricsTextDiv.parent().find("#lyricsTitle").text();
+			if (selectedText) {
+				publishFBWall(postTitle, selectedText);
+			}
 		}
 
-		$("#lyricsText").bind("neverhappensmouseup", function(e) {
-			var selectedText = getSelectionHTML();
-			if (selectedText) {
-				console.log(selectedText);
-				publishFBWall("Testing",selectedText);
+		var lightBoxContextMenu = [
+			{'Post':{
+				onclick:function(menuItem,menu) {
+					parsePost(this);
+				},
+				title:'Post to my Facebook wall',
+				disabled:false
 			}
+			}
+		];
+
+		var cmenu1= $(document).contextMenu(lightBoxContextMenu,{theme:'osx'});
+		$("#lyricsText").live("contextmenu", function (event) {
+			cmenu1.show($(this), event);
+			return false;
+		});
+
+		$("#lyricsText").bind("mousedown", function() {
+			selectedText = getSelectionHTML();
 		});
 
 	});

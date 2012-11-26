@@ -119,7 +119,7 @@
 			//
 			// ATTACH THE PLAYER TO BODY
 			//
-			$('<ul id="total-playlist"></ul>').appendTo('body').totalControl({
+			$('<ul id="total-playlist"></ul>').appendTo('body').hide().totalControl({
 				style: "default.css",
 				checkboxesEnabled: true,
 				playlistSortable: true,
@@ -171,6 +171,7 @@
 				$(".playlist-row").filter(function() {
 					return $(this).text()=="Main Library";
 				}).trigger("click");
+				$("#total-playlist").effect("bounce", { mode:'show', distance:30, times:3 }, 300);
 			});
 
 			$(".total_jspPane").sortable({
@@ -225,7 +226,7 @@
 				},
 				{'Download':{
 					onclick:function(menuItem,menu) {
-						var url = $(this).find(".total-title").attr("src");
+						var url = $(this).find(".total-title").attr("src")+"?download=true";
 						$('<iframe width="0" height="0" frameborder="0" src="@"></iframe>'.replace("@",url)).appendTo("body");
 						setTimeout(function(){
 							$("iframe").remove();
@@ -253,16 +254,20 @@
 						var that = $(this),
 							playlist_name_to_delete = that.text(),
 							req_url = "/playlist/" + self.username + " PLAYLIST " + encodeURIComponent(playlist_name_to_delete);
-						$.ajax({
-							type:'DELETE',
-							url: req_url,
-							success: function(data) {
-								that.remove();
-								$(".playlist-row").filter(function(i) {
-									return $(this).text()=="Main Library";
-								}).trigger("click");
-							}
-						});
+						if (playlist_name_to_delete!="Main Library") {
+							$.ajax({
+								type:'DELETE',
+								url: req_url,
+								success: function(data) {
+									that.remove();
+									$(".playlist-row").filter(function(i) {
+										return $(this).text()=="Main Library";
+									}).trigger("click");
+								}
+							});
+						} else {
+							alert("Cannot delete Main Library");
+						}
 					},
 					disabled:false
 				}
@@ -300,17 +305,20 @@
 
 	$(document).ready(function () {
 		$(document).bind("login", function() {
-			if (typeof(MyTotalPlayer)==='undefined') {
-				MyTotalPlayer = new Playboy();
-				MyTotalPlayer.init(FB_userInfo.email);
+			if (typeof($.MyTotalPlayer)==='undefined') {
+				$.MyTotalPlayer = new Playboy();
+				$.MyTotalPlayer.init(FB_userInfo.username);
 			}
 		});
+		// TODO: Tearing down/resetting stuff after logout doesn't really work
+		// Login -> Logout -> Login (again), now when you add songs they are
+		// added twice. Also the contextmenu won't disappear after you select items on it.
 		$(document).bind("logout", function() {
-			console.log("Unloading player...");
-			console.log(MyTotalPlayer);
-			if (typeof(MyTotalPlayer)==='object') {
-				delete MyTotalPlayer;
-				$("#total-playlist").html("");
+			if (typeof($.MyTotalPlayer)==='object') {
+				delete $.MyTotalPlayer;
+				$(".playlist-row").die().remove();
+				$(".total-rows").die().remove();
+				$("#total-playlist").effect("bounce", { mode:'hide', distance:30, times:5 }, 300);
 			}
 		});
 	});

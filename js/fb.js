@@ -1,12 +1,23 @@
 window.fbAsyncInit = function() {
 	// init the FB JS SDK
-	FB.init({
-		appId      : '	412279742177294', // App ID from the App Dashboard
+
+	var production_settings = {
+		appId      : '412279742177294', // App ID from the App Dashboard
 		channelUrl : '//spank.io/channel.html', // Channel File for x-domain communication
 		status     : true, // check the login status upon init?
 		cookie     : true, // set sessions cookies to allow your server to access the session?
 		xfbml      : true  // parse XFBML tags on this page?
-	});
+	};
+
+	var dev_settings = {
+		appId      : '	573967942630120', // App ID from the App Dashboard
+		channelUrl : '//xerxes.local:8888/channel.html', // Channel File for x-domain communication
+		status     : true, // check the login status upon init?
+		cookie     : true, // set sessions cookies to allow your server to access the session?
+		xfbml      : true  // parse XFBML tags on this page?
+	};
+
+	FB.init(production_settings);
 
 	function initFB(response) {
 		// Refer to:
@@ -17,6 +28,8 @@ window.fbAsyncInit = function() {
 			FB_userInfo.accessToken = response.authResponse.accessToken;
 			$("#fb-login").hide();
 			$(document).trigger("login");
+			var q = "SELECT name,username FROM user WHERE uid in (SELECT uid2 FROM friend WHERE uid1=me()) and is_app_user='1'";
+			// FB.api('fql',{q:q}, function(res) { console.log(res); })
 		});
 	}
 
@@ -30,6 +43,7 @@ window.fbAsyncInit = function() {
 				FB.logout(function(response) {
 					$(document).trigger("logout");
 					FB_userInfo = null;
+					document.location.reload(true);
 				});
 			};
 		} else {
@@ -49,8 +63,8 @@ window.fbAsyncInit = function() {
 		}
 		//$('<iframe src="/static/index3.html"></iframe>').appendTo("body");
 	}
-//	$('<button id="fb-auth">Login</button>').appendTo("#searchForm");
-	$('<div id="fb-login" class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1"></div>').appendTo("#searchForm");
+	$('<button id="fb-auth" style="display: none;">Login</button>').appendTo("#searchForm");
+	$('<div id="fb-login" class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1" scope="email, read_friendlists, publish_stream"></div>').appendTo("#searchForm");
 	// run once with current status and whenever the status changes
 	FB.getLoginStatus(updateButton);
 	FB.Event.subscribe('auth.statusChange', updateButton);

@@ -178,8 +178,8 @@
 				$.each(attributes, function(i, attr) {
 					data[attr] = that.attr(attr);
 				});
-				if (typeof(MyTotalPlayer)==='object') {
-					MyTotalPlayer.addToPlaylist(data, function () {
+				if (typeof($.MyTotalPlayer)==='object') {
+					$.MyTotalPlayer.addToPlaylist(data, function () {
 						$(document).trigger("playlistDidChange");
 					});
 				} else {

@@ -207,7 +207,12 @@ class VKSongByIdHandler(tornado.web.RequestHandler):
 		# {response:[{track}, {track}, {track}]}
 		tracks = tracks['response']
 		if len(tracks)>0:
-			self.redirect("/track/"+tracks[0]['url'])
+			url = "/track/"+tracks[0]['url']
+			try:
+				if self.get_argument("download"):
+					url += "?download=true"
+			except: pass
+			self.redirect(url)
 		if not self._finished:
 			self.finish()
 
@@ -223,7 +228,10 @@ class VKSongHandler(tornado.web.RequestHandler):
 		self.async_client = tornado.curl_httpclient.CurlAsyncHTTPClient()
 		self.set_header("Content-Type", "audio/mpeg")
 		filename = os.path.split(owner_aid)[-1]
-		self.set_header("Content-Disposition","attachment; filename=%s" % filename)
+		try:
+			if self.get_argument("download"):
+				self.set_header("Content-Disposition","attachment; filename=%s" % filename)
+		except: pass
 		req = tornado.httpclient.HTTPRequest(url=owner_aid, user_agent=VK_AGENT, header_callback=self.header_callback, streaming_callback=self.streaming_callback)
 		try:
 			yield tornado.gen.Task(self.async_client.fetch, req)
