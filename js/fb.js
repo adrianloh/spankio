@@ -17,14 +17,13 @@ window.fbAsyncInit = function() {
 		xfbml      : true  // parse XFBML tags on this page?
 	};
 
-	FB.init(production_settings);
+	FB.init(dev_settings);
 
 	function initFB(response) {
 		// Refer to:
 		// http://developers.facebook.com/docs/reference/javascript/FB.getLoginStatus/
 		FB.api('/me', function(info) {
 			FB_userInfo = info;
-			console.log(FB_userInfo);
 			FB_userInfo.accessToken = response.authResponse.accessToken;
 			$("#fb-login").hide();
 			$(document).trigger("login");

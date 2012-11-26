@@ -51,8 +51,10 @@
 		// When we CLOSE the LIGHTBOX
 		//
 		$("#closeButton").click(function() {
-			$("#lyricsText").text("");
-			$("#vk-results-list").html("");
+			$("#lyricsTitle").text("");
+			$("#lyricsText").html("");
+			$("#vk-results-list").remove();
+			$("#lyricsThumb").remove();
 			$("#lightBox").slideUp('fast','swing');
 			$("#lightBox_jspPane").html("");
 			$(this).removeClass('busy');
@@ -73,12 +75,12 @@
 			}
 		});
 
-		var searchVK = function(vksearch_q, mx_track_id) {
+		var searchVK = function(params) {
 			vk_search_in_progress = true;
 			$('<ul id="vk-results-list"></ul>').appendTo('.lightBox_jspPane');
 			var xhr = $.ajax({
 				type: 'GET',
-				url: '/vksearch/'+encodeURIComponent(vksearch_q),
+				url: '/vksearch/'+encodeURIComponent(params.q),
 				success: function(data) {
 					vk_search_in_progress = false;
 					var message = "";
@@ -89,14 +91,16 @@
 						message = '<li class="vkMessage">Found @MESSAGE@ track(s)</li>'.replace("@MESSAGE@", data.response.length);
 						$(message).appendTo("#vk-results-list");
 						$.each(data.response, function (i, track) {
-							track.mid = mx_track_id;
+							track.mxid = params.mxid;
 							var trackAttr = [],
 								title = track.title.slice(0,60) + ' -- ' + track.artist.slice(0,60);
 							if (title.length>0 && title.length<80) {
-								// The lick button
-								var lick = '<img class="lickButton" src="/img/lick.png" mid="@MID@" artist="@ARTIST@" title="@TITLE@" url="@URL@" />',
+								// VERY VERY IMPORTANT!
+								// The lick button contains ALL the data we need to reconstruct every entry of the playlist
+								// Where: MID is MusixMatch's ID used in API tracks.get and URL is a VK song's OWNER_ID+TRACK_ID
+								var lick = '<img class="lickButton" src="/img/lick.png" thumb="@THUMB@" mxid="@MXID@" artist="@ARTIST@" title="@TITLE@" url="@URL@" />',
 									trackurl = "/tracksearch/" + track.owner_id + "_" + track.aid + ".mp3"
-									lick = lick.replace("@MID@", mx_track_id).replace("@ARTIST@", track.artist).replace("@TITLE@", track.title).replace("@URL@", trackurl);
+									lick = lick.replace("@THUMB@", params.thumb).replace("@MXID@", params.mxid).replace("@ARTIST@", track.artist).replace("@TITLE@", track.title).replace("@URL@", trackurl);
 								// Add the 360 player. The player plays the href of the first <a> it finds after div.ui360
 								trackAttr.push('<div class="ui360">' + '<a class="vkDownloadLink" href=/track/' + track.url +'>'+ lick + title + '</a>'+'</div>');
 								$('<li class="vkTrackEntry">' + trackAttr.join('') + '</li>').appendTo("#vk-results-list");
@@ -171,7 +175,7 @@
 
 		// Add new songs to the playlist when the lick button is clicked.
 		$(".lickButton").live('click', function addThisToPlaylist() {
-			var attributes = ["mid", "title", "artist", "url"],
+			var attributes = ["mxid", "title", "artist", "url", "thumb"],
 				data = {},
 				that = $(this);
 			try {
@@ -191,17 +195,21 @@
 			return false;
 		});
 
-		$.displayLyrics = function(title, artist, track_id) {
+		$.displayLyrics = function(params) {
 			mx_get_lyrics_in_progress = true;
 			$.ajax({
 				type: 'GET',
-				url: "/lyrics/" + track_id,
+				url: "/lyrics/" + params.mxid,
 				success: function(data) {
 					mx_get_lyrics_in_progress = false;
 					var message = data.message;
 					if (message.header.status_code==200) {
-						$("#lightBox").attr("mx_track_id", track_id).slideDown('fast','swing');
-						$("#lyricsTitle").text(title + " | " + artist);
+						$("#lightBox").attr("mxid", params.mxid).slideDown('fast','swing');
+						if (params.url) {
+							$("#lightBox").attr("url", params.url)
+						}
+						$('<img id="lyricsThumb" src="@" />'.replace("@", params.thumb)).appendTo("#lightBox");
+						$("#lyricsTitle").text(params.title + " | " + params.artist);
 						//$("#lyricsTitle").fitText();
 						var lyrics = message.body.lyrics.lyrics_body || "Lyrics not available.";
 						$("#lyricsText").text(lyrics);
@@ -215,12 +223,17 @@
 
 		$(".lyricLink").live('click', function openLightbox() {
 			if (!vk_search_in_progress && !mx_get_lyrics_in_progress && $("#lightBox").css("display")!='block') {
-				var title = $(this).text(),
-					artist = $(this).parent().next().text(),
+				var anchor = $(this),
+					trackEntry = anchor.parent().parent(),
+					title = anchor.text(),
+					thumb = trackEntry.find(".mxThumb").attr("src").replace(".jpg","_350_350.jpg"),
+					artist = trackEntry.find(".trackArtist").text(),
 					query_string = title + " " + artist,
-					track_id = $(this).attr("track_id");
-				searchVK(query_string, track_id);
-				$.displayLyrics(title, artist, track_id);
+					track_id = anchor.attr("track_id");
+				searchVK({q:query_string,
+							mxid:track_id, thumb:thumb});
+				$.displayLyrics({title:title, artist:artist,
+							mxid:track_id, thumb:thumb});
 			}
 			return false;
 		});

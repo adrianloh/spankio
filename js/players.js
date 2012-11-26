@@ -9,7 +9,22 @@
 
 		var self = this;
 		this.username = "";
-		var track_fragment = '<div onclick="" mid="@MID@" class="total-row can-play" artwork="/TotalControl/images/artwork.png" style="background-color: rgb(251, 251, 251); "><div type="checkbox" onclick="" class="total-checked"></div><div class="total-not-playing"></div><div class="total-title" src="@URL@">@TITLE@</div><div class="total-artist">@ARTIST@</div><div style="clear:both;"></div></div>';
+
+		function trackObjectToDOM(track) {
+			var track_fragment = '<div onclick="" mxid="@MXID@" class="total-row can-play" artwork="@THUMB@" style="background-color: rgb(251, 251, 251); "><div type="checkbox" onclick="" class="total-checked"></div><div class="total-not-playing"></div><div class="total-title" src="@URL@">@TITLE@</div><div class="total-artist">@ARTIST@</div><div style="clear:both;"></div></div>';
+			return track_fragment.replace("@THUMB@",track.thumb).replace("@MXID@", track.mxid).replace("@ARTIST@", track.artist).replace("@TITLE@", track.title).replace("@URL@", track.url);
+		}
+
+		function trackDOMToObject(div) {
+			div = $(div);
+			return {
+				mxid: div.attr("mxid"),
+				artist: div.find(".total-artist").text(),
+				title: div.find(".total-title").text(),
+				url: div.find(".total-title").attr("src"),
+				thumb:div.attr("artwork")
+			}
+		}
 
 		this.current_playlist = "Main Library";
 
@@ -17,8 +32,7 @@
 		// ADD A NEW TRACK TO THE CURRENT PLAYLIST
 		//
 		this.addToPlaylist = function(track, callback) {
-			var data = track_fragment.replace("@MID@", track.mid).replace("@ARTIST@", track.artist).replace("@TITLE@", track.title).replace("@URL@", track.url);
-			$(data).prependTo(".total_jspPane");
+			$(trackObjectToDOM(track)).prependTo(".total_jspPane");
 			if (callback) {
 				callback();
 			}
@@ -33,7 +47,7 @@
 				drop: function( event, ui ) {
 					var this_playlist_name = $(this).text(),
 						dropped_track = $(ui)[0].draggable,
-						track = {mid: dropped_track.attr("mid"),
+						track = {mxid: dropped_track.attr("mxid"),
 							artist: dropped_track.find(".total-artist").text(),
 							title: dropped_track.find(".total-title").text(),
 							url: dropped_track.find(".total-title").attr("src")
@@ -62,13 +76,7 @@
 			var playlist = [];
 			self.LCD.loading();
 			$(".total-row").each(function(i,div) {
-				div = $(div);
-				playlist.push({
-					mid: div.attr("mid"),
-					artist: div.find(".total-artist").text(),
-					title: div.find(".total-title").text(),
-					url: div.find(".total-title").attr("src")
-				});
+				playlist.push(trackDOMToObject(div));
 			});
 			self.LCD.status(self.current_playlist, playlist.length);
 			var req_url = "/playlist/" + self.username + " PLAYLIST " + encodeURIComponent(self.current_playlist);
@@ -202,15 +210,7 @@
 			var songListContextMenu = [
 				{'Lyrics':{
 					onclick:function(menuItem,menu) {
-						var div = $(this),
-							mid = div.attr("mid"),
-							title = div.find(".total-title").text(),
-							artist = div.find(".total-artist").text();
-						if (mid) {
-							$.displayLyrics(title, artist, mid);
-						} else {
-							$.searchByWire(title + " " + artist)
-						}
+						$.displayLyrics(trackDOMToObject(this));
 					},
 					title:'This is the hover title',
 					disabled:false

@@ -47,34 +47,27 @@
 		}
 	}
 
-	function publishFBWall(title, snippet) {
-		FB.api('/me/feed', 'post',
-			{
-				message     : snippet,
-				link        : 'http://spank.io/tracksearch/-18147471_84769174.mp3',
-				picture     : 'http://thinkdiff.net/iphone/lucky7_ios.jpg',
-				name        : title,
-				description : snippet
-			},
-			function(response) {
-				if (!response || response.error) {
-					console.log(response);
-					alert('Error occured');
-				} else {
-					alert('Post ID: ' + response.id);
-				}
-			});
-	}
-
 	$(document).ready(function () {
 
 		var selectedText = "";
 
 		function parsePost(o) {
 			var lyricsTextDiv = $(o),
-				postTitle = lyricsTextDiv.parent().find("#lyricsTitle").text();
+				postTitle = $("#lyricsTitle").text(),
+				thumb = $("#lyricsThumb").attr("src"),
+				url = $("#lightBox").attr("url");
 			if (selectedText) {
-				publishFBWall(postTitle, selectedText);
+				url = (typeof(url)==='undefined') ? "http://spank.io" : "http://spank.io".concat(url);
+				url = thumb; // Disable this line and a link to the mp3 goes to the wall instead
+				FB.api('/me/feed', 'post', {link:url, name:postTitle, message:selectedText, picture:thumb},
+					function(response) {
+						if (!response || response.error) {
+							console.log(response);
+							alert('Error occured');
+						} else {
+							alert('Posted to FB Wall!');
+						}
+				});
 			}
 		}
 
@@ -89,7 +82,7 @@
 			}
 		];
 
-		var cmenu1= $(document).contextMenu(lightBoxContextMenu,{theme:'osx'});
+		var cmenu1= $(document).contextMenu(lightBoxContextMenu,{theme:'vista'});
 		$("#lyricsText").live("contextmenu", function (event) {
 			cmenu1.show($(this), event);
 			return false;
