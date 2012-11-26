@@ -8,7 +8,7 @@
 		Playboy.prototype._singletonInstance = this;
 
 		var self = this;
-		var username = $("title").text();
+		this.username = "";
 		var track_fragment = '<div onclick="" mid="@MID@" class="total-row can-play" artwork="/TotalControl/images/artwork.png" style="background-color: rgb(251, 251, 251); "><div type="checkbox" onclick="" class="total-checked"></div><div class="total-not-playing"></div><div class="total-title" src="@URL@">@TITLE@</div><div class="total-artist">@ARTIST@</div><div style="clear:both;"></div></div>';
 
 		this.current_playlist = "Main Library";
@@ -38,7 +38,7 @@
 							title: dropped_track.find(".total-title").text(),
 							url: dropped_track.find(".total-title").attr("src")
 						},
-						req_url = "/playlist/" + username + " PLAYLIST " + encodeURIComponent(this_playlist_name);
+						req_url = "/playlist/" + self.username + " PLAYLIST " + encodeURIComponent(this_playlist_name);
 					$.ajax({
 						type:'PUT',
 						url: req_url,
@@ -71,7 +71,7 @@
 				});
 			});
 			self.LCD.status(self.current_playlist, playlist.length);
-			var req_url = "/playlist/" + username + " PLAYLIST " + encodeURIComponent(self.current_playlist);
+			var req_url = "/playlist/" + self.username + " PLAYLIST " + encodeURIComponent(self.current_playlist);
 			console.log("Saving to: ".concat(req_url));
 			$.ajax({
 				type:'PUT',
@@ -91,7 +91,7 @@
 			self.LCD.loading();
 			self.current_playlist = $(this).text();
 			console.log("Loading playlist --> " + self.current_playlist);
-			var url = "/playlist/" + username + " PLAYLIST " + encodeURIComponent(self.current_playlist);
+			var url = "/playlist/" + self.username + " PLAYLIST " + encodeURIComponent(self.current_playlist);
 			$.getJSON(url, function(tracklist) {
 				$(".total-row").remove();
 				tracklist = tracklist || [];
@@ -104,7 +104,9 @@
 			});
 		});
 
-		(function init() {
+		this.init = function(username) {
+
+			self.username = username;
 
 			$.each([
 				"/TotalControl/images/default-lcd-screen.png",
@@ -117,11 +119,7 @@
 			//
 			// ATTACH THE PLAYER TO BODY
 			//
-			$('<ul id="total-playlist"></ul>').appendTo('body');
-			// Total player adds tracks to its playlist by naively appending
-			// div layers to itself. Get the div html fragment that we'll
-			// use later to add new songs to the playlist.
-			$("#total-playlist").totalControl({
+			$('<ul id="total-playlist"></ul>').appendTo('body').totalControl({
 				style: "default.css",
 				checkboxesEnabled: true,
 				playlistSortable: true,
@@ -165,7 +163,7 @@
 			//
 			// FIRST LOAD OF SAVED PLAYLISTS
 			//
-			$.getJSON("/playlist/" + username + " PLAYLIST ALL", function(data) {
+			$.getJSON("/playlist/" + self.username + " PLAYLIST ALL", function(data) {
 				$.each(data, function(i, playlist_name) {
 					var name = playlist_name.split(" PLAYLIST ").slice(-1);
 					self.createPlaylistItemWithName(name);
@@ -254,7 +252,7 @@
 					onclick:function(menuItem,menu) {
 						var that = $(this),
 							playlist_name_to_delete = that.text(),
-							req_url = "/playlist/" + username + " PLAYLIST " + encodeURIComponent(playlist_name_to_delete);
+							req_url = "/playlist/" + self.username + " PLAYLIST " + encodeURIComponent(playlist_name_to_delete);
 						$.ajax({
 							type:'DELETE',
 							url: req_url,
@@ -296,12 +294,25 @@
 				return false;
 			});
 
-		})();
+		};
 
 	};
 
 	$(document).ready(function () {
-		var a = new Playboy();
+		$(document).bind("login", function() {
+			if (typeof(MyTotalPlayer)==='undefined') {
+				MyTotalPlayer = new Playboy();
+				MyTotalPlayer.init(FB_userInfo.email);
+			}
+		});
+		$(document).bind("logout", function() {
+			console.log("Unloading player...");
+			console.log(MyTotalPlayer);
+			if (typeof(MyTotalPlayer)==='object') {
+				delete MyTotalPlayer;
+				$("#total-playlist").html("");
+			}
+		});
 	});
 
 }(window));

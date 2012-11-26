@@ -18,12 +18,16 @@
 	$(document).ready(function () {
 
 		var current_page = 1,
-			username = $("title").text();
-
-		var vk_search_in_progress = false,
+			vk_search_in_progress = false,
 			mx_get_lyrics_in_progress = false;
 
-		var player = Playboy();
+		$(document).bind("login", function() {
+			$("title").text("Spank.io | " + FB_userInfo.name);
+		});
+
+		$(document).bind("logout", function() {
+			$("title").text("Welcome to Spank!");
+		});
 
 		$("#lightBox").jScrollPane("lightBox_jspPane", {
 			autoReinitialise: true,
@@ -92,7 +96,7 @@
 								// The lick button
 								var lick = '<img class="lickButton" src="/img/lick.png" mid="@MID@" artist="@ARTIST@" title="@TITLE@" url="@URL@" />',
 									trackurl = "/tracksearch/" + track.owner_id + "_" + track.aid + ".mp3"
-								lick = lick.replace("@MID@", mx_track_id).replace("@ARTIST@", track.artist).replace("@TITLE@", track.title).replace("@URL@", trackurl);
+									lick = lick.replace("@MID@", mx_track_id).replace("@ARTIST@", track.artist).replace("@TITLE@", track.title).replace("@URL@", trackurl);
 								// Add the 360 player. The player plays the href of the first <a> it finds after div.ui360
 								trackAttr.push('<div class="ui360">' + '<a class="vkDownloadLink" href=/track/' + track.url +'>'+ lick + title + '</a>'+'</div>');
 								$('<li class="vkTrackEntry">' + trackAttr.join('') + '</li>').appendTo("#vk-results-list");
@@ -174,9 +178,13 @@
 				$.each(attributes, function(i, attr) {
 					data[attr] = that.attr(attr);
 				});
-				player.addToPlaylist(data, function () {
-					$(document).trigger("playlistDidChange");
-				});
+				if (typeof(MyTotalPlayer)==='object') {
+					MyTotalPlayer.addToPlaylist(data, function () {
+						$(document).trigger("playlistDidChange");
+					});
+				} else {
+					alert("Login first to add to your playlist!");
+				}
 			} catch(err) {
 				console.log(err);
 			}
@@ -216,11 +224,6 @@
 			}
 			return false;
 		});
-
-		var removeResults = function() {
-			$(".results-list").remove();
-			$(".results-total").remove();
-		};
 
 	});
 

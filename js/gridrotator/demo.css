@@ -12,8 +12,10 @@
 
 /* General Demo Style */
 body {
-	font-family: 'Lato', 'Myriad Pro','Trebuchet MS', sans-serif;
-	background: #f9f9f9 url(../images/bg.jpg) repeat top left;
+    /*background: url(https://lh5.googleusercontent.com/-IK5ie7TDN-U/UK52LAxvTPI/AAAAAAAAVYo/RXpAyu6KUCk/s0/oldpaper.jpg) no-repeat fixed center center;*/
+	/*background-position: -20% 20%;*/
+	/*background-size: cover;*/
+    font-family: 'Lato', 'Myriad Pro','Trebuchet MS', sans-serif;
 	font-weight: 300;
 	font-size: 14px;
 	color: #333;

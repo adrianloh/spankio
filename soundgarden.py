@@ -9,6 +9,8 @@ import tornado.httpclient
 import tornado.curl_httpclient
 from urllib import urlencode, unquote
 import tornadoredis
+import facebook
+
 
 def extract(q, terms=(), delimiter=":"):
 	"""
@@ -68,12 +70,18 @@ DB_BASE = "http://onurknz.iriscouch.com/soundgarden/"
 class MainHandler(tornado.web.RequestHandler):
 
 	def get(self):
-		self.render("soundgarden.html", username="Welcome!")
+		self.render("soundgarden.html")
 
 class UsersHandler(tornado.web.RequestHandler):
 
-	def get(self, username):
-		self.render("soundgarden.html", username=username)
+	def get(self):
+		fbsr = None
+		try:
+			cookies = self.request.headers['Cookie']
+			fbsr = [re.findall("=(.*)",c)[0] for c in cookies.split(";") if re.search("fbsr",c)][0]
+		except: pass
+		if fbsr: print fbsr
+		self.render("soundgarden.html")
 
 class FBChannelFileHandler(tornado.web.RequestHandler):
 
@@ -275,6 +283,9 @@ class VKSearchHandler(tornado.web.RequestHandler):
 			self.finish()
 
 site_root = os.path.dirname(os.path.abspath(__file__))
+
+settings = {'cookie_secret':'SnB5T0RVTWVSY2lTV2hhSGx6bGdCU0c0M2dJWXFfZHhyWTQyTklzVC1tQnpJaDd4OV'}
+
 application = tornado.web.Application([
 	(r"/", MainHandler),
 	(r"/channel.html", FBChannelFileHandler),
@@ -292,7 +303,7 @@ application = tornado.web.Application([
 	(r"/img/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/img"}),
 	(r"/TotalControl/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/TotalControl"}),
 	(r"/360player/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/360player"}),
-	], debug=True)
+	], debug=True, **settings)
 
 if __name__ == "__main__":
 	if "OPENSHIFT_INTERNAL_IP" in os.environ:

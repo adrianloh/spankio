@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>{{ escape(username) }}</title>
+    <title>Welcome to Spank!</title>
     <!-- Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Condiment' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Averia+Serif+Libre:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
@@ -29,82 +29,58 @@
     <link type="text/css" href="/TotalControl/javascripts/jscrollpane/style/jquery.jscrollpane.css" rel="stylesheet" media="all" />
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.js"></script>
-    <script type="text/javascript" src="/js/contextMenu/jquery.contextmenu.js"></script>
+    <script type="text/javascript" src="/js/fb.js"></script>
 
-    <!-- 360 Player -->
-    <script type="text/javascript" src="/360player/berniecode-animator.js"></script>
-    <script type="text/javascript" src="/360player/soundmanager2.js"></script>
-    <script type="text/javascript" src="/360player/360player.js"></script>
-
-    <!-- Total Control Music Player -->
-    <!-- NOTE: Total Control and 360 both rely on SoundManager2, we loaded it for 360,
-        Total Control will rely on the same instance.
-    -->
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="/TotalControl/javascripts/jscrollpane/script/jquery.mousewheel.js"></script>
-    <script type="text/javascript" src="/TotalControl/javascripts/jscrollpane/script/jquery.jscrollpane.js"></script>
-    <script type="text/javascript" src="/TotalControl/TotalControl.js"></script>
-
-    <script type="text/javascript" src="/js/livesearch.js"></script>
-    <script type="text/javascript" src="/js/jquery.fittext.js"></script>
-    <script type="text/javascript" src="/js/jquery.jeditable.mini.js"></script>
-    <script type="text/javascript" src="/js/jquery.tinyscrollbar.min.js"></script>
-
-    <script type="text/javascript" src="/js/md5-min.js"></script>
-
-    <!-- Mine -->
-    <script type="text/javascript" src="/js/gridrotator/modernizr.custom.26633.js"></script>
-    <script type="text/javascript" src="/js/gridrotator/jquery.gridrotator.js"></script>
-
-    <script type="text/javascript" src="/js/players.js"></script>
-    <script type="text/javascript" src="/js/index.js"></script>
-    <script type="text/javascript" src="/js/snippets.js"></script>
 </head>
 <body>
 <div id="fb-root"></div>
-<script>
-    window.fbAsyncInit = function() {
-        // init the FB JS SDK
-        FB.init({
-            appId      : '	412279742177294', // App ID from the App Dashboard
-            channelUrl : '//singular-merovingian.rhcloud.com/channel.html', // Channel File for x-domain communication
-            status     : true, // check the login status upon init?
-            cookie     : true, // set sessions cookies to allow your server to access the session?
-            xfbml      : true  // parse XFBML tags on this page?
-        });
-        // Additional initialization code such as adding Event Listeners goes here
-    };
-    // Load the SDK's source Asynchronously
-    // Note that the debug version is being actively developed and might
-    // contain some type checks that are overly strict.
-    // Please report such bugs using the bugs tool.
-    (function(d, debug){
-        var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement('script'); js.id = id; js.async = true;
-        js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
-        ref.parentNode.insertBefore(js, ref);
-    }(document, /*debug*/ false));
-</script>
-<iframe src="/static/index3.html"></iframe>
-<div id="gridpattern"></div>
+<div id="logo">Spank.io</div>
+<div id="searchForm">
+    <button id="fb-auth">Login</button>
+    <div id="track_count_current"></div>
+    <div id="track_count_total"></div>
+    <form id="searchLyrics">
+        <input type="text" name="lyrics" id="lyrics" size="120" value="" class="text-input" />
+    </form>
+</div>
 <div class="st-scroll">
-	<h1>Spank.io</h1>
     <div id="lightBox">
-        <div id="blockHead"></div>
         <img id="closeButton" src="/img/close.png" />
         <div id="lyricsTitle"></div>
         <pre id="lyricsText"></pre>
     </div>
-    <div id="searchForm">
-        <div id="track_count_current"></div>
-        <div id="track_count_total"></div>
-        <form id="searchLyrics">
-                <input type="text" name="lyrics" id="lyrics" size="120" value="" class="text-input"/>
-        </form>
-    </div>
     <section id="resultsTotal"></section>
     <section id="resultsSection"></section>
 </div>
+<div id="gridpattern"></div>
 </body>
+<!-- 360 Player -->
+<script type="text/javascript" src="/360player/berniecode-animator.js"></script>
+<script type="text/javascript" src="/360player/soundmanager2.js"></script>
+<script type="text/javascript" src="/360player/360player.js"></script>
+
+<!-- Total Control Music Player -->
+<!-- NOTE: Total Control and 360 both rely on SoundManager2, we loaded it for 360,
+        Total Control will rely on the same instance.
+    -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/TotalControl/javascripts/jscrollpane/script/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="/TotalControl/javascripts/jscrollpane/script/jquery.jscrollpane.js"></script>
+<script type="text/javascript" src="/TotalControl/TotalControl.js"></script>
+
+<script type="text/javascript" src="/js/contextMenu/jquery.contextmenu.js"></script>
+<script type="text/javascript" src="/js/livesearch.js"></script>
+<script type="text/javascript" src="/js/jquery.fittext.js"></script>
+<script type="text/javascript" src="/js/jquery.jeditable.mini.js"></script>
+<script type="text/javascript" src="/js/jquery.tinyscrollbar.min.js"></script>
+
+<script type="text/javascript" src="/js/md5-min.js"></script>
+
+<!-- Mine -->
+<script type="text/javascript" src="/js/gridrotator/modernizr.custom.26633.js"></script>
+<script type="text/javascript" src="/js/gridrotator/jquery.gridrotator.js"></script>
+
+<script type="text/javascript" src="/js/players.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+<script type="text/javascript" src="/js/snippets.js"></script>
 </html>

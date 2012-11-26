@@ -50,6 +50,8 @@ soundManager.url = '/TotalControl/javascripts/soundmanager/swf';
 		 var playerHtml = '';
 		 var totalSongs = 0;
 		 var useFlash = "no";
+
+		 // Get initial list of songs
       	 thisPlayer.find("li").each(function () {
 			var thisTitle = $(this).attr("title");
 			var thisArtist = $(this).attr("artist");
@@ -136,8 +138,8 @@ soundManager.url = '/TotalControl/javascripts/soundmanager/swf';
 		});// End traversing playlist rows
 		
 		// Get artist and title of first song
-		var firstTitle = thisPlayer.find("li:first").attr("title");
-		var firstArtist = thisPlayer.find("li:first").attr("artist");
+		var firstTitle = thisPlayer.find("li:first").attr("title") || "";
+		var firstArtist = thisPlayer.find("li:first").attr("artist") || "";
 		
 		///////////////////////////////////////////////////////////////
 		
@@ -637,7 +639,7 @@ soundManager.url = '/TotalControl/javascripts/soundmanager/swf';
 		// Create global HTML5 audio object
 		var htmlSound = new Audio ();
 		// Create global SoundManager audio object
-		var mySound = soundManager.createSound();
+//		var mySound = soundManager.createSound();
 
 		// Play //////////////////////
 		var firstSrc = thisPlayer.find("[src]:first").attr("src");
@@ -650,7 +652,7 @@ soundManager.url = '/TotalControl/javascripts/soundmanager/swf';
 		{
 			thisPlayer.find(".total-artwork:first").html("");
 		}
-		
+
 		function songPlay (newSrc) {
 			if (useFlash == "no")
 			{
