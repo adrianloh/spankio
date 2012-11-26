@@ -17,7 +17,7 @@ window.fbAsyncInit = function() {
 		xfbml      : true  // parse XFBML tags on this page?
 	};
 
-	FB.init(dev_settings);
+	FB.init(production_settings);
 
 	function initFB(response) {
 		// Refer to:
