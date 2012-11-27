@@ -288,6 +288,17 @@ INPUT:-ms-input-placeholder
 	-webkit-box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
 	box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
 }
+#lyricsThumb {
+    display: none;
+    outline-color: black;
+    outline: 3px;
+    z-index: 0;
+    position: fixed;
+    left: 47%;
+    top: 12%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
 #logo {
 	z-index: 2;
 	opacity: 0.96;

@@ -85,7 +85,14 @@ class UsersHandler(tornado.web.RequestHandler):
 
 class FBChannelFileHandler(tornado.web.RequestHandler):
 
-	def get(self, username):
+	def get(self):
+		# See following for why we're setting these headers:
+		# https://developers.facebook.com/blog/post/530/
+		import time
+		expire = 60*60*24*365
+		self.set_header("Cache-Control", "maxage=%i" % expire)
+		self.set_header("Pragma", "public")
+		self.set_header("Expires", time.asctime(time.gmtime(time.time()+expire)) + " GMT")
 		self.write('<script src="//connect.facebook.net/en_US/all.js"></script>')
 
 class TestHandler(tornado.web.RequestHandler):
@@ -113,15 +120,11 @@ class PlaylistHandler(tornado.web.RequestHandler):
 		redkey = urldecode(redkey)
 		if re.search("PLAYLIST ALL", redkey):
 			pattern = re.sub("ALL", "*", redkey)
-			try:
-				playlists = yield tornado.gen.Task(RED.keys, pattern)
-				if playlists:
-					self.write(json.dumps(playlists))
-				else:
-					self.write(json.dumps(["Main Library"]))
-			except Exception as e:
-				print "Error while getting playlists."
-				self.write(json.dumps([]))
+			playlists = yield tornado.gen.Task(RED.keys, pattern)
+			if playlists:
+				self.write(json.dumps(playlists))
+			else:
+				self.write(json.dumps(["Main Library"]))
 		else:
 			tracklist = yield tornado.gen.Task(RED.get, redkey)
 			if tracklist: self.write(tracklist if (tracklist is not None) else json.dumps([]))

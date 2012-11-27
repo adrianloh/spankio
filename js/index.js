@@ -78,37 +78,34 @@
 		var searchVK = function(params) {
 			vk_search_in_progress = true;
 			$('<ul id="vk-results-list"></ul>').appendTo('.lightBox_jspPane');
-			var xhr = $.ajax({
-				type: 'GET',
-				url: '/vksearch/'+encodeURIComponent(params.q),
-				success: function(data) {
-					vk_search_in_progress = false;
-					var message = "";
-					if (data.error) {
-						message = '<li class="vkMessage">Oopsies, couldn\'t find this song.</li>'
-						$(message).appendTo("#vk-results-list");
-					} else {
-						message = '<li class="vkMessage">Found @MESSAGE@ track(s)</li>'.replace("@MESSAGE@", data.response.length);
-						$(message).appendTo("#vk-results-list");
-						$.each(data.response, function (i, track) {
-							track.mxid = params.mxid;
-							var trackAttr = [],
-								title = track.title.slice(0,60) + ' -- ' + track.artist.slice(0,60);
-							if (title.length>0 && title.length<80) {
-								// VERY VERY IMPORTANT!
-								// The lick button contains ALL the data we need to reconstruct every entry of the playlist
-								// Where: MID is MusixMatch's ID used in API tracks.get and URL is a VK song's OWNER_ID+TRACK_ID
-								var lick = '<img class="lickButton" src="/img/lick.png" thumb="@THUMB@" mxid="@MXID@" artist="@ARTIST@" title="@TITLE@" url="@URL@" />',
-									trackurl = "/tracksearch/" + track.owner_id + "_" + track.aid + ".mp3"
-									lick = lick.replace("@THUMB@", params.thumb).replace("@MXID@", params.mxid).replace("@ARTIST@", track.artist).replace("@TITLE@", track.title).replace("@URL@", trackurl);
-								// Add the 360 player. The player plays the href of the first <a> it finds after div.ui360
-								trackAttr.push('<div class="ui360">' + '<a class="vkDownloadLink" href=/track/' + track.url +'>'+ lick + title + '</a>'+'</div>');
-								$('<li class="vkTrackEntry">' + trackAttr.join('') + '</li>').appendTo("#vk-results-list");
-							}
-						});
-						// threeSixtyPlayer.init searches for div.ui360 elements and attaches a player to each item it finds.
-						threeSixtyPlayer.init();
-					}
+			var url = "https://api.vkontakte.ru/method/audio.search?access_token=b63e1d33bf6561b4bf6561b4b9bf4e0dd1bbf65bf6b5dabefccf0d187e2dbaa4ac0b03e&count=100&q=QUERY&callback=?";
+			var xhr = $.getJSON(url.replace("QUERY",params.q), function(data) {
+				vk_search_in_progress = false;
+				var message = "";
+				if (data.error) {
+					message = '<li class="vkMessage">Oopsies, couldn\'t find this song.</li>'
+					$(message).appendTo("#vk-results-list");
+				} else {
+					message = '<li class="vkMessage">Found @MESSAGE@ track(s)</li>'.replace("@MESSAGE@", data.response[0]);
+					$(message).appendTo("#vk-results-list");
+					$.each(data.response.slice(1), function (i, track) {
+						track.mxid = params.mxid;
+						var trackAttr = [],
+							title = track.title.slice(0,60) + ' -- ' + track.artist.slice(0,60);
+						if (title.length>0 && title.length<80) {
+							// VERY VERY IMPORTANT!
+							// The lick button contains ALL the data we need to reconstruct every entry of the playlist
+							// Where: MXID is MusixMatch's ID used in API tracks.get and URL is a VK song's OWNER_ID+TRACK_ID
+							var lick = '<img class="lickButton" src="/img/lick.png" thumb="@THUMB@" mxid="@MXID@" artist="@ARTIST@" title="@TITLE@" url="@URL@" />',
+								trackurl = track.owner_id + "_" + track.aid + ".mp3";
+							lick = lick.replace("@THUMB@", params.thumb).replace("@MXID@", params.mxid).replace("@ARTIST@", track.artist).replace("@TITLE@", track.title).replace("@URL@", trackurl);
+							// Add the 360 player. The player plays the href of the first <a> it finds after div.ui360
+							trackAttr.push('<div class="ui360">' + '<a class="vkDownloadLink" href="' + track.url +'">'+ lick + title + '</a>'+'</div>');
+							$('<li class="vkTrackEntry">' + trackAttr.join('') + '</li>').appendTo("#vk-results-list");
+						}
+					});
+					// threeSixtyPlayer.init searches for div.ui360 elements and attaches a player to each item it finds.
+					threeSixtyPlayer.init();
 				}
 			});
 			$("#closeButton").click(function() {
@@ -119,7 +116,7 @@
 		//
 		//	LIVE SEARCH FORM
 		//
-		// Stop the ENTER key from submitting the form when we hit it
+		// Suppress the ENTER key
 		$("#lyrics").keydown(function(e){
 			if ( e.keyCode===13 ) {
 				return false;
@@ -127,6 +124,7 @@
 		});
 
 		$.searchByWire = function(search_term) {
+			// Get the lightbox out of the way when we start searching again...
 			$("#closeButton").trigger("click");
 			var data = {q:search_term, page:current_page};
 			$("html").addClass('busy');
@@ -197,26 +195,23 @@
 
 		$.displayLyrics = function(params) {
 			mx_get_lyrics_in_progress = true;
-			$.ajax({
-				type: 'GET',
-				url: "/lyrics/" + params.mxid,
-				success: function(data) {
-					mx_get_lyrics_in_progress = false;
-					var message = data.message;
-					if (message.header.status_code==200) {
-						$("#lightBox").attr("mxid", params.mxid).slideDown('fast','swing');
-						if (params.url) {
-							$("#lightBox").attr("url", params.url)
-						}
-						$('<img id="lyricsThumb" src="@" />'.replace("@", params.thumb)).appendTo("#lightBox");
-						$("#lyricsTitle").text(params.title + " | " + params.artist);
-						//$("#lyricsTitle").fitText();
-						var lyrics = message.body.lyrics.lyrics_body || "Lyrics not available.";
-						$("#lyricsText").text(lyrics);
-					} else {
-						console.log("$displayLyrics returned error with object:");
-						console.log(data);
+			var url = "http://api.musixmatch.com/ws/1.1/track.lyrics.get?apikey=316bd7524d833bb192d98be44fe43017&track_id=#&format=jsonp&callback=?";
+			$.getJSON(url.replace("#",params.mxid), function(data) {
+				mx_get_lyrics_in_progress = false;
+				var message = data.message;
+				if (message.header.status_code==200) {
+					$("#lightBox").attr("mxid", params.mxid).slideDown('fast','swing');
+					if (params.url) {
+						$("#lightBox").attr("url", params.url)
 					}
+					$('<img id="lyricsThumb" src="@" />'.replace("@", params.thumb)).appendTo("#lightBox");
+					$("#lyricsTitle").text(params.title + " | " + params.artist);
+					//$("#lyricsTitle").fitText();
+					var lyrics = message.body.lyrics.lyrics_body || "Lyrics not available.";
+					$("#lyricsText").text(lyrics);
+				} else {
+					console.log("$displayLyrics returned error with object:");
+					console.log(data);
 				}
 			});
 		};

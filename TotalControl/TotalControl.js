@@ -654,43 +654,48 @@ soundManager.url = '/TotalControl/javascripts/soundmanager/swf';
 		}
 
 		function songPlay (newSrc) {
+			if (typeof(newSrc)==='undefined') { return false; }
 			if (useFlash == "no")
 			{
-				
-				htmlSound.src = newSrc;
-				htmlSound.preload = "auto";
-				htmlSound.load();
+				var url = "https://api.vkontakte.ru/method/audio.getById?audios=#&access_token=b63e1d33bf6561b4bf6561b4b9bf4e0dd1bbf65bf6b5dabefccf0d187e2dbaa4ac0b03e&callback=?",
+					owner_id = newSrc.split(".")[0];
+				$.getJSON(url.replace("#",owner_id), function(data) {
+					htmlSound.src = data.response[0].url;
+					htmlSound.preload = "auto";
+					htmlSound.load();
+					htmlSound.play();
+				});
 
 				thisPlayer.find( ".total-position-scrubber" ).bind( "slide", function(event, ui) {
 					htmlSound.currentTime = ui.value;
 				});
-				
+
 				var currentArtist = currentRow.find(".total-artist").text();
 				var currentTitle = 	currentRow.find(".total-title").text();
-				
+
 				thisPlayer.find(".total-playing-artist").html(currentArtist);
 				thisPlayer.find(".total-playing-title").html(currentTitle);
-				
+
 				htmlSound.addEventListener("timeupdate", function() {
 					var newVolume = thisPlayer.find( ".total-volume-slider" ).slider("option", "value");
 					htmlSound.volume = newVolume;
-					
+
 					var duration = htmlSound.duration * 1000;
 					var durationTime = convertMilliseconds(duration, "mm:ss");
 					thisPlayer.find(".total-song-duration").html(durationTime.clock );
-					
+
 					var position = htmlSound.currentTime * 1000;
 					var positionTime = convertMilliseconds(position, "mm:ss");
 					thisPlayer.find(".total-song-position").html(positionTime.clock );
-					
+
 					thisPlayer.find( ".total-position-scrubber" ).slider("option", "max", duration/1000);
 					thisPlayer.find( ".total-position-scrubber" ).slider("option", "value", position/1000);
-					
+
 				});
-				
-				
+
 				thisPlayer.find(".total-row .total-not-playing").removeClass("total-playing");
 				currentRow.find(".total-not-playing").addClass("total-playing");
+
 			}
 			else if (useFlash == "yes")
 			{
@@ -955,7 +960,6 @@ soundManager.url = '/TotalControl/javascripts/soundmanager/swf';
 				songPlay(firstSrc);
 			}
 		}
-		
 		
 		// Next Button
 		thisPlayer.find(".total-next").live("click", function () {

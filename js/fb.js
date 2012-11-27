@@ -1,4 +1,4 @@
-window.fbAsyncInit = function() {
+window.fbAsyncInit = function checkFacebookStatus() {
 	// init the FB JS SDK
 
 	var production_settings = {
@@ -17,7 +17,12 @@ window.fbAsyncInit = function() {
 		xfbml      : true  // parse XFBML tags on this page?
 	};
 
-	FB.init(production_settings);
+	var settings = {
+		"spank.io": production_settings,
+		"xerxes.local:8888": dev_settings
+	};
+
+	FB.init(settings[window.location.host]);
 
 	function initFB(response) {
 		// Refer to:
@@ -28,12 +33,14 @@ window.fbAsyncInit = function() {
 			$("#fb-login").hide();
 			$(document).trigger("login");
 			var q = "SELECT name,username FROM user WHERE uid in (SELECT uid2 FROM friend WHERE uid1=me()) and is_app_user='1'";
-			// FB.api('fql',{q:q}, function(res) { console.log(res); })
+			FB.api('fql',{q:q}, function(res) {
+				var friends_using_this_app = res
+			})
 		});
 	}
 
 	function updateButton(response) {
-		var button       =   document.getElementById('fb-auth');
+		var button = document.getElementById('fb-auth');
 		if (response.status === 'connected') {
 			//user is already logged in and connected
 			initFB(response);
@@ -55,14 +62,13 @@ window.fbAsyncInit = function() {
 						initFB(response);
 					} else {
 						//user cancelled login or did not grant authorization
-						alert("Aiks!");
+						console.log("User cancelled login/authorization.");
 					}
 				}, {scope:'email, read_friendlists, publish_stream'});
 			}
 		}
-		//$('<iframe src="/static/index3.html"></iframe>').appendTo("body");
 	}
-	$('<button id="fb-auth" style="display: none;">Login</button>').appendTo("#searchForm");
+	$('<button id="fb-auth" style="display: none;">Login</button>').appendTo("#searchForm"); // Keep this button around for debug
 	$('<div id="fb-login" class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1" scope="email, read_friendlists, publish_stream"></div>').appendTo("#searchForm");
 	// run once with current status and whenever the status changes
 	FB.getLoginStatus(updateButton);

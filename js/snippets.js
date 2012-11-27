@@ -1,30 +1,5 @@
 (function(){
 
-	function getSelectedText()
-	{
-		var selectedText=(
-			window.getSelection
-				?
-				window.getSelection()
-				:
-				document.getSelection
-					?
-					document.getSelection()
-					:
-					document.selection.createRange().text
-			);
-		if(!selectedText || selectedText=="")
-		{
-			if(document.activeElement.selectionStart)
-			{
-				selectedText = document.activeElement.value.substring(
-					document.activeElement.selectionStart
-						. document.activeElement.selectionEnd);
-			}
-		}
-		return selectedText;
-	}
-
 	function getSelectionHTML() { 										// http://snipplr.com/view/10912/get-html-of-selection/
 		var userSelection = window.getSelection();
 		if (userSelection.isCollapsed)
@@ -51,9 +26,9 @@
 
 		var selectedText = "";
 
-		function parsePost(o) {
-			var lyricsTextDiv = $(o),
-				postTitle = $("#lyricsTitle").text(),
+		function parsePost() {
+			// We assume that there will always only be ONE lightbox open
+			var postTitle = $("#lyricsTitle").text(),
 				thumb = $("#lyricsThumb").attr("src"),
 				url = $("#lightBox").attr("url");
 			if (selectedText) {
@@ -74,7 +49,7 @@
 		var lightBoxContextMenu = [
 			{'Post':{
 				onclick:function(menuItem,menu) {
-					parsePost(this);
+					parsePost();
 				},
 				title:'Post to my Facebook wall',
 				disabled:false
