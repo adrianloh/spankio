@@ -166,7 +166,7 @@ INPUT:-ms-input-placeholder
 	letter-spacing: -1.8px;
 	color: rgb(255, 255, 255);
 	font: 51px "Oswald";
-	left: 16%;
+	left: 22%;
 	top: -1.5%;
 }
 #track_count_total {
@@ -471,14 +471,14 @@ INPUT:-ms-input-placeholder
 
 ul.lastfm-buttons {
     position: absolute;
-    top: -31%;
-    left: 7%;
-    border-radius: 11px;
-    background-color: rgb(84, 9, 165);
-    padding: 3px 11px 6px 14px;
+    top: -62%;
+    left: 9%;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 3px 6px 6px 6px;
 }
 
 button.chart-button {
+    font: 10px "proxima-nova-1";
     width: 100px;
 }
 
