@@ -51,10 +51,13 @@
 		// When we CLOSE the LIGHTBOX
 		//
 		$("#closeButton").click(function() {
-			$("#lyricsTitle").text("");
-			$("#lyricsText").html("");
+			lightBoxModel.lyricsText("");
+			lightBoxModel.lyricsTitle("");
+			lightBoxModel.lyricsThumb("");
+//			$("#lyricsThumb").remove();
+//			$("#lyricsTitle").text("");
+//			$("#lyricsText").html("");
 			$("#vk-results-list").remove();
-			$("#lyricsThumb").remove();
 			$("#lightBox").slideUp('fast','swing');
 			$("#lightBox_jspPane").html("");
 			$(this).removeClass('busy');
@@ -123,6 +126,49 @@
 			}
 		});
 
+		function LightBoxViewModel() {
+			var self = this;
+			self.lyricsTitle = ko.observable("");
+			self.lyricsText = ko.observable("");
+			self.lyricsThumb = ko.observable("");
+			self.vkSearchResults = ko.observableArray([]);
+		}
+
+		var lightBoxModel = new LightBoxViewModel();
+		ko.applyBindings(lightBoxModel, document.getElementById('lightBox'));
+
+		function ChartsViewModel() {
+			var self = this;
+			// Editable data
+			self.chartTracks = ko.observableArray([]);
+			self.push = function(o) {
+				// Init defaults for properties our view expects
+				var track = {title:'na', artist:'na', mxid:"na", thumb:"http://api.musixmatch.com/images/albums/nocover.png"};
+				if (o.hasOwnProperty("track")) {    // This is a MusiXMatch track object
+					o = o.track;
+					track.mxid = o.track_id;
+					track.title = o.track_name;
+					track.artist = o.artist_name;
+					track.thumb = o.album_coverart_100x100;
+					self.chartTracks.push(track);
+				} else if (o.hasOwnProperty("mbid")) { // This is a last.fm track object
+					track.artist = o.artist.name;
+					track.title = o.name;
+					track.thumb = o.image ? o.image[2]['#text'] : track.thumb;
+					self.chartTracks.push(track);
+				} else if (o.hasOwnProperty("im:artist")) {
+					track.artist = o['im:artist'].label;
+					track.title = o['im:name'].label;
+					track.thumb = o['im:image'][1] ? o['im:image'][1].label : track.thumb;
+					self.chartTracks.push(track);
+				}
+			}
+		}
+
+		var charts = new ChartsViewModel();
+		Charts = charts;
+		ko.applyBindings(charts);
+
 		$.searchByWire = function(search_term) {
 			// Get the lightbox out of the way when we start searching again...
 			$("#closeButton").trigger("click");
@@ -136,24 +182,13 @@
 					var items = [],
 						tracklist = response.message.body.track_list;
 					if (tracklist.length>0) {
-						$("#track_count_total").text(padToFour(tracklist.length));
-						$('#resultsSection').html("");
-						$('<div/>', {'id':'pageNumber', 'class':'results-total', html:'Page: ' + current_page}).appendTo('#resultsTotal');
+						charts.chartTracks.removeAll();
 						$.each(tracklist, function (i, o) {
-							var track = o.track;
-							var trackAttr = [];
-							trackAttr.push('<img class="mxThumb" src="@" />'.replace("@",track.album_coverart_100x100));
-							trackAttr.push('<div class="trackName">'+ '<a class="lyricLink" href="#" track_id="' + track.track_id +'">'+ track.track_name.slice(0,45) +'</a>' +'</div>');
- 							trackAttr.push('<div class="trackArtist">'+ track.artist_name +'</div>');
-							items.push('<li class="trackEntry">' + trackAttr.join('') + '</li>');
+							charts.push(o);
 						});
 					} else {
 						items.push('<li class="trackName">' + "Nothing found!" + '</li>');
 					}
-					$('<ul/>', {'class':'results-list helix', html:items.join('')}).appendTo('#resultsSection');
-					//stroll.bind(".results_list");
-					$(".trackEntry").each(function() { wobble($(this),-7,5); });
-					$("#resultsSection").trigger("scroll");
 				}
 			});
 			return false;
@@ -166,8 +201,8 @@
 
 		$("#lyrics").livesearch({
 			searchCallback: $.searchByWire,
-			innerText: "The Times They Are A-Changin'",
-			queryDelay:250,
+			innerText: "Freed music",
+			queryDelay:500,
 			minimumSearchLength: 3
 		});
 
@@ -193,42 +228,61 @@
 			return false;
 		});
 
-		$.displayLyrics = function(params) {
-			mx_get_lyrics_in_progress = true;
-			var url = "http://api.musixmatch.com/ws/1.1/track.lyrics.get?apikey=316bd7524d833bb192d98be44fe43017&track_id=#&format=jsonp&callback=?";
-			$.getJSON(url.replace("#",params.mxid), function(data) {
-				mx_get_lyrics_in_progress = false;
-				var message = data.message;
-				if (message.header.status_code==200) {
-					$("#lightBox").attr("mxid", params.mxid).slideDown('fast','swing');
-					if (params.url) {
-						$("#lightBox").attr("url", params.url)
+		function mxMatchOne(title, artist, callback, err_callback) {
+			var url = "http://api.musixmatch.com/ws/1.1/matcher.track.get?q_artist=ARTIST&q_track=TRACK&apikey=316bd7524d833bb192d98be44fe43017&format=jsonp&callback=?";
+			url = url.replace("ARTIST", encodeURIComponent($.trim(artist))).replace("TRACK", encodeURIComponent($.trim(title)));
+			$.getJSON(url, function(res) {
+				try {
+					if (res.message.body.track) {
+						callback(res.message.body.track);
+					} else {
+						err_callback();
 					}
-					$('<img id="lyricsThumb" src="@" />'.replace("@", params.thumb)).appendTo("#lightBox");
-					$("#lyricsTitle").text(params.title + " | " + params.artist);
-					//$("#lyricsTitle").fitText();
-					var lyrics = message.body.lyrics.lyrics_body || "Lyrics not available.";
-					$("#lyricsText").text(lyrics);
-				} else {
-					console.log("$displayLyrics returned error with object:");
-					console.log(data);
+				} catch(err) {
+					err_callback()
 				}
 			});
-		};
+		}
+
+		function getLyricsWithMxid(track) {
+			mx_get_lyrics_in_progress = true;
+			function getLyrics(mxid) {
+				var url = "http://api.musixmatch.com/ws/1.1/track.lyrics.get?apikey=316bd7524d833bb192d98be44fe43017&track_id=#&format=jsonp&callback=?";
+				$.getJSON(url.replace("#", mxid), function(data) {
+					mx_get_lyrics_in_progress = false;
+					try {
+						if (data.message.body && data.message.body.lyrics.lyrics_body) {
+							lightBoxModel.lyricsText(data.message.body.lyrics.lyrics_body);
+						}
+					} catch(err) { }
+				});
+			}
+			if (track.mxid=='na') {
+				mxMatchOne(track.title, track.artist, function onmatch(o) {
+					getLyrics(o.track_id);
+				}, function onerr() {
+					mx_get_lyrics_in_progress = false;
+				});
+			} else {
+				getLyrics(track.mxid);
+			}
+		}
 
 		$(".lyricLink").live('click', function openLightbox() {
 			if (!vk_search_in_progress && !mx_get_lyrics_in_progress && $("#lightBox").css("display")!='block') {
 				var anchor = $(this),
 					trackEntry = anchor.parent().parent(),
 					title = anchor.text(),
-					thumb = trackEntry.find(".mxThumb").attr("src").replace(".jpg","_350_350.jpg"),
+					thumb = trackEntry.find(".mxThumb").attr("src"),
 					artist = trackEntry.find(".trackArtist").text(),
 					query_string = title + " " + artist,
-					track_id = anchor.attr("track_id");
+					mxid = anchor.attr("mxid");
+				getLyricsWithMxid({artist:artist, title:title, mxid:mxid});
 				searchVK({q:query_string,
-							mxid:track_id, thumb:thumb});
-				$.displayLyrics({title:title, artist:artist,
-							mxid:track_id, thumb:thumb});
+					mxid:mxid, thumb:thumb});
+				lightBoxModel.lyricsThumb(thumb);
+				lightBoxModel.lyricsTitle(title + " | " + artist);
+				$("#lightBox").slideDown('fast','swing');
 			}
 			return false;
 		});
@@ -236,3 +290,24 @@
 	});
 
 })();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

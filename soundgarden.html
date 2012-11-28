@@ -41,15 +41,32 @@
     <form id="searchLyrics">
         <input type="text" name="lyrics" id="lyrics" size="120" value="" class="text-input" />
     </form>
+    <ul class="lastfm-buttons">
+        <li><button class="chart-button">lastfm_top</button></li>
+        <li><button class="chart-button">lastfm_loved</button></li>
+        <li><button class="chart-button">lastfm_hyped</button></li>
+        <li><button class="chart-button">billboards_us</button></li>
+        <li><button class="chart-button">billboards_uk</button></li>
+        <li><button class="chart-button">itunes</button></li>
+    </ul>
 </div>
 <div class="st-scroll">
     <div id="lightBox">
         <img id="closeButton" src="/img/close.png" />
-        <div id="lyricsTitle"></div>
-        <pre id="lyricsText"></pre>
+        <div id="lyricsTitle" data-bind="text : lyricsTitle"></div>
+        <pre id="lyricsText" data-bind="text : lyricsText"></pre>
+        <img id="lyricsThumb" data-bind="attr: { src: lyricsThumb }" />
     </div>
     <section id="resultsTotal"></section>
-    <section id="resultsSection"></section>
+    <section id="resultsSection">
+        <ul class="results-list" data-bind="foreach: chartTracks">
+            <li class="trackEntry">
+                <img class="mxThumb" data-bind="attr: { src: thumb }" />
+                <div class="trackName"><a class="lyricLink" href="#" data-bind="text: title, attr: { mxid: mxid }"></a></div>
+                <div class="trackArtist" data-bind="text: artist"></div>
+            </li>
+        </ul>
+    </section>
 </div>
 <div id="gridpattern"></div>
 </body>
@@ -80,4 +97,6 @@
 <script type="text/javascript" src="/js/players.js"></script>
 <script type="text/javascript" src="/js/index.js"></script>
 <script type="text/javascript" src="/js/snippets.js"></script>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.1.0/knockout-min.js"></script>
+<script type="text/javascript" src="/js/charts.js"></script>
 </html>

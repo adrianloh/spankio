@@ -4,7 +4,7 @@ html.busy, html.busy * {
 BODY
 {
 	background-color: rgb(65, 67, 117);
-/*	background: url(https://lh5.googleusercontent.com/-IK5ie7TDN-U/UK52LAxvTPI/AAAAAAAAVYo/RXpAyu6KUCk/s0/oldpaper.jpg) no-repeat fixed center center;
+	background: url(https://lh5.googleusercontent.com/-IK5ie7TDN-U/UK52LAxvTPI/AAAAAAAAVYo/RXpAyu6KUCk/s0/oldpaper.jpg) no-repeat fixed center center;
 	background-position: -20% 20%;
 	background-size: cover;*/
 	font-size: 12px;
@@ -468,4 +468,40 @@ INPUT:-ms-input-placeholder
 .st-scroll {
 	z-index: 10;
 }
+
+ul.lastfm-buttons {
+    position: absolute;
+    top: -31%;
+    left: 7%;
+    border-radius: 11px;
+    background-color: rgb(84, 9, 165);
+    padding: 3px 11px 6px 14px;
+}
+
+button.chart-button {
+    width: 100px;
+}
+
+ul.lastfm-buttons li {
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

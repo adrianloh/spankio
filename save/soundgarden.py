@@ -65,10 +65,22 @@ VK_ACCESS_TOKEN = "b63e1d33bf6561b4bf6561b4b9bf4e0dd1bbf65bf6b5dabefccf0d187e2db
 VK_AGENT = "com.r2soft.VKontakteMusic/1010 (unknown)"
 MX_API_KEY = "316bd7524d833bb192d98be44fe43017"
 MX_AGENT = "musiXmatch/211 CFNetwork/596.2.3 Darwin/12.2.0 (x86_64) (MacPro3,1)"
+DB_BASE = "http://onurknz.iriscouch.com/soundgarden/"
 
 class MainHandler(tornado.web.RequestHandler):
 
 	def get(self):
+		self.render("soundgarden.html")
+
+class UsersHandler(tornado.web.RequestHandler):
+
+	def get(self):
+		fbsr = None
+		try:
+			cookies = self.request.headers['Cookie']
+			fbsr = [re.findall("=(.*)",c)[0] for c in cookies.split(";") if re.search("fbsr",c)][0]
+		except: pass
+		if fbsr: print fbsr
 		self.render("soundgarden.html")
 
 class FBChannelFileHandler(tornado.web.RequestHandler):
@@ -82,6 +94,22 @@ class FBChannelFileHandler(tornado.web.RequestHandler):
 		self.set_header("Pragma", "public")
 		self.set_header("Expires", time.asctime(time.gmtime(time.time()+expire)) + " GMT")
 		self.write('<script src="//connect.facebook.net/en_US/all.js"></script>')
+
+class TestHandler(tornado.web.RequestHandler):
+
+	@tornado.web.asynchronous
+	@tornado.gen.engine
+	def get(self, owner_aid): # Expected string "/tracksearch/ownerid_aid.mp3"
+		req_url = "https://api.vkontakte.ru/method/audio.getById"
+		q = os.path.splitext(owner_aid)[0]
+		params = dict(access_token=VK_ACCESS_TOKEN, audios=q)
+		req = tornado.httpclient.HTTPRequest(req_url, user_agent=VK_AGENT, method="POST", body=urlencode(params), connect_timeout=10.0, request_timeout=10.0)
+		response = yield tornado.gen.Task(async_client.fetch, req)
+		tracks = json.loads(response.body)
+		# {response:[{track}, {track}, {track}]}
+		tracks = tracks['response']
+		if len(tracks)>0:
+			self.redirect(tracks[0]['url'])
 
 class PlaylistHandler(tornado.web.RequestHandler):
 
@@ -157,46 +185,140 @@ class MXSearchHandler(tornado.web.RequestHandler):
 		self.write(res.body)
 		self.finish()
 
-class MX2SearchHandler(tornado.web.RequestHandler):
+class MXLyricsHandler(tornado.web.RequestHandler):
 
 	@tornado.gen.engine
 	@tornado.web.asynchronous
-	def get(self, o):
+	def get(self, mx_track_id):
 		self.set_header("Content-Type", "application/json")
-		data = json.loads(urldecode(o))
-		search_string = data['q']
-		print search_string
-		page = data['page']
-		params = mx_parse_search(search_string, page=page)
-		params['apikey'] = MX_API_KEY
-		params['format'] = 'json'
-		params['quorum_factor'] = 0.85	# Level of fuzzy logic
-		# Enabling these two options will sort by popularity
-		#params['g_common_track'] = 1
-		#params['s_track_rating'] = 'desc'
-		url = "http://api.musixmatch.com/ws/1.1/track.search?" + urlencode(params)
-		req = tornado.httpclient.HTTPRequest(url, user_agent=MX_AGENT, connect_timeout=10.0, request_timeout=10.0)
+		params = {'apikey':MX_API_KEY,
+				  'format':'json',
+				  'track_id':mx_track_id}
+		req_url = "http://api.musixmatch.com/ws/1.1/track.lyrics.get?" + urlencode(params)
+		req = tornado.httpclient.HTTPRequest(req_url, user_agent=MX_AGENT, connect_timeout=10.0, request_timeout=10.0)
 		res = yield tornado.gen.Task(async_client.fetch, req)
-		tracklist = [o['track'] for o in json.loads(res.body)['message']['body']['track_list']]
-		reply = json.dumps({'aaData':tracklist})
-		self.write(reply)
+		self.write(res.body)
 		self.finish()
 
+class VKSongByIdHandler(tornado.web.RequestHandler):
+
+	@tornado.web.asynchronous
+	@tornado.gen.engine
+	def get(self, owner_aid): # Expected string "/tracksearch/ownerid_aid.mp3"
+		req_url = "https://api.vkontakte.ru/method/audio.getById"
+		q = os.path.splitext(owner_aid)[0]
+		params = dict(access_token=VK_ACCESS_TOKEN, audios=q)
+		req = tornado.httpclient.HTTPRequest(req_url, user_agent=VK_AGENT, method="POST", body=urlencode(params), connect_timeout=10.0, request_timeout=10.0)
+		response = yield tornado.gen.Task(async_client.fetch, req)
+		tracks = json.loads(response.body)
+		# {response:[{track}, {track}, {track}]}
+		tracks = tracks['response']
+		if len(tracks)>0:
+			url = "/track/"+tracks[0]['url']
+			try:
+				if self.get_argument("download"):
+					url += "?download=true"
+			except: pass
+			self.redirect(url)
+		if not self._finished:
+			self.finish()
+
+	def finish(self, chunk=None):
+		if not self.request.connection.stream.closed():
+			super(VKSongByIdHandler, self).finish(chunk)
+
+class VKSongHandler(tornado.web.RequestHandler):
+
+	@tornado.web.asynchronous
+	@tornado.gen.engine
+	def get(self, owner_aid):
+		self.async_client = tornado.curl_httpclient.CurlAsyncHTTPClient()
+		self.set_header("Content-Type", "audio/mpeg")
+		filename = os.path.split(owner_aid)[-1]
+		try:
+			if self.get_argument("download"):
+				self.set_header("Content-Disposition","attachment; filename=%s" % filename)
+		except: pass
+		req = tornado.httpclient.HTTPRequest(url=owner_aid, user_agent=VK_AGENT, header_callback=self.header_callback, streaming_callback=self.streaming_callback)
+		try:
+			yield tornado.gen.Task(self.async_client.fetch, req)
+		except IOError, AssertionError:
+			pass
+		if not self._finished:
+			self.finish()
+
+	def finish(self, chunk=None):
+		if not self.request.connection.stream.closed():
+			super(VKSongHandler, self).finish(chunk)
+
+#	def on_connection_close(self):
+#		self.flush()
+
+	def header_callback(self, data):
+		if re.search(r"Content-Length", data):
+			self.set_header("Content-Length",re.findall("\d+", data)[0])
+			self.flush()
+
+	def streaming_callback(self, data):
+		if not self.request.connection.stream.closed():
+			self.write(data)
+		self.flush()
+
+class VKSearchHandler(tornado.web.RequestHandler):
+
+	@tornado.gen.engine
+	@tornado.web.asynchronous
+	def get(self, search_string):
+		req_url = "https://api.vkontakte.ru/method/audio.search"
+		err_response = json.dumps(dict(error=True, response=[]))
+		try:
+			self.set_header("Content-Type", "application/json")
+			search_string = urldecode(search_string)
+			params = dict(access_token=VK_ACCESS_TOKEN, q=search_string.encode("utf-8"), count=100)
+			data = urlencode(params)
+			req = tornado.httpclient.HTTPRequest(req_url, method="POST", body=data, user_agent=VK_AGENT, connect_timeout=10.0, request_timeout=10.0)
+			response_tracks = yield tornado.gen.Task(async_client.fetch, req)
+			response = json.loads(response_tracks.body)
+			# {response:[434, {track}, {track}, {track}]}
+			results_total = int(response['response'][0])
+			if results_total>0:
+				owner_aids = ",".join(["%s_%s"%(song['owner_id'], song['aid']) for song in response['response'][1:]])
+				params = dict(access_token=VK_ACCESS_TOKEN, audios=owner_aids)
+				data = urlencode(params)
+				req = tornado.httpclient.HTTPRequest("https://api.vkontakte.ru/method/audio.getById", method="POST", body=data, user_agent=VK_AGENT, connect_timeout=10.0, request_timeout=10.0)
+				response = yield tornado.gen.Task(async_client.fetch, req)
+				# {response:[{track}, {track}, {track}]}
+				self.write(response.body)
+			else:
+				self.write(err_response)
+		except Exception as e:
+			print e
+			self.write(err_response)
+		finally:
+			self.finish()
+
 site_root = os.path.dirname(os.path.abspath(__file__))
+
+settings = {'cookie_secret':'SnB5T0RVTWVSY2lTV2hhSGx6bGdCU0c0M2dJWXFfZHhyWTQyTklzVC1tQnpJaDd4OV'}
 
 application = tornado.web.Application([
 	(r"/", MainHandler),
 	(r"/channel.html", FBChannelFileHandler),
+	(r"/test/(.*)", TestHandler),
+	(r"/users/(.*)", UsersHandler),
 	(r"/playlist/(.*)", PlaylistHandler),
 	(r"/mxsearch/(.*)", MXSearchHandler),
-	(r"/mxsearch2/(.*)", MX2SearchHandler),
+	(r"/lyrics/([0-9]+)", MXLyricsHandler),
+	(r"/vksearch/(.*)", VKSearchHandler),
+	(r"/track/(.*)", VKSongHandler),
+	(r"/tracksearch/(.*)", VKSongByIdHandler),
 	(r"/static/(.*)", tornado.web.StaticFileHandler, {"path": site_root}),
 	(r"/js/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/js"}),
 	(r"/css/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/css"}),
 	(r"/img/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/img"}),
 	(r"/TotalControl/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/TotalControl"}),
 	(r"/360player/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/360player"}),
-	], debug=True)
+	], debug=True, **settings)
 
 if __name__ == "__main__":
 	if "OPENSHIFT_INTERNAL_IP" in os.environ:
@@ -206,3 +328,5 @@ if __name__ == "__main__":
 	else:
 		application.listen(8888)
 	tornado.ioloop.IOLoop.instance().start()
+
+
