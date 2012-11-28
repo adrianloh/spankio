@@ -363,7 +363,13 @@ INPUT:-ms-input-placeholder
 	cursor:pointer;
 	position: fixed;
 	left: 8%;
-	top:33%;
+	top:42%;
+}
+#closePlayButton {
+    cursor:pointer;
+    position: fixed;
+    left: 8%;
+    top:49%;
 }
 #blockhead {
 	color: white;

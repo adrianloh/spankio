@@ -35,6 +35,10 @@
 			});
 		});
 
+		$(".chart-button").filter(function() {
+			return $(this).text()=="itunes";
+		}).trigger("click");
+
 	});
 
 })();

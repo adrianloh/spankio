@@ -309,9 +309,6 @@
 				$.MyTotalPlayer = new Playboy();
 				$.MyTotalPlayer.init(FB_userInfo.username);
 			}
-			$(".chart-button").filter(function() {
-				return $(this).text()=="itunes";
-			}).trigger("click");
 		});
 		// TODO: Tearing down/resetting stuff after logout doesn't really work
 		// Login -> Logout -> Login (again), now when you add songs they are

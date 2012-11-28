@@ -50,19 +50,25 @@
 		//
 		// When we CLOSE the LIGHTBOX
 		//
-		$("#closeButton").click(function() {
+		function tearDownLightBox() {
 			lightBoxModel.lyricsText("");
 			lightBoxModel.lyricsTitle("");
 			lightBoxModel.lyricsThumb("");
-//			$("#lyricsThumb").remove();
-//			$("#lyricsTitle").text("");
-//			$("#lyricsText").html("");
 			$("#vk-results-list").remove();
 			$("#lightBox").slideUp('fast','swing');
 			$("#lightBox_jspPane").html("");
 			$(this).removeClass('busy');
 			vk_search_in_progress = false;
 			mx_get_lyrics_in_progress = false;
+		}
+
+
+		$("#closePlayButton").click(function() {
+			tearDownLightBox();
+		});
+
+		$("#closeButton").click(function() {
+			tearDownLightBox();
 			try {
 				// If nothing is playing, this raises an Exception
 				if (threeSixtyPlayer.lastSound) {
