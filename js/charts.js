@@ -14,6 +14,7 @@
 		};
 
 		$(".chart-button").bind("click", function() {
+			$("html").addClass('busy');
 			var chartName = $(this).text();
 			var tracklist;
 			$.getJSON(lastfmTop[chartName](), function(res) {
@@ -30,6 +31,7 @@
 						Charts.push(o);
 					});
 				}
+				$("html").removeClass('busy');
 			});
 		});
 
