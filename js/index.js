@@ -200,31 +200,15 @@
 //			});
 		});
 
-		$.searchByWire = function(search_term) {
+		function searchByWire(search_term) {
 			// Get the lightbox out of the way when we start searching again...
 			$("#closePlayButton").trigger("click");
-			var url = '/mxsearch?q=#&page=1'.replace("#",search_term);
-			$("html").addClass('busy');
-			$.ajax({
-				type: 'GET',
-				url: url,
-				success: function(response) {
-					$("html").removeClass('busy');
-					var items = [],
-						tracklist = response.message.body.track_list;
-					if (tracklist.length>0) {
-						charts.current_url = url;
-						charts.chartTracks.removeAll();
-						$.each(tracklist, function (i, o) {
-							charts.push(o);
-						});
-					} else {
-						items.push('<li class="trackName">' + "Nothing found!" + '</li>');
-					}
-				}
-			});
+			var url = '/mxsearch?q=#&page=0'.replace("#",search_term);
+			charts.chartTracks.removeAll();
+			charts.current_url = url;
+			charts.fetchMore();
 			return false;
-		};
+		}
 
 		$(".trackArtist").live("click", function() {
 			var artist = $(this).text();
@@ -232,7 +216,7 @@
 		});
 
 		$("#lyrics").livesearch({
-			searchCallback: $.searchByWire,
+			searchCallback: searchByWire,
 			innerText: "Freed music",
 			queryDelay:500,
 			minimumSearchLength: 3
