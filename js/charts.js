@@ -51,7 +51,7 @@
 		});
 
 		$(".chart-button").filter(function() {
-			return $(this).text()=="billboards_us";
+			return $(this).text()=="billboards_uk";
 		}).trigger("click");
 
 	});

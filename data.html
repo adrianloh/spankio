@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+
+    <!-- required -->
+    <link rel="stylesheet" type="text/css" href="/360player/360player.css" />
+    <link rel="stylesheet" type="text/css" href="/360player/flashblock.css" />
+    <script type="text/javascript" src="/js/sm2/berniecode-animator.js"></script>
+    <script type="text/javascript" src="/js/sm2/soundmanager2.js"></script>
+    <script type="text/javascript" src="/js/sm2/360player.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.knob.js"></script>
+    <script type="text/javascript" src="/js/livesearch.js"></script>
+    <script type="text/javascript" src="/js/main.js"></script>
+    <style type="text/css">
+        .ui360,
+        .sm2-360ui {
+            /* size of the container for the circle, etc. */
+            width:256px;
+            height:256px;
+        }
+    </style>
+</head>
+<body>
+<div id="mxSearch" style="display: none;">
+    <input type="text" id="lyrics" size="120" value="" class="text-input" />
+    <table id="mxResults"></table>
+</div>
+<input id="playerPosition" type="text" value="75" class="dial">
+<input id="playerVolume" type="text" value="75" class="dial">
+<div>
+    <div class="ui360 ui360-vis"><a href="http://freshly-ground.com/data/audio/sm2/The%20Fugitives%20-%20Graffiti%20Sex.mp3">The Fugitives - Graffiti Sex</a></div>
+</div>
+<table id="playlist"></table>
+<script type="text/javascript">
+    soundManager.url = '/TotalControl/javascripts/soundmanager/swf';
+    threeSixtyPlayer.config.scaleFont = (navigator.userAgent.match(/msie/i)?false:true);
+    threeSixtyPlayer.config.showHMSTime = true;
+
+    // enable some spectrum stuffs
+
+    threeSixtyPlayer.config.useWaveformData = true;
+    threeSixtyPlayer.config.useEQData = true;
+
+    // enable this in SM2 as well, as needed
+
+    if (threeSixtyPlayer.config.useWaveformData) {
+        soundManager.flash9Options.useWaveformData = true;
+    }
+    if (threeSixtyPlayer.config.useEQData) {
+        soundManager.flash9Options.useEQData = true;
+    }
+    if (threeSixtyPlayer.config.usePeakData) {
+        soundManager.flash9Options.usePeakData = true;
+    }
+
+    if (threeSixtyPlayer.config.useWaveformData || threeSixtyPlayer.flash9Options.useEQData || threeSixtyPlayer.flash9Options.usePeakData) {
+        // even if HTML5 supports MP3, prefer flash so the visualization features can be used.
+        soundManager.preferFlash = true;
+    }
+
+    // favicon is expensive CPU-wise, but can be used.
+    if (window.location.href.match(/hifi/i)) {
+        threeSixtyPlayer.config.useFavIcon = true;
+    }
+
+    if (window.location.href.match(/html5/i)) {
+        // for testing IE 9, etc.
+        soundManager.useHTML5Audio = true;
+    }
+
+    $(document).ready(function() {
+
+        var config = {
+            playNext: false,
+            autoPlay: false,
+            allowMultiple: false,
+            loadRingColor: '#ccc',
+            playRingColor: '#000',
+            backgroundRingColor: '#eee',
+            circleDiameter: 256,
+            circleRadius: 256,
+            animDuration: 500,
+            animTransition: Animator.tx.bouncy,
+            showHMSTime: true,
+            useWaveformData: true,
+            waveformDataColor: '#0099ff',
+            waveformDataDownsample: 6,
+            waveformDataOutside: false,
+            waveformDataConstrain: false,
+            waveformDataLineRatio: 0.88,
+            useEQData: true,
+            eqDataColor: '#339933',
+            eqDataDownsample: 15,
+            eqDataOutside: true,
+            eqDataLineRatio: 1.14,
+            usePeakData: true,
+            peakDataColor: '#ff33ff',
+            peakDataOutside: true,
+            peakDataLineRatio: 0.5,
+            useAmplifier: true
+        };
+
+        threeSixtyPlayer.init(config);
+
+        $('#playlist').dataTable({
+            "bScrollInfinite":true,
+            "sScrollY": "400px",
+            "bPaginate": false,
+            "bJQueryUI": true,
+            "bProcessing": true,
+            "sAjaxSource": '/static/playlist.json',
+            "bDeferRender": true,
+            "aoColumns": [
+                { "sTitle": "Artist", "mData": "artist" },
+                { "sTitle": "Title", "mData": "title" }
+            ]
+        });
+
+        $("#playerPosition").knob({
+            fgColor:"#ffec03",
+            skin:"tron",
+            thickness:".2",
+            displayPrevious:true
+        });
+        $("#playerVolume").knob();
+
+    });
+</script>
+</body>
+</html>

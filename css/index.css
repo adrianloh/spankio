@@ -518,8 +518,8 @@ z-index: 2;
 }
 
 ul.lastfm-buttons {
-    position: absolute;
-    top: -62%;
+    position: fixed;
+    top: -90px;
     left: 9%;
     background-color: rgba(0, 0, 0, 0.5);
     padding: 3px 6px 6px 6px;

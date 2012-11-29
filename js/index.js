@@ -152,9 +152,11 @@
 			};
 			self.push = function(o) {
 				// Init defaults for properties our view expects
-				var track = {title:'na', artist:'na', mxid:"na", thumb:"http://api.musixmatch.com/images/albums/nocover.png"};
+				var track = {mbid:'na', title:'na', artist:'na', mxid:"na", thumb:"http://api.musixmatch.com/images/albums/nocover.png"};
+				console.log(o);
 				if (o.hasOwnProperty("track")) {    // This is a MusiXMatch track object
 					o = o.track;
+					track.mbid = o.track_mbid;
 					track.mxid = o.track_id;
 					track.title = o.track_name;
 					track.artist = o.artist_name;
@@ -163,6 +165,7 @@
 				} else if (o.hasOwnProperty("mbid")) { // This is a last.fm track object
 					track.artist = o.artist.name;
 					track.title = o.name;
+					track.mbid = o.mbid;
 					track.thumb = o.image ? o.image[2]['#text'] : track.thumb;
 					self.chartTracks.push(track);
 				} else if (o.hasOwnProperty("im:artist")) { // This is an iTunes track object
@@ -326,24 +329,3 @@
 	});
 
 })();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
