@@ -61,6 +61,8 @@ RED.connect()
 
 async_client = tornado.curl_httpclient.CurlAsyncHTTPClient()
 
+
+VK_ACCESS_TOKEN = "b63e1d33bf6561b4bf6561b4b9bf4e0dd1bbf65bf6b5dabefccf0d187e2dbaa4ac0b03e"
 VK_AGENT = "com.r2soft.VKontakteMusic/1010 (unknown)"
 MX_API_KEY = "316bd7524d833bb192d98be44fe43017"
 MX_AGENT = "musiXmatch/211 CFNetwork/596.2.3 Darwin/12.2.0 (x86_64) (MacPro3,1)"
@@ -69,6 +71,13 @@ class MainHandler(tornado.web.RequestHandler):
 
 	def get(self):
 		self.render("soundgarden.html")
+
+class VKTokenHandler(tornado.web.RequestHandler):
+
+	@tornado.web.asynchronous
+	def get(self):
+		self.write(vktoken.next())
+		self.finish()
 
 class FBChannelFileHandler(tornado.web.RequestHandler):
 
@@ -82,6 +91,16 @@ class FBChannelFileHandler(tornado.web.RequestHandler):
 		self.set_header("Expires", time.asctime(time.gmtime(time.time()+expire)) + " GMT")
 		self.write('<script src="//connect.facebook.net/en_US/all.js"></script>')
 
+class PlaylistRenameHandler(tornado.web.RequestHandler):
+
+	@tornado.web.asynchronous
+	def get(self, data):
+		oldname, newname = urldecode(data).split("===")
+		if oldname != newname:
+			RED.rename(oldname, newname)
+			self.write("OK")
+		self.finish()
+
 class PlaylistHandler(tornado.web.RequestHandler):
 
 	@tornado.gen.engine
@@ -90,9 +109,11 @@ class PlaylistHandler(tornado.web.RequestHandler):
 		self.set_header("Content-Type", "application/json")
 		redkey = urldecode(redkey)
 		if re.search("PLAYLIST ALL", redkey):
-			pattern = re.sub("ALL", "*", redkey)
+			pattern = re.sub(" ALL", "*", redkey)
 			playlists = yield tornado.gen.Task(RED.keys, pattern)
+			rest = [k for k in playlists if not re.search("Main Library",k)]
 			if playlists:
+				playlists = [k for k in playlists if k not in rest] + rest
 				self.write(json.dumps(playlists))
 			else:
 				self.write(json.dumps(["Main Library"]))
@@ -186,6 +207,7 @@ site_root = os.path.dirname(os.path.abspath(__file__))
 application = tornado.web.Application([
 	(r"/", MainHandler),
 	(r"/channel.html", FBChannelFileHandler),
+	(r"/playlist_rename/(.*)", PlaylistRenameHandler),
 	(r"/playlist/(.*)", PlaylistHandler),
 	(r"/mxsearch", MXSearchHandler),
 	(r"/mxsearch2/(.*)", MX2SearchHandler),

@@ -7,7 +7,7 @@
 
 	function wobble(elem, min, max) {
 		var rotate = "rotate(#deg)".replace("#",randrange(min,max));
-		elem.css("webkit-transform",rotate);
+		$(elem).css("webkit-transform",rotate).removeClass("unwobbled");
 	}
 
 	function padToFour(number) {
@@ -144,7 +144,7 @@
 			self.ok_to_fetch_more = true;
 			self.chartTracks = ko.observableArray([]);
 			self.totalChartTracks = ko.computed(function(){
-				return self.chartTracks().length;
+				return padToFour(self.chartTracks().length);
 			});
 			self.fetchMore = function() {
 				if (self.ok_to_fetch_more) {
@@ -185,6 +185,12 @@
 		var charts = new ChartsViewModel();
 		Charts = charts;
 		ko.applyBindings(charts);
+
+		charts.chartTracks.subscribe(function() {
+			$(".trackEntry.unwobbled").each(function(i,elem) {
+				wobble(elem,-6,6);
+			});
+		});
 
 		// Autopager for charts
 		$("#resultsSection").scroll(function() {

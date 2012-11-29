@@ -171,7 +171,7 @@
     height:12px;
 }
 .total-playlist-songs {
-    overflow:scroll;
+    overflow-x: hidden;
     width:inherit;
     background-color:white;
 }

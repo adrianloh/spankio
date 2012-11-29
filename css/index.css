@@ -96,15 +96,15 @@ FORM
 	font-weight: 900;
 	width: 80%;
 	top: 5%;
-	left: 200px;
+	left: 160px;
 	margin: 0 auto;
 }
 INPUT[type="text"], TEXTAREA
 {
 	font: 62.5%/1 Oswald;
-	text-shadow: -0.07em 0 red, 0.07em 0 cyan;		/* This creates the 3D effect, pretty easy, eh? */
+	text-shadow: -0.095em 0 red, 0.095em 0 cyan;		/* This creates the 3D effect, pretty easy, eh? */
 	letter-spacing: 0px;							/* make sure the letters don't overlap */
-	height: 80px;
+	height: 68px;
 	width: 700px;
 	padding: 3px 20px 5px;
 /*The Fallback*/
@@ -162,13 +162,12 @@ INPUT:-ms-input-placeholder
 	top: 7%;
 }
 #track_count_current {
-	z-index: 501;
-	position: fixed;
-	letter-spacing: -1.8px;
-	color: rgb(255, 255, 255);
-	font: 51px "Oswald";
-	left: 22%;
-	top: -1.5%;
+    position: fixed;
+    letter-spacing: -1.8px;
+    color: rgb(255, 255, 255);
+    font: 82px "Oswald";
+    left: 22%;
+    top: -2.5%;
 }
 #track_count_total {
 	z-index: 500;
@@ -317,7 +316,7 @@ z-index: 2;
     overflow-x: hidden;
 }
 #logo {
-	z-index: 2;
+    margin: 0 auto;
 	opacity: 0.96;
 	top: -38px;
 	position: fixed;
