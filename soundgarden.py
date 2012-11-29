@@ -38,10 +38,10 @@ def extract(q, terms=(), delimiter=":"):
 
 def mx_parse_search(lyrics, page=1):
 	kwargs = dict(page=page, page_size=100, f_has_lyrics=1)
-	p = {}
-	p['q_artist'] = ['artist','singer']
-	p['q_track'] =['song','title']
-	p['q_lyrics'] =['lyrics']
+	p = {'q_artist': ['artist', 'singer'],
+	     'q_track': ['song', 'title'],
+	     'q_lyrics': ['lyrics']
+	}
 	import itertools
 	terms = list(itertools.chain(*p.values()))
 	params = extract(lyrics, terms)
@@ -61,7 +61,6 @@ RED.connect()
 
 async_client = tornado.curl_httpclient.CurlAsyncHTTPClient()
 
-VK_ACCESS_TOKEN = "b63e1d33bf6561b4bf6561b4b9bf4e0dd1bbf65bf6b5dabefccf0d187e2dbaa4ac0b03e"
 VK_AGENT = "com.r2soft.VKontakteMusic/1010 (unknown)"
 MX_API_KEY = "316bd7524d833bb192d98be44fe43017"
 MX_AGENT = "musiXmatch/211 CFNetwork/596.2.3 Darwin/12.2.0 (x86_64) (MacPro3,1)"

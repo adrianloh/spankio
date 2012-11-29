@@ -71,16 +71,22 @@
 			}
 		});
 
+		var vk_keys = ["13e47ebc10ca8da510ca8da57510e1e1c0110ca10c4b1ba407dcd8718254eba6cdd201b",
+						"633b3aa76851ba026851ba0223687ad66766851685f861d38e74dc981cb38cbe200a017",
+						"b63e1d33bf6561b4bf6561b4b9bf4e0dd1bbf65bf6b5dabefccf0d187e2dbaa4ac0b03e",
+						"1d1aa7ae14a55a8e14a55a8e1d148e36eb114a514ab669144121a3185704c3e628ca24d"];
+		var pick = 0;
 		var searchVK = function(params) {
 			vk_search_in_progress = true;
 			$('<ul id="vk-results-list"></ul>').appendTo('.lightBox_jspPane');
 			var url = "https://api.vkontakte.ru/method/audio.search?q=QUERY\
-						&access_token=b63e1d33bf6561b4bf6561b4b9bf4e0dd1bbf65bf6b5dabefccf0d187e2dbaa4ac0b03e&count=100&callback=?";
-			var xhr = $.getJSON(url.replace("QUERY",params.q), function(data) {
+						&access_token=TOKEN&count=100&callback=?",
+				token = vk_keys[++pick%vk_keys.length];
+			var xhr = $.getJSON(url.replace("TOKEN", token).replace("QUERY",params.q), function(data) {
 				vk_search_in_progress = false;
 				var message = "";
 				if (data.error) {
-					message = '<li class="vkMessage">Oopsies, couldn\'t find this song.</li>'
+					message = '<li class="vkMessage">Oopsies, couldn\'t find this song.</li>';
 					$(message).appendTo("#vk-results-list");
 				} else {
 					message = '<li class="vkMessage">Found @MESSAGE@ track(s)</li>'.replace("@MESSAGE@", data.response[0]);
@@ -153,7 +159,6 @@
 			self.push = function(o) {
 				// Init defaults for properties our view expects
 				var track = {mbid:'na', title:'na', artist:'na', mxid:"na", thumb:"http://api.musixmatch.com/images/albums/nocover.png"};
-				console.log(o);
 				if (o.hasOwnProperty("track")) {    // This is a MusiXMatch track object
 					o = o.track;
 					track.mbid = o.track_mbid;
