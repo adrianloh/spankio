@@ -23,7 +23,7 @@
 				timeDelta = timeNow - last_request_time;
 			if (timeDelta>2000) {
 				$("html").addClass('busy');
-				console.log("Sending request!");
+				console.log(url);
 				$.getJSON(url, function(res) {
 					if (res.hasOwnProperty("message")) {        // MusiXMatch
 						tracklist = res.message.body.track_list
@@ -32,15 +32,17 @@
 					} else if (res.hasOwnProperty("tracks")) {  // LastFM
 						tracklist = res.tracks.track
 					}
+					Charts.current_url = url;
 					if (tracklist.length>0) {
 						if (!myUrl) {
-							Charts.current_url = url;
 							Charts.chartTracks.removeAll();
 						}
 						$.each(tracklist, function(i,o) {
 							Charts.push(o);
 						});
 						Charts.ok_to_fetch_more = true;
+					} else {
+						Charts.ok_to_fetch_more = false;
 					}
 					$("html").removeClass('busy');
 				});

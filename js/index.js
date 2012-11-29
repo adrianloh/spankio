@@ -142,13 +142,10 @@
 			});
 			self.fetchMore = function() {
 				if (self.ok_to_fetch_more) {
-					console.log("Fetching!");
 					var match = self.current_url.match(/page=(\d+)/);
 					if (match) {
-						self.ok_to_fetch_more = false;
 						var next = ++match[1],
 							next_url = self.current_url.replace(/page=(\d+)/,"page="+next);
-						self.current_url = next_url;
 						$(".chart-button").trigger("click",[next_url]);
 					}
 				}
@@ -181,16 +178,19 @@
 		Charts = charts;
 		ko.applyBindings(charts);
 
-		// Track our position along the lyrics results list
-		var last_time_get_some = new Date().getTime();
+		// Autopager for charts
 		$("#resultsSection").scroll(function() {
-			var lower_bound = $(document).height(),
-				upper_bound = $("#searchForm").height()*5;
 			var last = $(".results-list:last-child");
+//			console.log($("#resultsSection").scrollTop()*0.4 + " > " + (last.position().top + last.height()));
 			if ($("#resultsSection").scrollTop()*0.4 > (last.position().top + last.height())) {
 				Charts.fetchMore();
 			}
-//			console.log($("#resultsSection").scrollTop() + " | " + (last.position().top + last.height()));
+//			var lower_bound = $(document).height(),
+//				upper_bound = $("#searchForm").height()*5;
+//			var last = $(".results-list:last-child");
+//			if ($("#resultsSection").scrollTop()*0.4 > (last.position().top + last.height())) {
+//				Charts.fetchMore();
+//			}
 //          NOTE: Print the current track number. DISABLED cause it's too slow!
 //			$(".trackEntry").each(function(i, line) {
 //				var top = $(line).position().top;
