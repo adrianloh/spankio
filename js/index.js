@@ -218,7 +218,7 @@
 		$("#lyrics").livesearch({
 			searchCallback: searchByWire,
 			innerText: "Freed music",
-			queryDelay:250,
+			queryDelay:500,
 			minimumSearchLength: 3
 		});
 

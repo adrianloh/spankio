@@ -21,7 +21,7 @@
 				url = myUrl || lastfmTop[chartName]();
 			var timeNow = new Date().getTime(),
 				timeDelta = timeNow - last_request_time;
-			if (timeDelta>2000) {
+			if (timeDelta>2000 || url.match(/mxsearch/)) {
 				$("html").addClass('busy');
 				console.log(url);
 				$.getJSON(url, function(res) {
