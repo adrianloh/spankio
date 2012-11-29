@@ -139,11 +139,11 @@ class MXSearchHandler(tornado.web.RequestHandler):
 
 	@tornado.gen.engine
 	@tornado.web.asynchronous
-	def get(self, o):
+	def get(self):
 		self.set_header("Content-Type", "application/json")
-		data = json.loads(urldecode(o))
-		search_string = data['q']
-		page = data['page']
+#		data = json.loads(urldecode(o))
+		search_string = self.get_argument("q")
+		page = self.get_argument("page")
 		params = mx_parse_search(search_string, page=page)
 		params['apikey'] = MX_API_KEY
 		params['format'] = 'json'
@@ -188,7 +188,7 @@ application = tornado.web.Application([
 	(r"/", MainHandler),
 	(r"/channel.html", FBChannelFileHandler),
 	(r"/playlist/(.*)", PlaylistHandler),
-	(r"/mxsearch/(.*)", MXSearchHandler),
+	(r"/mxsearch", MXSearchHandler),
 	(r"/mxsearch2/(.*)", MX2SearchHandler),
 	(r"/static/(.*)", tornado.web.StaticFileHandler, {"path": site_root}),
 	(r"/js/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/js"}),

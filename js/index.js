@@ -17,8 +17,7 @@
 
 	$(document).ready(function () {
 
-		var current_page = 1,
-			vk_search_in_progress = false,
+		var vk_search_in_progress = false,
 			mx_get_lyrics_in_progress = false;
 
 		$(document).bind("login", function() {
@@ -33,18 +32,6 @@
 			autoReinitialise: true,
 			scrollbarWidth: 0,
 			scrollbarMargin: 0
-		});
-
-		// Track our position along the lyrics results list
-		$("#resultsSection").scroll(function() {
-			var lower_bound = $(document).height(),
-				upper_bound = $("#searchForm").height()*5;
-			$(".trackEntry").each(function(i, line) {
-				var top = $(line).position().top;
-				if (top<=lower_bound && top>=upper_bound) {
-					$("#track_count_current").text(padToFour(i));
-				}
-			});
 		});
 
 		//
@@ -87,7 +74,8 @@
 		var searchVK = function(params) {
 			vk_search_in_progress = true;
 			$('<ul id="vk-results-list"></ul>').appendTo('.lightBox_jspPane');
-			var url = "https://api.vkontakte.ru/method/audio.search?access_token=b63e1d33bf6561b4bf6561b4b9bf4e0dd1bbf65bf6b5dabefccf0d187e2dbaa4ac0b03e&count=100&q=QUERY&callback=?";
+			var url = "https://api.vkontakte.ru/method/audio.search?q=QUERY\
+						&access_token=b63e1d33bf6561b4bf6561b4b9bf4e0dd1bbf65bf6b5dabefccf0d187e2dbaa4ac0b03e&count=100&callback=?";
 			var xhr = $.getJSON(url.replace("QUERY",params.q), function(data) {
 				vk_search_in_progress = false;
 				var message = "";
@@ -145,8 +133,26 @@
 
 		function ChartsViewModel() {
 			var self = this;
+				self.current_url = null;
 			// Editable data
+			self.ok_to_fetch_more = true;
 			self.chartTracks = ko.observableArray([]);
+			self.totalChartTracks = ko.computed(function(){
+				return self.chartTracks().length;
+			});
+			self.fetchMore = function() {
+				if (self.ok_to_fetch_more) {
+					console.log("Fetching!");
+					var match = self.current_url.match(/page=(\d+)/);
+					if (match) {
+						self.ok_to_fetch_more = false;
+						var next = ++match[1],
+							next_url = self.current_url.replace(/page=(\d+)/,"page="+next);
+						self.current_url = next_url;
+						$(".chart-button").trigger("click",[next_url]);
+					}
+				}
+			};
 			self.push = function(o) {
 				// Init defaults for properties our view expects
 				var track = {title:'na', artist:'na', mxid:"na", thumb:"http://api.musixmatch.com/images/albums/nocover.png"};
@@ -162,7 +168,7 @@
 					track.title = o.name;
 					track.thumb = o.image ? o.image[2]['#text'] : track.thumb;
 					self.chartTracks.push(track);
-				} else if (o.hasOwnProperty("im:artist")) {
+				} else if (o.hasOwnProperty("im:artist")) { // This is an iTunes track object
 					track.artist = o['im:artist'].label;
 					track.title = o['im:name'].label;
 					track.thumb = o['im:image'][1] ? o['im:image'][1].label : track.thumb;
@@ -175,19 +181,39 @@
 		Charts = charts;
 		ko.applyBindings(charts);
 
+		// Track our position along the lyrics results list
+		var last_time_get_some = new Date().getTime();
+		$("#resultsSection").scroll(function() {
+			var lower_bound = $(document).height(),
+				upper_bound = $("#searchForm").height()*5;
+			var last = $(".results-list:last-child");
+			if ($("#resultsSection").scrollTop()*0.4 > (last.position().top + last.height())) {
+				Charts.fetchMore();
+			}
+//			console.log($("#resultsSection").scrollTop() + " | " + (last.position().top + last.height()));
+//          NOTE: Print the current track number. DISABLED cause it's too slow!
+//			$(".trackEntry").each(function(i, line) {
+//				var top = $(line).position().top;
+//				if (top<=lower_bound && top>=upper_bound) {
+//					$("#track_count_current").text(padToFour(i));
+//				}
+//			});
+		});
+
 		$.searchByWire = function(search_term) {
 			// Get the lightbox out of the way when we start searching again...
-			$("#closeButton").trigger("click");
-			var data = {q:search_term, page:current_page};
+			$("#closePlayButton").trigger("click");
+			var url = '/mxsearch?q=#&page=1'.replace("#",search_term);
 			$("html").addClass('busy');
 			$.ajax({
 				type: 'GET',
-				url: '/mxsearch/' + encodeURIComponent(JSON.stringify(data)),
+				url: url,
 				success: function(response) {
 					$("html").removeClass('busy');
 					var items = [],
 						tracklist = response.message.body.track_list;
 					if (tracklist.length>0) {
+						charts.current_url = url;
 						charts.chartTracks.removeAll();
 						$.each(tracklist, function (i, o) {
 							charts.push(o);
@@ -235,8 +261,11 @@
 		});
 
 		function mxMatchOne(title, artist, callback, err_callback) {
-			var url = "http://api.musixmatch.com/ws/1.1/matcher.track.get?q_artist=ARTIST&q_track=TRACK&apikey=316bd7524d833bb192d98be44fe43017&format=jsonp&callback=?";
-			url = url.replace("ARTIST", encodeURIComponent($.trim(artist))).replace("TRACK", encodeURIComponent($.trim(title)));
+			var url = "http://api.musixmatch.com/ws/1.1/matcher.track.get?q_artist=ARTIST&q_track=TRACK\
+						&apikey=316bd7524d833bb192d98be44fe43017&format=jsonp&callback=?";
+			artist = encodeURIComponent($.trim(artist));
+			title = encodeURIComponent($.trim(title));
+			url = url.replace("ARTIST", artist).replace("TRACK", title);
 			$.getJSON(url, function(res) {
 				try {
 					if (res.message.body.track) {
@@ -253,7 +282,8 @@
 		function getLyricsWithMxid(track) {
 			mx_get_lyrics_in_progress = true;
 			function getLyrics(mxid) {
-				var url = "http://api.musixmatch.com/ws/1.1/track.lyrics.get?apikey=316bd7524d833bb192d98be44fe43017&track_id=#&format=jsonp&callback=?";
+				var url = "http://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=#\
+							&apikey=316bd7524d833bb192d98be44fe43017&format=jsonp&callback=?";
 				$.getJSON(url.replace("#", mxid), function(data) {
 					mx_get_lyrics_in_progress = false;
 					try {

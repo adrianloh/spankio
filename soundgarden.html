@@ -36,7 +36,7 @@
 <div id="fb-root"></div>
 <div id="logo">Spank.io</div>
 <div id="searchForm">
-    <div id="track_count_current"></div>
+    <div id="track_count_current" data-bind="text: totalChartTracks"></div>
     <div id="track_count_total"></div>
     <form id="searchLyrics">
         <input type="text" name="lyrics" id="lyrics" size="120" value="" class="text-input" />
@@ -58,7 +58,6 @@
         <pre id="lyricsText" data-bind="text : lyricsText"></pre>
         <img id="lyricsThumb" data-bind="attr: { src: lyricsThumb }" />
     </div>
-    <section id="resultsTotal"></section>
     <section id="resultsSection">
         <ul class="results-list" data-bind="foreach: chartTracks">
             <li class="trackEntry">
@@ -100,4 +99,5 @@
 <script type="text/javascript" src="/js/snippets.js"></script>
 <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.1.0/knockout-min.js"></script>
 <script type="text/javascript" src="/js/charts.js"></script>
+<script type="text/javascript" src="/js/scrollExtend/js/jquery.scrollExtend.min.js"></script>
 </html>

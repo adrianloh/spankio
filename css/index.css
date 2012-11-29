@@ -40,6 +40,7 @@ A:hover
 	position: fixed;
 	background-size: 4px 4px;
 	background-image: -webkit-repeating-linear-gradient(90deg, rgba(0, 0, 0, .5), rgba(26, 1, 1, .5) 1px, transparent 2px, transparent 15px), -webkit-repeating-linear-gradient(-90deg, rgba(6, 106, 255, 0), rgb(0, 0, 0) 1px, transparent 2px, transparent 15px);
+    background-image: -moz-repeating-linear-gradient(90deg, rgba(0, 0, 0, .5), rgba(26, 1, 1, .5) 1px, transparent 2px, transparent 15px), -moz-repeating-linear-gradient(-90deg, rgba(6, 106, 255, 0), rgb(0, 0, 0) 1px, transparent 2px, transparent 15px);
 	width: 110%;
 	height: 110%;
 	top: -10px;
@@ -95,7 +96,7 @@ FORM
 	font-weight: 900;
 	width: 80%;
 	top: 5%;
-	left: 10%;
+	left: 200px;
 	margin: 0 auto;
 }
 INPUT[type="text"], TEXTAREA
@@ -223,7 +224,7 @@ INPUT:-ms-input-placeholder
 .trackName
 {
 	color: #111111;
-	font: 500 26px "proxima-nova-1";
+	font: 500 18px "proxima-nova-1";
 	display: inline-block;
 	vertical-align: 39;
 	background-color: rgb(36, 30, 30);
@@ -233,13 +234,13 @@ INPUT:-ms-input-placeholder
 {
 	letter-spacing: -1.8px;
 	color: #f3efb5;
-	font: italic 700 20px "Averia Serif Libre";
+	font: italic 700 16px "Averia Serif Libre";
 	cursor:pointer;
 	vertical-align: 20;
 	background-color: rgb(104, 93, 93);
 	display: inline-block;
 }
-#resultsSection
+#__resultsSection
 {
 	text-shadow: 2px 2px 2px rgba(151, 24, 64, 0.2);
 	position: absolute;
@@ -253,6 +254,21 @@ INPUT:-ms-input-placeholder
 	overflow-y: auto;
 	overflow-x: hidden;
 	z-index: 2;
+}
+#resultsSection
+{
+text-shadow: 2px 2px 2px rgba(151, 24, 64, 0.2);
+position: absolute;
+width: 70%;
+top: 17%;
+left: 0px;
+text-align: center;
+line-height: 20px;
+-webkit-backface-visibility: hidden;
+height: 82%;
+overflow-y: auto;
+overflow-x: hidden;
+z-index: 2;
 }
 
 /* The iTunes player
@@ -276,6 +292,7 @@ INPUT:-ms-input-placeholder
 	outline: 3px;
 	background-size: 2px 3px;
 	background-image: -webkit-repeating-linear-gradient(90deg, rgba(0, 0, 0, .7), rgb(255, 255, 255) 1px, transparent 2px, transparent 15px), -webkit-repeating-linear-gradient(-90deg, rgba(255, 255, 255, 0.6), rgb(0, 0, 0) 1px, transparent 2px, transparent 15px);
+    background-image: -moz-repeating-linear-gradient(90deg, rgba(0, 0, 0, .7), rgb(255, 255, 255) 1px, transparent 2px, transparent 15px), -moz-repeating-linear-gradient(-90deg, rgba(255, 255, 255, 0.6), rgb(0, 0, 0) 1px, transparent 2px, transparent 15px);
 	z-index: 9999;
 	position: fixed;
 	left: 10%;
@@ -326,6 +343,32 @@ INPUT:-ms-input-placeholder
 }
 #lyricsTitle {
 	text-shadow: 0 1px 0 #ccc,
+	0 2px 0 #c9c9c9,
+	0 3px 0 #bbb,
+	0 4px 0 #b9b9b9,
+	0 5px 0 #aaa,
+	0 6px 0 #aaa,
+	0 6px 1px rgba(0,0,0,.1),
+	0 0 5px rgba(0,0,0,.1),
+	0 1px 3px rgba(0,0,0,.3),
+	0 3px 5px rgba(0,0,0,.2),
+	0 5px 10px rgba(0,0,0,.25),
+	0 10px 10px rgba(0,0,0,.2),
+	0 20px 20px rgba(0,0,0,.15);
+	font: 70px Oswald;
+	letter-spacing: -2px;
+	text-align: left;
+	line-height: 53px;
+	color: white;
+	font-weight: 700;
+	z-index: 10;
+	display: inline-block;
+	margin-bottom: 26px;
+	margin-top: 23px;
+}
+
+#__lyricsTitle {
+	text-shadow: 0 1px 0 #ccc,
 	 0 2px 0 #c9c9c9,
 	 0 3px 0 #bbb,
 	 0 4px 0 #b9b9b9,
@@ -356,20 +399,19 @@ INPUT:-ms-input-placeholder
 	color: white;
 	font: 17px/26px "proxima-nova-1";
 	letter-spacing: 0px;
-	margin-top: 30%;
 	display: inline-block;
 }
 #closeButton {
 	cursor:pointer;
 	position: fixed;
 	left: 8%;
-	top:42%;
+	top:49%;
 }
 #closePlayButton {
     cursor:pointer;
     position: fixed;
     left: 8%;
-    top:49%;
+    top:42%;
 }
 #blockhead {
 	color: white;
