@@ -28,7 +28,7 @@
 			$("title").text("Welcome to Spank!");
 		});
 
-		$(".thoughtbot").click(function(){
+		$(".thoughtbot").click(function toggleBetweenMusicalLyrical(){
 			var funcs = {
 					'Musical':function(){
 						$("#vk-results-container").css("opacity","1.0").css("z-index","1");
@@ -48,7 +48,7 @@
 		//
 		// When we CLOSE the LIGHTBOX
 		//
-		function tearDownLightBox() {
+		var tearDownLightBox = function() {
 			lightBoxModel.lyricsText("");
 			lightBoxModel.lyricsTitle("");
 			lightBoxModel.lyricsThumb("");
@@ -58,14 +58,13 @@
 			$(this).removeClass('busy');
 			vk_search_in_progress = false;
 			mx_get_lyrics_in_progress = false;
-		}
+		};
 
-
-		$("#closePlayButton").click(function() {
+		$("#closePlayButton").click(function() { // Close the lightbox but don't stop playing music
 			tearDownLightBox();
 		});
 
-		$("#closeButton").click(function() {
+		$("#closeButton").click(function() {	// Close the lightbox. Stop playing music.
 			tearDownLightBox();
 			try {
 				// If nothing is playing, this raises an Exception
@@ -206,28 +205,13 @@
 		// Autopager for charts
 		$("#resultsSection").scroll(function() {
 			var last = $(".results-list:last-child");
-//			console.log($("#resultsSection").scrollTop()*0.4 + " > " + (last.position().top + last.height()));
 			if ($("#resultsSection").scrollTop()*0.4 > (last.position().top + last.height())) {
 				Charts.fetchMore();
 			}
-//			var lower_bound = $(document).height(),
-//				upper_bound = $("#searchForm").height()*5;
-//			var last = $(".results-list:last-child");
-//			if ($("#resultsSection").scrollTop()*0.4 > (last.position().top + last.height())) {
-//				Charts.fetchMore();
-//			}
-//          NOTE: Print the current track number. DISABLED cause it's too slow!
-//			$(".trackEntry").each(function(i, line) {
-//				var top = $(line).position().top;
-//				if (top<=lower_bound && top>=upper_bound) {
-//					$("#track_count_current").text(padToFour(i));
-//				}
-//			});
 		});
 
 		$.searchByWire = function(search_term) {
-			// Get the lightbox out of the way when we start searching again...
-			$("#closePlayButton").trigger("click");
+			tearDownLightBox(); // Get the lightbox out of the way when we start searching again...
 			var url = '/mxsearch?q=#&page=1'.replace("#",search_term);
 			$("html").addClass('busy');
 			$.ajax({
@@ -285,7 +269,7 @@
 			return false;
 		});
 
-		function mxMatchOne(title, artist, callback, err_callback) {
+		var mxMatchOne = function(title, artist, callback, err_callback) {
 			var url = "http://api.musixmatch.com/ws/1.1/matcher.track.get?q_artist=ARTIST&q_track=TRACK\
 						&apikey=316bd7524d833bb192d98be44fe43017&format=jsonp&callback=?";
 			artist = encodeURIComponent($.trim(artist));
@@ -302,9 +286,9 @@
 					err_callback();
 				}
 			});
-		}
+		};
 
-		function getLyricsWithMxid(track) {
+		var getLyricsWithMxid = function(track) {
 			mx_get_lyrics_in_progress = true;
 			function getLyrics(mxid) {
 				var url = "http://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=#\
@@ -327,7 +311,7 @@
 			} else {
 				getLyrics(track.mxid);
 			}
-		}
+		};
 
 		$(".lyricLink").live('click', function openLightbox() {
 			if (!vk_search_in_progress && !mx_get_lyrics_in_progress && $("#lightBox").css("display")!='block') {
