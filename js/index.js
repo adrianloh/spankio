@@ -28,11 +28,21 @@
 			$("title").text("Welcome to Spank!");
 		});
 
-		$("#lightBox").jScrollPane("lightBox_jspPane", {
-			autoReinitialise: true,
-			scrollbarWidth: 0,
-			scrollbarMargin: 0
-		});
+//		$("#lightBox").jScrollPane("lightBox_jspPane", {
+//			autoReinitialise: true,
+//			scrollbarWidth: 0,
+//			scrollbarMargin: 0
+//		});
+
+//		$("#lightBox").mCustomScrollbar();
+
+		var reInitScrollPanes = function() {
+//			$("#lightBox").mCustomScrollbar("update");
+//			var pane = $('#lightBox').each(function(){
+//				var api = $(this).data('jsp');
+//				api.reinitialise();
+//			});
+		};
 
 		$(".thoughtbot").click(function(){
 			var funcs = {
@@ -128,6 +138,7 @@
 					});
 					// threeSixtyPlayer.init searches for div.ui360 elements and attaches a player to each item it finds.
 					threeSixtyPlayer.init();
+//					$("#lightBox").mCustomScrollbar("update");
 				}
 			});
 			$("#closeButton").click(function() {
@@ -155,6 +166,14 @@
 
 		var lightBoxModel = new LightBoxViewModel();
 		ko.applyBindings(lightBoxModel, document.getElementById('lightBox'));
+
+		lightBoxModel.lyricsText.subscribe(function(){
+			setTimeout(function(){
+				reInitScrollPanes();
+//				$("#lightBox").jScrollPane("lightBox_jspPane",{height:1000});
+//				$("#lightBox").mCustomScrollbar("update");
+			},1500);
+		});
 
 		function ChartsViewModel() {
 			var self = this;
@@ -321,7 +340,7 @@
 					mx_get_lyrics_in_progress = false;
 					try {
 						if (data.message.body && data.message.body.lyrics.lyrics_body) {
-							lightBoxModel.lyricsText(data.message.body.lyrics.lyrics_body);
+							lightBoxModel.lyricsText(data.message.body.lyrics.lyrics_body+"\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 						}
 					} catch(err) { }
 				});

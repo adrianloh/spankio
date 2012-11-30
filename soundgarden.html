@@ -17,6 +17,7 @@
     <!-- NOTE: Version 1.6.4 of JQuery is required by Total Control -->
 
     <link rel="stylesheet" type="text/css" href="/js/contextMenu/jquery.contextmenu.css" />
+    <link rel="stylesheet" type="text/css" href="/js/jquery.mCustomScrollbar.css" />
 
     <!-- 360 Player -->
     <link rel="stylesheet" type="text/css" href="/360player/360player.css" />
@@ -61,8 +62,10 @@
             <button class="thoughtbot">Lyrical</button>
         </div>
         <img id="closePlayButton" src="/img/closeplay.png" />
-        <pre id="lyricsText" data-bind="text : lyricsText"></pre>
-        <div id="vk-results-container"></div>
+        <div id="dummyContainer">
+            <pre id="lyricsText" data-bind="text : lyricsText"></pre>
+            <div id="vk-results-container"></div>
+        </div>
     </div>
     <section id="resultsSection">
         <ul class="results-list" data-bind="foreach: chartTracks">
@@ -99,6 +102,8 @@
 <!-- Mine -->
 <script type="text/javascript" src="/js/gridrotator/modernizr.custom.26633.js"></script>
 <script type="text/javascript" src="/js/gridrotator/jquery.gridrotator.js"></script>
+
+<script type="text/javascript" src="/js/jquery.mCustomScrollbar.min.js"></script>
 
 <script type="text/javascript" src="/js/players.js"></script>
 <script type="text/javascript" src="/js/index.js"></script>
