@@ -176,7 +176,7 @@
 					track.mxid = o.track_id;
 					track.title = o.track_name;
 					track.artist = o.artist_name;
-					track.thumb = o.album_coverart_100x100;
+					track.thumb = o.album_coverart_350x350;
 					self.chartTracks.push(track);
 				} else if (o.hasOwnProperty("mbid")) { // This is a last.fm track object
 					track.artist = o.artist.name;
