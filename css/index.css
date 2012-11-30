@@ -97,7 +97,8 @@ FORM
 	width: 80%;
 	top: 5%;
 	left: 160px;
-	margin: 0 auto;
+    margin-left: 21px;
+	/*margin: 0 auto;*/
 }
 INPUT[type="text"], TEXTAREA
 {
@@ -168,6 +169,7 @@ INPUT:-ms-input-placeholder
     font: 82px "Oswald";
     left: 22%;
     top: -2.5%;
+    margin-left: 21px;
 }
 #track_count_total {
 	z-index: 500;
@@ -177,6 +179,7 @@ INPUT:-ms-input-placeholder
 	font: 51px "Oswald";
 	left: 24%;
 	top: -1.5%;
+    margin-left: 21px;
 }
 #prev_page{
 	z-index:500;
@@ -526,11 +529,8 @@ ul.lastfm-buttons {
     left: 9%;
     background-color: rgba(0, 0, 0, 0.5);
     padding: 3px 6px 6px 6px;
+    margin-right: 20px;
 }
-
-ul.lastfm-buttons li {
-}
-
 
 
 

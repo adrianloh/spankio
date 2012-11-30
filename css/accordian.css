@@ -338,7 +338,7 @@ button.shiny-blue:active {
 *******************************************************************************/
 button.chart-button {
     font: bold 12px/1 "proxima-nova-1";
-    width: 100px;
+    width: 130px;
     background-color: #52a8e8;
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #52a8e8), color-stop(100%, #377ad0));
     background-image: -webkit-linear-gradient(top, #52a8e8, #377ad0);

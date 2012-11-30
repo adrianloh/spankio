@@ -11,13 +11,13 @@
 			lastfm_loved:function(){ return this.lastfm_base.replace("METHOD","chart.getlovedtracks") },
 			billboards_uk:function() { return this.billboards_base.replace("#","uk") },
 			billboards_us:function() { return this.billboards_base.replace("#","us") },
-			itunes:function() { return "https://itunes.apple.com/us/rss/topsongs/limit=300/explicit=true/json" },
+			itunes_store:function() { return "https://itunes.apple.com/us/rss/topsongs/limit=300/explicit=true/json" },
 		};
 
 		var last_request_time = new Date().getTime()-5000;
 		$(".chart-button").bind("click", function(event, myUrl) {
 			var tracklist,
-				chartName = $(this).text(),
+				chartName = $(this).text().replace(".","").replace(" ","_").toLowerCase(),
 				url = myUrl || lastfmTop[chartName]();
 			var timeNow = new Date().getTime(),
 				timeDelta = timeNow - last_request_time;
@@ -51,7 +51,7 @@
 		});
 
 		$(".chart-button").filter(function() {
-			return $(this).text()=="billboards_uk";
+			return $(this).text()=="Billboards UK";
 		}).trigger("click");
 
 	});
