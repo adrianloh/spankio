@@ -31,10 +31,8 @@
 		$(".thoughtbot").click(function(){
 			var funcs = {
 					'Musical':function(){
-						$("#vk-results-container").css("opacity","1.0");
-						$("#vk-results-container").css("z-index","1");
-						$("#lyricsText").css("opacity","0");
-						$("#lyricsText").css("z-index","0");
+						$("#vk-results-container").css("opacity","1.0").css("z-index","1");
+						$("#lyricsText").css("opacity","0").css("z-index","0");
 					},
 					'Lyrical':function(){
 						$("#vk-results-container").css("opacity","0");
@@ -192,7 +190,7 @@
 					track.thumb = o['im:image'][1] ? o['im:image'][1].label : track.thumb;
 					self.chartTracks.push(track);
 				}
-			}
+			};
 		}
 
 		var charts = new ChartsViewModel();
@@ -301,7 +299,7 @@
 						err_callback();
 					}
 				} catch(err) {
-					err_callback()
+					err_callback();
 				}
 			});
 		}
