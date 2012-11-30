@@ -187,7 +187,7 @@
 				} else if (o.hasOwnProperty("im:artist")) { // This is an iTunes track object
 					track.artist = o['im:artist'].label;
 					track.title = o['im:name'].label;
-					track.thumb = o['im:image'][2] ? o['im:image'][1].label : track.thumb;
+					track.thumb = o['im:image'][2] ? o['im:image'][2].label : track.thumb;
 					self.chartTracks.push(track);
 				}
 			};
