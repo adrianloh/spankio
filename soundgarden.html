@@ -10,6 +10,7 @@
 
 	<link rel="stylesheet" type="text/css" href="/css/fonts.css" />
 	<link rel="stylesheet" type="text/css" href="/css/index.css" />
+    <link rel="stylesheet" type="text/css" href="/css/accordian.css" />
 
     <!-- JQuery -->
     <!--    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js"></script> -->
@@ -52,11 +53,16 @@
 </div>
 <div class="st-scroll">
     <div id="lightBox">
-        <img id="closeButton" src="/img/close.png" />
-        <img id="closePlayButton" src="/img/closeplay.png" />
         <div id="lyricsTitle" data-bind="text : lyricsTitle"></div>
-        <pre id="lyricsText" data-bind="text : lyricsText"></pre>
         <img id="lyricsThumb" data-bind="attr: { src: lyricsThumb }" />
+        <img id="closeButton" src="/img/close.png" />
+        <div id="lyricsButtons">
+            <button class="thoughtbot">Musical</button>
+            <button class="thoughtbot">Lyrical</button>
+        </div>
+        <img id="closePlayButton" src="/img/closeplay.png" />
+        <pre id="lyricsText" data-bind="text : lyricsText"></pre>
+        <div id="vk-results-container"></div>
     </div>
     <section id="resultsSection">
         <ul class="results-list" data-bind="foreach: chartTracks">
@@ -100,4 +106,5 @@
 <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.1.0/knockout-min.js"></script>
 <script type="text/javascript" src="/js/charts.js"></script>
 <script type="text/javascript" src="/js/scrollExtend/js/jquery.scrollExtend.min.js"></script>
+<script type="text/javascript" src="/js/jquery.easyAccordion.js"></script>
 </html>

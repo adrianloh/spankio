@@ -2,13 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="32ba444c-fc18-4642-a53c-06c7d6e77d49" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/jquery.easyAccordion.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TotalControl/css/default.css" afterPath="$PROJECT_DIR$/TotalControl/css/default.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/index.css" afterPath="$PROJECT_DIR$/css/index.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/charts.js" afterPath="$PROJECT_DIR$/js/charts.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/index.js" afterPath="$PROJECT_DIR$/js/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/players.js" afterPath="$PROJECT_DIR$/js/players.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/soundgarden.html" afterPath="$PROJECT_DIR$/soundgarden.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/soundgarden.py" afterPath="$PROJECT_DIR$/soundgarden.py" />
     </list>
     <ignored path="soundgarden-heroku.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -31,7 +30,34 @@
       <file leaf-file-name="soundgarden.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/soundgarden.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="62" column="45" selection-start="3156" selection-end="3156" vertical-scroll-proportion="-15.384615">
+            <state line="45" column="27" selection-start="2309" selection-end="2321" vertical-scroll-proportion="-12.346154">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="accordian.css" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/css/accordian.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="201" column="95" selection-start="9544" selection-end="9544" vertical-scroll-proportion="0.37037036">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="charts.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/charts.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="23" column="33" selection-start="1265" selection-end="1265" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.css" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/css/index.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="529" column="0" selection-start="12329" selection-end="12329" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -40,7 +66,7 @@
       <file leaf-file-name="index.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="54" column="11" selection-start="1386" selection-end="1386" vertical-scroll-proportion="0.0">
+            <state line="48" column="57" selection-start="1416" selection-end="1416" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -54,15 +80,6 @@
                 <marker date="1354200295000" expanded="false" signature="381:419" placeholder="..." />
                 <marker date="1354200295000" expanded="false" signature="620:631" placeholder="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.css" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/css/index.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="169" column="11" selection-start="3974" selection-end="3974" vertical-scroll-proportion="0.37037036">
-              <folding />
             </state>
           </provider>
         </entry>
@@ -104,12 +121,14 @@
         <option value="$PROJECT_DIR$/soundgarden.html" />
         <option value="$PROJECT_DIR$/js/index.js" />
         <option value="$PROJECT_DIR$/css/index.css" />
+        <option value="$PROJECT_DIR$/js/charts.js" />
+        <option value="$PROJECT_DIR$/css/accordian.css" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="416" />
-    <option name="y" value="192" />
+    <option name="x" value="660" />
+    <option name="y" value="166" />
     <option name="width" value="1701" />
     <option name="height" value="1295" />
   </component>
@@ -182,6 +201,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="soundgarden-heroku" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="hidden-bayou-5179" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="TotalControl" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -237,7 +270,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="416" y="192" width="1701" height="1295" extended-state="0" />
+    <frame x="660" y="166" width="1701" height="1295" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -335,13 +368,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/charts.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="5" selection-start="2179" selection-end="2179" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/TotalControl/TotalControl.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="661" column="18" selection-start="22688" selection-end="22688" vertical-scroll-proportion="0.3483245">
@@ -370,6 +396,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/TotalControl/css/default.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="149" column="20" selection-start="4846" selection-end="4846" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/js/players.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="219" column="14" selection-start="6714" selection-end="6714" vertical-scroll-proportion="0.0">
@@ -380,30 +413,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TotalControl/css/default.css">
+    <entry file="file://$PROJECT_DIR$/js/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="149" column="20" selection-start="4846" selection-end="4846" vertical-scroll-proportion="0.0">
+        <state line="48" column="57" selection-start="1416" selection-end="1416" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/soundgarden.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="62" column="45" selection-start="3156" selection-end="3156" vertical-scroll-proportion="-15.384615">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="11" selection-start="1386" selection-end="1386" vertical-scroll-proportion="0.0">
+        <state line="45" column="27" selection-start="2309" selection-end="2321" vertical-scroll-proportion="-12.346154">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/css/index.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="169" column="11" selection-start="3974" selection-end="3974" vertical-scroll-proportion="0.37037036">
+        <state line="529" column="0" selection-start="12329" selection-end="12329" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/charts.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="33" selection-start="1265" selection-end="1265" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/accordian.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="201" column="95" selection-start="9544" selection-end="9544" vertical-scroll-proportion="0.37037036">
           <folding />
         </state>
       </provider>

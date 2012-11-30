@@ -34,6 +34,25 @@
 			scrollbarMargin: 0
 		});
 
+		$(".thoughtbot").click(function(){
+			var funcs = {
+					'Musical':function(){
+						$("#vk-results-container").css("opacity","1.0");
+						$("#vk-results-container").css("z-index","1");
+						$("#lyricsText").css("opacity","0");
+						$("#lyricsText").css("z-index","0");
+					},
+					'Lyrical':function(){
+						$("#vk-results-container").css("opacity","0");
+						$("#vk-results-container").css("z-index","0");
+						$("#lyricsText").css("opacity","1.0");
+						$("#lyricsText").css("z-index","1");
+					}
+				},
+				f = funcs[$(this).text()];
+			f();
+		});
+
 		//
 		// When we CLOSE the LIGHTBOX
 		//
@@ -78,7 +97,7 @@
 		var pick = 0;
 		var searchVK = function(params) {
 			vk_search_in_progress = true;
-			$('<ul id="vk-results-list"></ul>').appendTo('.lightBox_jspPane');
+			$('<ul id="vk-results-list"></ul>').appendTo('#vk-results-container');
 			var url = "https://api.vkontakte.ru/method/audio.search?q=QUERY\
 						&access_token=TOKEN&count=100&callback=?",
 				token = vk_keys[++pick%vk_keys.length];
@@ -317,6 +336,8 @@
 				getLyrics(track.mxid);
 			}
 		}
+
+		$('#accordion-container').easyAccordion();
 
 		$(".lyricLink").live('click', function openLightbox() {
 			if (!vk_search_in_progress && !mx_get_lyrics_in_progress && $("#lightBox").css("display")!='block') {

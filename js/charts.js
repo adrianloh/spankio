@@ -4,7 +4,7 @@
 	$(document).ready(function () {
 
 		var lastfmTop = {
-			lastfm_base:"http://ws.audioscrobbler.com/2.0/?method=METHOD&page=1&limit=200&api_key=0325c588426d1889087a065994d30fa1&format=json&callback=?",
+			lastfm_base:"http://ws.audioscrobbler.com/2.0/?method=METHOD&page=1&limit=300&api_key=0325c588426d1889087a065994d30fa1&format=json&callback=?",
 			billboards_base:"http://api.musixmatch.com/ws/1.1/chart.tracks.get?page=1&page_size=100&country=#&f_has_lyrics=1&apikey=316bd7524d833bb192d98be44fe43017&format=jsonp&callback=?",
 			lastfm_hyped:function(){ return this.lastfm_base.replace("METHOD","chart.gethypedtracks") },
 			lastfm_top:function(){ return this.lastfm_base.replace("METHOD","chart.gettoptracks") },
