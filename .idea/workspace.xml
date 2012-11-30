@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="32ba444c-fc18-4642-a53c-06c7d6e77d49" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/index.css" afterPath="$PROJECT_DIR$/css/index.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/index.js" afterPath="$PROJECT_DIR$/js/index.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/soundgarden.html" afterPath="$PROJECT_DIR$/soundgarden.html" />
     </list>
@@ -37,7 +35,7 @@
       <file leaf-file-name="index.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="36" column="2" selection-start="928" selection-end="928" vertical-scroll-proportion="0.0">
+            <state line="354" column="5" selection-start="11867" selection-end="11867" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -52,19 +50,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="soundgarden.html" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="soundgarden.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/soundgarden.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="67" column="0" selection-start="3413" selection-end="3413" vertical-scroll-proportion="-26.961538">
+            <state line="89" column="0" selection-start="4363" selection-end="4363" vertical-scroll-proportion="0.66101694">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.css" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="index.css" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/css/index.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="406" column="4" selection-start="10080" selection-end="10080" vertical-scroll-proportion="0.3483245">
+            <state line="442" column="9" selection-start="10643" selection-end="10643" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -88,9 +86,9 @@
         <option value="$PROJECT_DIR$/css/accordian.css" />
         <option value="$PROJECT_DIR$/soundgarden.py" />
         <option value="$PROJECT_DIR$/js/charts.js" />
+        <option value="$PROJECT_DIR$/css/index.css" />
         <option value="$PROJECT_DIR$/js/index.js" />
         <option value="$PROJECT_DIR$/soundgarden.html" />
-        <option value="$PROJECT_DIR$/css/index.css" />
       </list>
     </option>
   </component>
@@ -366,13 +364,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/soundgarden.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="195" column="42" selection-start="6720" selection-end="6720" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/jquery.mCustomScrollbar.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="796" column="4" selection-start="35926" selection-end="35926" vertical-scroll-proportion="-8.807693">
@@ -395,23 +386,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/css/index.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="442" column="9" selection-start="10643" selection-end="10643" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/js/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="2" selection-start="928" selection-end="928" vertical-scroll-proportion="0.0">
+        <state line="354" column="5" selection-start="11867" selection-end="11867" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/soundgarden.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="195" column="42" selection-start="6720" selection-end="6720" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/soundgarden.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="67" column="0" selection-start="3413" selection-end="3413" vertical-scroll-proportion="-26.961538">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/css/index.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="406" column="4" selection-start="10080" selection-end="10080" vertical-scroll-proportion="0.3483245">
+        <state line="89" column="0" selection-start="4363" selection-end="4363" vertical-scroll-proportion="0.66101694">
           <folding />
         </state>
       </provider>
