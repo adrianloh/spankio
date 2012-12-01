@@ -310,6 +310,7 @@ function ThreeSixtyPlayer() {
     // handlers for sound events as they're started/stopped/played
 
     play: function() {
+	  $(document).trigger("soundplay",[this]);
       pl.removeClass(this._360data.oUIBox,this._360data.className);
       this._360data.className = pl.css.sPlaying;
       pl.addClass(this._360data.oUIBox,this._360data.className);

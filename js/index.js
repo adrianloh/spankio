@@ -1,21 +1,8 @@
 (function() {
 
-	function randrange(minVal,maxVal,floatVal) {
-		var randVal = minVal+(Math.random()*(maxVal-minVal));
-		return typeof floatVal=='undefined'?Math.round(randVal):randVal.toFixed(floatVal);
-	}
-
-	function wobble(elem, min, max) {
-		var rotate = "rotate(#deg)".replace("#",randrange(min,max));
-		$(elem).css("webkit-transform",rotate).removeClass("unwobbled");
-	}
-
-	function padToFour(number) {
-		if (number<=9999) { number = ("000"+number).slice(-4); }
-		return number;
-	}
-
 	$(document).ready(function () {
+
+		Spank = {};
 
 		var vk_search_in_progress = false,
 			mx_get_lyrics_in_progress = false;
@@ -49,9 +36,9 @@
 		// When we CLOSE the LIGHTBOX
 		//
 		var tearDownLightBox = function() {
-			lightBoxModel.lyricsText("");
-			lightBoxModel.lyricsTitle("");
-			lightBoxModel.lyricsThumb("");
+			Spank.lightBox.lyricsText("");
+			Spank.lightBox.lyricsTitle("");
+			Spank.lightBox.lyricsThumb("");
 			$("#vk-results-list").remove();
 			$("#lightBox").slideUp('fast','swing');
 			$("#lightBox_jspPane").html("");
@@ -89,8 +76,7 @@
 		var searchVK = function(params) {
 			vk_search_in_progress = true;
 			$('<ul id="vk-results-list"></ul>').appendTo('#vk-results-container');
-			var url = "https://api.vkontakte.ru/method/audio.search?q=QUERY\
-						&access_token=TOKEN&count=100&callback=?",
+			var url = "https://api.vkontakte.ru/method/audio.search?q=QUERY&access_token=TOKEN&count=100&callback=?",
 				token = vk_keys[++pick%vk_keys.length];
 			var xhr = $.getJSON(url.replace("TOKEN", token).replace("QUERY",params.q), function(data) {
 				vk_search_in_progress = false;
@@ -136,80 +122,6 @@
 			}
 		});
 
-		function LightBoxViewModel() {
-			var self = this;
-			self.lyricsTitle = ko.observable("");
-			self.lyricsText = ko.observable("");
-			self.lyricsThumb = ko.observable("");
-			self.vkSearchResults = ko.observableArray([]);
-		}
-
-		var lightBoxModel = new LightBoxViewModel();
-		ko.applyBindings(lightBoxModel, document.getElementById('lightBox'));
-
-		function ChartsViewModel() {
-			var self = this;
-				self.current_url = null;
-			// Editable data
-			self.ok_to_fetch_more = true;
-			self.chartTracks = ko.observableArray([]);
-			self.totalChartTracks = ko.computed(function(){
-				return padToFour(self.chartTracks().length);
-			});
-			self.fetchMore = function() {
-				if (self.ok_to_fetch_more) {
-					var match = self.current_url.match(/page=(\d+)/);
-					if (match) {
-						var next = ++match[1],
-							next_url = self.current_url.replace(/page=(\d+)/,"page="+next);
-						$(".chart-button").trigger("click",[next_url]);
-					}
-				}
-			};
-			self.push = function(o) {
-				// Init defaults for properties our view expects
-				var track = {mbid:'na', title:'na', artist:'na', mxid:"na", thumb:"http://api.musixmatch.com/images/albums/nocover.png"};
-				if (o.hasOwnProperty("track")) {    // This is a MusiXMatch track object
-					o = o.track;
-					track.mbid = o.track_mbid;
-					track.mxid = o.track_id;
-					track.title = o.track_name;
-					track.artist = o.artist_name;
-					track.thumb = o.album_coverart_100x100;
-					self.chartTracks.push(track);
-				} else if (o.hasOwnProperty("mbid")) { // This is a last.fm track object
-					track.artist = o.artist.name;
-					track.title = o.name;
-					track.mbid = o.mbid;
-					track.thumb = o.image ? o.image[2]['#text'] : track.thumb;
-					self.chartTracks.push(track);
-				} else if (o.hasOwnProperty("im:artist")) { // This is an iTunes track object
-					track.artist = o['im:artist'].label;
-					track.title = o['im:name'].label;
-					track.thumb = o['im:image'][2] ? o['im:image'][2].label : track.thumb;
-					self.chartTracks.push(track);
-				}
-			};
-		}
-
-		var charts = new ChartsViewModel();
-		Charts = charts;
-		ko.applyBindings(charts);
-
-		charts.chartTracks.subscribe(function() {
-			$(".trackEntry.unwobbled").each(function(i,elem) {
-				wobble(elem,-6,6);
-			});
-		});
-
-		// Autopager for charts
-		$("#resultsSection").scroll(function() {
-			var last = $(".results-list:last-child");
-			if ($("#resultsSection").scrollTop()*0.4 > (last.position().top + last.height())) {
-				Charts.fetchMore();
-			}
-		});
-
 		$.searchByWire = function(search_term) {
 			tearDownLightBox(); // Get the lightbox out of the way when we start searching again...
 			var url = '/mxsearch?q=#&page=1'.replace("#",search_term);
@@ -222,10 +134,10 @@
 					var items = [],
 						tracklist = response.message.body.track_list;
 					if (tracklist.length>0) {
-						charts.current_url = url;
-						charts.chartTracks.removeAll();
+						Spank.charts.current_url = url;
+						Spank.charts.chartTracks.removeAll();
 						$.each(tracklist, function (i, o) {
-							charts.push(o);
+							Spank.charts.push(o);
 						});
 					} else {
 						items.push('<li class="trackName">' + "Nothing found!" + '</li>');
@@ -270,8 +182,7 @@
 		});
 
 		var mxMatchOne = function(title, artist, callback, err_callback) {
-			var url = "http://api.musixmatch.com/ws/1.1/matcher.track.get?q_artist=ARTIST&q_track=TRACK\
-						&apikey=316bd7524d833bb192d98be44fe43017&format=jsonp&callback=?";
+			var url = "http://api.musixmatch.com/ws/1.1/matcher.track.get?q_artist=ARTIST&q_track=TRACK&apikey=316bd7524d833bb192d98be44fe43017&format=jsonp&callback=?";
 			artist = encodeURIComponent($.trim(artist));
 			title = encodeURIComponent($.trim(title));
 			url = url.replace("ARTIST", artist).replace("TRACK", title);
@@ -291,13 +202,12 @@
 		var getLyricsWithMxid = function(track) {
 			mx_get_lyrics_in_progress = true;
 			function getLyrics(mxid) {
-				var url = "http://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=#\
-							&apikey=316bd7524d833bb192d98be44fe43017&format=jsonp&callback=?";
+				var url = "http://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=#&apikey=316bd7524d833bb192d98be44fe43017&format=jsonp&callback=?";
 				$.getJSON(url.replace("#", mxid), function(data) {
 					mx_get_lyrics_in_progress = false;
 					try {
 						if (data.message.body && data.message.body.lyrics.lyrics_body) {
-							lightBoxModel.lyricsText(data.message.body.lyrics.lyrics_body+"\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+							Spank.lightBox.lyricsText(data.message.body.lyrics.lyrics_body+"\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 						}
 					} catch(err) { }
 				});
@@ -325,8 +235,8 @@
 				getLyricsWithMxid({artist:artist, title:title, mxid:mxid});
 				searchVK({q:query_string,
 					mxid:mxid, thumb:thumb});
-				lightBoxModel.lyricsThumb(thumb);
-				lightBoxModel.lyricsTitle(title + " | " + artist);
+				Spank.lightBox.lyricsThumb(thumb);
+				Spank.lightBox.lyricsTitle(title + " | " + artist);
 				$("#lightBox").slideDown('fast','swing');
 			}
 			return false;

@@ -32,17 +32,17 @@
 					} else if (res.hasOwnProperty("tracks")) {  // LastFM
 						tracklist = res.tracks.track;
 					}
-					Charts.current_url = url;
+					Spank.charts.current_url = url;
 					if (tracklist.length>0) {
 						if (!myUrl) {
-							Charts.chartTracks.removeAll();
+							Spank.charts.chartTracks.removeAll();
 						}
 						$.each(tracklist, function(i,o) {
-							Charts.push(o);
+							Spank.charts.push(o);
 						});
-						Charts.ok_to_fetch_more = true;
+						Spank.charts.ok_to_fetch_more = true;
 					} else {
-						Charts.ok_to_fetch_more = false;
+						Spank.charts.ok_to_fetch_more = false;
 					}
 					$("html").removeClass('busy');
 				});

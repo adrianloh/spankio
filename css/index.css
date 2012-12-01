@@ -203,6 +203,16 @@ INPUT:-ms-input-placeholder
 /* MusixMatch Results section
 ==================================================*/
 .trackEntry {
+	width: 200px;
+	display: inline-block;
+	margin-bottom: 26px;
+}
+
+.trackEntry img {
+}
+
+
+.__trackEntry {
 	width: 600px;
 	padding-top: 11px;
 	background-size: 4px 4px;
@@ -217,31 +227,34 @@ INPUT:-ms-input-placeholder
 	background: url(/img/tape1.png) no-repeat fixed -50px -110px;
 }
 .mxThumb {
+	width: 160px;
+	height: 160px;
+	float: left;
 	margin-right: 15px;
-	border: solid 1px #000;
-	-moz-box-shadow: 1px 1px 5px #999;
-	-webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.92);
-	box-shadow: 1px 1px 5px #999;
+	border: solid 0px #000;
+/*	-moz-box-shadow: 1px 1px 5px #999;
+	-webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, 2.92);
+	box-shadow: 1px 1px 5px #999;*/
 }
 .trackName
 {
+	width: 160px;
 	color: #111111;
-	font: 500 18px "proxima-nova-1";
+	font: 800 15px "PT Sans Narrow";
 	display: inline-block;
-	vertical-align: 39;
 	background-color: rgb(36, 30, 30);
-	clear: left;
+	clear: both;
+	margin-left: -45px; /*	Why this correction? */
 }
 .trackArtist
 {
 	letter-spacing: -1.8px;
-	color: #f3efb5;
-	font: italic 700 16px "Averia Serif Libre";
-	cursor:pointer;
-	vertical-align: 20;
-	background-color: rgb(104, 93, 93);
-	display: inline-block;
+	color: rgb(255, 255, 255);
+	font: italic 600 13px "proxima-nova-1";
+	cursor: pointer;
+	margin-left: -45px; /*	Why this correction? */
 }
+
 #__resultsSection
 {
 	text-shadow: 2px 2px 2px rgba(151, 24, 64, 0.2);
