@@ -9,7 +9,6 @@ import tornado.httpclient
 import tornado.curl_httpclient
 from urllib import urlencode, unquote
 import tornadoredis
-import facebook
 
 
 def extract(q, terms=(), delimiter=":"):
