@@ -3,18 +3,33 @@
 	$(document).ready(function() {
 
 		$("#funkyPlayer").css("background", 'url(' + Spank.genericAlbumArt + ')');
-		$(".spank-player-control-buttons").css("webkitFilter","grayscale(1)").css("position","relative").css("height","90%").css("right","10%").css("cursor","pointer").css("z-index",999);
 
-		// !!! DOESN'T WORK! Event is not fired!
-		$(".tweetDetails").hover(function mousein() {
-			$(this).parent().find(".tweetDelete").css("display","block");
-		}, function mouseout() {
-			$(this).parent().find(".tweetDelete").css("display","none");
+		// Tooltips plugin
+
+		$.extend(Tipped.Skins, {
+			'controlButtons' : {
+				border: { size: 3, color: '#959fa9' },
+				background: '#f7f7f7',
+				radius: { size: 4, position: 'border' },
+				shadow: false,
+				closeButtonSkin: 'light'
+			}
+		});
+
+		Tipped.create(".playModeButtons", {
+			skin:'controlButtons'
+		});
+
+		Tipped.create(".ui360", {
+			skin:'controlButtons',
+			target: '.sm2-360btn',
+			hook: 'leftmiddle'
 		});
 
 		Spank.history = (function() {
 			var self = this;
 			self.stream = ko.observableArray([]);
+
 			self.prependToHistory = function (o, playNow) {
 				var underlyingArray = self.stream();
 				var i = underlyingArray.length;
@@ -30,6 +45,7 @@
 					Spank.player.playObject(o, 0);
 				}
 			};
+
 			self.playHistoryItem = function(o,event) {
 				// Push the clicked History item to the top and play it
 				if (Spank.history.stream.indexOf(o)>1) {
@@ -40,6 +56,7 @@
 					self.prependToHistory(o, true);
 				}
 			};
+
 			self.deleteHistoryItem = function(o,event) {
 				$(event.target).parent().animate({"left": "-=500px"}, 500, function() {
 					if (Spank.player.lastPlayedObject===o) {
@@ -48,6 +65,14 @@
 					self.stream.remove(o);
 				});
 			};
+
+			self.downloadHistoryItem = function(o,event) {
+				$('<iframe width="0" height="0" frameborder="0" src="@"></iframe>'.replace("@", o.direct)).appendTo("body");
+				setTimeout(function(){
+					$("iframe").remove();
+				},60000);
+			};
+
 			return this;
 		})();
 

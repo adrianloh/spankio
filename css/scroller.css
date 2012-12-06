@@ -11,8 +11,9 @@
 
 #toggle-playlist-button {
     position: absolute;
-    top: -14px;
-    left: 64;
+    top: -20px;
+    margin: 10px auto;
+    left: 45%;
 }
 
 #playlistScroller img {

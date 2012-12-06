@@ -26,14 +26,21 @@ SpectrumAnalyzer = audioContext.createAnalyser();
 
 Html5Audios = {};
 
+var isChrome = (navigator.userAgent.match(/chrome/i));
+
 function setupWebAudio(url) {
 	var audio = new Audio();
-	audio.src = url;
-	audio.preload = "auto";
-	audio.load();
-	var source = audioContext.createMediaElementSource(audio);
-	source.connect(SpectrumAnalyzer);                   // Connect the audio to the analyzer
-//	SpectrumAnalyzer.connect(audioContext.destination); // *BUT* don't connect it to the speakers
+	if (isChrome) {
+		audio.src = url;
+		audio.preload = "auto";
+		audio.load();
+		var source = audioContext.createMediaElementSource(audio);
+		source.connect(SpectrumAnalyzer);                   // Connect the audio to the analyzer
+//	    SpectrumAnalyzer.connect(audioContext.destination); // *BUT* don't connect it to the speakers
+	} else {
+		audio.src = "";
+		audio.preload = "none";
+	}
 	return audio;
 }
 

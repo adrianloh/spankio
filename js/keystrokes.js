@@ -58,18 +58,18 @@
 						break;
 					case keys.alpha_o:
 						// Toggle loop mode
-						$('.spank-player-control-buttons[src="/css/loop_on.png"]').trigger("click");
+						$('.playModeButtons[src="/css/loop_on.png"]').trigger("click");
 						break;
 					case keys.alpha_p:
 						// Toggle shuffle mode
-						$('.spank-player-control-buttons[src="/css/shuffle_on.png"]').trigger("click");
+						$('.playModeButtons[src="/css/shuffle_on.png"]').trigger("click");
 						break;
 					case keys.alpha_i:
 						// Shuffle results list
 						$('#random_button').trigger("mousedown").trigger('click');
 						setTimeout(function() {
 							$('#random_button').trigger("mouseup");
-						},1000);
+						},250);
 						break;
 				}
 

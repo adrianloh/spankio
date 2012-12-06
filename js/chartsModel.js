@@ -86,15 +86,15 @@ Array.prototype.shuffle = function() {
 
 		ko.applyBindings(Spank.charts, document.getElementById('resultsSection'));
 
-		var unfocusSearchBarTimeout = setTimeout(function(){},1000);
+//		var unfocusSearchBarTimeout = setTimeout(function(){},1000);
 		Spank.charts.chartTracks.subscribe(function() {
 			$(".trackEntry.unwobbled").each(function(i,elem) {
 				Spank.utils.wobble(elem,-8,8);
 			});
-			clearTimeout(unfocusSearchBarTimeout);
-			setTimeout(function() {
-				$("#lyrics").blur()
-			},10000)
+//			clearTimeout(unfocusSearchBarTimeout);
+//			setTimeout(function() {
+//				$("#lyrics").blur()
+//			},10000)
 		});
 
 		$("#random_button").mousedown(function() {

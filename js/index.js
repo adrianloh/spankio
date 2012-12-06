@@ -95,7 +95,7 @@
 					threeSixtyPlayer.init("vkDownloadLink");
 				}
 			});
-			$("#closeButton").click(function() {
+			$("#closeButton").click(function() { // Crash close lightbox, don't load VK results
 				xhr.abort();
 			});
 		};

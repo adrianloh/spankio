@@ -103,6 +103,7 @@
     <script type="text/javascript" src="/js/charts.js"></script>
     <script type="text/javascript" src="/js/keystrokes.js"></script>
     <script type="text/javascript" src="/js/snippets.js"></script>
+    <script type="text/javascript" src="/js/draggables.js"></script>
 
     <!-- Context menu plugin -->
     <link rel="stylesheet" type="text/css" href="/js/contextMenu/jquery.contextmenu.css" />
@@ -122,6 +123,10 @@
             return true;
         }
     </script>
+
+    <link rel="stylesheet" type="text/css" href="/js/tipped/tipped.css">
+    <link rel="stylesheet" type="text/css" href="/js/tipped/custom.css">
+    <script type="text/javascript" src="/js/tipped/tipped.js"></script>
 
 </head>
 <body>
@@ -369,19 +374,20 @@
 <div id="fb-root"></div>
 
     <div id="logo">Spank.io</div>
+    <div id="spank-player-controls">
+        <img id="chat_button" style="display:none;" class="playModeButtons" src="/img/chat.png" />
+        <img id="random_button" title="Shuffle chart entries [i]" class="playModeButtons" src="/css/random_on.png" />
+        <img id="loop_button" title="Loop Mode [o]" class="playModeButtons" src="/css/loop_on.png" />
+        <img id="shuffle_button" title="Shuffle Mode [p]" class="playModeButtons" src="/css/shuffle_on.png" />
+    </div>
     <div id="searchForm">
         <form id="searchLyrics">
             <input type="text" name="lyrics" id="lyrics" size="120" value="" class="text-input" />
         </form>
     </div>
-    <div id="spank-player-controls">
-        <img id="random_button" class="spank-player-control-buttons" src="/css/random_on.png">
-        <img id="loop_button" class="spank-player-control-buttons" src="/css/loop_on.png">
-        <img id="shuffle_button" class="spank-player-control-buttons" src="/css/shuffle_on.png">
-    </div>
     <div id="funkyPlayer">
         <div id="funkyPlayer-container">
-            <div class="ui360 ui360-vis">
+            <div class="ui360 ui360-vis" title="Play/Pause [space]">
                 <a class="fatManLink" data-bind="attr: { href: current_url }"></a>
             </div>
         </div>
@@ -389,8 +395,9 @@
 
     <div id="playHistory">
         <ul id="history-stream-list" data-bind="foreach: stream">
-            <li class="tweetItem tweetStop">
-                <img class="tweetThumb" onerror="ImgError(this)" data-bind="attr: { src: thumb }" />
+            <li class="tweetItem tweetStop" data-bind="cartDeleteIcons:[]">
+                <img class="tweetThumb" onerror="ImgError(this)" data-bind="pickupStreamItems:[], attr: { src: thumb }" />
+                <a data-bind="attr: { href: direct }"><img class="tweetDownload" src="/img/cart.png" /></a>
                 <img class="tweetDelete" src="/img/deleteTweet.png" data-bind="click: $root.deleteHistoryItem" />
                 <div class="tweetDetails" data-bind="click: $root.playHistoryItem">
                     <div class="tweetTrackName" data-bind="text: title"></div>

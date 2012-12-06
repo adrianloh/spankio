@@ -2,7 +2,7 @@
 
 	$(document).ready(function () {
 
-		$(".spank-player-control-buttons").click(function() {
+		$(".playModeButtons").click(function() {
 			var attr = $(this).attr("src").match(/\/css\/(.+)_on/)[1];
 			threeSixtyPlayer.config[attr] = !threeSixtyPlayer.config[attr];
 			playerControlModel[attr](threeSixtyPlayer.config[attr]);

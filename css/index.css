@@ -58,28 +58,27 @@ iframe {
 ==================================================*/
 FORM
 {
-	position: fixed;
-	font-size: 68px;
-	font-weight: 900;
-	width: 80%;
-	top: 2%;
-	left: 0px;
-    margin-left: 6%;
+    position: fixed;
+    font-size: 68px;
+    font-weight: 900;
+    width: 80%;
+    top: 2%;
+    left: 0px;
+    margin-left: 9%;
 	/*margin: 0 auto;*/
 }
 INPUT[type="text"], TEXTAREA
 {
-	font: 62.5%/1 Oswald;
-	text-shadow: -0.095em 0 red, 0.095em 0 cyan;		/* This creates the 3D effect, pretty easy, eh? */
-	letter-spacing: 0px;							    /* make sure the letters don't overlap */
-	height: 68px;
-	width: 700px;
-	padding: 3px 20px 5px;
-/*The Fallback*/
-	background-color: rgba(255, 255, 255, 1);
-	border: 4px solid black;
-	color: #000000;
-	-webkit-transform: rotate(-2deg);
+    font: 44.5%/1 Oswald;
+    text-shadow: -0.095em 0 red, 0.095em 0 cyan;
+    letter-spacing: 0px;
+    height: 100%;
+    width: 68%;
+    padding: 3px 14px 5px;
+    background-color: rgba(255, 255, 255, 1);
+    border: 6px solid rgb(63, 63, 63);
+    color: #000000;
+/*-webkit-transform: rotate(-2deg);*/
 }
 INPUT::-webkit-input-placeholder
 {
@@ -99,7 +98,7 @@ INPUT:-ms-input-placeholder
 	top: 0px;
 	left: 0px;
 	width: 100%;
-	height: 12%;
+	height: 10%;
 	-moz-box-shadow: 0 020px 20px rgba(0, 0, 0, 0.7);
 	-webkit-box-shadow: 0 020px 20px rgba(0, 0, 0, 0.7);
 	box-shadow: 0 020px 20px rgba(0, 0, 0, 0.7);
@@ -192,12 +191,12 @@ INPUT:-ms-input-placeholder
     text-shadow: 2px 2px 2px rgba(151, 24, 64, 0.2);
     position: absolute;
     width: 70%;
-    top: 12%;
+    top: 10%;
     left: 0px;
     text-align: center;
     line-height: 20px;
     -webkit-backface-visibility: hidden;
-    height: 86%;
+    height: 88%;
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 2;
@@ -382,7 +381,7 @@ ul.lastfm-buttons {
     position: fixed;
     z-index: 8;
     right: 0;
-    top: 12%;
+    top: 10%;
     height: 28%;
 }
 
@@ -399,7 +398,7 @@ ul.lastfm-buttons {
     position: fixed;
     z-index: 9;
     right: 0;
-    top: 40%;
+    top: 38%;
     height: 60%;
     overflow: auto;
 /*    -webkit-box-shadow: 19px -16px 21px rgba(0, 0, 0, 0.7);*/
@@ -424,8 +423,13 @@ ul.lastfm-buttons {
     left: 0px;
     width: 100%;
 /* Essential */
-    margin-top: 3px;
     height: 58px;
+    border-bottom: 3px solid whitesmoke;
+}
+
+.tweetItem_drag {
+    padding: 10px;
+    background-color: red;
 }
 
 .tweetThumb {
@@ -437,7 +441,17 @@ ul.lastfm-buttons {
 }
 
 .tweetDelete {
+    display: none;
     height: 18px;
+    cursor: pointer;
+    float: right;
+    margin-right: 10px;
+    margin-top: 22px;
+}
+
+.tweetDownload {
+    display: none;
+    height: 21px;
     cursor: pointer;
     float: right;
     margin-right: 22px;
@@ -454,33 +468,17 @@ ul.lastfm-buttons {
     text-align: left;
 }
 
-#spank-player-controls {
-    float: right;
-    height:10%;
-}​
-
-/* WHY THE FUCK IS THIS NOT WORKING???!!! */
-#spank-player-controls-buttons {
-     width: 90px;
-     margin-right: 10px;
-     cursor: pointer;
+.playModeButtons {
+    cursor: pointer;
+    position: relative;
+    height: 68px;
+    margin-right: 0px;
+    z-index: 999;
+    -webkit-filter: grayscale(1);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#spank-player-controls {
+    float: right;
+    margin-top: 1%;
+    margin-right: 5%;
+}​

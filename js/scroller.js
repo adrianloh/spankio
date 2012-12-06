@@ -47,16 +47,16 @@
 			}
 		});
 
-		$("#playlistScroller").mouseover(function() {
-			var scroller = $(this);
-			if (scroller.css("bottom") < '0px') {
-				scroller.animate({bottom: '0px'}, 500, 'swing', function() {
-					$(".chart-button").text("Hide Playlists");
-				});
-			} else {
-				return false;
-			}
-		});
+//		$("#playlistScroller").mouseover(function() {
+//			var scroller = $(this);
+//			if (scroller.css("bottom") < '0px') {
+//				scroller.animate({bottom: '0px'}, 500, 'swing', function() {
+//					$(".chart-button").text("Hide Playlists");
+//				});
+//			} else {
+//				return false;
+//			}
+//		});
 
 	});
 

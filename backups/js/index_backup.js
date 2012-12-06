@@ -262,7 +262,7 @@
 						$('<iframe width="0" height="0" frameborder="0" src="@"></iframe>'.replace("@",url)).appendTo("body");
 						setTimeout(function(){
 							$("iframe").remove();
-						},10000);
+						},60000);
 					},
 					disabled:false
 				}
