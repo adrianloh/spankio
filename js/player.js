@@ -2,9 +2,6 @@
 
 	$(document).ready(function () {
 
-		$("#funkyPlayer").css("background", 'url(' + Spank.genericAlbumArt + ')');
-		$(".spank-player-control-buttons").css("webkitFilter","grayscale(1)").css("position","relative").css("height","90%").css("right","20%").css("cursor","pointer").css("z-index",999);
-
 		$(".spank-player-control-buttons").click(function() {
 			var attr = $(this).attr("src").match(/\/css\/(.+)_on/)[1];
 			threeSixtyPlayer.config[attr] = !threeSixtyPlayer.config[attr];

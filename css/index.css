@@ -455,13 +455,12 @@ ul.lastfm-buttons {
 }
 
 #spank-player-controls {
-    position: absolute;
-    right: 0px;
-    height:12%;
+    float: right;
+    height:10%;
 }​
 
 /* WHY THE FUCK IS THIS NOT WORKING???!!! */
-#spank-player-controls {
+#spank-player-controls-buttons {
      width: 90px;
      margin-right: 10px;
      cursor: pointer;

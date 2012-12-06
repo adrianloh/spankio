@@ -9,7 +9,25 @@
 		this_image.parent().css("border", highlight_border);
 	};
 
+	var appendToResults = function(url, tracklist, this_image, reset) {
+		Spank.charts.current_url = url;
+			if (reset) {
+				// E.g. the first time we click on a playlist item and load new results...
+				highlightCurrentPlaylistItem(this_image);
+				Spank.charts.chartTracks.removeAll();
+			}
+			Spank.charts.pushBatch(tracklist);
+			Spank.charts.ok_to_fetch_more = true;
+	};
+
 	$(document).ready(function () {
+
+		var resultsCache = {};
+		if (typeof(localStorage.resultsCache)==='undefined') {
+			localStorage.resultsCache = JSON.stringify(resultsCache);
+		} else {
+			resultsCache = JSON.parse(localStorage.resultsCache);
+		}
 
 		var last_request_time = new Date().getTime()-5000;
 		$(".playlistThumb").live("click", function(event, myUrl) {
@@ -21,34 +39,42 @@
 			var timeNow = new Date().getTime(),
 				timeDelta = timeNow - last_request_time;
 			if (timeDelta>2000) {
-				$("html").addClass('busy');
-				this_image.css('cursor','wait');
-				console.log(url);
-				$.getJSON(url, function(res) {
-					if (res.hasOwnProperty("message")) {        // MusiXMatch
-						tracklist = res.message.body.track_list;
-					} else if (res.hasOwnProperty("feed")) {    // iTunes
-						tracklist = res.feed.entry;
-					} else if (res.hasOwnProperty("tracks")) {  // LastFM
-						tracklist = res.tracks.track;
-					} else {                                    // Our own playlist, which is just a plain array
-						tracklist = res;
+				var fetchNew = true;
+				if (url.match(/http/) && resultsCache[url]) {
+					var stored = resultsCache[url],
+						timeSinceLastCache = new Date().getTime()-stored.timestamp;
+					if (timeSinceLastCache<86400000) {
+						appendToResults(url, stored.data, this_image, (!myUrl));
+						fetchNew = false;
 					}
-					Spank.charts.current_url = url;
-					if (tracklist.length>0) {
-						if (!myUrl) {
-							// E.g. the first time we click on a playlist item and load new results...
-							highlightCurrentPlaylistItem(this_image);
-							Spank.charts.chartTracks.removeAll();
+				}
+				if (fetchNew) {
+					$("html").addClass('busy');
+					this_image.css('cursor','wait');
+					$.getJSON(url, function(res) {
+						if (res.hasOwnProperty("message")) {        // MusiXMatch
+							tracklist = res.message.body.track_list;
+						} else if (res.hasOwnProperty("feed")) {    // iTunes
+							tracklist = res.feed.entry;
+						} else if (res.hasOwnProperty("tracks")) {  // LastFM
+							tracklist = res.tracks.track;
+						} else {                                    // Our own playlist, which is just a plain array
+							tracklist = res;
 						}
-						Spank.charts.pushBatch(tracklist);
-						Spank.charts.ok_to_fetch_more = true;
-					} else {
-						Spank.charts.ok_to_fetch_more = false;
-					}
-					$("html").removeClass('busy');
-					this_image.css('cursor','pointer');
-				});
+						if (tracklist.length>0) {
+							appendToResults(url, tracklist, this_image, (!myUrl));
+							resultsCache[url] = {
+								timestamp:new Date().getTime(),
+								data:tracklist
+							};
+							localStorage.resultsCache = JSON.stringify(resultsCache);
+						} else {
+							Spank.charts.ok_to_fetch_more = false;
+						}
+						$("html").removeClass('busy');
+						this_image.css('cursor','pointer');
+					});
+				}
 				last_request_time = new Date().getTime();
 			}
 			return false;
@@ -81,7 +107,7 @@
 				// once this starts, all the bandwidth will be sucked
 				// by downloading album art!
 				var t1 = setTimeout(function() {
-					$(".playlistThumb[title='last.fm Loved']").trigger("click");
+					$(".playlistThumb[title='Billboards UK']").trigger("click");
 					clearTimeout(t1);
 				},2000);
 			}

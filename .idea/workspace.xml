@@ -2,233 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="32ba444c-fc18-4642-a53c-06c7d6e77d49" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/css/backup.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/css/more.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/css/scrollbars.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/css/scroller.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/historyModel.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/keystrokes.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/player.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/playerModel.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/scroller.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/utils.js" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/360 button - large.psd" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/360 button.psd" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/360-button-pause-light.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/360-button-pause-light.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/360-button-pause.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/360-button-pause.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/360-button-play-light.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/360-button-play-light.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/360-button-play.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/360-button-play.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/360-button-vis-pause-light.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/360-button-vis-pause-light.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/360-button-vis-pause.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/360-button-vis-pause.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/360-button-vis-play-light.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/360-button-vis-play-light.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/360-button-vis-play.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/360-button-vis-play.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/360player-visualization.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/360player.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/360player.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/berniecode-animator.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/canvas-visualization-basic.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/canvas-visualization.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/demo-slider-controls.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/demo-slider-controls.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/demo.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/excanvas.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/flashblock.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/icon_loading_dots.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/icon_loading_spinner.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/icon_loading_spinner_bigger.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/soundmanager2-nodebug-jsmin.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/360player/soundmanager2.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/TotalControl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/css/dark.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/css/default.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/css/light.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/artwork.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/dark-add-button.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/dark-checkbox-label.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/dark-checked.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/dark-control-panel.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/dark-lcd-screen.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/dark-maximize.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/dark-next.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/dark-pause.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/dark-play.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/dark-previous.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/dark-repeat-all-active.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/dark-repeat-all.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/dark-repeat-one-active.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/dark-repeat-one.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/dark-scrubber-dragger.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/dark-shuffle-active.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/dark-shuffle.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/dark-unchecked.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/dark-volume-dragger.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/dark-volume-icon.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-add-button.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-checkbox-label.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-checked.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-control-panel.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-lcd-screen.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-lcd-screen_saving.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-lcd-screen_unsaved.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-maximize.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-next.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-pause.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-play.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-previous.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-repeat-all-active.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-repeat-all.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-repeat-one-active.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-repeat-one.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-scrubber-dragger.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-shuffle-active.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-shuffle.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-unchecked.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-volume-dragger.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/default-volume-icon.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/light-add-button.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/light-checkbox-label.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/light-checked.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/light-control-panel.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/light-lcd-screen.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/light-maximize.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/light-next.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/light-pause.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/light-play.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/light-previous.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/light-repeat-all-active.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/light-repeat-all.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/light-repeat-one-active.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/light-repeat-one.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/light-scrubber-dragger.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/light-shuffle-active.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/light-shuffle.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/light-unchecked.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/light-volume-dragger.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/images/light-volume-icon.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/jscrollpane/.gitignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/jscrollpane/.gitmodules" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/jscrollpane/image/logo.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/jscrollpane/script/demo.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/jscrollpane/script/jquery.jscrollpane.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/jscrollpane/script/jquery.jscrollpane.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/jscrollpane/script/jquery.mousewheel.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/jscrollpane/script/mwheelIntent.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/jscrollpane/style/demo.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/jscrollpane/style/jquery.jscrollpane.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/jscrollpane/themes/lozenge/image/ui-icons_222222_256x240.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/jscrollpane/themes/lozenge/image/ui-icons_888888_256x240.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/jscrollpane/themes/lozenge/image/ui-icons_cd0a0a_256x240.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/jscrollpane/themes/lozenge/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/jscrollpane/themes/lozenge/style/jquery.jscrollpane.lozenge.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/jscrollpane/v1.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/soundmanager/script/soundmanager2-jsmin.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/soundmanager/script/soundmanager2-nodebug-jsmin.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/soundmanager/script/soundmanager2-nodebug.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/soundmanager/script/soundmanager2.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/soundmanager/src/SoundManager2.as" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/soundmanager/src/SoundManager2_AS3.as" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/soundmanager/src/SoundManager2_SMSound_AS3.as" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/soundmanager/src/make-flash8.bat" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/soundmanager/src/make-flash8.sh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/soundmanager/src/make-flash9.bat" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/soundmanager/src/make-flash9.sh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/soundmanager/swf/_soundmanager2_flash9.swf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/soundmanager/swf/soundmanager2.swf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/soundmanager/swf/soundmanager2_debug.swf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/soundmanager/swf/soundmanager2_flash9.swf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/soundmanager/swf/soundmanager2_flash9_debug.swf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/TotalControl/javascripts/soundmanager/swf/soundmanager2_flash_xdomain.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/backup.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/css/accordian.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/css/images/slide-title-active-1.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/css/images/slide-title-active-2.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/css/images/slide-title-inactive-1.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/css/images/slide-title-inactive-2.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/css/images/slide.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/css/index1.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/css/stroll.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/facebook.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/hello.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/hellotornado.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/img/BacksideGartersBlackNRed.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/img/arrow.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/img/bg2.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/img/bg3.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/img/closeplay.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/img/favicon.ico" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/img/finger.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/img/loader.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/img/oldpaper.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/img/sponsors.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/img/tape1.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/index3.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/easyXDM.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/grid.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/gridrotator/demo.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/gridrotator/fallback.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/gridrotator/jquery.gridrotator.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/gridrotator/loading.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/gridrotator/modernizr.custom.26633.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/gridrotator/style.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/index3.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/index_backup.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/jquery-1.8.2.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/jquery-ui.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/jquery.dataTables.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/jquery.easyAccordion.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/jquery.fittext.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/jquery.jeditable.mini.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/jquery.json2html-3.1.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/jquery.knob.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/jquery.mCustomScrollbar.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/jquery.mCustomScrollbar.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/jquery.mCustomScrollbar.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/jquery.mousewheel-3.0.6.pack.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/jquery.tinyscrollbar.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/komv.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/players.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/porthole.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/scrollExtend.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/scrollExtend/images/loading-bars.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/scrollExtend/images/loading.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/scrollExtend/jquery.scrollExtend.example.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/scrollExtend/js/jquery-1.4.2.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/scrollExtend/js/jquery.scrollExtend.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/scrollExtend/js/jquery.scrollExtend.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/scrollExtend/more_content.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/sm2/360player-visualization.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/sm2/360player.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/sm2/360player.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/sm2/berniecode-animator.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/sm2/flashblock.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/sm2/soundmanager2.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/stroll.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/test.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/main.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/playlist.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/save/backup.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/save/facebook.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/save/hello.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/save/hellotornado.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/save/soundgarden.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/track_fragment.txt" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/index.css" afterPath="$PROJECT_DIR$/css/index.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/charts.js" afterPath="$PROJECT_DIR$/js/charts.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/fb.js" afterPath="$PROJECT_DIR$/js/fb.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/index.js" afterPath="$PROJECT_DIR$/js/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/soundgarden.html" afterPath="$PROJECT_DIR$/soundgarden.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/soundgarden.py" afterPath="$PROJECT_DIR$/soundgarden.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/historyModel.js" afterPath="$PROJECT_DIR$/js/historyModel.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/player.js" afterPath="$PROJECT_DIR$/js/player.js" />
     </list>
     <ignored path="soundgarden-heroku.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -248,14 +26,86 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="soundgarden.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="soundgarden.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/soundgarden.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="70" column="39" selection-start="2747" selection-end="2747" vertical-scroll-proportion="0.46452704">
+            <state line="72" column="0" selection-start="2789" selection-end="2789" vertical-scroll-proportion="0.0">
               <folding>
-                <element signature="e#291#1590#0" expanded="false" />
-                <element signature="e#1630#2134#0" expanded="false" />
+                <element signature="e#275#1574#0" expanded="false" />
+                <element signature="e#1614#2118#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="playerModel.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/playerModel.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="77" column="16" selection-start="2510" selection-end="2510" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="soundgarden.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/soundgarden.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="389" column="26" selection-start="16933" selection-end="16933" vertical-scroll-proportion="-250.64285">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.css" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/css/index.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="3" column="4" selection-start="46" selection-end="46" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="player.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/player.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="4" column="0" selection-start="55" selection-end="55" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="chartsModel.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/chartsModel.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="31" column="17" selection-start="824" selection-end="824" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="54" column="10" selection-start="1434" selection-end="1434" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="historyModel.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/historyModel.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="93" column="29" selection-start="3276" selection-end="3276" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="charts.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/js/charts.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="109" column="80" selection-start="4747" selection-end="4747" vertical-scroll-proportion="0.6744996">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -277,25 +127,25 @@
         <option value="$PROJECT_DIR$/css/buttons.css" />
         <option value="$PROJECT_DIR$/soundgarden.html" />
         <option value="$PROJECT_DIR$/js/init360.js" />
-        <option value="$PROJECT_DIR$/js/charts.js" />
         <option value="$PROJECT_DIR$/js/utils.js" />
         <option value="$PROJECT_DIR$/js/chartsModel.js" />
-        <option value="$PROJECT_DIR$/css/index.css" />
         <option value="$PROJECT_DIR$/js/index.js" />
         <option value="$PROJECT_DIR$/js/keystrokes.js" />
         <option value="$PROJECT_DIR$/js/playerModel.js" />
         <option value="$PROJECT_DIR$/360_files/360player_custom.js" />
-        <option value="$PROJECT_DIR$/js/player.js" />
-        <option value="$PROJECT_DIR$/js/historyModel.js" />
         <option value="$PROJECT_DIR$/js/fb.js" />
         <option value="$PROJECT_DIR$/soundgarden.py" />
+        <option value="$PROJECT_DIR$/css/index.css" />
+        <option value="$PROJECT_DIR$/js/player.js" />
+        <option value="$PROJECT_DIR$/js/historyModel.js" />
+        <option value="$PROJECT_DIR$/js/charts.js" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="469" />
-    <option name="y" value="74" />
-    <option name="width" value="1645" />
+    <option name="x" value="421" />
+    <option name="y" value="129" />
+    <option name="width" value="1611" />
     <option name="height" value="1332" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -371,20 +221,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="soundgarden-heroku" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="hidden-bayou-5179" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="backups" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -395,8 +231,8 @@
     <property name="options.lastSelected" value="reference.settingsdialog.IDE.editor.colors.Font" />
     <property name="FullScreen" value="false" />
     <property name="DefaultHtmlFileTemplate" value="Html5" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -497,15 +333,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="469" y="74" width="1645" height="1332" extended-state="0" />
-    <editor active="false" />
+    <frame x="421" y="129" width="1611" height="1332" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32700247" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22951844" sideWeight="0.67299753" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23769969" sideWeight="0.67299753" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -572,39 +408,19 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/js/charts.js">
+    <entry file="file://$PROJECT_DIR$/soundgarden.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="0" selection-start="731" selection-end="731" vertical-scroll-proportion="0.38647342" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/chartsModel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="99" column="50" selection-start="2962" selection-end="2962" vertical-scroll-proportion="0.44656488" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/playerModel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="86" column="15" selection-start="2805" selection-end="2805" vertical-scroll-proportion="1.3906542" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/css/index.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="487" column="0" selection-start="9677" selection-end="9677" vertical-scroll-proportion="9.214759" />
+        <state line="70" column="39" selection-start="2747" selection-end="2747" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#275#1574#0" expanded="false" />
+            <element signature="e#1614#2118#0" expanded="false" />
+          </folding>
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/init360.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="14" column="0" selection-start="428" selection-end="428" vertical-scroll-proportion="0.26168224" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="10" selection-start="1434" selection-end="1434" vertical-scroll-proportion="1.0217597" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/soundgarden.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="389" column="26" selection-start="16933" selection-end="16933" vertical-scroll-proportion="0.44616878" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/360_files/360player_custom.js">
@@ -626,31 +442,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/scroller.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="0" selection-start="815" selection-end="815" vertical-scroll-proportion="0.5760135">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/player.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="0" selection-start="1561" selection-end="1561" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/historyModel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="0" selection-start="295" selection-end="295" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="31" column="0" selection-start="815" selection-end="815" vertical-scroll-proportion="0.5760135" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/fb.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="32" column="0" selection-start="1215" selection-end="1215" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1354785032000" expanded="false" signature="2455:2469" placeholder="..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -661,13 +459,69 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/js/playerModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="77" column="16" selection-start="2510" selection-end="2510" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/soundgarden.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="39" selection-start="2747" selection-end="2747" vertical-scroll-proportion="0.46452704">
+        <state line="72" column="0" selection-start="2789" selection-end="2789" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="e#291#1590#0" expanded="false" />
-            <element signature="e#1630#2134#0" expanded="false" />
+            <element signature="e#275#1574#0" expanded="false" />
+            <element signature="e#1614#2118#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/soundgarden.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="389" column="26" selection-start="16933" selection-end="16933" vertical-scroll-proportion="-250.64285">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/index.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="4" selection-start="46" selection-end="46" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/player.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="0" selection-start="55" selection-end="55" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/historyModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="93" column="29" selection-start="3276" selection-end="3276" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="54" column="10" selection-start="1434" selection-end="1434" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/chartsModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="17" selection-start="824" selection-end="824" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/charts.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="109" column="80" selection-start="4747" selection-end="4747" vertical-scroll-proportion="0.6744996">
+          <folding />
         </state>
       </provider>
     </entry>

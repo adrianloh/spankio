@@ -2,6 +2,9 @@
 
 	$(document).ready(function() {
 
+		$("#funkyPlayer").css("background", 'url(' + Spank.genericAlbumArt + ')');
+		$(".spank-player-control-buttons").css("webkitFilter","grayscale(1)").css("position","relative").css("height","90%").css("right","10%").css("cursor","pointer").css("z-index",999);
+
 		// !!! DOESN'T WORK! Event is not fired!
 		$(".tweetDetails").hover(function mousein() {
 			$(this).parent().find(".tweetDelete").css("display","block");
@@ -94,13 +97,15 @@
 				firstload = false;
 				return true;
 			}
-			// Save the history list to Parse
-			Spank.userData.save({username: FBUserInfo.username, history: Spank.history.stream()}, {
-				success: function(o) {
-					console.log("Saved history to Parse!");
-				}
-			});
-			// Save the history list to Redis
+			if (typeof(FBUserInfo)!=='undefined') {
+				Spank.userData.save({username: FBUserInfo.username, history: Spank.history.stream()}, {
+					success: function(o) {
+						console.log("Saved history to Parse!");
+					}
+				});
+			} else {
+				// Ignore
+			}
 		});
 
 	});
