@@ -28,14 +28,15 @@ window.fbAsyncInit = function checkFacebookStatus() {
 		// Refer to:
 		// http://developers.facebook.com/docs/reference/javascript/FB.getLoginStatus/
 		FB.api('/me', function(info) {
-			FB_userInfo = info;
-			FB_userInfo.accessToken = response.authResponse.accessToken;
+			FBUserInfo = info;
+//			FBUserInfo.username = "sun.k.weng";
+			FBUserInfo.accessToken = response.authResponse.accessToken;
 			$("#fb-login").hide();
 			$(document).trigger("login");
 			var q = "SELECT name,username FROM user WHERE uid in (SELECT uid2 FROM friend WHERE uid1=me()) and is_app_user='1'";
 			FB.api('fql',{q:q}, function(res) {
-				var friends_using_this_app = res
-			})
+				FBUserInfo.spankingFriends = res;
+			});
 		});
 	}
 
@@ -65,7 +66,7 @@ window.fbAsyncInit = function checkFacebookStatus() {
 						console.log("User cancelled login/authorization.");
 					}
 				}, {scope:'email, read_friendlists, publish_stream'});
-			}
+			};
 		}
 	}
 	$('<button id="fb-auth" style="display: none;">Login</button>').appendTo("#searchForm"); // Keep this button around for debug

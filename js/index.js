@@ -2,13 +2,11 @@
 
 	$(document).ready(function () {
 
-		Spank = {};
-
 		var vk_search_in_progress = false,
 			mx_get_lyrics_in_progress = false;
 
 		$(document).bind("login", function() {
-			$("title").text("Spank.io | " + FB_userInfo.name);
+			$("title").text("Spank.io | " + FBUserInfo.name);
 		});
 
 		$(document).bind("logout", function() {
@@ -18,19 +16,26 @@
 		$(".thoughtbot").click(function toggleBetweenMusicalLyrical(){
 			var funcs = {
 					'Musical':function(){
-						$("#vk-results-container").css("opacity","1.0").css("z-index","1");
-						$("#lyricsText").css("opacity","0").css("z-index","0");
+						$("#vk-results-container").css("display","block");
+						$("#lyricsText").css("display","none");
 					},
 					'Lyrical':function(){
-						$("#vk-results-container").css("opacity","0");
-						$("#vk-results-container").css("z-index","0");
-						$("#lyricsText").css("opacity","1.0");
-						$("#lyricsText").css("z-index","1");
+						$("#lyricsText").css("display","block");
+						$("#vk-results-container").css("display","none");
 					}
 				},
 				f = funcs[$(this).text()];
 			f();
 		});
+
+		Spank.lightBox = {
+			lyricsTitle: ko.observable(""),
+			lyricsText: ko.observable(""),
+			lyricsThumb: ko.observable(""),
+			vkSearchResults: ko.observableArray()
+		};
+
+		ko.applyBindings(Spank.lightBox, document.getElementById('lightBox'));
 
 		//
 		// When we CLOSE the LIGHTBOX
@@ -41,43 +46,23 @@
 			Spank.lightBox.lyricsThumb("");
 			$("#vk-results-list").remove();
 			$("#lightBox").slideUp('fast','swing');
+			$("#closeButton").hide();
 			$("#lightBox_jspPane").html("");
 			$(this).removeClass('busy');
 			vk_search_in_progress = false;
 			mx_get_lyrics_in_progress = false;
+			//$("#lyrics").focus();
 		};
-
-		$("#closePlayButton").click(function() { // Close the lightbox but don't stop playing music
-			tearDownLightBox();
-		});
 
 		$("#closeButton").click(function() {	// Close the lightbox. Stop playing music.
 			tearDownLightBox();
-			try {
-				// If nothing is playing, this raises an Exception
-				if (threeSixtyPlayer.lastSound) {
-					threeSixtyPlayer.lastSound.destruct();
-				}
-				$.each(soundManager.soundIDs, function(i, id) {
-					if (id.match(/ui360/)) {
-						soundManager.destroySound(id);
-					}
-				});
-			} catch(e) {
-				console.log(e);
-			}
 		});
 
-		var vk_keys = ["13e47ebc10ca8da510ca8da57510e1e1c0110ca10c4b1ba407dcd8718254eba6cdd201b",
-						"633b3aa76851ba026851ba0223687ad66766851685f861d38e74dc981cb38cbe200a017",
-						"b63e1d33bf6561b4bf6561b4b9bf4e0dd1bbf65bf6b5dabefccf0d187e2dbaa4ac0b03e",
-						"1d1aa7ae14a55a8e14a55a8e1d148e36eb114a514ab669144121a3185704c3e628ca24d"];
-		var pick = 0;
 		var searchVK = function(params) {
 			vk_search_in_progress = true;
 			$('<ul id="vk-results-list"></ul>').appendTo('#vk-results-container');
 			var url = "https://api.vkontakte.ru/method/audio.search?q=QUERY&access_token=TOKEN&count=100&callback=?",
-				token = vk_keys[++pick%vk_keys.length];
+				token = VK.getToken();
 			var xhr = $.getJSON(url.replace("TOKEN", token).replace("QUERY",params.q), function(data) {
 				vk_search_in_progress = false;
 				var message = "";
@@ -92,19 +77,22 @@
 						var trackAttr = [],
 							title = track.title.slice(0,60) + ' -- ' + track.artist.slice(0,60);
 						if (title.length>0 && title.length<80) {
-							// VERY VERY IMPORTANT!
+							// VERY VERY IMPORTANT! &#9654
 							// The lick button contains ALL the data we need to reconstruct every entry of the playlist
 							// Where: MXID is MusixMatch's ID used in API tracks.get and URL is a VK song's OWNER_ID+TRACK_ID
-							var lick = '<img class="lickButton" src="/img/lick.png" thumb="@THUMB@" mxid="@MXID@" artist="@ARTIST@" title="@TITLE@" url="@URL@" />',
+							var lick = '<img class="lickButton" src="/img/play.png" thumb="@THUMB@" mxid="@MXID@" artist="@ARTIST@" title="@TITLE@" url="@URL@" direct="@DIRECT@"/>',
+								plus = '<img class="lickButton" src="/img/plus.png" thumb="@THUMB@" mxid="@MXID@" artist="@ARTIST@" title="@TITLE@" url="@URL@" direct="@DIRECT@"/>',
 								trackurl = track.owner_id + "_" + track.aid + ".mp3";
-							lick = lick.replace("@THUMB@", params.thumb).replace("@MXID@", params.mxid).replace("@ARTIST@", track.artist).replace("@TITLE@", track.title).replace("@URL@", trackurl);
+							lick = lick.replace("@DIRECT@", track.url).replace("@THUMB@", params.thumb).replace("@MXID@", params.mxid).replace("@ARTIST@", track.artist).replace("@TITLE@", track.title).replace("@URL@", trackurl);
+							plus = plus.replace("@DIRECT@", track.url).replace("@THUMB@", params.thumb).replace("@MXID@", params.mxid).replace("@ARTIST@", track.artist).replace("@TITLE@", track.title).replace("@URL@", trackurl);
 							// Add the 360 player. The player plays the href of the first <a> it finds after div.ui360
-							trackAttr.push('<div class="ui360">' + '<a class="vkDownloadLink" href="' + track.url +'">'+ lick + title + '</a>'+'</div>');
+							trackAttr.push('<div class="dummy">' + '<div class="lickContainer">' + lick + plus + '</div>' + '<a class="vkDownloadLink" href="' + track.url +'">' + title + '</a>'+'</div>');
+							//trackAttr.push('<a class="vkDownloadLink" href="' + track.url +'">'+ lick + title + '</a>');
 							$('<li class="vkTrackEntry">' + trackAttr.join('') + '</li>').appendTo("#vk-results-list");
 						}
 					});
-					// threeSixtyPlayer.init searches for div.ui360 elements and attaches a player to each item it finds.
-					threeSixtyPlayer.init();
+					// LittleBoy.init searches for div.ui360 elements and attaches a player to each item it finds.
+					threeSixtyPlayer.init("vkDownloadLink");
 				}
 			});
 			$("#closeButton").click(function() {
@@ -123,31 +111,34 @@
 		});
 
 		$.searchByWire = function(search_term) {
-			tearDownLightBox(); // Get the lightbox out of the way when we start searching again...
-			var url = '/mxsearch?q=#&page=1'.replace("#",search_term);
-			$("html").addClass('busy');
-			$.ajax({
-				type: 'GET',
-				url: url,
-				success: function(response) {
-					$("html").removeClass('busy');
-					var items = [],
-						tracklist = response.message.body.track_list;
-					if (tracklist.length>0) {
-						Spank.charts.current_url = url;
-						Spank.charts.chartTracks.removeAll();
-						$.each(tracklist, function (i, o) {
-							Spank.charts.push(o);
-						});
-					} else {
-						items.push('<li class="trackName">' + "Nothing found!" + '</li>');
+			// Each time we start a new search...
+			tearDownLightBox();                                               // Close the lightbox
+			$(".playlistEntry").css("border","5px solid rgb(204, 204, 204)"); // Don't highlight any playlist items
+			if (search_term!=='') {
+				var url = '/mxsearch?q=#&page=1'.replace("#",search_term);
+				$("html").addClass('busy');
+				$.ajax({
+					type: 'GET',
+					url: url,
+					success: function(response) {
+						$("html").removeClass('busy');
+						var items = [],
+							tracklist = response.message.body.track_list;
+						if (tracklist.length>0) {
+							Spank.charts.current_url = url;
+							Spank.charts.chartTracks.removeAll();
+							Spank.charts.pushBatch(tracklist);
+						} else {
+							items.push('<li class="trackName">' + "Nothing found!" + '</li>');
+						}
 					}
-				}
-			});
-			return false;
+				});
+			} else {
+				return false;
+			}
 		};
 
-		$(".trackArtist").live("click", function() {
+		$(".trackArtist").live("click", function searchWithArtistName() {
 			var artist = $(this).text();
 			$("#lyrics").val(artist).trigger("keyup");
 		});
@@ -159,21 +150,19 @@
 			minimumSearchLength: 3
 		});
 
-		// Add new songs to the playlist when the lick button is clicked.
-		$(".lickButton").live('click', function addThisToPlaylist() {
-			var attributes = ["mxid", "title", "artist", "url", "thumb"],
+		$(".lickButton").live('click', function prependVKTrackToHistoryAndPlay() {
+			var button = $(this),
+				attributes = ["title", "artist", "url", "thumb", "direct"],
 				data = {},
 				that = $(this);
 			try {
 				$.each(attributes, function(i, attr) {
 					data[attr] = that.attr(attr);
 				});
-				if (typeof($.MyTotalPlayer)==='object') {
-					$.MyTotalPlayer.addToPlaylist(data, function () {
-						$(document).trigger("playlistDidChange");
-					});
+				if (button.attr("src").match(/play/)) {
+					Spank.history.prependToHistory(data, true);
 				} else {
-					alert("Login first to add to your playlist!");
+					Spank.history.prependToHistory(data, false);
 				}
 			} catch(err) {
 				console.log(err);
@@ -223,6 +212,13 @@
 			}
 		};
 
+		$("#playlists-scroller-list").sortable({
+			update : function () {
+				console.log("Resorting!");
+				//$(document).trigger("playlistDidChange");
+			}
+		});
+
 		$(".lyricLink").live('click', function openLightbox() {
 			if (!vk_search_in_progress && !mx_get_lyrics_in_progress && $("#lightBox").css("display")!='block') {
 				var anchor = $(this),
@@ -238,6 +234,7 @@
 				Spank.lightBox.lyricsThumb(thumb);
 				Spank.lightBox.lyricsTitle(title + " | " + artist);
 				$("#lightBox").slideDown('fast','swing');
+				$("#closeButton").show();
 			}
 			return false;
 		});

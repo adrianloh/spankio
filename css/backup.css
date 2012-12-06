@@ -1,0 +1,89 @@
+#__gridpattern {
+    background-color: black;
+    opacity: 0.4;
+    position: fixed;
+    width: 110%;
+    height: 110%;
+    top: -10px;
+    right: -10px;
+}
+
+#____gridpattern {
+    position: fixed;
+    background-size: 4px 4px;
+    background-image: -webkit-repeating-linear-gradient(90deg, rgba(0, 0, 0, .5), rgba(26, 1, 1, .5) 1px, transparent 2px, transparent 15px), -webkit-repeating-linear-gradient(-90deg, rgba(6, 106, 255, 0), rgb(0, 0, 0) 1px, transparent 2px, transparent 15px);
+    background-image: -moz-repeating-linear-gradient(90deg, rgba(0, 0, 0, .5), rgba(26, 1, 1, .5) 1px, transparent 2px, transparent 15px), -moz-repeating-linear-gradient(-90deg, rgba(6, 106, 255, 0), rgb(0, 0, 0) 1px, transparent 2px, transparent 15px);
+    width: 110%;
+    height: 110%;
+    top: -10px;
+    right: -10px;
+    z-index: 0;
+}
+
+#___gridpattern {
+    position: fixed;
+    background-size: 4px 4px;
+    background-image: -webkit-repeating-linear-gradient(90deg, rgba(0, 0, 0, .5), rgba(173, 0, 0, .5) 1px, transparent 2px, transparent 15px), -webkit-repeating-linear-gradient(-90deg, rgba(155, 0, 0, 0.46), rgb(0, 0, 0) 1px, transparent 2px, transparent 15px);
+    width: 110%;
+    height: 110%;
+    top: -10px;
+    right: -10px;
+}​
+
+.btn
+ {
+     width: 40px;
+     height: 40px;
+     background: url(/static/img/subscribe.png) no-repeat 0 0 !important;
+     border: none !important;
+     text-indent: -9999px;
+     position: absolute;
+     top: 5px;
+     right: 5px;
+ }
+#h1_oldTitle {
+    opacity: 0.96;
+    top: -249px;
+    position: fixed;
+    text-align: center;
+    text-indent: -.12em;
+    color: rgb(249, 253, 255);
+    font: 360px "anchor-web-1","anchor-web-2", 'Impact', sans-serif;
+    font-weight: 900;
+    line-height: 1;
+    text-shadow: #863027 .01em .01em 0, #863027 .02em .02em 0, #863027 .03em .03em 0, #863027 .04em .04em 0, #863027 .05em .05em 0, #863027 .06em .06em 0, #863027 .07em .07em 0, #863027 .08em .08em 0, #863027 .09em .09em 0, #863027 .1em .1em 0;
+}
+
+.playlist-row {
+    padding-bottom:4px;
+    padding-top:4px;
+    margin-bottom: 2px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    cursor:pointer;
+    font-size: 11px;
+    color:black;
+    font-weight: 100;
+    background-color: #edede5;
+}
+
+#playlist-container {
+    background: url(/TotalControl/images/default-control-panel.png) no-repeat;
+    display:none;
+    padding-top: 72px;
+    height: 557px;
+    width: 193px;
+    background-color: #ffffff;
+    position: absolute;
+    left: -196px;
+    top: 0px;
+    border: solid;
+    border-color: #D7D7D7;
+    border-width: 1px;
+    overflow: auto;
+    -moz-box-shadow: -30px 10px 30px rgba(0, 0, 0, 0.57);
+    -webkit-box-shadow: -30px 10px 30px rgba(0, 0, 0, 0.57);
+    box-shadow: -30px 10px 30px rgba(0, 0, 0, 0.57);
+    opacity: 1;
+}

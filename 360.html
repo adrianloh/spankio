@@ -1,0 +1,68 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="/360player/index.css" />
+<link rel="stylesheet" type="text/css" href="/360player/flashblock.css" />
+<link rel="stylesheet" type="text/css" href="/360player/360player.css" />
+<link rel="stylesheet" type="text/css" href="/360player/360player-visualization.css" />
+<script type="text/javascript" src="/360player/berniecode-animator.js"></script>
+<script type="text/javascript" src="/360player/sm2/soundmanager2.js"></script>
+<script type="text/javascript" src="/360player/360player.js"></script>
+
+<script type="text/javascript">
+
+soundManager.setup({
+  // path to directory containing SM2 SWF
+  url: '/360player/swf'
+});
+
+threeSixtyPlayer.config.scaleFont = (navigator.userAgent.match(/msie/i)?false:true);
+threeSixtyPlayer.config.showHMSTime = true;
+
+// enable some spectrum stuffs
+
+threeSixtyPlayer.config.useWaveformData = true;
+threeSixtyPlayer.config.useEQData = true;
+
+// enable this in SM2 as well, as needed
+
+if (threeSixtyPlayer.config.useWaveformData) {
+  soundManager.flash9Options.useWaveformData = true;
+}
+if (threeSixtyPlayer.config.useEQData) {
+  soundManager.flash9Options.useEQData = true;
+}
+if (threeSixtyPlayer.config.usePeakData) {
+  soundManager.flash9Options.usePeakData = true;
+}
+
+if (threeSixtyPlayer.config.useWaveformData || threeSixtyPlayer.flash9Options.useEQData || threeSixtyPlayer.flash9Options.usePeakData) {
+  // even if HTML5 supports MP3, prefer flash so the visualization features can be used.
+  soundManager.preferFlash = true;
+}
+
+// favicon is expensive CPU-wise, but can be used.
+if (window.location.href.match(/hifi/i)) {
+  threeSixtyPlayer.config.useFavIcon = true;
+}
+
+if (window.location.href.match(/html5/i)) {
+  // for testing IE 9, etc.
+  soundManager.useHTML5Audio = true;
+}
+
+</script>
+
+<style type="text/css">
+
+</style>
+
+</head>
+
+<body>
+
+		<div class="sm2-inline-list"> <!-- remove this class to have one item per line -->
+			<div class="ui360 ui360-vis"><a href="http://freshly-ground.com/data/audio/sm2/The%20Fugitives%20-%20Graffiti%20Sex.mp3">The Fugitives - Graffiti Sex</a></div>
+	   	</div>
+
+</body>
+</html>

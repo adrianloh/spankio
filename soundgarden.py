@@ -56,14 +56,12 @@ def urldecode(string):
 	return unquote(string).decode('utf8')
 
 config = dict(host="pikachu.ec2.myredis.com", port=6449, password="mavN3nb59XyRTfmJtu", selected_db=0)
+#config = dict(host='50.30.35.9', port=2700, password='53163f381734dddac45956b11fc934ea', selected_db=0)
 RED = tornadoredis.Client(**config)
 RED.connect()
 
 async_client = tornado.curl_httpclient.CurlAsyncHTTPClient()
 
-
-VK_ACCESS_TOKEN = "b63e1d33bf6561b4bf6561b4b9bf4e0dd1bbf65bf6b5dabefccf0d187e2dbaa4ac0b03e"
-VK_AGENT = "com.r2soft.VKontakteMusic/1010 (unknown)"
 MX_API_KEY = "316bd7524d833bb192d98be44fe43017"
 MX_AGENT = "musiXmatch/211 CFNetwork/596.2.3 Darwin/12.2.0 (x86_64) (MacPro3,1)"
 
@@ -71,13 +69,6 @@ class MainHandler(tornado.web.RequestHandler):
 
 	def get(self):
 		self.render("soundgarden.html")
-
-class VKTokenHandler(tornado.web.RequestHandler):
-
-	@tornado.web.asynchronous
-	def get(self):
-		self.write(vktoken.next())
-		self.finish()
 
 class FBChannelFileHandler(tornado.web.RequestHandler):
 
@@ -91,15 +82,14 @@ class FBChannelFileHandler(tornado.web.RequestHandler):
 		self.set_header("Expires", time.asctime(time.gmtime(time.time()+expire)) + " GMT")
 		self.write('<script src="//connect.facebook.net/en_US/all.js"></script>')
 
-class PlaylistRenameHandler(tornado.web.RequestHandler):
+class XDomainFileHandler(tornado.web.RequestHandler):
 
-	@tornado.web.asynchronous
-	def get(self, data):
-		oldname, newname = urldecode(data).split("===")
-		if oldname != newname:
-			RED.rename(oldname, newname)
-			self.write("OK")
-		self.finish()
+	def get(self):
+		self.write("""<?xml version="1.0"?>
+<!-- http://xerxes.local:8888/crossdomain.xml -->
+<cross-domain-policy>
+<allow-access-from domain="*" />
+</cross-domain-policy>""")
 
 class PlaylistHandler(tornado.web.RequestHandler):
 
@@ -108,51 +98,8 @@ class PlaylistHandler(tornado.web.RequestHandler):
 	def get(self, redkey):
 		self.set_header("Content-Type", "application/json")
 		redkey = urldecode(redkey)
-		if re.search("PLAYLIST ALL", redkey):
-			pattern = re.sub(" ALL", "*", redkey)
-			playlists = yield tornado.gen.Task(RED.keys, pattern)
-			rest = [k for k in playlists if not re.search("Main Library",k)]
-			if playlists:
-				playlists = [k for k in playlists if k not in rest] + rest
-				self.write(json.dumps(playlists))
-			else:
-				self.write(json.dumps(["Main Library"]))
-		else:
-			tracklist = yield tornado.gen.Task(RED.get, redkey)
-			if tracklist: self.write(tracklist if (tracklist is not None) else json.dumps([]))
-		self.finish()
-
-	@tornado.gen.engine
-	@tornado.web.asynchronous
-	def delete(self, redkey):
-		redkey = urldecode(redkey)
-		res = yield tornado.gen.Task(RED.delete, redkey)
-		self.write(str(res))
-		self.finish()
-
-	@tornado.gen.engine
-	@tornado.web.asynchronous
-	def put(self, redkey):
-		redkey = urldecode(redkey)
-		data = json.loads(self.get_argument("data"))
-		playlist = []
-		if isinstance(data, list):
-			playlist = data[::-1]
-		elif isinstance(data, dict):
-			print "Got a dict"
-			print data
-			res = yield tornado.gen.Task(RED.get, redkey)
-			if res is not None:
-				playlist = json.loads(res)
-				playlist.append(data)
-				print playlist
-				print "Adding to existing..."
-			else:
-				playlist = [data]
-				print "Adding to new playlist..."
-		if isinstance(playlist, list):
-			res = yield tornado.gen.Task(RED.set, redkey, str(json.dumps(playlist)))
-			if res: self.write("OK")
+		tracklist = yield tornado.gen.Task(RED.get, redkey)
+		if tracklist: self.write(tracklist if (tracklist is not None) else json.dumps([]))
 		self.finish()
 
 class MXSearchHandler(tornado.web.RequestHandler):
@@ -177,46 +124,25 @@ class MXSearchHandler(tornado.web.RequestHandler):
 		self.write(res.body)
 		self.finish()
 
-class MX2SearchHandler(tornado.web.RequestHandler):
+class MyStaticHandler(tornado.web.StaticFileHandler):
 
-	@tornado.gen.engine
-	@tornado.web.asynchronous
-	def get(self, o):
-		self.set_header("Content-Type", "application/json")
-		data = json.loads(urldecode(o))
-		search_string = data['q']
-		print search_string
-		page = data['page']
-		params = mx_parse_search(search_string, page=page)
-		params['apikey'] = MX_API_KEY
-		params['format'] = 'json'
-		params['quorum_factor'] = 0.85	# Level of fuzzy logic
-		# Enabling these two options will sort by popularity
-		#params['g_common_track'] = 1
-		#params['s_track_rating'] = 'desc'
-		url = "http://api.musixmatch.com/ws/1.1/track.search?" + urlencode(params)
-		req = tornado.httpclient.HTTPRequest(url, user_agent=MX_AGENT, connect_timeout=10.0, request_timeout=10.0)
-		res = yield tornado.gen.Task(async_client.fetch, req)
-		tracklist = [o['track'] for o in json.loads(res.body)['message']['body']['track_list']]
-		reply = json.dumps({'aaData':tracklist})
-		self.write(reply)
-		self.finish()
+	def set_extra_headers(self, path):
+		self.set_header("Access-Control-Allow-Origin","*")
+		self.set_header("Accept-Ranges","bytes")
 
 site_root = os.path.dirname(os.path.abspath(__file__))
 
 application = tornado.web.Application([
 	(r"/", MainHandler),
 	(r"/channel.html", FBChannelFileHandler),
-	(r"/playlist_rename/(.*)", PlaylistRenameHandler),
-	(r"/playlist/(.*)", PlaylistHandler),
+	(r"/crossdomain.xml", XDomainFileHandler),
+	(r"/playlist/(.*)", PlaylistHandler), # Keep around for old users
 	(r"/mxsearch", MXSearchHandler),
-	(r"/mxsearch2/(.*)", MX2SearchHandler),
-	(r"/static/(.*)", tornado.web.StaticFileHandler, {"path": site_root}),
+	(r"/static/(.*)", MyStaticHandler, {"path": site_root}),
 	(r"/js/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/js"}),
 	(r"/css/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/css"}),
 	(r"/img/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/img"}),
-	(r"/TotalControl/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/TotalControl"}),
-	(r"/360player/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/360player"}),
+	(r"/360_files/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/360_files"}),
 	], debug=True)
 
 if __name__ == "__main__":
