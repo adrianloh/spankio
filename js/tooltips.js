@@ -12,6 +12,20 @@
 			}
 		});
 
+		$.extend(Tipped.Skins, {
+			'dropTip' : {
+				border: { size: 3, color: '#959fa9' },
+				radius: { size: 4, position: 'border' },
+				shadow: {
+					blur: 10,
+					color: '#000',
+					offset: { x: -3, y: 5 },
+					opacity: .15
+				},
+				closeButtonSkin: 'light'
+			}
+		});
+
 		Tipped.create(".playModeButtons", {
 			skin:'controlButtons'
 		});
@@ -22,6 +36,25 @@
 			hook: 'leftmiddle'
 		});
 
+		Tipped.create("#lyrics", "Drop here to find more songs by this artist", {
+			skin:'dropTip',
+			showOn:false,
+			hook: 'bottommiddle'
+		});
+
+		Tipped.create("#playlistScroller", "Drop on a playlist thumbnail to add", {
+			skin:'dropTip',
+			showOn:false,
+			offset: { x: 100, y: 0 },
+			hook: 'topleft'
+		});
+
+		Tipped.create("#resultsSection", "Drop here to find similar songs", {
+			skin:'dropTip',
+			showOn:false,
+			offset: { x: 300, y: 0 },
+			hook: 'leftmiddle'
+		});
 
 	});
 

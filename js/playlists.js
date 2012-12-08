@@ -123,7 +123,6 @@
 		});
 
 		$(document).one("userDataLoaded", function firstLoadOfUserPlaylists() {
-			Spank.playlistScroller.push({cover:'/img/emptyplaylist.png'});
 			Spank.userData.playlists = Spank.userData.get("playlists") || {};
 			$.each(Spank.userData.playlists, function(pname,plist) {
 				Spank.playlistScroller.push({
@@ -133,6 +132,7 @@
 			});
 		});
 
+		Spank.playlistScroller.push({cover:'/img/emptyplaylist.png'});
 		$.each(chartPlaylistItems, function(i,o) {
 			// Populate the playlist bar with charts
 			Spank.playlistScroller.push(o);
@@ -195,7 +195,7 @@
 					//console.warn("Opening " + title + " with " + tracklist.length + " items.");
 					appendToResults(title, url, tracklist, this_image, true);
 				} else {
-					alert("Empty playlist! Nothing to look at, yo!");
+					alert("Aiks! Empty playlist. Drag a thumbnail from your stream to start adding to this playlist");
 				}
 				return false;
 			} else if (url.match(/http/) && resultsCache[url] && useCacheResults) {

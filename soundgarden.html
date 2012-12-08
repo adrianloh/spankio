@@ -94,6 +94,8 @@
     <!-- The scripts that drive this app
     -->
     <script type="text/javascript" src="/js/utils.js"></script>
+    <script type="text/javascript" src="/js/tooltips.js"></script>
+    <script type="text/javascript" src="/js/draggables.js"></script>
     <script type="text/javascript" src="/js/musicPlayerModel.js"></script>
     <script type="text/javascript" src="/js/historyModel.js"></script>
     <script type="text/javascript" src="/js/chartsModel.js"></script>
@@ -101,7 +103,6 @@
     <script type="text/javascript" src="/js/playlists.js"></script>
     <script type="text/javascript" src="/js/keystrokes.js"></script>
     <script type="text/javascript" src="/js/snippets.js"></script>
-    <script type="text/javascript" src="/js/draggables.js"></script>
 
     <!-- Context menu plugin -->
     <link rel="stylesheet" type="text/css" href="/js/contextMenu/jquery.contextmenu.css" />
@@ -381,9 +382,9 @@
 
     <div id="spank-player-controls">
         <img id="chat_button" style="display:none;" class="playModeButtons" src="/img/chat.png" />
-        <img id="random_button" title="Shuffle chart entries [i]" class="playModeButtons" src="/css/random_on.png" />
-        <img id="loop_button" title="Loop Mode [o]" class="playModeButtons" src="/css/loop_on.png" />
-        <img id="shuffle_button" title="Shuffle Mode [p]" class="playModeButtons" src="/css/shuffle_on.png" />
+        <img id="random_button" title="Shuffle chart entries [ i ]" class="playModeButtons" src="/css/random_on.png" />
+        <img id="loop_button" title="Loop Mode [ o ]" class="playModeButtons" src="/css/loop_on.png" />
+        <img id="shuffle_button" title="Shuffle Mode [ p ]" class="playModeButtons" src="/css/shuffle_on.png" />
     </div>
 
     <div id="searchForm">
@@ -448,9 +449,9 @@
 
     <div id="playlistScroller">
         <ul id="playlists-scroller-list" data-bind="foreach: playlistItems">
-            <li class="playlistEntry" data-bind="makeDroppablePlaylistTile:$data, bindPlaylistButtons:$data, css: { droppablePlaylist: url==='#' }">
+            <li class="playlistEntry" data-bind="css: { droppablePlaylist: url==='#' }, makeDroppablePlaylistTile:$data, bindPlaylistButtons:$data">
                 <img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />
-                <div class="playlistName" data-bind="text: title"></div>
+                <div class="playlistName" data-bind="text:title"></div>
             </li>
         </ul>
         <div class="clearfix"></div>

@@ -4,3 +4,11 @@
     font-size: 14px;
     padding: 4px 5px;
 }
+
+.t_Content_dropTip {
+    color: #333;
+    font-family: "PT Sans Narrow";
+    font-size: 15px;
+    padding: 10px;
+    background-color: rgba(255, 240, 81, 0.59);
+}

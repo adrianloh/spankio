@@ -20,6 +20,10 @@
 
 		ko.bindingHandlers.makeDroppablePlaylistTile = {
 			init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+				var data = valueAccessor();
+				if (data.url!=="#") {
+					return false;
+				}
 				bindDroppablePlaylists(element);
 			}
 		};
@@ -27,6 +31,9 @@
 		ko.bindingHandlers.bindPlaylistButtons = {
 			init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 				var data = valueAccessor();
+				if (data.url!=="#") {
+					return false;
+				}
 				$(element).find(".playlistName").click(function() {
 					Spank.userIsTyping = true;
 				}).editable({
@@ -48,6 +55,12 @@
 			}
 		};
 
+		var historyDropZones = function(op) {
+			$.each(['#lyrics', '#resultsSection', '#playlistScroller'], function(i,o) {
+				Tipped[op](o);
+			});
+		};
+
 		ko.bindingHandlers.pickupStreamItems = {
 			init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 				$(element).draggable({
@@ -65,6 +78,10 @@
 					},
 					stop:function( event ) {
 					}
+				}).hover(function mousein() {
+					historyDropZones('show');
+				}, function mouseout() {
+					historyDropZones('hide');
 				});
 			}
 		};
@@ -83,7 +100,6 @@
 			accept: ".tweetThumb",
 			hoverClass: "bgOver",
 			drop: function getSimilarAsDroppedTrack(event) {
-				console.log(event);
 				var similar_url = "http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=@&track=#&autocorrect=1&limit=300&api_key=0325c588426d1889087a065994d30fa1&format=json";
 				if (draggedHistoryItem!==null) {
 					var url = similar_url.replace("@",encodeURIComponent(draggedHistoryItem.artist)).replace("#", encodeURIComponent(draggedHistoryItem.title));
