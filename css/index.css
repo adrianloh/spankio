@@ -1,23 +1,38 @@
-#playlistDropZone {
-    width: 50%;
-    height: 100%;
-    float: right;
-    top: 0;
-    right: 0;
-    background-color: rgba(84, 255, 76, 0.34);
-    position: absolute;
+.playlistDropZone {
+    width: 35%;
+    margin-left: 0;
+    height: 70%;
+    top: 90px;
+    left: 35%;
+    background-color: rgba(67, 135, 53, 0.33);
+    position: fixed;
+    z-index: 1;
     display: none;
 }
 
-#playlistDummyZone {
-    width: 50%;
-    height: 100%;
-    float: left;
-    top: 0;
-    right: 0;
-    background-color: rgba(244, 255, 73, 0.38);
+.dropSpans {
+    top: 50%;
+    left: 30%;
     position: absolute;
+    font: 32px "Oswald";
+    color: rgb(255, 255, 255);
+}
+
+.playlistSearchZone {
+    width: 35%;
+    margin-left: 0;
+    height: 70%;
+    float: left;
+    top: 90px;
+    left: 0;
+    background-color: rgba(23, 67, 114, 0.40);
+    position: fixed;
+    z-index: 1;
     display: none;
+}
+
+.searchFullWidth {
+    width: 70%;
 }
 
 #resultsOps {
@@ -42,7 +57,8 @@
 }
 
 .bgOver {
-    background-color: rgba(248, 255, 186, 0.48);
+    color: #000000;
+    background-color: rgba(218, 226, 115, 0.47);
 }
 
 .selectedPlaylistItem {

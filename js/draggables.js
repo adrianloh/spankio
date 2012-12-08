@@ -6,7 +6,7 @@
 
 		var draggedHistoryItem = {};
 
-		$("#playlistDropzone").droppable({
+		$("#playlistDropZone").droppable({
 			accept: ".tweetThumb",
 			greedy: true,
 			tolerance: "pointer",
@@ -98,13 +98,19 @@
 					start:function( event ) {
 						draggedHistoryItem = valueAccessor(); // Gets us the raw JSON object of the history item that was picked up
 						if (Spank.charts.currentPlaylistTitle) {
-							$("#playlistDropzone").show();
+							$("#playlistSearchZone").removeClass("searchFullWidth");
+							$("#playlistSearchZone").show();
+							$("#playlistDropZone").show();
+						} else {
+							if (!$("#playlistSearchZone").hasClass("searchFullWidth")) $("#playlistSearchZone").addClass("searchFullWidth");
+							$("#playlistSearchZone").show();
 						}
 					},
 					drag:function( event ) {
 					},
 					stop:function( event ) {
-						$("#playlistDropzone").hide();
+						$("#playlistDropZone").hide();
+						$("#playlistSearchZone").hide();
 					}
 				}).hover(function mousein() {
 					historyDropZones('show');
@@ -124,9 +130,9 @@
 			}
 		});
 
-		$("#resultsSection").droppable({
+		$("#playlistSearchZone").droppable({
 			accept: ".tweetThumb",
-			activeClass: "bgOver",
+			hoverClass: "bgOver",
 			drop: function getSimilarAsDroppedTrack(event) {
 				var similar_url = "http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=@&track=#&autocorrect=1&limit=200&api_key=0325c588426d1889087a065994d30fa1&format=json";
 				if (draggedHistoryItem!==null) {

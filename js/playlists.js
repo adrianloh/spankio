@@ -285,21 +285,17 @@
 			}
 		});
 
-		$("#resultsSection").css("height", $("#playlistScroller").position().top-(document.height*0.09));
-
 		$(".hideshow-playlist-button").click(function() {
 			var button = $(this),
 				scroller = $("#playlistScroller");
 			if (scroller.css("bottom") >= '0px') {
 				// Hide playlists
-				$("#resultsSection").css("height","90%");
 				scroller.animate({bottom: '-200px'}, 500, 'swing', function() {
 					button.text("Show Playlists");
 				});
 			} else {
 				// Reveal playlists
 				scroller.animate({bottom: '0px'}, 500, 'swing', function(){
-					$("#resultsSection").css("height", scroller.position().top-(document.height*0.09));
 					button.text("Hide Playlists");
 				});
 			}
