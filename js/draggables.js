@@ -75,10 +75,9 @@
 		};
 
 		var historyDropZones = function(op) {
-			var tipsToShow = ['#lyrics'];
+			var tipsToShow = ['#lyrics','#playlistScroller'];
 			if (Spank.charts.currentPlaylistTitle==null) {
 				tipsToShow.push('#resultsSection');
-				tipsToShow.push('#playlistScroller');
 			}
 			$.each(tipsToShow, function(i,o) {
 				Tipped[op](o);

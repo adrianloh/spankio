@@ -42,7 +42,13 @@
 			hook: 'bottommiddle'
 		});
 
-		Tipped.create("#playlistScroller", "Drop on a playlist thumbnail to add", {
+		Tipped.create("#playlistScroller", function(element) {
+			if (Spank.charts.currentPlaylistTitle==null) {
+				return "Drop on a playlist thumbnail to add to it";
+			} else {
+				return "Drop to other playlists to add to them"
+			}
+		},{
 			skin:'dropTip',
 			showOn:false,
 			offset: { x: 100, y: 0 },
