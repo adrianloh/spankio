@@ -27,6 +27,9 @@
 			var self = {};
 			self.stream = ko.observableArray([]);
 			self.prependToHistory = function (o, playNow) {
+				if (JSON.stringify(o)===JSON.stringify(Spank.player.lastPlayedObject)) {
+					return false;
+				}
 				var underlyingArray = self.stream();
 				var i = underlyingArray.length;
 				while (i--) {
@@ -39,6 +42,9 @@
 				self.stream.valueHasMutated();
 				if (playNow) {
 					Spank.player.playObject(o, 0);
+					threeSixtyPlayer.config.jumpToTop = false;
+				} else {
+					threeSixtyPlayer.config.jumpToTop = true;
 				}
 			};
 			self.playHistoryItem = function(o,event) { // When clicking a History item, push it to the top and play it
@@ -105,7 +111,13 @@
 					}
 				},
 				error: function(error) {
-					alert("Error: " + error.code + " " + error.message);
+					$(".droppablePlaylist").remove();
+					Spank.userData = {};
+					Spank.userData.save = function() {
+						return false;
+					};
+					alert("BIG PROBLEM ON OUR END! You can continue but nothing will be saved. Shame...");
+					//alert("Error: " + error.code + " " + error.message);
 				}
 			});
 		};

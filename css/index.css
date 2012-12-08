@@ -1,5 +1,27 @@
+#playlistDropZone {
+    width: 50%;
+    height: 100%;
+    float: right;
+    top: 0;
+    right: 0;
+    background-color: rgba(84, 255, 76, 0.34);
+    position: absolute;
+    display: none;
+}
+
+#playlistDummyZone {
+    width: 50%;
+    height: 100%;
+    float: left;
+    top: 0;
+    right: 0;
+    background-color: rgba(244, 255, 73, 0.38);
+    position: absolute;
+    display: none;
+}
+
 #resultsOps {
-    top: 20%;
+    top: 35%;
     position: fixed;
     right: 37%;
     z-index: 20;
@@ -10,11 +32,12 @@
 .trash {
     cursor: pointer;
     width: 100px;
+    position: absolute;
+    top: 150%;
 }
 
 .arrowright {
     cursor: pointer;
-    margin-top: 58px;
     width: 119px;
 }
 

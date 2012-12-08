@@ -91,6 +91,7 @@ function setupWebAudio(url) {
 			random:false,
 			shuffle:false,
 			loop:false,
+			jumpToTop:false,
 			playNext:true, // stop after one sound, or play through list until end
 			autoPlay:false, // start playing the first sound right away
 			allowMultiple:false, // let many sounds play at once (false = only one sound playing at a time)

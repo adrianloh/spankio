@@ -4,7 +4,18 @@
 
 		Spank.userIsTyping = false;
 
-		var draggedHistoryItem = null;
+		var draggedHistoryItem = {};
+
+		$("#playlistDropzone").droppable({
+			accept: ".tweetThumb",
+			greedy: true,
+			tolerance: "pointer",
+			hoverClass: "bgOver",
+			drop: function addDroppedTrackToPlaylistView() {
+				var droppedHistoryItem = JSON.parse(JSON.stringify(draggedHistoryItem));
+				Spank.playlistScroller.addSongToPlaylist(Spank.charts.currentPlaylistTitle, droppedHistoryItem);
+			}
+		});
 
 		ko.bindingHandlers.cartDeleteIcons = {
 			init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
@@ -56,7 +67,12 @@
 		};
 
 		var historyDropZones = function(op) {
-			$.each(['#lyrics', '#resultsSection', '#playlistScroller'], function(i,o) {
+			var tipsToShow = ['#lyrics'];
+			if (Spank.charts.currentPlaylistTitle==null) {
+				tipsToShow.push('#resultsSection');
+				tipsToShow.push('#playlistScroller');
+			}
+			$.each(tipsToShow, function(i,o) {
 				Tipped[op](o);
 			});
 		};
@@ -73,10 +89,14 @@
 					zIndex:999,
 					start:function( event ) {
 						draggedHistoryItem = valueAccessor(); // Gets us the raw JSON object of the history item that was picked up
+						if (Spank.charts.currentPlaylistTitle) {
+							$("#playlistDropzone").show();
+						}
 					},
 					drag:function( event ) {
 					},
 					stop:function( event ) {
+						$("#playlistDropzone").hide();
 					}
 				}).hover(function mousein() {
 					historyDropZones('show');
@@ -98,9 +118,9 @@
 
 		$("#resultsSection").droppable({
 			accept: ".tweetThumb",
-			hoverClass: "bgOver",
+			activeClass: "bgOver",
 			drop: function getSimilarAsDroppedTrack(event) {
-				var similar_url = "http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=@&track=#&autocorrect=1&limit=300&api_key=0325c588426d1889087a065994d30fa1&format=json";
+				var similar_url = "http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=@&track=#&autocorrect=1&limit=200&api_key=0325c588426d1889087a065994d30fa1&format=json";
 				if (draggedHistoryItem!==null) {
 					var url = similar_url.replace("@",encodeURIComponent(draggedHistoryItem.artist)).replace("#", encodeURIComponent(draggedHistoryItem.title));
 					Spank.charts.populateResultsWithUrl(url, function extract(res) {

@@ -72,7 +72,7 @@
 							selector = ".playlistThumb[title='@']".replace("@",playname);
 						$(selector).attr('src', savedTracklist[0].thumb);
 						console.warn("Saved " + savedTracklist.length + ' items into playlist ' + playname);
-						Spank.charts.shoppingCart.removeAll();
+						//Spank.charts.shoppingCart.removeAll();
 					}
 				});
 			},
@@ -249,7 +249,7 @@
 			var underlyingArray = Spank.charts.shoppingCart();
 			$.each(underlyingArray, function(i,o) {
 				var playNow = i===(underlyingArray.length-1);
-				Spank.history.prependToHistory(o, playNow);
+				Spank.history.prependToHistory(o, false);
 			});
 			Spank.charts.shoppingCart.removeAll();
 			$(".mxThumb").removeClass("selectedPlaylistItem");
@@ -278,6 +278,7 @@
 				});
 				// After removal, whatever is left on the charts *is* the new playlist!
 				Spank.playlistScroller.savePlaylist(playname, Spank.charts.chartTracks());
+				Spank.charts.shoppingCart.removeAll();
 			} else {
 				console.error("Attempted to save playlist but cannot get playlist name");
 				Spank.charts.shoppingCart.removeAll();

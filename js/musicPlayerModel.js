@@ -154,7 +154,10 @@
 		$(document).bind('fatManFinish', function(e,data) {
 			var underlyingArray = Spank.history.stream(),
 				next_play_index;
-			if (threeSixtyPlayer.config.loop) {
+			if (threeSixtyPlayer.config.jumpToTop) {
+				next_play_index = 0;
+				threeSixtyPlayer.config.jumpToTop = false;
+			} else if (threeSixtyPlayer.config.loop) {
 				next_play_index = -1;
 				// Do nothing because loop is built into 360 Player
 			} else if (threeSixtyPlayer.config.shuffle && underlyingArray.length > 1) {

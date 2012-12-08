@@ -94,6 +94,8 @@ Array.prototype.shuffle = function() {
 				//console.warn("Rendering " + newItems.length + ' items.');
 			};
 			self.populateResultsWithUrl = function(url, extract_function, error_callback) {
+				// This function is called to look for Similar artists/Similar tracks
+				self.currentPlaylistTitle = null;
 				$("html").addClass('busy');
 				$.getJSON(url, function(res) {
 					var tracklist;
