@@ -1,3 +1,31 @@
+#resultsOps {
+    top: 20%;
+    position: fixed;
+    right: 37%;
+    z-index: 20;
+    width: 20px;
+    display: none;
+}
+
+.trash {
+    cursor: pointer;
+    width: 100px;
+}
+
+.arrowright {
+    cursor: pointer;
+    margin-top: 58px;
+    width: 119px;
+}
+
+.bgOver {
+    background-color: rgba(248, 255, 186, 0.48);
+}
+
+.selectedPlaylistItem {
+    border:solid 6px rgb(247, 255, 113);
+}
+
 html.busy, html.busy * {
 	cursor: wait;
 }
@@ -58,26 +86,26 @@ iframe {
 ==================================================*/
 FORM
 {
-    position: fixed;
-    font-size: 68px;
-    font-weight: 900;
-    width: 80%;
-    top: 2%;
-    left: 0px;
-    margin-left: 9%;
+	position: fixed;
+	font-size: 68px;
+	font-weight: 900;
+	width: 80%;
+	top: 11px;
+	left: 0px;
+	margin-left: 9%;
 	/*margin: 0 auto;*/
 }
 INPUT[type="text"], TEXTAREA
 {
-    font: 44.5%/1 Oswald;
-    text-shadow: -0.095em 0 red, 0.095em 0 cyan;
-    letter-spacing: 0px;
-    height: 100%;
-    width: 68%;
-    padding: 3px 14px 5px;
-    background-color: rgba(255, 255, 255, 1);
-    border: 6px solid rgb(63, 63, 63);
-    color: #000000;
+	font: 44.5%/1 Oswald;
+	text-shadow: -0.095em 0 red, 0.095em 0 cyan;
+	letter-spacing: 0px;
+	height: 100%;
+	width: 68%;
+	padding: 3px 10px 5px;
+	background-color: rgba(255, 255, 255, 1);
+	border: 6px solid rgb(63, 63, 63);
+	color: #000000;
 /*-webkit-transform: rotate(-2deg);*/
 }
 INPUT::-webkit-input-placeholder
@@ -98,7 +126,7 @@ INPUT:-ms-input-placeholder
 	top: 0px;
 	left: 0px;
 	width: 100%;
-	height: 10%;
+	height: 84px;
 	-moz-box-shadow: 0 020px 20px rgba(0, 0, 0, 0.7);
 	-webkit-box-shadow: 0 020px 20px rgba(0, 0, 0, 0.7);
 	box-shadow: 0 020px 20px rgba(0, 0, 0, 0.7);
@@ -166,7 +194,7 @@ INPUT:-ms-input-placeholder
 	height: 160px;
 	float: left;
 	margin-right: 15px;
-	border: solid 0px #000;
+    cursor: pointer;
 /*	-moz-box-shadow: 1px 1px 5px #999;
 	-webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, 2.92);
 	box-shadow: 1px 1px 5px #999;*/
@@ -191,12 +219,12 @@ INPUT:-ms-input-placeholder
     text-shadow: 2px 2px 2px rgba(151, 24, 64, 0.2);
     position: absolute;
     width: 70%;
-    top: 10%;
-    left: 0px;
+    top: 86px;
+    left: 0;
     text-align: center;
     line-height: 20px;
     -webkit-backface-visibility: hidden;
-    height: 88%;
+    height: 90%;
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 2;
@@ -381,7 +409,7 @@ ul.lastfm-buttons {
     position: fixed;
     z-index: 8;
     right: 0;
-    top: 10%;
+    top: 86px;
     height: 28%;
 }
 
@@ -433,6 +461,7 @@ ul.lastfm-buttons {
 }
 
 .tweetThumb {
+    cursor: -webkit-grab;
     width: 50px;
     height: 50px;
     float: left;
@@ -479,6 +508,5 @@ ul.lastfm-buttons {
 
 #spank-player-controls {
     float: right;
-    margin-top: 1%;
     margin-right: 5%;
 }​

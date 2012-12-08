@@ -338,7 +338,7 @@ button.shiny-blue:active {
    I wrote a blog post about creating this button:
    http://robots.thoughtbot.com/post/2718077289/make-css3-buttons-like-a-boss
 *******************************************************************************/
-button.chart-button {
+button.hideshow-playlist-button {
     font: bold 12px/1 "proxima-nova-1";
     width: 130px;
     background-color: #52a8e8;
@@ -362,7 +362,7 @@ button.chart-button {
     text-shadow: 0 -1px 1px #3275bc;
     /*width: 112px;*/
     -webkit-background-clip: padding-box; }
-button.chart-button:hover {
+button.hideshow-playlist-button:hover {
     background-color: #3e9ee5;
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #3e9ee5), color-stop(100%, #206bcb));
     background-image: -webkit-linear-gradient(top, #3e9ee5 0%, #206bcb 100%);
@@ -379,7 +379,7 @@ button.chart-button:hover {
     cursor: pointer;
     text-shadow: 0 -1px 1px #1d62ab;
     -webkit-background-clip: padding-box; }
-button.chart-button:active {
+button.hideshow-playlist-button:active {
     background: #3282d3;
     border: 1px solid #154c8c;
     border-bottom: 1px solid #0e408e;
@@ -388,9 +388,9 @@ button.chart-button:active {
     text-shadow: 0 -1px 1px #2361a4;
     -webkit-background-clip: padding-box; }
 
-button[disabled].chart-button,
-button[disabled].chart-button:hover,
-button[disabled].chart-button:active {
+button[disabled].hideshow-playlist-button,
+button[disabled].hideshow-playlist-button:hover,
+button[disabled].hideshow-playlist-button:active {
     background-color: #dadada;
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #dadada), color-stop(100%, #f3f3f3));
     background-image: -webkit-linear-gradient(top, #dadada, #f3f3f3);
@@ -408,7 +408,7 @@ button[disabled].chart-button:active {
     cursor: not-allowed;
     text-shadow: 0 -1px 1px #ebebeb; }
 
-button.chart-button::-moz-focus-inner {
+button.hideshow-playlist-button::-moz-focus-inner {
     border: 0;
     padding: 0; }
 

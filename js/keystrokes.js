@@ -11,21 +11,20 @@
 			alpha_o: 79,
 			alpha_p: 80,
 			alpha_i: 73
-		};
+			},
+			boundKeys = $.map(keys, function(o) { return o; });
 
-		$(document).keydown(function(e){
+		$(document).keydown(function(e) {
 
-			if ($(document.activeElement).attr("id")!=='lyrics') {
+			if (!Spank.userIsTyping && $(document.activeElement).attr("id")!=='lyrics' && boundKeys.indexOf(e.keyCode)>=0) {
 				switch (e.keyCode)
 				{
-					case keys.right:
-						// Next song
+					case keys.right:    // Next song
 						Spank.player.suspendLoopAndTrigger(function() {
 							$(document).trigger('fatManFinish');
 						});
 						break;
-					case keys.spacebar:
-						// Toggle play/pause
+					case keys.spacebar: // Toggle play/pause
 						if (Spank.player.lastPlayedObject===null && threeSixtyPlayer.config.loop) {
 							// The very first time we land and hit spacebar
 							threeSixtyPlayer.config.loop = false;
@@ -37,35 +36,29 @@
 							$(".sm2-360btn").trigger('click');
 						}
 						break;
-					case keys.left:
-						// Previous song
+					case keys.left:     // Previous song
 						var prevSong = Spank.player.lastLastPlayedObject;
 						if (prevSong!==null) {
 							Spank.player.playObject(prevSong);
 						}
 						break;
-					case keys.delete:
-						// Delete currently playing track from stream and go to next song
+					case keys.delete:   // Delete currently playing track from stream and go to next song
 						Spank.player.suspendLoopAndTrigger(function() {
 							$(".tweetPlay").find(".tweetDelete").trigger("click");
 						});
 						break;
-					case keys.backspace:
-						// Delete currently playing track from stream and go to next song
+					case keys.backspace: // Delete currently playing track from stream and go to next song
 						Spank.player.suspendLoopAndTrigger(function() {
 							$(".tweetPlay").find(".tweetDelete").trigger("click");
 						});
 						break;
-					case keys.alpha_o:
-						// Toggle loop mode
+					case keys.alpha_o:  // Toggle loop mode
 						$('.playModeButtons[src="/css/loop_on.png"]').trigger("click");
 						break;
-					case keys.alpha_p:
-						// Toggle shuffle mode
+					case keys.alpha_p:  // Toggle shuffle mode
 						$('.playModeButtons[src="/css/shuffle_on.png"]').trigger("click");
 						break;
-					case keys.alpha_i:
-						// Shuffle results list
+					case keys.alpha_i:  // Shuffle results list
 						$('#random_button').trigger("mousedown").trigger('click');
 						setTimeout(function() {
 							$('#random_button').trigger("mouseup");

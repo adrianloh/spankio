@@ -25,38 +25,14 @@
 
 		ko.applyBindings(playerControlModel, document.getElementById('spank-player-controls'));
 
+		// Recall the previous saved state of the Loop and Shuffle buttons
 		$.each(['loop','shuffle'], function(i,a) {
 			if (typeof(localStorage[a])!=='undefined' && localStorage[a]==='true') {
-				console.log(a+" is true");
 				$('#'+a+"_button").trigger("click");
 			}
 		});
 
-		var deprecated_getPlaylistsFromRedis = function () {
-			var req = "/playlist/list/" + encodeURIComponent(FBUserInfo.username + " PLAYLIST ALL");
-			$.getJSON(req, function(data) {
-				$.each(data, function(i,o) {
-					var playlistItem = {
-						title: $.trim(o.title.split(" PLAYLIST").slice(1)[0]),
-						cover: o.cover.match(/^http/) ? o.cover : Spank.genericAlbumArt,
-						url: "/playlist/items/" + encodeURIComponent(this.title)
-					};
-					Spank.playlistScroller.push(playlistItem);
-				});
-			});
-		};
-
-		// On first launch, grab the user's playlist once we log into Facebook
-		$(document).one("login", function() {
-			// getPlaylistsFromRedis();
-			// Dock the playlist bar...
-			var t2 = setTimeout(function() {
-				$(".chart-button").trigger("click");
-				clearTimeout(t2);
-			},5000);
-
-		});
-
+		// The logic of what to do next once a song finishes playing
 		$(document).bind('fatManFinish', function(e,data) {
 			var underlyingArray = Spank.history.stream(),
 				next_play_index;
@@ -81,13 +57,6 @@
 			//console.log("Song started...");
 			//console.log(data);
 		});
-
-
-
-
-
-
-
 
 
 	});

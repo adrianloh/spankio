@@ -30,13 +30,19 @@ var isChrome = (navigator.userAgent.match(/chrome/i));
 
 function setupWebAudio(url) {
 	var audio = new Audio();
+	audio.onerror = function() {
+		console.error("Error loading HTML5 underlying audio...")
+		//alert("Crap! Music servers temporarily unwell... reload? Try again later? Go back to using iTunes?")
+	};
 	if (isChrome) {
 		audio.src = url;
 		audio.preload = "auto";
-		audio.load();
-		var source = audioContext.createMediaElementSource(audio);
-		source.connect(SpectrumAnalyzer);                   // Connect the audio to the analyzer
-//	    SpectrumAnalyzer.connect(audioContext.destination); // *BUT* don't connect it to the speakers
+		try {
+			audio.load();
+			var source = audioContext.createMediaElementSource(audio);
+			source.connect(SpectrumAnalyzer);                   // Connect the audio to the analyzer
+//	        SpectrumAnalyzer.connect(audioContext.destination); // *BUT* don't connect it to the speakers
+		} catch(err) { }
 	} else {
 		audio.src = "";
 		audio.preload = "none";

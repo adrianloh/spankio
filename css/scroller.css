@@ -1,5 +1,5 @@
 #playlistScroller {
-    padding: 15px 15px 25px 15px;
+    padding: 15px 15px 0px 15px;
     position: fixed;
 	bottom:0;
 	left:3%;
@@ -16,7 +16,7 @@
     left: 45%;
 }
 
-#playlistScroller img {
+.playlistThumb {
 	width: 120px;
 	height: 120px;
     border: 1px solid #ccc;
@@ -41,15 +41,15 @@
 }
 
 #playlistScroller li {
-	text-align: center;
-	background-color: #f0f0f0;
-	border: 5px solid #ccc;
-	width: 130px;
-	height: 190px;
-	padding: 0;
-	margin: 6px;
-	display: block;
-	float: left;
+    text-align: center;
+    background-color: #f0f0f0;
+    border: 5px solid #ccc;
+    width: 130px;
+    height: 168px;
+    padding: 0;
+    margin: 6px;
+    display: block;
+    float: left;
 }
 a.prev, a.next {
 	background: url(miscellaneous_sprite.png) no-repeat transparent;

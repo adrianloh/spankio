@@ -94,13 +94,11 @@
     <!-- The scripts that drive this app
     -->
     <script type="text/javascript" src="/js/utils.js"></script>
+    <script type="text/javascript" src="/js/musicPlayerModel.js"></script>
     <script type="text/javascript" src="/js/historyModel.js"></script>
-    <script type="text/javascript" src="/js/playerModel.js"></script>
     <script type="text/javascript" src="/js/chartsModel.js"></script>
     <script type="text/javascript" src="/js/index.js"></script>
-    <script type="text/javascript" src="/js/scroller.js"></script>
-    <script type="text/javascript" src="/js/player.js"></script>
-    <script type="text/javascript" src="/js/charts.js"></script>
+    <script type="text/javascript" src="/js/playlists.js"></script>
     <script type="text/javascript" src="/js/keystrokes.js"></script>
     <script type="text/javascript" src="/js/snippets.js"></script>
     <script type="text/javascript" src="/js/draggables.js"></script>
@@ -108,6 +106,9 @@
     <!-- Context menu plugin -->
     <link rel="stylesheet" type="text/css" href="/js/contextMenu/jquery.contextmenu.css" />
     <script type="text/javascript" src="/js/contextMenu/jquery.contextmenu.js"></script>
+
+    <!-- Edit-in-place Playlist Names -->
+    <script type="text/javascript" src="/js/jquery.jeditable.mini.js"></script>
 
     <!-- A library to generate md5 hashes  -->
     <script type="text/javascript" src="/js/md5-min.js"></script>
@@ -371,23 +372,29 @@
 </div>
 
 </div>
-<div id="fb-root"></div>
+
+    <!-- BEGIN MY STUFF -->
+
+    <div id="fb-root"></div>
 
     <div id="logo">Spank.io</div>
+
     <div id="spank-player-controls">
         <img id="chat_button" style="display:none;" class="playModeButtons" src="/img/chat.png" />
         <img id="random_button" title="Shuffle chart entries [i]" class="playModeButtons" src="/css/random_on.png" />
         <img id="loop_button" title="Loop Mode [o]" class="playModeButtons" src="/css/loop_on.png" />
         <img id="shuffle_button" title="Shuffle Mode [p]" class="playModeButtons" src="/css/shuffle_on.png" />
     </div>
+
     <div id="searchForm">
         <form id="searchLyrics">
             <input type="text" name="lyrics" id="lyrics" size="120" value="" class="text-input" />
         </form>
     </div>
+
     <div id="funkyPlayer">
         <div id="funkyPlayer-container">
-            <div class="ui360 ui360-vis" title="Play/Pause [space]">
+            <div class="ui360 ui360-vis" title="Play/Pause [ space ]">
                 <a class="fatManLink" data-bind="attr: { href: current_url }"></a>
             </div>
         </div>
@@ -396,7 +403,7 @@
     <div id="playHistory">
         <ul id="history-stream-list" data-bind="foreach: stream">
             <li class="tweetItem tweetStop" data-bind="cartDeleteIcons:[]">
-                <img class="tweetThumb" onerror="ImgError(this)" data-bind="pickupStreamItems:[], attr: { src: thumb }" />
+                <img class="tweetThumb" onerror="ImgError(this)" data-bind="pickupStreamItems:$data, attr: { src: thumb }" />
                 <a data-bind="attr: { href: direct }"><img class="tweetDownload" src="/img/cart.png" /></a>
                 <img class="tweetDelete" src="/img/deleteTweet.png" data-bind="click: $root.deleteHistoryItem" />
                 <div class="tweetDetails" data-bind="click: $root.playHistoryItem">
@@ -406,6 +413,12 @@
             </li>
         </ul>
     </div>
+
+    <div id="resultsOps">
+        <img src="/img/trash.png" class="trash" />
+        <img src="/img/arrowright.png" class="arrowright" />
+    </div>
+
     <div class="resultsBody">
         <img id="closeButton" src="/img/close.png" />
         <div id="lightBox">
@@ -420,12 +433,11 @@
                 <div id="vk-results-container"></div>
             </div>
         </div>
-
         <div id="resultsSection">
             <div id="track_count_current" data-bind="text: totalChartTracks"></div>
             <ul class="results-list" data-bind="foreach: chartTracks">
                 <li class="trackEntry unwobbled">
-                    <img class="mxThumb" onerror="ImgError(this)" data-bind="attr: { src: thumb }" />
+                    <img class="mxThumb" onerror="ImgError(this)" data-bind="click: $root.addToShoppingCart, attr: { src: thumb }" />
                     <div class="trackName"><a class="lyricLink" href="#" data-bind="text: title, attr: { mxid: mxid }"></a></div>
                     <div class="trackArtist" data-bind="text: artist"></div>
                 </li>
@@ -436,18 +448,20 @@
 
     <div id="playlistScroller">
         <ul id="playlists-scroller-list" data-bind="foreach: playlistItems">
-            <li class="playlistEntry">
+            <li class="playlistEntry" data-bind="makeDroppablePlaylistTile:$data, bindPlaylistButtons:$data, css: { droppablePlaylist: url==='#' }">
                 <img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />
                 <div class="playlistName" data-bind="text: title"></div>
             </li>
         </ul>
         <div class="clearfix"></div>
-        <div id="toggle-playlist-button"><button class="chart-button">Hide Playlists</button></div>
+        <div id="toggle-playlist-button">
+            <button class="hideshow-playlist-button">Hide Playlists</button>
+        </div>
         <a class="prev" id="foo2_prev" href="#"><span>prev</span></a>
         <a class="next" id="foo2_next" href="#"><span>next</span></a>
         <div class="pagination" id="foo2_pag"></div>
     </div>
-<!--<div id="gridpattern"></div>-->
+
 </body>
 
 </html>

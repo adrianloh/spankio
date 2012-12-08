@@ -104,34 +104,26 @@
 		//	LIVE SEARCH FORM
 		//
 		// Suppress the ENTER key
-		$("#lyrics").keydown(function(e){
-			if ( e.keyCode===13 ) {
-				return false;
-			}
+//		$("#lyrics").keydown(function(e){
+//			if ( e.keyCode===13 ) {
+//				return false;
+//			}
+//		});
+
+		// Don't allow the form to be submitted or we'll jump away
+		// from the page!
+		$("#searchLyrics").submit(function(e) {
+			return false;
 		});
 
 		$.searchByWire = function(search_term) {
 			// Each time we start a new search...
 			tearDownLightBox();                                               // Close the lightbox
 			$(".playlistEntry").css("border","5px solid rgb(204, 204, 204)"); // Don't highlight any playlist items
-			if (search_term!=='') {
+			if ($.trim(search_term)!=='') {
 				var url = '/mxsearch?q=#&page=1'.replace("#",search_term);
-				$("html").addClass('busy');
-				$.ajax({
-					type: 'GET',
-					url: url,
-					success: function(response) {
-						$("html").removeClass('busy');
-						var items = [],
-							tracklist = response.message.body.track_list;
-						if (tracklist.length>0) {
-							Spank.charts.current_url = url;
-							Spank.charts.chartTracks.removeAll();
-							Spank.charts.pushBatch(tracklist);
-						} else {
-							items.push('<li class="trackName">' + "Nothing found!" + '</li>');
-						}
-					}
+				Spank.charts.populateResultsWithUrl(url, function extract(res) {
+					return res.message.body.track_list;
 				});
 			} else {
 				return false;
@@ -145,7 +137,7 @@
 
 		$("#lyrics").livesearch({
 			searchCallback: $.searchByWire,
-			innerText: "Freed music",
+			innerText: "You're every move and waking sound",
 			queryDelay:500,
 			minimumSearchLength: 3
 		});
@@ -212,12 +204,12 @@
 			}
 		};
 
-		$("#playlists-scroller-list").sortable({
-			update : function () {
-				console.log("Resorting!");
-				//$(document).trigger("playlistDidChange");
-			}
-		});
+//		$("#playlists-scroller-list").sortable({
+//			update : function () {
+//				console.log("Resorting!");
+//				//$(document).trigger("playlistDidChange");
+//			}
+//		});
 
 		$(".lyricLink").live('click', function openLightbox() {
 			if (!vk_search_in_progress && !mx_get_lyrics_in_progress && $("#lightBox").css("display")!='block') {
