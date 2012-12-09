@@ -96,13 +96,13 @@
 					zIndex:999,
 					start:function( event ) {
 						draggedHistoryItem = valueAccessor(); // Gets us the raw JSON object of the history item that was picked up
+						var searchZone = $("#playlistSearchZone");
 						if (Spank.charts.currentPlaylistTitle) {
-							$("#playlistSearchZone").removeClass("searchFullWidth");
-							$("#playlistSearchZone").show();
+							searchZone.removeClass("searchFullWidth").show();
 							$("#playlistDropZone").show();
 						} else {
-							if (!$("#playlistSearchZone").hasClass("searchFullWidth")) $("#playlistSearchZone").addClass("searchFullWidth");
-							$("#playlistSearchZone").show();
+							if (!searchZone.hasClass("searchFullWidth")) searchZone.addClass("searchFullWidth");
+							searchZone.show();
 						}
 					},
 					drag:function( event ) {

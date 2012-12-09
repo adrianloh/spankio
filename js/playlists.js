@@ -72,7 +72,6 @@
 							selector = ".playlistThumb[title='@']".replace("@",playname);
 						$(selector).attr('src', savedTracklist[0].thumb);
 						console.warn("Saved " + savedTracklist.length + ' items into playlist ' + playname);
-						//Spank.charts.shoppingCart.removeAll();
 					}
 				});
 			},
