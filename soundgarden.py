@@ -67,6 +67,7 @@ MX_AGENT = "musiXmatch/211 CFNetwork/596.2.3 Darwin/12.2.0 (x86_64) (MacPro3,1)"
 class MainHandler(tornado.web.RequestHandler):
 
 	def get(self):
+		self.set_header("Cache-Control", "maxage=0, no-cache, must-revalidate")
 		self.render("soundgarden.html")
 
 class FBChannelFileHandler(tornado.web.RequestHandler):
