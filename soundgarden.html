@@ -44,6 +44,7 @@
     </style>
     <!-- 360 Player STUFF END-->
 
+    <script type='text/javascript' src='https://static.firebase.com/v0/firebase.js'></script>
     <script src="http://www.parsecdn.com/js/parse-1.1.14.min.js"></script>
 
     <script type="text/javascript">
@@ -59,6 +60,7 @@
             };
         // The global object/ui components exported by this webapp
         Spank = {
+            playlists:{},
             lightBox:null,
             player: null,
             playlistScroller: null,
@@ -443,7 +445,8 @@
             <ul class="results-list" data-bind="sortable: {data:chartTracks, afterMove: onResort }">
                 <li class="trackEntry unwobbled">
                     <img class="mxThumb" onerror="ImgError(this)" data-bind="click: $root.addToShoppingCart, attr: { src: thumb }" />
-                    <div class="trackName"><a class="lyricLink" href="#" data-bind="text: title, attr: { mxid: mxid }"></a></div>
+                    <!--<div class="trackName"><a class="lyricLink" href="#" data-bind="text: title, attr: { mxid: mxid }"></a></div>-->
+                    <div class="trackName"><a class="lyricLink" href="#" data-bind="text: title"></a></div>
                     <div class="trackArtist" data-bind="text: artist"></div>
                 </li>
             </ul>

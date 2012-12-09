@@ -62,7 +62,7 @@
 						var oldname = o.previous,
 							newname = o.current;
 						if (oldname!==newname) {
-							if (Spank.userData.playlists[oldname]) {
+							if (Spank.playlists[oldname]) {
 								Spank.playlistScroller.renamePlaylist(oldname, newname, element);
 							} else {
 								alert("Can't rename me cause I'm empty! Add some songs first...");
