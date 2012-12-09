@@ -11,10 +11,10 @@ Array.prototype.shuffle = function() {
 (function() {
 
 	$(document).ready(function() {
-
+		
 		Spank.charts = (function() {
 			var self = {};
-			self.currentPlaylistTitle = null;
+			self.currentPlaylistTitle = undefined;
 			self.current_url = null;
 			self.ok_to_fetch_more = true;
 			self.shoppingCart = ko.observableArray([]);
@@ -23,7 +23,7 @@ Array.prototype.shuffle = function() {
 				return Spank.utils.padToFour(self.chartTracks().length);
 			});
 			self.onResort = function(o) {
-				if (self.currentPlaylistTitle!=null) {
+				if (self.currentPlaylistTitle) {
 					Spank.playlistScroller.savePlaylist(self.currentPlaylistTitle, self.chartTracks());
 				}
 			};
@@ -45,7 +45,7 @@ Array.prototype.shuffle = function() {
 					mxid:"na",
 					thumb: Spank.genericAlbumArt
 				};
-				if (o.hasOwnProperty("track")) {    // This is a MusiXMatch track object
+				if ("track" in o) {    // This is a MusiXMatch track object
 					o = o.track;
 					track.artist = o.artist_name;
 					track.title = o.track_name;
@@ -53,16 +53,16 @@ Array.prototype.shuffle = function() {
 					track.album = o.album_name;
 					track.mbid = o.track_mbid;
 					track.mxid = o.track_id;
-				} else if (o.hasOwnProperty("streamable")) { // This is a last.fm track object
+				} else if ("streamable" in o) { // This is a last.fm track object
 					track.artist = o.artist.name;
 					track.title = o.name;
 					track.thumb = o.image ? o.image[o.image.length-1]['#text'] : track.thumb;
 					track.mbid = o.mbid;
-				} else if (o.hasOwnProperty("im:artist")) { // This is an iTunes track object
+				} else if ("im:artist" in o) { // This is an iTunes track object
 					track.artist = o['im:artist'].label;
 					track.title = o['im:name'].label;
 					track.thumb = o['im:image'][2] ? o['im:image'][2].label : track.thumb;
-				} else if (o.hasOwnProperty("url")) { // A song in our own playlist, thus URL
+				} else if ("url" in o) {	// A song in our own playlist, thus URL
 					track.artist = o.artist;
 					track.title = o.title;
 					track.thumb = o.thumb;
@@ -77,11 +77,7 @@ Array.prototype.shuffle = function() {
 						bad = true;
 					}
 				});
-				if (bad) {
-					return false;
-				} else {
-					return track;
-				}
+				return bad ? false : track;
 			};
 			self.pushBatch = function(list, unshift) {
 				//console.warn("Batch adding " + list.length + ' items.');
@@ -100,7 +96,7 @@ Array.prototype.shuffle = function() {
 			};
 			self.populateResultsWithUrl = function(url, extract_function, error_callback) {
 				// This function is called to look for Similar artists/Similar tracks
-				self.currentPlaylistTitle = null;
+				self.currentPlaylistTitle = undefined;
 				$("html").addClass('busy');
 				$.getJSON(url, function(res) {
 					var tracklist;

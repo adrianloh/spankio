@@ -10,9 +10,9 @@
 		});
 
 		var playerControlModel = {
-			random:ko.observable(),
-			loop:ko.observable(),
-			shuffle:ko.observable()
+			random: ko.observable(),
+			loop: ko.observable(),
+			shuffle: ko.observable()
 		};
 
 		ko.applyBindings(playerControlModel, document.getElementById('spank-player-controls'));
@@ -21,13 +21,13 @@
 			playerControlModel[a].subscribe(function(v) {
 				var p = v ?	"brightness(0)" : "grayscale(1)",
 					s = "#@_button".replace("@",a);
-				$(s).css("webkitFilter",p);
+				$(s).css("webkitFilter", p);
 			});
 		});
 
 		// Recall the previous saved state of the Loop and Shuffle buttons
 		$.each(['loop','shuffle'], function(i,a) {
-			if (typeof(localStorage[a])!=='undefined' && localStorage[a]==='true') {
+			if (localStorage[a] && localStorage[a]==='true') {
 				$('#'+a+"_button").trigger("click");
 			}
 		});
@@ -158,8 +158,8 @@
 				next_play_index = 0;
 				threeSixtyPlayer.config.jumpToTop = false;
 			} else if (threeSixtyPlayer.config.loop) {
-				next_play_index = -1;
 				// Do nothing because loop is built into 360 Player
+				next_play_index = -1;
 			} else if (threeSixtyPlayer.config.shuffle && underlyingArray.length > 1) {
 				next_play_index = Spank.utils.randrange(0, underlyingArray.length-1);
 			} else if (underlyingArray.length > 1) {

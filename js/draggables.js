@@ -75,8 +75,8 @@
 		};
 
 		var historyDropZones = function(op) {
-			var tipsToShow = ['#lyrics','#playlistScroller'];
-			if (Spank.charts.currentPlaylistTitle==null) {
+			var tipsToShow = ['#searchField','#playlistScroller'];
+			if (!Spank.charts.currentPlaylistTitle) {
 				tipsToShow.push('#resultsSection');
 			}
 			$.each(tipsToShow, function(i,o) {
@@ -119,12 +119,12 @@
 			}
 		};
 
-		$("#lyrics").droppable({
+		$("#searchField").droppable({
 			accept: ".tweetThumb",
 			hoverClass: "bgOver",
 			drop: function searchMusixForDroppedArtist() {
 				if (draggedHistoryItem!==null) {
-					$("#lyrics").val("artist: " + draggedHistoryItem.artist).trigger("keyup");
+					$("#searchField").val("artist: " + draggedHistoryItem.artist).trigger("keyup");
 				}
 			}
 		});

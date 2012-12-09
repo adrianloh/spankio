@@ -132,10 +132,10 @@
 
 		$(".trackArtist").live("click", function searchWithArtistName() {
 			var artist = $(this).text();
-			$("#lyrics").val(artist).trigger("keyup");
+			$("#searchField").val(artist).trigger("keyup");
 		});
 
-		$("#lyrics").livesearch({
+		$("#searchField").livesearch({
 			searchCallback: $.searchByWire,
 			innerText: "You're every move and waking sound",
 			queryDelay:500,

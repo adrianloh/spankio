@@ -30,7 +30,7 @@
 				if (list.length>0) {
 					var o = list[0];
 					o.index = this.playlistItems.indexOf(o);
-					return o
+					return o;
 				} else {
 					return null;
 				}
@@ -186,12 +186,13 @@
 				url = myUrl || $(this).attr("url"),
 				timeNow = new Date().getTime(),
 				timeDelta = timeNow - last_request_time,
-				fetchNew = true;
+				fetchNew = true,
+				title;
 			if (url==="#") {                            // This is a user playlist
-				var title = this_image.attr("title"); // Note: ONLY USER PLAYLISTS HAVE TITLES!
+				title = this_image.attr("title"); // Note: ONLY USER PLAYLISTS HAVE TITLES!
 				tracklist = Spank.userData.playlists[title];
 				//console.warn("Clicked on playlist: " + title);
-				if (tracklist!=null) {
+				if (tracklist) {
 					//console.warn("Opening " + title + " with " + tracklist.length + " items.");
 					appendToResults(title, url, tracklist, this_image, true);
 				} else {
@@ -248,8 +249,14 @@
 		$(".arrowright").click(function() {
 			var underlyingArray = Spank.charts.shoppingCart();
 			$.each(underlyingArray, function(i,o) {
-				var playNow = i===(underlyingArray.length-1);
-				Spank.history.prependToHistory(o, threeSixtyPlayer.lastSound.paused);
+				if (i===(underlyingArray.length-1)) {
+					// NOTE threeSixtyPlayer.lastSound.paused is null if we've not
+					// yet played anything before.
+					var playNow = threeSixtyPlayer.lastSound!==null ? threeSixtyPlayer.lastSound.paused : true;
+					Spank.history.prependToHistory(o, playNow);
+				} else {
+					Spank.history.prependToHistory(o, false);
+				}
 			});
 			Spank.charts.shoppingCart.removeAll();
 			$(".mxThumb").removeClass("selectedPlaylistItem");

@@ -16,7 +16,7 @@
 
 		$(document).keydown(function(e) {
 
-			if (!Spank.userIsTyping && $(document.activeElement).attr("id")!=='lyrics' && boundKeys.indexOf(e.keyCode)>=0) {
+			if (!Spank.userIsTyping && $(document.activeElement).attr("id")!=='searchField' && boundKeys.indexOf(e.keyCode)>=0) {
 				switch (e.keyCode)
 				{
 					case keys.right:    // Next song

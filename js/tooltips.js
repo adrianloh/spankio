@@ -36,17 +36,17 @@
 			hook: 'leftmiddle'
 		});
 
-		Tipped.create("#lyrics", "Drop here to find more songs by this artist", {
+		Tipped.create("#searchField", "Drop here to find more songs by this artist", {
 			skin:'dropTip',
 			showOn:false,
 			hook: 'bottommiddle'
 		});
 
 		Tipped.create("#playlistScroller", function(element) {
-			if (Spank.charts.currentPlaylistTitle==null) {
+			if (!Spank.charts.currentPlaylistTitle) {
 				return "Drop on a playlist thumbnail to add to it";
 			} else {
-				return "Drop to other playlists to add to them"
+				return "Drop to other playlists to add to them";
 			}
 		},{
 			skin:'dropTip',

@@ -530,6 +530,12 @@ ul.lastfm-buttons {
     overflow: auto;
 }
 
+.tweetTrackName {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .tweetDetails {
     cursor: pointer;
     padding-top: 10px;
