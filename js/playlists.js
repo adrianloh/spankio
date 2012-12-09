@@ -249,7 +249,7 @@
 			var underlyingArray = Spank.charts.shoppingCart();
 			$.each(underlyingArray, function(i,o) {
 				var playNow = i===(underlyingArray.length-1);
-				Spank.history.prependToHistory(o, false);
+				Spank.history.prependToHistory(o, threeSixtyPlayer.lastSound.paused);
 			});
 			Spank.charts.shoppingCart.removeAll();
 			$(".mxThumb").removeClass("selectedPlaylistItem");
