@@ -22,6 +22,11 @@ Array.prototype.shuffle = function() {
 			self.totalChartTracks = ko.computed(function(){
 				return Spank.utils.padToFour(self.chartTracks().length);
 			});
+			self.onResort = function(o) {
+				if (self.currentPlaylistTitle!=null) {
+					Spank.playlistScroller.savePlaylist(self.currentPlaylistTitle, self.chartTracks());
+				}
+			};
 			self.fetchMore = function() {
 				if (self.ok_to_fetch_more) {
 					var match = self.current_url.match(/page=(\d+)/);

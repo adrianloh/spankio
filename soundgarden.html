@@ -91,6 +91,8 @@
     <link rel="stylesheet" type="text/css" href="/css/scroller.css" />
     <script type="text/javascript" src="/js/jquery.carouFredSel.js"></script>
 
+    <script type="text/javascript" src="/js/knockout-sortable.min.js"></script>
+
     <!-- The scripts that drive this app
     -->
     <script type="text/javascript" src="/js/utils.js"></script>
@@ -402,7 +404,7 @@
     </div>
 
     <div id="playHistory">
-        <ul id="history-stream-list" data-bind="foreach: stream">
+        <ul id="history-stream-list" data-bind="sortable: {data: stream, afterMove: saveHistory }">
             <li class="tweetItem tweetStop" data-bind="cartDeleteIcons:[]">
                 <img class="tweetThumb" onerror="ImgError(this)" data-bind="pickupStreamItems:$data, attr: { src: thumb }" />
                 <a data-bind="attr: { href: direct }"><img class="tweetDownload" src="/img/cart.png" /></a>
@@ -438,7 +440,7 @@
             <div id="playlistSearchZone" class="playlistSearchZone searchFullWidth"><span class="dropSpans">Search for similar tracks</span></div>
             <div id="playlistDropZone" class="playlistDropZone"><span class="dropSpans">Add to this playlist</span></div>
             <div id="track_count_current" data-bind="text: totalChartTracks"></div>
-            <ul class="results-list" data-bind="foreach: chartTracks">
+            <ul class="results-list" data-bind="sortable: {data:chartTracks, afterMove: onResort }">
                 <li class="trackEntry unwobbled">
                     <img class="mxThumb" onerror="ImgError(this)" data-bind="click: $root.addToShoppingCart, attr: { src: thumb }" />
                     <div class="trackName"><a class="lyricLink" href="#" data-bind="text: title, attr: { mxid: mxid }"></a></div>

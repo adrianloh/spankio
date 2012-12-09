@@ -26,6 +26,17 @@
 		Spank.history = (function() {
 			var self = {};
 			self.stream = ko.observableArray([]);
+			self.saveHistory = function() {
+				if (typeof(FBUserInfo)!=='undefined') {
+					Spank.userData.save({history: self.stream()}, {
+						success: function(o) {
+							console.log("Saved history to Parse!");
+						}
+					});
+				} else {
+					// Ignore
+				}
+			};
 			self.prependToHistory = function (o, playNow) {
 				if (JSON.stringify(o)===JSON.stringify(Spank.player.lastPlayedObject)) {
 					return false;
@@ -83,15 +94,7 @@
 				firstload = false;
 				return true;
 			}
-			if (typeof(FBUserInfo)!=='undefined') {
-				Spank.userData.save({history: Spank.history.stream()}, {
-					success: function(o) {
-						console.log("Saved history to Parse!");
-					}
-				});
-			} else {
-				// Ignore
-			}
+			Spank.history.saveHistory();
 		});
 
 		var loadSavedHistoryFromParse = function(callbackWithResults, callbackNoResults) {
