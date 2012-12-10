@@ -5,8 +5,10 @@
 		$("#funkyPlayer").css("background", 'url(' + Spank.genericAlbumArt + ')');
 
 		$(document).one("login", function() {
-			Spank.base.url = 'https://wild.firebaseio.com/spank/users/' + FBUserInfo.username;
+			var firebaseOKName = FBUserInfo.username.replace(/[\.#\$\[\]]/g,"_"); // Illegal characters for Firebase urls
+			Spank.base.url = 'https://wild.firebaseio.com/spank/users/' + firebaseOKName;
 			Spank.base.history = new Firebase(Spank.base.url + "/history");
+			$(document).trigger("baseReady");
 			Spank.base.history.on('value', function(snapshot) {
 				console.warn("Firebase HISTORY PULL");
 				var newHistory = snapshot.val();
@@ -19,12 +21,33 @@
 						return koo;
 					});
 					Spank.history.stream(koHistory);
-					Spank.history.highlightPlayingSong()
+					Spank.base.history.off('value');
+					Spank.base.history.on('child_changed', addNewHistoryItem);
+					Spank.base.history.on('child_added', addNewHistoryItem);
+					Spank.base.history.on('child_removed', function(snapshot) {
+						Spank.history.stream.pop();
+					})
 				} else {
 					console.error(snapshot.val());
 				}
 			});
-			$(document).trigger("baseReady");
+
+			var addNewHistoryItem = function(snapshot) {
+				var o = snapshot.val();
+				if (o!==null) {
+					var atHistoryIndex = parseInt(snapshot.name()),
+						koo = {};
+					$.each(o, function(k,v) {
+						koo[k] = ko.observable(v);
+					});
+					Spank.history.stream()[atHistoryIndex] = koo;
+					Spank.history.stream.valueHasMutated();
+					Spank.history.highlightPlayingSong();
+				} else {
+					console.error(o);
+				}
+			};
+
 		});
 
 		Spank.history = (function() {
@@ -65,7 +88,7 @@
 			};
 			self.saveHistory = function(moveEvent) {
 				// E.g. the user moved an item
-				if (typeof(moveEvent)!=='undefined' && ('item' in moveEvent) && ('sourceIndex' in moveEvent) && ('targetIndex' in moveEvent)) {
+				if (moveEvent===true || (typeof(moveEvent)!=='undefined' && ('item' in moveEvent) && ('sourceIndex' in moveEvent) && ('targetIndex' in moveEvent))) {
 					Spank.base.history.transaction(function(currentData) {
 						return ko.toJS(self.stream);                            //// Back to Vanilla Jane objects
 					});
@@ -117,6 +140,7 @@
 				}
 			};
 			self.deleteHistoryItem = function(koo, event) {
+				// When you click on the red 'minus' icon
 				$(event.target).parent().animate({"left": "-=500px"}, 500, function() {
 					if (Spank.player.lastPlayedObject!==null && Spank.player.lastPlayedObject.url===koo.url()) {
 						Spank.player.suspendLoopAndTrigger(function() {
@@ -140,8 +164,8 @@
 					self.prependToHistory(koo, true);
 				}
 			};
-			self.downloadHistoryItem = function(o, event) {
-				$('<iframe width="0" height="0" frameborder="0" src="@"></iframe>'.replace("@", o.direct)).appendTo("body");
+			self.downloadHistoryItem = function(koo, event) {
+				$('<iframe width="0" height="0" frameborder="0" src="@"></iframe>'.replace("@", koo.direct())).appendTo("body");
 				setTimeout(function(){
 					$("iframe").remove();
 				},60000);
@@ -157,8 +181,6 @@
 				firstload = false;
 				return true;
 			}
-			// If the player is playing, find the corresponding DOM element on the stream
-			// and highlight it
 			Spank.history.saveHistory();
 		});
 

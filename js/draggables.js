@@ -49,14 +49,6 @@
 					Spank.userIsTyping = true;
 				}).editable({
 					editBy:'click',
-					onEdit: function(o) {
-//						$(this).bind("keyup", function(e) {
-//							if (e.keyCode===13) {       // ENTER key -- submit
-//								$(this).unbind("keyup");
-//								$(this).trigger("blur");
-//							}
-//						});
-					},
 					onSubmit: function(o) {
 						Spank.userIsTyping = false;
 						var oldname = o.previous,

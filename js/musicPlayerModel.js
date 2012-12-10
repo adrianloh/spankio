@@ -43,7 +43,6 @@
 		});
 
 		var fakeSource = "/static/silence.mp3";
-		var testAudio = new Audio();
 		Spank.player = {
 			current_url: ko.observable(fakeSource),
 			lastLastPlayedObject: null,
@@ -87,12 +86,14 @@
 						if (Array.isArray(images) && images.length>0) {
 							var koo = Spank.history.findWithUrl(o.url);
 							if (koo!==null) {
-								koo.thumb(images[images.length-1]['#text']);
-								$("#funkyPlayer").css("background", "url(#)".replace("#", o.thumb));
+								var newCoverUrl = images[images.length-1]['#text'];
+								koo.thumb(newCoverUrl);
+								Spank.history.saveHistory(true);
+								$("#funkyPlayer").css("background", "url(#)".replace("#", newCoverUrl));
 							}
 						}
 					} catch(err) {
-						console.error(err);
+						console.error("Cannot find new album art.");
 					}
 				})
 			},
