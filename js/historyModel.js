@@ -150,7 +150,7 @@
 					Spank.base.history.transaction(function update(currentData) {
 						currentData = utils.deleteFromArray(ko.toJS(koo), currentData);
 						return currentData;
-					}, function onComplete(newData) {
+					}, function onComplete(ok) {
 						console.warn("Firebase HISTORY DELETE");
 					});
 				});

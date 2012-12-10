@@ -65,6 +65,7 @@
 						//console.log("Playing direct: " + newDirectLink);
 						Spank.player.current_url(newDirectLink);
 						var koo = Spank.history.findWithUrl(o.url);
+						o.direct = newDirectLink;
 						if (koo!==null) {
 							koo.direct(newDirectLink);
 							Spank.history.highlightPlayingSong();
@@ -142,17 +143,23 @@
 			var underlyingArray = Spank.history.stream(),
 				next_play_index;
 			if (threeSixtyPlayer.config.jumpToTop) {
+				// When a song is playing, but we added something new to the top,
+				// next song is to jump to it
 				next_play_index = 0;
 				threeSixtyPlayer.config.jumpToTop = false;
 			} else if (threeSixtyPlayer.config.loop) {
-				// Do nothing because loop is built into 360 Player
+				// Loop ON, do nothing because loop is built into 360 Player
 				next_play_index = -1;
 			} else if (threeSixtyPlayer.config.shuffle && underlyingArray.length > 1) {
+				// Shuffle ON when there's more than one song
 				next_play_index = Spank.utils.randrange(0, underlyingArray.length-1);
 			} else if (underlyingArray.length > 1) {
-				var next_index = underlyingArray.indexOf(Spank.player.lastPlayedObject)+1;
+				// Normal play, no modes
+				var koo = Spank.history.findWithUrl(Spank.player.lastPlayedObject.url),
+					next_index = Spank.history.stream.indexOf(koo)+1;
 				next_play_index = next_index < underlyingArray.length && next_index || 0;
 			} else if (threeSixtyPlayer.config.loop===false) {
+				// There's only one song in history
 				$("#loop_button").trigger("click");
 				next_play_index = 0;
 			}
