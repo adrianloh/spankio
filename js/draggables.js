@@ -50,12 +50,12 @@
 				}).editable({
 					editBy:'click',
 					onEdit: function(o) {
-						$(this).bind("keyup", function(e) {
-							if (e.keyCode===13) {       // ENTER key -- submit
-								$(this).unbind("keyup");
-								$(this).trigger("blur");
-							}
-						});
+//						$(this).bind("keyup", function(e) {
+//							if (e.keyCode===13) {       // ENTER key -- submit
+//								$(this).unbind("keyup");
+//								$(this).trigger("blur");
+//							}
+//						});
 					},
 					onSubmit: function(o) {
 						Spank.userIsTyping = false;
@@ -63,7 +63,7 @@
 							newname = o.current;
 						if (oldname!==newname) {
 							if (Spank.playlists[oldname]) {
-								Spank.playlistScroller.renamePlaylist(oldname, newname, element);
+								Spank.playlistScroller.renamePlaylist(oldname, newname);
 							} else {
 								alert("Can't rename me cause I'm empty! Add some songs first...");
 								$(this).text(oldname);

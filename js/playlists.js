@@ -21,48 +21,93 @@
 
 	$(document).ready(function() {
 
-		var dontRender = false;
+		var dereference = function(o) {
+			var t;
+			if (Array.isArray(o)) {
+				t = $.map(o, function(e) {
+					return e;
+				});
+			} else {
+				t = {};
+				$.each(o, function(k,v) {
+					if (o.hasOwnProperty(k)) {
+						t[k] = v;
+					}
+				});
+			}
+			return t;
+		};
 
 		$(document).one("loadPlaylists", function() {
 			Spank.base.playlists_url = Spank.base.url + "/playlists/";
 			Spank.bases = {};
 			Spank.bases.playlists = new Firebase(Spank.base.playlists_url);
+			Spank.bases.known = {};
 			Spank.bases.playlists.on('child_added', function(snapshot) {
-				var playname = snapshot.name(), playlist = snapshot.val(),
-					selector = ".playlistThumb[title='@']".replace("@",playname),
-					exists = $(selector).length>0;
-				if (!dontRender && !exists) {
+				var o = snapshot.val(),
+					playname = o.title,
+					playlist = o.list,
+					selector = ".playlistThumb[title='@']".replace("@",playname);
+				if (!Array.isArray(playlist)) return;
+				if ($(selector).length===0) {
+					console.warn("Adding playlist thumbnail: " + playname);
 					Spank.playlistScroller.push({
 						title: playname,
 						cover: playlist[0].thumb
 					});
-				} else {
-					dontRender = false;
 				}
-				Spank.bases[playname] = new Firebase(Spank.base.playlists_url + encodeURIComponent(playname));
-				var thisBase = Spank.bases[playname];
-				thisBase.on("value", function(snapshot) {
-					var this_playname = snapshot.name(),
-						this_selector = ".playlistThumb[title='@']".replace("@", this_playname),
-						this_PlaylistThumbnail = $(this_selector);
-					if (snapshot.val()!==null) {
-						Spank.playlists[this_playname] = snapshot.val();
-						if (Spank.charts.currentPlaylistTitle===this_playname) {
-							Spank.charts.chartTracks(snapshot.val());
-						}
-						if (this_PlaylistThumbnail.length>0) {
-							this_PlaylistThumbnail.attr("src", snapshot.val()[0].thumb);
-						}
-					} else { // If we deleted this branch, then snapshot.val() === null
-						if (this_PlaylistThumbnail.length>0) {
-							this_PlaylistThumbnail.parent().remove();
-							if (Spank.charts.currentPlaylistTitle===this_playname) {
-								$(".playlistThumb[title='Billboards UK']").trigger("click");
-							}
-						}
+				Spank.bases.known[snapshot.name()] = playname;
+				Spank.bases[playname] = snapshot.ref();
+				Spank.bases[playname].on("value", function(playSnapshot) {
+					if (playSnapshot.val()!==null) {
+						var o = playSnapshot.val(),
+							this_playname = o.title,
+							this_playlist = o.list,
+							this_selector = ".playlistThumb[title='@']".replace("@", this_playname),
+							this_PlaylistThumbnail = $(this_selector),
+							isInView = Spank.charts.currentPlaylistTitle===this_playname;
+						Spank.playlists[this_playname] = dereference(this_playlist); //JSON.parse(JSON.stringify(this_playlist));
+						if (isInView) Spank.charts.chartTracks(this_playlist);
+						this_PlaylistThumbnail.attr("src", this_playlist[0].thumb);
 					}
 				});
 			});
+
+			Spank.bases.playlists.on('child_removed', function(snapshot) {
+				var playlistThatWasRemoved = snapshot.val(),
+					playname = playlistThatWasRemoved.title,
+					selector = ".playlistThumb[title='@']".replace("@", playname),
+					playlistThumbnail = $(selector);
+				// If we deleted this branch, then this_playlist === null
+				// e.g. it's like calling for an object at a location that doesn't exists
+				delete Spank.bases.known[snapshot.name()];
+				console.error("Removing DOM: " + playname);
+				playlistThumbnail.parent().remove();
+				if (Spank.charts.currentPlaylistTitle===playname) {
+					$(".playlistThumb[title='Billboards UK']").trigger("click");
+				}
+			});
+
+			Spank.bases.playlists.on('child_changed', function(snapshot) {
+				var o = snapshot.val();
+				if ((snapshot.name() in Spank.bases.known) && (o.title!==Spank.bases.known[snapshot.name()])) {
+					var newname = o.title,
+						oldname = Spank.bases.known[snapshot.name()];
+					console.warn("Renamed " + oldname + " >>> " + newname);
+					Spank.bases[newname] = Spank.bases[oldname];
+					Spank.playlists[newname] = Spank.playlists[oldname];
+					Spank.bases.known[snapshot.name()] = newname;
+					if (Spank.charts.currentPlaylistTitle===oldname) {
+						Spank.charts.currentPlaylistTitle = newname;
+					}
+					// Change the attribute attached to the thumb of this playlist
+					var selector = ".playlistThumb[title='@']".replace("@", oldname),
+						playlistThumbnail = $(selector);
+					playlistThumbnail.attr("title", newname);
+					playlistThumbnail.parent().find(".playlistName").text(newname);
+				}
+			});
+
 		});
 
 		var deleteDuplicate =  function(o, array) {
@@ -75,9 +120,13 @@
 			}
 		};
 
+
+
+
+
 		Spank.playlistScroller = {
 			playlistItems: ko.observableArray([]),
-			getPlaylistWithName: function(name) {
+			getPlaylistInScrollerWithName: function(name) {
 				var list = ko.utils.arrayFilter(this.playlistItems(), function(item) {
 					return item.title===name;
 				});
@@ -89,55 +138,46 @@
 					return null;
 				}
 			},
-			renamePlaylist: function(oldname, newname, element) {
-				var o = this.getPlaylistWithName(oldname);
-				o.title = newname;
-				if (Spank.charts.currentPlaylistTitle===oldname) {
-					Spank.charts.currentPlaylistTitle = newname;
-				}
-				// Naively just save the old list with a new name
-				dontRender = true;
-				this.savePlaylist(newname, Spank.playlists[oldname],
-					function afterSave(newData) {
-						Spank.bases[oldname].remove();
-						delete Spank.playlists[oldname];
-						// Change the attribute attached to the thumb of this playlist
-						$(element).find(".playlistThumb").attr("title", newname);
-					});
+			renamePlaylist: function(oldname, newname) {
+				var data = {title: newname, list:Spank.playlists[oldname]};
+				Spank.bases[oldname].update(data);
 			},
 			removePlaylistWithName: function(playname) {
-				var o = this.getPlaylistWithName(playname),
-					selector = ".playlistThumb[title='@']".replace("@",playname),
-					that = this;
 				delete Spank.playlists[playname];
 				Spank.bases[playname].remove();
 			},
 			savePlaylist: function(playname, tracklist, callback) {
-				var needsNewBase = typeof(Spank.bases[playname])==='undefined',
+				var isNewPlaylist = typeof(Spank.bases[playname])==='undefined',
 					saveList = JSON.parse(JSON.stringify(tracklist)); // !! IMPORTANT !! Dereference the objects in tracklist from their original...
-				if (needsNewBase) {
-					Spank.bases[playname] = new Firebase(Spank.base.playlists_url + encodeURIComponent(playname));
+				if (isNewPlaylist) {
+					var data = {title: playname, list:tracklist},
+						newRef = Spank.bases.playlists.push();
+					newRef.set(data, function afterSave(ok) {
+						Spank.bases[playname] = new Firebase(newRef.toString());
+						if (callback) callback();
+					});
+				} else {
+					Spank.bases[playname].transaction(function(currentData) {
+						return {title: playname, list: tracklist};
+					}, function(newData) {
+						if (callback) callback(newData);
+					});
 				}
-				Spank.bases[playname].transaction(function(currentData) {
-					return saveList;
-				}, function(newData) {
-					if (callback) callback();
-				});
 			},
 			addSongToPlaylist: function(playname, track) {
 				var isNewPlaylist = typeof(Spank.playlists[playname])==='undefined',
 					isInView = Spank.charts.currentPlaylistTitle === playname,
 					tracklist = [],
 					selector = ".playlistThumb[title='@']".replace("@",playname);
-				if (!isNewPlaylist) tracklist = Spank.playlists[playname];
+				if (!isNewPlaylist) {
+					tracklist = Spank.playlists[playname];
+				}
 				if (isInView) Spank.charts.pushBatch([track], true);    // The true argument makes the charts view prepend the track vs. the default append to bottom
 				//deleteDuplicate(track, Spank.playlists[playname]);
 				tracklist.unshift(track);
-				this.savePlaylist(playname, tracklist,
-					function afterSave() {
-						$(selector).attr("src", track.thumb);
-					});
+				this.savePlaylist(playname, tracklist);
 				if (isNewPlaylist) {
+					// Add a new playlist dropzone since we used this one already
 					Spank.playlistScroller.push({cover:'/img/emptyplaylist.png'});
 				}
 			},
@@ -166,7 +206,7 @@
 
 		$("#playlists-scroller-list").carouFredSel(scroller_config);
 		Spank.playlistScroller.playlistItems.subscribe(function(list) {
-			console.log("Added playlist " + list[list.length-1].title);
+			//console.log("Added playlist " + list[list.length-1].title);
 			$("#playlists-scroller-list").carouFredSel(scroller_config);
 		});
 
@@ -230,8 +270,8 @@
 				title = this_image.attr("title"); // Note: ONLY USER PLAYLISTS HAVE TITLES!
 				tracklist = Spank.playlists[title];
 				//console.warn("Clicked on playlist: " + title);
-				if (tracklist) {
-					//console.warn("Opening " + title + " with " + tracklist.length + " items.");
+				if (tracklist.length>0) {
+					console.warn("Opening " + title + " with " + tracklist.length + " items.");
 					appendToResults(title, url, tracklist, this_image, true);
 				} else {
 					alert("Aiks! Empty playlist. Drag a thumbnail from your stream to start adding to this playlist");
