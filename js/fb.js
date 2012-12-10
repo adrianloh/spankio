@@ -39,11 +39,19 @@ window.fbAsyncInit = function checkFacebookStatus() {
 			var q = "SELECT name,username,uid FROM user WHERE uid in (SELECT uid2 FROM friend WHERE uid1=me()) and is_app_user='1'";
 			FB.api('fql',{q:q}, function(res) {
 				FBUserInfo.spankingFriends = res;
+				localStorage.spank = JSON.stringify(FBUserInfo);
 			});
 		});
 	}
 
 	function updateButton(response) {
+		var loginTimeout = setTimeout(function(){
+			if (typeof(FBUserInfo)==='undefined' && typeof(localStorage.spank)==='string') {
+				FBUserInfo = JSON.parse(localStorage.spank);
+				$(document).trigger("login");
+			}
+			clearTimeout(loginTimeout);
+		},5000);
 		var button = document.getElementById('fb-auth');
 		if (response.status === 'connected') {
 			//user is already logged in and connected
@@ -57,6 +65,7 @@ window.fbAsyncInit = function checkFacebookStatus() {
 				});
 			};
 		} else {
+			clearTimeout(loginTimeout);
 			$("#fb-login").show();
 			//user is not connected to your app or logged out
 			button.innerHTML = 'Login';
