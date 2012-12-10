@@ -410,7 +410,7 @@
         <ul id="history-stream-list" data-bind="sortable: {data: stream, afterMove: saveHistory }">
             <li class="tweetItem tweetStop" data-bind="cartDeleteIcons:[]">
                 <img class="tweetThumb" onerror="ImgError(this)" data-bind="pickupStreamItems:$data, attr: { src: thumb }" />
-                <a data-bind="attr: { href: direct }"><img class="tweetDownload" src="/img/cart.png" /></a>
+                <a class="tweetDownloadLink" data-bind="attr: { href: direct }"><img class="tweetDownload" src="/img/cart.png" /></a>
                 <img class="tweetDelete" src="/img/deleteTweet.png" data-bind="click: $root.deleteHistoryItem" />
                 <div class="tweetDetails" data-bind="click: $root.playHistoryItem">
                     <div class="tweetTrackName" data-bind="text: title"></div>

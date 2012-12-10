@@ -11,8 +11,15 @@
 				console.warn("Firebase HISTORY PULL");
 				var newHistory = snapshot.val();
 				if (Array.isArray(newHistory) && newHistory.length>0) {
-////				Spank.history.stream([]);
-					Spank.history.stream(newHistory);
+					var koHistory = $.map(newHistory, function(o) {
+						var koo = {};
+						$.each(o, function(k,v) {
+							koo[k] = ko.observable(v);
+						});
+						return koo;
+					});
+					Spank.history.stream(koHistory);
+					Spank.history.highlightPlayingSong()
 				} else {
 					console.error(snapshot.val());
 				}
@@ -39,19 +46,50 @@
 					}
 				};
 			self.stream = ko.observableArray([]);
-			self.saveHistory = function(o) {
+			self.findWithUrl = function(url) {
+				return ko.utils.arrayFirst(self.stream(), function(o) { return o.url()===url })
+			};
+			self.highlightPlayingSong = function() {
+				setTimeout(function() {
+					var playingNow = threeSixtyPlayer.lastSound!==null ? !threeSixtyPlayer.lastSound.paused : false;
+					if (playingNow) {
+						console.log("Last sound: " + threeSixtyPlayer.lastSound.url);
+						var tweetDownloadLink = $(".tweetDownloadLink[href='#']".replace('#', threeSixtyPlayer.lastSound.url));
+						if (tweetDownloadLink.length>0) {
+							var tweetItem = tweetDownloadLink.parent();
+							$(".tweetPlay").removeClass("tweetPlay");
+							tweetItem.removeClass("tweetStop").addClass("tweetPlay");
+						}
+					}
+				},10);
+			};
+			self.saveHistory = function(moveEvent) {
 				// E.g. the user moved an item
-				if (typeof(o)!=='undefined' && ('item' in o) && ('sourceIndex' in o) && ('targetIndex' in o)) {
+				if (typeof(moveEvent)!=='undefined' && ('item' in moveEvent) && ('sourceIndex' in moveEvent) && ('targetIndex' in moveEvent)) {
 					Spank.base.history.transaction(function(currentData) {
-						return self.stream();
+						return ko.toJS(self.stream);                            //// Back to Vanilla Jane objects
 					});
 				}
 			};
-			self.prependToHistory = function(o, playNow) {
-				if (JSON.stringify(o)===JSON.stringify(Spank.player.lastPlayedObject)) {
+			self.prependToHistory = function(xo, playNow) {
+				var koo = {},
+					stop = false;
+				$.each(xo, function(k,v) {
+					if (!stop) {
+						if (ko.isObservable(v)) {
+							koo = xo;
+							stop = true;
+						} else {
+							koo[k] = ko.observable(v);
+						}
+					}
+				});
+				// WARNING! Only KO observables allowed pass this point!!!
+				if (koo===Spank.player.lastPlayedObject) {
 					return false;
 				}
 				Spank.base.history.transaction(function update(currentData) {
+						var o = ko.toJS(koo);                               //// Back to Vanilla Jane objects
 						if (currentData===null) {
 							// currentData is null if history is empty
 							return [o];
@@ -72,37 +110,34 @@
 						//console.warn("Firebase HISTORY PUSHED");
 					});
 				if (playNow) {
-					var config = {jumpToTop:false},
-						data = {track:o, playerconfig:config, position:0};
-					//Spank.base.playnow.set(data);
-					Spank.player.playObject(o);
+					Spank.player.playObject(ko.toJS(koo));                      //// Back to Vanilla Jane objects
 					threeSixtyPlayer.config.jumpToTop = false;
 				} else {
 					threeSixtyPlayer.config.jumpToTop = true;
 				}
 			};
-			self.deleteHistoryItem = function(o, event) {
+			self.deleteHistoryItem = function(koo, event) {
 				$(event.target).parent().animate({"left": "-=500px"}, 500, function() {
-					if (Spank.player.lastPlayedObject===o) {
+					if (Spank.player.lastPlayedObject!==null && Spank.player.lastPlayedObject.url===koo.url()) {
 						Spank.player.suspendLoopAndTrigger(function() {
 							$(document).trigger('fatManFinish');
 						});
 					}
 					Spank.base.history.transaction(function update(currentData) {
-						currentData = utils.deleteFromArray(o, currentData);
+						currentData = utils.deleteFromArray(ko.toJS(koo), currentData);
 						return currentData;
 					}, function onComplete(newData) {
 						console.warn("Firebase HISTORY DELETE");
 					});
 				});
 			};
-			self.playHistoryItem = function(o, event) { // When clicking a History item, push it to the top and play it
-				if (Spank.history.stream.indexOf(o)>1) {
+			self.playHistoryItem = function(koo, event) { // When clicking a History item, push it to the top and play it
+				if (Spank.history.stream.indexOf(koo)>1) {
 					$(event.target).parent().parent().animate({"top": "-=1000px"}, 500, function() {
-						self.prependToHistory(o, true);
+						self.prependToHistory(koo, true);
 					});
 				} else {
-					self.prependToHistory(o, true);
+					self.prependToHistory(koo, true);
 				}
 			};
 			self.downloadHistoryItem = function(o, event) {
@@ -122,6 +157,8 @@
 				firstload = false;
 				return true;
 			}
+			// If the player is playing, find the corresponding DOM element on the stream
+			// and highlight it
 			Spank.history.saveHistory();
 		});
 

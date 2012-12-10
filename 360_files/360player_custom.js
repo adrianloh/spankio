@@ -895,7 +895,7 @@ function setupWebAudio(url) {
 
 		};
 
-
+		var last_update = 0;
 		this.updatePlaying = function () {
 
 			var timeNow = (this._360data.showHMSTime ? self.getTime(this.position, true) : parseInt(this.position / 1000, 10));
@@ -903,6 +903,13 @@ function setupWebAudio(url) {
 			if (this.bytesLoaded) {
 				this._360data.lastValues.bytesLoaded = this.bytesLoaded;
 				this._360data.lastValues.bytesTotal = this.bytesTotal;
+			}
+
+			if (new Date().getTime() - last_update>5000) {
+				Spank.base.live.update({
+					position: parseInt(this.position/1000, 10)
+				});
+				last_update = new Date().getTime();
 			}
 
 			if (this.position) {

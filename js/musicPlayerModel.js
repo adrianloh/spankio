@@ -48,30 +48,29 @@
 			current_url: ko.observable(fakeSource),
 			lastLastPlayedObject: null,
 			lastPlayedObject: null,
-			playObject: function(o, atHistoryIndex) {
-				var that = this;
+			playObject: function(o) {
+				o = ko.toJS(o);             // Double make sure we are dealing with Plain Janes here and not koo's
 				this.lastLastPlayedObject = this.lastPlayedObject;
 				this.lastPlayedObject = o;
-				atHistoryIndex = Spank.history.stream.indexOf(o);
 				var thumb_path = o.thumb || Spank.genericAlbumArt,
 					bgImage = "url(#)".replace("#",thumb_path);
 				if (thumb_path===Spank.genericAlbumArt) {
 					// Do this async, so we don't care when this returns;
-					this.applyNewCoverArt(o, atHistoryIndex)
+					this.applyNewCoverArt(o)
 				}
 				var owner_id = o.url.split(".")[0],
 					url = "https://api.vkontakte.ru/method/audio.getById?audios=" + owner_id + "&access_token=" + VK.getToken() + "&callback=?";
 				$.getJSON(url, function getActualVKLink(data) {
-					var newDirectLink = data.response[0].url,
-						underlyingArray = Spank.history.stream();
+					var newDirectLink = data.response[0].url;
 					if (newDirectLink) {
-						o.direct = newDirectLink;
-						underlyingArray[atHistoryIndex] = o;
-						Spank.history.stream.valueHasMutated();
-						that.highlightHistoryItemWithIndex(atHistoryIndex);
-						Spank.player.current_url(o.direct);
-						var pushData = {track:o};
-						console.log(pushData);
+						console.log("Playing direct: " + newDirectLink);
+						Spank.player.current_url(newDirectLink);
+						var koo = Spank.history.findWithUrl(o.url);
+						if (koo!==null) {
+							koo.direct(newDirectLink);
+							Spank.history.highlightPlayingSong();
+						}
+						var pushData = {track:ko.toJS(o), position:0};
 						Spank.base.live.set(pushData);
 						$("#funkyPlayer").css("background", bgImage);
 					} else {
@@ -79,77 +78,23 @@
 					}
 				});
 			},
-			deprecated_playObject: function(o, atHistoryIndex) {
-				this.lastLastPlayedObject = this.lastPlayedObject;
-				this.lastPlayedObject = o;
-				atHistoryIndex = atHistoryIndex || Spank.history.stream().indexOf(o);
-				this.highlightHistoryItemWithIndex(atHistoryIndex);
-				var thumb_path = o.thumb || Spank.genericAlbumArt,
-					bgImage = "url(#)".replace("#",thumb_path);
-				if (thumb_path===Spank.genericAlbumArt) {
-					// Do this async, so we don't care when this returns;
-					this.applyNewCoverArt(o, atHistoryIndex)
-				}
-				if (o.direct) {
-					testAudio.src = o.direct;
-					testAudio.preload = "none";
-					testAudio.addEventListener('loadstart', function() { // BROWSER BUG: For some reason, testAudio.onloadstart doesn't work
-						// If direct VK link OK...
-						testAudio.pause();
-						Spank.player.current_url(o.direct);
-						$("#funkyPlayer").css("background", bgImage);
-					});
-					var that = this;
-					testAudio.onerror = function() {
-						// If the direct VK link is no longer there
-						that.vkGetDirectLinkAndTryPlayingAgain(o, atHistoryIndex);
-					};
-					testAudio.load();
-				} else {
-					this.vkGetDirectLinkAndTryPlayingAgain(o, atHistoryIndex);
-				}
-			},
-			vkGetDirectLinkAndTryPlayingAgain: function(o, atHistoryIndex) {
-				console.warn("Looking for new VK link");
-				var owner_id = o.url.split(".")[0],
-					url = "https://api.vkontakte.ru/method/audio.getById?audios=" + owner_id + "&access_token=" + VK.getToken() + "&callback=?";
-				$.getJSON(url, function(data) {
-					var newDirectLink = data.response[0].url,
-						underlyingArray = Spank.history.stream();
-					if (newDirectLink) {
-						o.direct = newDirectLink;
-						underlyingArray[atHistoryIndex] = o;
-						Spank.history.stream.valueHasMutated();
-						Spank.player.playObject(o, atHistoryIndex);
-					} else {
-						alert("Yipes! This audio file has gone missing! Replace it with another one!");
-					}
-
-				});
-			},
-			applyNewCoverArt: function(o, atHistoryIndex) {
+			applyNewCoverArt: function(o) {
 				var lastfm_trackSearch = "http://ws.audioscrobbler.com/2.0/?method=track.search&artist=@&track=#&limit=1&api_key=0325c588426d1889087a065994d30fa1&format=json",
 					url = lastfm_trackSearch.replace("@", encodeURIComponent(o.artist)).replace("#", encodeURIComponent(o.title));
 				$.getJSON(url, function(res) {
-					var underlyingArray = Spank.history.stream();
 					try {
 						var images = res.results.trackmatches.track.image;
 						if (Array.isArray(images) && images.length>0) {
-							o.thumb = images[images.length-1]['#text'] || o.thumb;
-							$("#funkyPlayer").css("background", "url(#)".replace("#", o.thumb));
-							underlyingArray[atHistoryIndex] = o;
-							Spank.history.stream.valueHasMutated();
+							var koo = Spank.history.findWithUrl(o.url);
+							if (koo!==null) {
+								koo.thumb(images[images.length-1]['#text']);
+								$("#funkyPlayer").css("background", "url(#)".replace("#", o.thumb));
+							}
 						}
 					} catch(err) {
 						console.error(err);
 					}
 				})
-			},
-			highlightHistoryItemWithIndex: function(n) {
-				n++;
-				var selector = ".tweetItem:nth-child(#)".replace("#",n);
-				$(".tweetPlay").removeClass("tweetPlay");
-				$(selector).removeClass("tweetStop").addClass("tweetPlay");
 			},
 			suspendLoopAndTrigger: function(callback) {
 				if (threeSixtyPlayer.config.loop) {

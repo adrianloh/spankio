@@ -95,7 +95,7 @@
 					cursor: '-webkit-grabbing',
 					zIndex:999,
 					start:function( event ) {
-						draggedHistoryItem = valueAccessor(); // Gets us the raw JSON object of the history item that was picked up
+						draggedHistoryItem = ko.toJS(valueAccessor()); // Gets us the raw JSON object of the history item that was picked up
 						var searchZone = $("#playlistSearchZone");
 						if (Spank.charts.currentPlaylistTitle) {
 							searchZone.removeClass("searchFullWidth").show();
