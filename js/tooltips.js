@@ -14,6 +14,16 @@
 		});
 
 		$.extend(Tipped.Skins, {
+			'controlButtons2' : {
+				border: { size: 3, color: '#959fa9' },
+				background: '#f7f7f7',
+				radius: { size: 4, position: 'border' },
+				shadow: false,
+				closeButtonSkin: 'light'
+			}
+		});
+
+		$.extend(Tipped.Skins, {
 			'dropTip' : {
 				border: { size: 3, color: '#959fa9' },
 				radius: { size: 4, position: 'border' },

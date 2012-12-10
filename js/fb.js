@@ -68,7 +68,7 @@ window.fbAsyncInit = function checkFacebookStatus() {
 						//user cancelled login or did not grant authorization
 						console.log("User cancelled login/authorization.");
 					}
-				}, {scope:'email, read_friendlists, publish_stream'});
+				}, {scope:'email, publish_stream'});
 			};
 		}
 	}

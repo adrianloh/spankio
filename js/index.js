@@ -49,6 +49,7 @@
 			$("#closeButton").hide();
 			$("#lightBox_jspPane").html("");
 			$(this).removeClass('busy');
+			$(".t_Tooltip_controlButtons2").remove();
 			vk_search_in_progress = false;
 			mx_get_lyrics_in_progress = false;
 			//$("#lyrics").focus();
@@ -80,8 +81,8 @@
 							// VERY VERY IMPORTANT! &#9654
 							// The lick button contains ALL the data we need to reconstruct every entry of the playlist
 							// Where: MXID is MusixMatch's ID used in API tracks.get and URL is a VK song's OWNER_ID+TRACK_ID
-							var lick = '<img class="lickButton" src="/img/play.png" thumb="@THUMB@" mxid="@MXID@" artist="@ARTIST@" title="@TITLE@" url="@URL@" direct="@DIRECT@"/>',
-								plus = '<img class="lickButton" src="/img/plus.png" thumb="@THUMB@" mxid="@MXID@" artist="@ARTIST@" title="@TITLE@" url="@URL@" direct="@DIRECT@"/>',
+							var lick = '<img class="lickButton" src="/img/play.png" thumb="@THUMB@" mxid="@MXID@" artist="@ARTIST@" songtitle="@TITLE@" url="@URL@" direct="@DIRECT@"/>',
+								plus = '<img class="lickButton" src="/img/plus.png" thumb="@THUMB@" mxid="@MXID@" artist="@ARTIST@" songtitle="@TITLE@" url="@URL@" direct="@DIRECT@"/>',
 								trackurl = track.owner_id + "_" + track.aid + ".mp3";
 							lick = lick.replace("@DIRECT@", track.url).replace("@THUMB@", params.thumb).replace("@MXID@", params.mxid).replace("@ARTIST@", track.artist).replace("@TITLE@", track.title).replace("@URL@", trackurl);
 							plus = plus.replace("@DIRECT@", track.url).replace("@THUMB@", params.thumb).replace("@MXID@", params.mxid).replace("@ARTIST@", track.artist).replace("@TITLE@", track.title).replace("@URL@", trackurl);
@@ -91,8 +92,17 @@
 							$('<li class="vkTrackEntry">' + trackAttr.join('') + '</li>').appendTo("#vk-results-list");
 						}
 					});
-					// LittleBoy.init searches for div.ui360 elements and attaches a player to each item it finds.
-					threeSixtyPlayer.init("vkDownloadLink");
+					Tipped.create(".lickButton", function(element) {
+						if ($(element).attr("src").match(/plus/)) {
+							return "Save for later";
+						} else {
+							return "Play now";
+						}
+					},{
+						hideAfter: 1000,
+						skin:'controlButtons2',
+						hook: 'topmiddle'
+					});
 				}
 			});
 			$("#closeButton").click(function() { // Crash close lightbox, don't load VK results
@@ -144,17 +154,39 @@
 
 		$(".lickButton").live('click', function prependVKTrackToHistoryAndPlay() {
 			var button = $(this),
-				attributes = ["title", "artist", "url", "thumb", "direct"],
+				attributes = ["songtitle", "artist", "url", "thumb", "direct"],
 				data = {},
 				that = $(this);
 			try {
 				$.each(attributes, function(i, attr) {
-					data[attr] = that.attr(attr);
+					var save_attr = attr.replace(/song/,"");
+					data[save_attr] = that.attr(attr);
 				});
-				if (button.attr("src").match(/play/)) {
-					Spank.history.prependToHistory(data, true);
-				} else {
-					Spank.history.prependToHistory(data, false);
+				var ok = true,
+					must_have_keys = ["title", "artist", "url", "thumb", "direct"];
+				$.each(must_have_keys, function(i, attr) {
+					if (!data.hasOwnProperty(attr)) {
+						console.error(attr);
+						ok = false;
+					}
+				});
+				$.each(data, function(k,v) {
+					try {
+						if (!v.match(/\w/g)) {
+							console.error(k + " > " + v);
+							ok = false;
+						}
+					} catch(err) {
+						console.error(k + " > " + v);
+						ok = false;
+					}
+				});
+				if (ok) {
+					if (button.attr("src").match(/play/)) {
+						Spank.history.prependToHistory(data, true);
+					} else {
+						Spank.history.prependToHistory(data, false);
+					}
 				}
 			} catch(err) {
 				console.log(err);
@@ -219,14 +251,16 @@
 					thumb = trackEntry.find(".mxThumb").attr("src"),
 					artist = trackEntry.find(".trackArtist").text(),
 					query_string = title + " " + artist,
-					mxid = anchor.attr("mxid");
-				getLyricsWithMxid({artist:artist, title:title, mxid:mxid});
+					mxid = anchor.attr("mxid"),
+					mxData = {artist:artist, title:title, mxid:mxid};
+				getLyricsWithMxid(mxData);
 				searchVK({q:query_string,
 					mxid:mxid, thumb:thumb});
 				Spank.lightBox.lyricsThumb(thumb);
 				Spank.lightBox.lyricsTitle(title + " | " + artist);
-				$("#lightBox").slideDown('fast','swing');
-				$("#closeButton").show();
+				$("#lightBox").slideDown('fast','swing', function() {
+					$("#closeButton").show();
+				});
 			}
 			return false;
 		});

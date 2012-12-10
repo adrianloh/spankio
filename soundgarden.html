@@ -70,8 +70,8 @@
             genericAlbumArt: "http://lh5.googleusercontent.com/-iNJ6fFP1ESk/ULlYVjb-m6I/AAAAAAAAVZU/QFfGVNT2pb8/s0/hi-512-5.png"
         };
 
-        Parse.initialize("743mZmF65tx9xVPvWWrCeAJuEA2LLNm89VMcNzQm", "8bynNa8lvkA8k6bPdCfGAHb6A1W3oSS1ipjMBVl1");
-        UserData = Parse.Object.extend("UserData");   // constructor
+        //Parse.initialize("743mZmF65tx9xVPvWWrCeAJuEA2LLNm89VMcNzQm", "8bynNa8lvkA8k6bPdCfGAHb6A1W3oSS1ipjMBVl1");
+        //UserData = Parse.Object.extend("UserData");   // constructor
 
     </script>
 
@@ -447,7 +447,7 @@
                 <li class="trackEntry unwobbled">
                     <img class="mxThumb" onerror="ImgError(this)" data-bind="click: $root.addToShoppingCart, attr: { src: thumb }" />
                     <!--<div class="trackName"><a class="lyricLink" href="#" data-bind="text: title, attr: { mxid: mxid }"></a></div>-->
-                    <div class="trackName"><a class="lyricLink" href="#" data-bind="text: title"></a></div>
+                    <div class="trackName"><a class="lyricLink" href="#" data-bind="text: title, attr: { mxid: mxid }"></a></div>
                     <div class="trackArtist" data-bind="text: artist"></div>
                 </li>
             </ul>

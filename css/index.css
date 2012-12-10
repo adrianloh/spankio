@@ -103,6 +103,7 @@ button:focus {
 
 ul.results-list {
 	margin-top: 28px;
+    margin-left: -40px;
 }
 
 /* Disable the bullet thing on list items */
@@ -224,15 +225,14 @@ INPUT:-ms-input-placeholder
 /* MusixMatch Results section
 ==================================================*/
 .trackEntry {
-	width: 200px;
-	display: inline-block;
-	margin-bottom: 26px;
+    width: 150px;
+    display: inline-block;
+    margin-bottom: 26px;
+    margin-left: 15px;
 }
 .mxThumb {
-	width: 160px;
-	height: 160px;
-	float: left;
-	margin-right: 15px;
+    width: 150px;
+    height: 150px;
     cursor: pointer;
 /*	-moz-box-shadow: 1px 1px 5px #999;
 	-webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, 2.92);
@@ -243,16 +243,14 @@ INPUT:-ms-input-placeholder
 	color: #111111;
 	font: 800 15px "PT Sans Narrow";
 	display: inline-block;
-	background-color: rgb(36, 30, 30);
+    background-color: rgba(73, 45, 45, 0.57);
 	clear: both;
-	margin-left: -45px; /*	Why this correction? */
 }
 .trackArtist {
 	letter-spacing: -1.8px;
 	color: rgb(114, 114, 114);
 	font: italic 600 13px "proxima-nova-1";
 	cursor: pointer;
-	margin-left: -45px; /*	Why this correction? */
 }
 #resultsSection {
     text-shadow: 2px 2px 2px rgba(151, 24, 64, 0.2);

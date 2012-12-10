@@ -6,6 +6,10 @@
 
 		var draggedHistoryItem = {};
 
+		$(".mxThumb").mouseover(function() {
+			$(this).css("z-index","1");
+		});
+
 		$("#playlistDropZone").droppable({
 			accept: ".tweetThumb",
 			greedy: true,
