@@ -22,6 +22,7 @@
 	$(document).ready(function() {
 
 		var dereference = function(o) {
+			//JSON.parse(JSON.stringify(this_playlist));
 			var t;
 			if (Array.isArray(o)) {
 				t = $.map(o, function(e) {
@@ -38,7 +39,7 @@
 			return t;
 		};
 
-		$(document).one("loadPlaylists", function() {
+		$(document).one("baseReady", function() {
 			Spank.base.playlists_url = Spank.base.url + "/playlists/";
 			Spank.bases = {};
 			Spank.bases.playlists = new Firebase(Spank.base.playlists_url);
@@ -66,7 +67,7 @@
 							this_selector = ".playlistThumb[title='@']".replace("@", this_playname),
 							this_PlaylistThumbnail = $(this_selector),
 							isInView = Spank.charts.currentPlaylistTitle===this_playname;
-						Spank.playlists[this_playname] = dereference(this_playlist); //JSON.parse(JSON.stringify(this_playlist));
+						Spank.playlists[this_playname] = dereference(this_playlist);
 						if (isInView) Spank.charts.chartTracks(this_playlist);
 						this_PlaylistThumbnail.attr("src", this_playlist[0].thumb);
 					}
@@ -119,10 +120,6 @@
 				}
 			}
 		};
-
-
-
-
 
 		Spank.playlistScroller = {
 			playlistItems: ko.observableArray([]),

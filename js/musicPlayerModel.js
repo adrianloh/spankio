@@ -2,6 +2,16 @@
 
 	$(document).ready(function() {
 
+		$(document).one("baseReady", function() {
+			Spank.base.live = new Firebase(Spank.base.url + "/live");
+			Spank.base.live.on('value', function(snapshot) {
+				if (snapshot.val()!==null) {
+					var data = snapshot.val();
+					//Spank.player.playObject(data.track);
+				}
+			});
+		});
+
 		$(".playModeButtons").click(function() {
 			var attr = $(this).attr("src").match(/\/css\/(.+)_on/)[1];
 			threeSixtyPlayer.config[attr] = !threeSixtyPlayer.config[attr];
@@ -39,6 +49,37 @@
 			lastLastPlayedObject: null,
 			lastPlayedObject: null,
 			playObject: function(o, atHistoryIndex) {
+				var that = this;
+				this.lastLastPlayedObject = this.lastPlayedObject;
+				this.lastPlayedObject = o;
+				atHistoryIndex = Spank.history.stream.indexOf(o);
+				var thumb_path = o.thumb || Spank.genericAlbumArt,
+					bgImage = "url(#)".replace("#",thumb_path);
+				if (thumb_path===Spank.genericAlbumArt) {
+					// Do this async, so we don't care when this returns;
+					this.applyNewCoverArt(o, atHistoryIndex)
+				}
+				var owner_id = o.url.split(".")[0],
+					url = "https://api.vkontakte.ru/method/audio.getById?audios=" + owner_id + "&access_token=" + VK.getToken() + "&callback=?";
+				$.getJSON(url, function getActualVKLink(data) {
+					var newDirectLink = data.response[0].url,
+						underlyingArray = Spank.history.stream();
+					if (newDirectLink) {
+						o.direct = newDirectLink;
+						underlyingArray[atHistoryIndex] = o;
+						Spank.history.stream.valueHasMutated();
+						that.highlightHistoryItemWithIndex(atHistoryIndex);
+						Spank.player.current_url(o.direct);
+						var pushData = {track:o};
+						console.log(pushData);
+						Spank.base.live.set(pushData);
+						$("#funkyPlayer").css("background", bgImage);
+					} else {
+						alert("Yipes! This audio file has gone missing! Replace it with another one!");
+					}
+				});
+			},
+			deprecated_playObject: function(o, atHistoryIndex) {
 				this.lastLastPlayedObject = this.lastPlayedObject;
 				this.lastPlayedObject = o;
 				atHistoryIndex = atHistoryIndex || Spank.history.stream().indexOf(o);

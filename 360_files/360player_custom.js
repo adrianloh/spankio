@@ -31,7 +31,7 @@ var isChrome = (navigator.userAgent.match(/chrome/i));
 function setupWebAudio(url) {
 	var audio = new Audio();
 	audio.onerror = function() {
-		console.error("Error loading HTML5 underlying audio...")
+		//console.error("Error loading HTML5 underlying audio...")
 		//alert("Crap! Music servers temporarily unwell... reload? Try again later? Go back to using iTunes?")
 	};
 	if (isChrome) {
@@ -356,7 +356,7 @@ function setupWebAudio(url) {
 				}
 //// After a few seconds of playing, sync the positions of both audio tracks
 				var tout = setInterval(function() {
-					if (htmlSound.readyState===4) {
+					if (htmlSound && htmlSound.readyState===4) {
 						htmlSound.currentTime = self.player_current_position/1000;
 						clearInterval(tout);
 					}
@@ -535,7 +535,7 @@ function setupWebAudio(url) {
 
 //				thisSound.setVolume(10);
 
-				Html5Audios[soundURL] = setupWebAudio(soundURL);
+////DISABLE				Html5Audios[soundURL] = setupWebAudio(soundURL);
 
 				// tack on some custom data
 
