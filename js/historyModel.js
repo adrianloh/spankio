@@ -76,7 +76,7 @@
 				setTimeout(function() {
 					var playingNow = threeSixtyPlayer.lastSound!==null ? !threeSixtyPlayer.lastSound.paused : false;
 					if (playingNow) {
-						console.log("Last sound: " + threeSixtyPlayer.lastSound.url);
+						//console.log("Last sound: " + threeSixtyPlayer.lastSound.url);
 						var tweetDownloadLink = $(".tweetDownloadLink[href='#']".replace('#', threeSixtyPlayer.lastSound.url));
 						if (tweetDownloadLink.length>0) {
 							var tweetItem = tweetDownloadLink.parent();

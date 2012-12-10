@@ -62,7 +62,7 @@
 				$.getJSON(url, function getActualVKLink(data) {
 					var newDirectLink = data.response[0].url;
 					if (newDirectLink) {
-						console.log("Playing direct: " + newDirectLink);
+						//console.log("Playing direct: " + newDirectLink);
 						Spank.player.current_url(newDirectLink);
 						var koo = Spank.history.findWithUrl(o.url);
 						if (koo!==null) {
