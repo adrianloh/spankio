@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="32ba444c-fc18-4642-a53c-06c7d6e77d49" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/chartsModel.js" afterPath="$PROJECT_DIR$/js/chartsModel.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/playlists.js" afterPath="$PROJECT_DIR$/js/playlists.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/soundgarden.html" afterPath="$PROJECT_DIR$/soundgarden.html" />
-    </list>
+    <list default="true" id="32ba444c-fc18-4642-a53c-06c7d6e77d49" name="Default" comment="" />
     <ignored path="soundgarden-heroku.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -147,8 +143,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="381" />
-    <option name="y" value="66" />
+    <option name="x" value="159" />
+    <option name="y" value="57" />
     <option name="width" value="1740" />
     <option name="height" value="1293" />
   </component>
@@ -365,7 +361,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="381" y="66" width="1740" height="1293" extended-state="0" />
+    <frame x="159" y="57" width="1740" height="1293" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.0665529" sideWeight="0.9851143" order="7" side_tool="false" content_ui="tabs" />
