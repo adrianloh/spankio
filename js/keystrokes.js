@@ -6,7 +6,7 @@
 			right: 39,
 			left: 37,
 			spacebar: 32,
-			delete: 46,
+			del: 46,
 			backspace: 8,
 			alpha_o: 79,
 			alpha_p: 80,
@@ -16,7 +16,7 @@
 
 		$(document).keydown(function(e) {
 
-			if (!Spank.userIsTyping && $(document.activeElement).attr("id")!=='searchField' && boundKeys.indexOf(e.keyCode)>=0) {
+			if (!Spank.userIsTyping && $(document.activeElement).attr("id")!=='searchField' && $(document.activeElement).attr("id")!=='history-filter' && boundKeys.indexOf(e.keyCode)>=0) {
 				switch (e.keyCode)
 				{
 					case keys.right:    // Next song
@@ -42,7 +42,7 @@
 							Spank.player.playObject(prevSong);
 						}
 						break;
-					case keys.delete:   // Delete currently playing track from stream and go to next song
+					case keys.del:   // Delete currently playing track from stream and go to next song
 						Spank.player.suspendLoopAndTrigger(function() {
 							$(".tweetPlay").find(".tweetDelete").trigger("click");
 						});

@@ -36,12 +36,15 @@
 	border: solid #fff 5px;
 	left: -5px;
 	background: #fff;
+   -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
 }
 
 .bx-wrapper .bx-pager,
 .bx-wrapper .bx-controls-auto {
 	position: absolute;
-	bottom: -30px;
+	bottom: 230px;
 	width: 100%;
 }
 

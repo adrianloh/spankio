@@ -1,5 +1,27 @@
 /* Hack scrollbars, BUG? Why must put these in a separate file eh? */
 
+
+/* Let's get this party started */
+#lightbox-content-container::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+#lightbox-content-container::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+/* Handle */
+#lightbox-content-container::-webkit-scrollbar-thumb {
+    /* Enable these two to round off the corners */
+    /*-webkit-border-radius: 10px;*/
+    /*border-radius: 10px;*/
+    background: rgba(168, 79, 79, 0.8);
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+
 /* Let's get this party started */
 #playHistory::-webkit-scrollbar {
     width: 5px;

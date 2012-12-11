@@ -75,7 +75,7 @@
 	}
 
 	$.fn.bxSlider = function(options){
-		
+
 		if(this.length == 0) return;
 		
 		// support mutltiple elements
@@ -88,7 +88,7 @@
 		var slider = {};
 		// set a reference to our slider element
 		var el = this;
-		
+
 		/**
 		 * ===================================================================================
 		 * = PRIVATE FUNCTIONS
@@ -102,9 +102,9 @@
 			// merge user-supplied options with the defaults
 			slider.settings = $.extend({}, defaults, options);
 			// store the original children
-			slider.children = el.children(slider.settings.slideSelector);
+////			slider.children = el.children(slider.settings.slideSelector);
 			// if random start, set the startSlide setting to random number
-			if(slider.settings.randomStart) slider.settings.startSlide = Math.floor(Math.random() * slider.children.length);
+////			if(slider.settings.randomStart) slider.settings.startSlide = Math.floor(Math.random() * slider.children.length);
 			// store active slide information
 			slider.active = { index: slider.settings.startSlide }
 			// store if the slider is in carousel mode (displaying / moving multiple slides)
@@ -145,6 +145,7 @@
 		 * Performs all DOM and CSS modifications
 		 */
 		var setup = function(){
+			slider.children = $(".playlistEntry").removeAttr("style");
 			// wrap el in a wrapper
 			el.wrap('<div class="bx-wrapper"><div class="bx-viewport"></div></div>');
 			// store a namspace reference to .bx-viewport
@@ -251,7 +252,35 @@
 				if (slider.settings.touchEnabled && !slider.settings.ticker) initTouch();
 			});
 		}
-		
+
+		Spank.setupScroller = setup;
+
+		Spank.rescanChildren = function(){
+			$(".bx-clone").remove();
+			slider.children = $(".playlistEntry").removeAttr("style");
+			slider.children.css({
+				float: slider.settings.mode == 'horizontal' ? 'left' : 'none',
+				position: 'relative',
+				width: getSlideWidth(),
+				listStyle: 'none',
+				marginRight: slider.settings.mode == 'horizontal' ? slider.settings.slideMargin : 0,
+				marginBottom: slider.settings.mode == 'vertical' ? slider.settings.slideMargin: 0
+			});
+			if(slider.settings.infiniteLoop && slider.settings.mode != 'fade' && !slider.settings.ticker){
+				var slice = slider.settings.mode == 'vertical' ? slider.settings.minSlides : slider.settings.maxSlides;
+				var sliceAppend = slider.children.slice(0, slice).clone().addClass('bx-clone');
+				var slicePrepend = slider.children.slice(-slice).clone().addClass('bx-clone');
+				el.append(sliceAppend).prepend(slicePrepend);
+				// var cloneAppend = slider.children.first().clone().addClass('bx-clone');
+				// var clonePrepend = slider.children.last().clone().addClass('bx-clone');
+				// el.append(cloneAppend).prepend(clonePrepend);
+			}
+			// check if startSlide is last slide
+			slider.active.last = slider.settings.startSlide == getPagerQty() - 1;
+			// only check for control addition if not in "ticker" mode
+			//populatePager();
+		};
+
 		/**
 		 * Returns the calculated height of the viewport, used to determine either adaptiveHeight or the maxHeight value
 		 */
@@ -1162,7 +1191,6 @@
 		});
 		
 		init();
-		
 		// returns the current jQuery object
 		return this;
 	}

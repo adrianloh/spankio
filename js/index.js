@@ -59,26 +59,40 @@
 			tearDownLightBox();
 		});
 
+		var attempts = 0;
 		var searchVK = function(params) {
 			vk_search_in_progress = true;
 			$('<ul id="vk-results-list"></ul>').appendTo('#vk-results-container');
 			var url = "https://api.vkontakte.ru/method/audio.search?q=QUERY&access_token=TOKEN&count=100&callback=?",
 				token = VK.getToken();
+			$("html").addClass("busy");
 			var xhr = $.getJSON(url.replace("TOKEN", token).replace("QUERY",params.q), function(data) {
+			$("html").removeClass("busy");
 				vk_search_in_progress = false;
 				var message = "";
 				if (data.error) {
-					message = '<li class="vkMessage">Oopsies, couldn\'t find this song.</li>';
-					$(message).appendTo("#vk-results-list");
+					if (data.error.error_code===6 && attempts<3) {
+						++attempts;
+						searchVK(params);
+					} else {
+						attempts = 0;
+						message = '<li class="vkMessage">Oopsies, something went wrong. Try again.</li>';
+						$(message).appendTo("#vk-results-list");
+					}
 				} else {
-					message = '<li class="vkMessage">Found @MESSAGE@ track(s)</li>'.replace("@MESSAGE@", data.response[0]);
+					attempts = 0;
+					if (data.response[0]===0) {
+						message = '<li class="vkMessage">Unbelievable. Couldn\'t find this song.</li>';
+					} else {
+						message = '<li class="vkMessage">Found @MESSAGE@ track(s)</li>'.replace("@MESSAGE@", data.response[0]);
+					}
 					$(message).appendTo("#vk-results-list");
 					$.each(data.response.slice(1), function (i, track) {
 						track.mxid = params.mxid;
 						var trackAttr = [],
 							title = track.title.slice(0,60) + ' -- ' + track.artist.slice(0,60);
 						if (title.length>0 && title.length<80) {
-							// VERY VERY IMPORTANT! &#9654
+							// VERY VERY IMPORTANT!
 							// The lick button contains ALL the data we need to reconstruct every entry of the playlist
 							// Where: MXID is MusixMatch's ID used in API tracks.get and URL is a VK song's OWNER_ID+TRACK_ID
 							var lick = '<img class="lickButton" src="/img/play.png" thumb="@THUMB@" mxid="@MXID@" artist="@ARTIST@" songtitle="@TITLE@" url="@URL@" direct="@DIRECT@"/>',
@@ -101,7 +115,11 @@
 					},{
 						hideAfter: 1000,
 						skin:'controlButtons2',
-						hook: 'topmiddle'
+						hook: 'topmiddle',
+						hideOn: [
+							{ element: 'self', event: 'mouseleave' },
+							{ element: 'tooltip', event: 'mouseenter' }
+						]
 					});
 				}
 			});
@@ -128,13 +146,16 @@
 
 		$.searchByWire = function(search_term) {
 			// Each time we start a new search...
+			Spank.charts.ok_to_fetch_more = true;
 			tearDownLightBox();                                               // Close the lightbox
 			$(".playlistEntry").css("border","5px solid rgb(204, 204, 204)"); // Don't highlight any playlist items
 			if ($.trim(search_term)!=='') {
-				var url = '/mxsearch?q=#&page=1'.replace("#",search_term);
-				Spank.charts.populateResultsWithUrl(url, function extract(res) {
-					return res.message.body.track_list;
-				});
+				setTimeout(function() {
+					var url = '/mxsearch?q=#&page=1'.replace("#",search_term);
+					Spank.charts.populateResultsWithUrl(url, function extract(res) {
+						return res.message.body.track_list;
+					});
+				},250);
 			} else {
 				return false;
 			}
@@ -142,7 +163,7 @@
 
 		$(".trackArtist").live("click", function searchWithArtistName() {
 			var artist = $(this).text();
-			$("#searchField").val(artist).trigger("keyup");
+			$("#searchField").val("artist: " + artist).trigger("keyup");
 		});
 
 		$("#searchField").livesearch({
@@ -150,6 +171,23 @@
 			innerText: "You're every move and waking sound",
 			queryDelay:500,
 			minimumSearchLength: 3
+		});
+
+		$("#history-filter").livesearch({
+			searchCallback: function(input) {
+				var re = new RegExp(input, "i");
+				$(".tweetDetails").each(function() {
+					var self = $(this);
+					if (self.children().text().match(re)) {
+						self.parent().show();
+					} else {
+						self.parent().hide();
+					}
+				});
+			},
+			innerText: "Filter stream",
+			queryDelay:150,
+			minimumSearchLength: 2
 		});
 
 		$(".lickButton").live('click', function prependVKTrackToHistoryAndPlay() {

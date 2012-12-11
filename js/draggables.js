@@ -39,6 +39,9 @@
 				if (data.url!=="#") {
 					return false;
 				}
+				try {
+					Spank.rescanChildren(element);
+				} catch(err) {}
 				bindDroppablePlaylists(element);
 			}
 		};
@@ -163,7 +166,7 @@
 		};
 
 		bindDroppablePlaylists(".droppablePlaylist");
-		$("#foo2_prev, #foo2_next").live("click", function() {
+		$(".bx-prev, .bx-next").live("click", function() {
 			bindDroppablePlaylists(".droppablePlaylist");
 		});
 

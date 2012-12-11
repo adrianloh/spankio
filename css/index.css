@@ -1,7 +1,75 @@
+.history-filter-container2 {
+    margin-left: 5;
+    margin-top: 3;
+    display: inline-block;
+    zoom: 1; /* ie7 hack for display:inline-block */
+    *display: inline;
+    border: solid 1px #d2d2d2;
+    padding: 3px 5px;
+    width: 86%;
+    
+    -webkit-border-radius: 2em;
+    -moz-border-radius: 2em;
+    border-radius: 2em;
+
+    -webkit-box-shadow: 0 1px 0px rgba(0,0,0,.1);
+    -moz-box-shadow: 0 1px 0px rgba(0,0,0,.1);
+    box-shadow: 0 1px 0px rgba(0,0,0,.1);
+
+    background: #f1f1f1;
+    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
+    background: -moz-linear-gradient(top,  #fff,  #ededed);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ededed'); /* ie7 */
+    -ms-filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ededed'); /* ie8 */
+}
+#history-filter input {
+    font: normal 12px/100% Arial, Helvetica, sans-serif;
+}
+.history-filter-container2 #history-filter {
+    background: #fff;
+    padding: 6px 6px 6px 8px;
+    width: 100%;
+    border: solid 1px #bcbbbb;
+    outline: none;
+
+    -webkit-border-radius: 2em;
+    -moz-border-radius: 2em;
+    border-radius: 2em;
+
+    -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,.2);
+    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.2);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.2);
+}
+#history-filter {
+    border: solid 1px #494949;
+    font-size: 11px;
+    height: 27px;
+    width: 80%;
+    text-shadow: 0 1px 1px rgba(0,0,0,.6);
+
+    -webkit-border-radius: 2em;
+    -moz-border-radius: 2em;
+    border-radius: 2em;
+
+    background: #5f5f5f;
+    background: -webkit-gradient(linear, left top, left bottom, from(#9e9e9e), to(#454545));
+    background: -moz-linear-gradient(top,  #9e9e9e,  #454545);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#9e9e9e', endColorstr='#454545'); /* ie7 */
+    -ms-filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#9e9e9e', endColorstr='#454545'); /* ie8 */
+}
+
+#history-filter-container {
+    position: fixed;
+    width: 30%;
+    z-index: 1;
+    background-color: whitesmoke;
+    height: 42px;
+}
+
 .playlistDropZone {
     width: 35%;
     margin-left: 0;
-    height: 70%;
+    height: 65%;
     top: 90px;
     left: 35%;
     background-color: rgba(67, 135, 53, 0.33);
@@ -12,7 +80,7 @@
 
 .dropSpans {
     top: 50%;
-    left: 30%;
+    left: 10%;
     position: absolute;
     font: 32px "Oswald";
     color: rgb(255, 255, 255);
@@ -21,7 +89,7 @@
 .playlistSearchZone {
     width: 35%;
     margin-left: 0;
-    height: 70%;
+    height: 65%;
     float: left;
     top: 90px;
     left: 0;
@@ -135,7 +203,7 @@ FORM
 	margin-left: 9%;
 	/*margin: 0 auto;*/
 }
-INPUT[type="text"], TEXTAREA
+#searchField
 {
 	font: 44.5%/1 Oswald;
 	text-shadow: -0.095em 0 red, 0.095em 0 cyan;
@@ -163,8 +231,8 @@ INPUT:-ms-input-placeholder
 #searchForm {
 	z-index: 200;
 	position: fixed;
-	top: 0px;
-	left: 0px;
+	top: 0;
+	left: 0;
 	width: 100%;
 	height: 84px;
 	-moz-box-shadow: 0 020px 20px rgba(0, 0, 0, 0.7);
@@ -239,12 +307,17 @@ INPUT:-ms-input-placeholder
 	box-shadow: 1px 1px 5px #999;*/
 }
 .trackName {
-	width: 160px;
+	width: 150px;
 	color: #111111;
 	font: 800 15px "PT Sans Narrow";
 	display: inline-block;
     background-color: rgba(73, 45, 45, 0.57);
 	clear: both;
+
+	height:20px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 .trackArtist {
 	letter-spacing: -1.8px;
@@ -271,17 +344,18 @@ INPUT:-ms-input-placeholder
 ==================================================*/
 #lightBox {
     display: none;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.93);
     z-index: 9;
     position: fixed;
     left: 10%;
     top: 16%;
-    width: 70%;
+    width: 55%;
     height: 80%;
     overflow: hidden;
 	-moz-box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
 	-webkit-box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
 	box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
+	border: 2px solid #BBB;
 }
 #___lightBox {
     display: none;
@@ -364,7 +438,7 @@ INPUT:-ms-input-placeholder
 	display: none;
 	width: 70%;
 	position: relative;
-	left: 20%;
+	left: 10%;
 	color: black;
 	font: 14px/26px "proxima-nova-1";
 	letter-spacing: 1px;
@@ -379,8 +453,15 @@ INPUT:-ms-input-placeholder
 }
 /* List items of tracks from VK
 ==================================================*/
+.dummy {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	padding-right: 40px;
+}
+
 #vk-results-list {
-	margin-top: 10%;
+	margin-top: 80px;
 }
 .vkMessage {
 	color: black;
@@ -392,7 +473,7 @@ INPUT:-ms-input-placeholder
 .vkTrackEntry {
     background-color: whitesmoke;
     height: 40px;
-    width: 90%;
+    width: 96%;
     margin-bottom: 4px;
 }
 .vkdownloadlink {
@@ -403,7 +484,7 @@ INPUT:-ms-input-placeholder
     vertical-align: 6px;
 }
 .lickContainer {
-    margin-left: 18px;
+    margin-left: 10px;
     margin-top: 7px;
     display: inline-block;
 }
@@ -434,7 +515,7 @@ ul.lastfm-buttons {
 }
 
 #funkyPlayer-container {
-    margin-top: 2%;
+    margin-top: -4%;
     margin-left: 12%;
 }
 
@@ -464,13 +545,14 @@ ul.lastfm-buttons {
     z-index: 9;
     right: 0;
     top: 38%;
-    height: 60%;
+    height: 62%;
     overflow: auto;
 /*    -webkit-box-shadow: 19px -16px 21px rgba(0, 0, 0, 0.7);*/
 }
 
 #history-stream-list {
      margin-left: -40px; /* Must put this correction after we hack the scrollbar */
+     margin-top: 42px;
 }
 
 .tweetPlay {
@@ -526,6 +608,12 @@ ul.lastfm-buttons {
 
 .tweet-shit {
     overflow: auto;
+}
+
+.tweetTrackArtist {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .tweetTrackName {

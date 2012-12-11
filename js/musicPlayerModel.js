@@ -54,8 +54,8 @@
 				var thumb_path = o.thumb || Spank.genericAlbumArt,
 					bgImage = "url(#)".replace("#",thumb_path);
 				if (thumb_path===Spank.genericAlbumArt) {
-					// Do this async, so we don't care when this returns;
-					this.applyNewCoverArt(o)
+					// Do this async cause we don't care when this returns;
+					this.applyNewCoverArt(o);
 				}
 				var owner_id = o.url.split(".")[0],
 					url = "https://api.vkontakte.ru/method/audio.getById?audios=" + owner_id + "&access_token=" + VK.getToken() + "&callback=?";
@@ -96,7 +96,7 @@
 					} catch(err) {
 						console.error("Cannot find new album art.");
 					}
-				})
+				});
 			},
 			suspendLoopAndTrigger: function(callback) {
 				if (threeSixtyPlayer.config.loop) {
@@ -106,7 +106,7 @@
 						threeSixtyPlayer.config.loop = true;
 					},2000);
 				} else {
-					callback()
+					callback();
 				}
 			}
 		};

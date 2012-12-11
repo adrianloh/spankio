@@ -84,6 +84,7 @@
 				delete Spank.bases.known[snapshot.name()];
 				console.error("Removing DOM: " + playname);
 				playlistThumbnail.parent().remove();
+				Spank.rescanChildren();
 				if (Spank.charts.currentPlaylistTitle===playname) {
 					$(".playlistThumb[title='Billboards UK']").trigger("click");
 				}
@@ -208,6 +209,7 @@
 		});
 
 		Spank.playlistScroller.push({cover:'/img/emptyplaylist.png'});
+
 		$.each(chartPlaylistItems, function(i,o) {
 			// Populate the playlist bar with charts
 			Spank.playlistScroller.push(o);
@@ -217,10 +219,15 @@
 				// it's thing cause once this starts, all the bandwidth will be sucked
 				// by downloading album art!
 				$('#playlists-scroller-list').bxSlider({
+					minSlides: 1,
 					maxSlides: 10,
 					slideWidth: 130,
-					slideMargin: 5
+					slideMargin: 5,
+					moveSlides: 3,
+					hideControlOnEnd: true,
+					pager: false
 				});
+				//Spank.rescanChildren();
 				var t1 = setTimeout(function() {
 					$(".playlistThumb[title='Billboards UK']").trigger("click");
 					clearTimeout(t1);
@@ -272,7 +279,7 @@
 				title = this_image.attr("title"); // Note: ONLY USER PLAYLISTS HAVE TITLES!
 				tracklist = Spank.playlists[title];
 				//console.warn("Clicked on playlist: " + title);
-				if (tracklist.length>0) {
+				if (tracklist && tracklist.length>0) {
 					console.warn("Opening " + title + " with " + tracklist.length + " items.");
 					appendToResults(title, url, tracklist, this_image, true);
 				} else {

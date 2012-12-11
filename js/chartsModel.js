@@ -155,9 +155,9 @@ Array.prototype.shuffle = function() {
 			if (list.length===0) {
 				Spank.charts.shoppingCart.removeAll();
 			}
-			$(".trackEntry.unwobbled").each(function(i,elem) {
-				Spank.utils.wobble(elem,-8,8);
-			});
+			// $(".trackEntry.unwobbled").each(function(i,elem) {
+			// 	Spank.utils.wobble(elem,-8,8);
+			// });
 		});
 
 		$("#random_button").mousedown(function onClickShuffleResultsButton() {
