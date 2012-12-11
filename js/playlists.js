@@ -68,7 +68,7 @@
 							this_PlaylistThumbnail = $(this_selector),
 							isInView = Spank.charts.currentPlaylistTitle===this_playname;
 						Spank.playlists[this_playname] = dereference(this_playlist);
-						if (isInView) Spank.charts.pushBatch(this_playlist);
+						if (isInView) Spank.charts.pushBatch(this_playlist, 'replace');
 						this_PlaylistThumbnail.attr("src", this_playlist[0].thumb);
 					}
 				});
@@ -169,7 +169,8 @@
 				if (!isNewPlaylist) {
 					tracklist = Spank.playlists[playname];
 				}
-				if (isInView) Spank.charts.pushBatch([track], true);    // The true argument makes the charts view prepend the track vs. the default append to bottom
+				// The 'unshift' argument makes the charts view prepend the track vs. the default append to bottom
+				if (isInView) Spank.charts.pushBatch([track], "unshift");
 				//deleteDuplicate(track, Spank.playlists[playname]);
 				tracklist.unshift(track);
 				this.savePlaylist(playname, tracklist);

@@ -79,16 +79,18 @@ Array.prototype.shuffle = function() {
 				});
 				return bad ? false : track;
 			};
-			self.pushBatch = function(list, unshift) {
-				console.warn("Batch adding " + list.length + ' items.');
+			self.pushBatch = function(list, mode) {
+				//console.warn("Batch adding " + list.length + ' items.');
 				var newItems = $.map(list, function(item) {
 					item = self.process(item);
 					if (item!==false) {
 						return item;
 					}
 				});
-				if (unshift) {
+				if (mode && mode==='unshift') {
 					self.chartTracks.unshift.apply(self.chartTracks, newItems);
+				} else if (mode && mode==='replace') {
+					self.chartTracks(newItems);
 				} else {
 					self.chartTracks.push.apply(self.chartTracks, newItems);
 				}
