@@ -80,7 +80,7 @@ Array.prototype.shuffle = function() {
 				return bad ? false : track;
 			};
 			self.pushBatch = function(list, unshift) {
-				//console.warn("Batch adding " + list.length + ' items.');
+				console.warn("Batch adding " + list.length + ' items.');
 				var newItems = $.map(list, function(item) {
 					item = self.process(item);
 					if (item!==false) {

@@ -68,7 +68,7 @@
 							this_PlaylistThumbnail = $(this_selector),
 							isInView = Spank.charts.currentPlaylistTitle===this_playname;
 						Spank.playlists[this_playname] = dereference(this_playlist);
-						if (isInView) Spank.charts.chartTracks(this_playlist);
+						if (isInView) Spank.charts.pushBatch(this_playlist);
 						this_PlaylistThumbnail.attr("src", this_playlist[0].thumb);
 					}
 				});
@@ -201,10 +201,9 @@
 			next: "#foo2_next"
 		};
 
-		$("#playlists-scroller-list").carouFredSel(scroller_config);
+//		$("#playlists-scroller-list").carouFredSel(scroller_config);
 		Spank.playlistScroller.playlistItems.subscribe(function(list) {
-			//console.log("Added playlist " + list[list.length-1].title);
-			$("#playlists-scroller-list").carouFredSel(scroller_config);
+//			$("#playlists-scroller-list").carouFredSel(scroller_config);
 		});
 
 		Spank.playlistScroller.push({cover:'/img/emptyplaylist.png'});
@@ -216,6 +215,11 @@
 				// with one of the charts... note that we wait a bit first to let FB do
 				// it's thing cause once this starts, all the bandwidth will be sucked
 				// by downloading album art!
+				$('#playlists-scroller-list').bxSlider({
+					maxSlides: 10,
+					slideWidth: 130,
+					slideMargin: 5
+				});
 				var t1 = setTimeout(function() {
 					$(".playlistThumb[title='Billboards UK']").trigger("click");
 					clearTimeout(t1);

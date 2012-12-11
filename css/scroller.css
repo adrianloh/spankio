@@ -21,7 +21,7 @@
 	height: 120px;
     border: 1px solid #ccc;
     background-color: white;
-    margin: 5px auto 5px auto;
+    margin: 0px auto 5px auto;
     display: block;
     cursor: pointer;
 }
