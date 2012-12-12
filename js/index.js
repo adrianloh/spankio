@@ -173,6 +173,11 @@
 			minimumSearchLength: 3
 		});
 
+		$("#history-filter").blur(function() {
+			$(".tweetItem").show();
+			$(this).val("");
+		});
+
 		$("#history-filter").livesearch({
 			searchCallback: function(input) {
 				var re = new RegExp(input, "i");

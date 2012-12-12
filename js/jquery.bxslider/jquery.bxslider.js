@@ -60,9 +60,6 @@
 				}
 			});
 			var playlistNameElement = $(li).find(".playlistName")[0];
-			$(playlistNameElement).click(function() {
-				document._userIsTyping = true;
-			});
 			$(playlistNameElement).editable({
 				editBy:'click',
 				onSubmit: function(change) {
@@ -70,14 +67,17 @@
 					var oldname = change.previous,
 						newname = change.current;
 					if (oldname!==newname) {
-//						if (Spank.playlists[oldname]) {
-//							Spank.playlistScroller.renamePlaylist(oldname, newname);
-//						} else {
-//							alert("Can't rename me cause I'm empty! Add some songs first...");
-//							$(this).text(oldname);
-//						}
+						if (Spank.playlists[oldname]) {
+							Spank.playlistScroller.renamePlaylist(oldname, newname);
+						} else {
+							alert("Can't rename me cause I'm empty! Add some songs first...");
+							$(this).text(oldname);
+						}
 					}
 				}
+			});
+			$(playlistNameElement).click(function(){
+				document._userIsTyping = true;
 			});
 		});
 	};
@@ -1184,7 +1184,6 @@
 			// if infiniteLoop is false and last page is showing, disregard call
 			if (!slider.settings.infiniteLoop && slider.active.last) return;
 			var pagerIndex = slider.active.index + 1;
-			console.log(slider.active.index);
 			el.goToSlide(pagerIndex, 'next');
 		}
 		
@@ -1195,7 +1194,6 @@
 			// if infiniteLoop is false and last page is showing, disregard call
 			if (!slider.settings.infiniteLoop && slider.active.index == 0) return;
 			var pagerIndex = slider.active.index - 1;
-			console.log(slider.active.index);
 			el.goToSlide(pagerIndex, 'prev');
 		}
 		

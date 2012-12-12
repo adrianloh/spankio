@@ -26,7 +26,7 @@
 			maxSlides: 7,
 			slideWidth: 130,
 			slideMargin: 5,
-			moveSlides: 3
+			moveSlides: 4
 		});
 
 		var dereference = function(o) {
@@ -187,6 +187,7 @@
 				default_item.title = o.title ? o.title : default_item.title;
 				default_item.cover = o.cover ? o.cover : default_item.cover;
 				default_item.url = o.url ? o.url : default_item.url;
+				default_item.value = ko.observable(default_item.title);
 				this.playlistItems.push(default_item);
 			}
 		};

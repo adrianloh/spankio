@@ -7,7 +7,7 @@
 			left: 37,
 			spacebar: 32,
 			del: 46,
-			backspace: 8,
+			backspace: 81112, // Don't intercept backspace, too risky
 			alpha_o: 79,
 			alpha_p: 80,
 			alpha_i: 73
