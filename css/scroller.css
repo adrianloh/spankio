@@ -20,9 +20,8 @@
 }
 
 .playlistThumb {
-/* 	width: 120px;
+ 	width: 120px;
 	height: 120px;
-*/    
  	border: 1px solid #ccc;
     background-color: white;
     margin: 0px auto 5px auto;
@@ -34,7 +33,7 @@
 	margin: 0;
 	padding: 0;
 	list-style: none;
-	display: block;
+	display: inline-block;
 	height: 250px;
 }
 
@@ -55,25 +54,25 @@
     display: block;
     float: left;
 }
-a.prev, a.next {
-	background: url(miscellaneous_sprite.png) no-repeat transparent;
-	width: 45px;
-	height: 50px;
-	display: block;
-	position: absolute;
-	top: 85px;
-}
-a.prev {			left: -22px;
-					background-position: 0 0; }
-a.prev:hover {		background-position: 0 -50px; }
-a.next {			right: -22px;
-					background-position: -50px 0; }
-a.next:hover {		background-position: -50px -50px; }
+/*a.prev, a.next {*/
+	/*background: url(miscellaneous_sprite.png) no-repeat transparent;*/
+	/*width: 45px;*/
+	/*height: 50px;*/
+	/*display: block;*/
+	/*position: absolute;*/
+	/*top: 85px;*/
+/*}*/
+/*a.prev {			left: -22px;*/
+					/*background-position: 0 0; }*/
+/*a.prev:hover {		background-position: 0 -50px; }*/
+/*a.next {			right: -22px;*/
+					/*background-position: -50px 0; }*/
+/*a.next:hover {		background-position: -50px -50px; }*/
 
-a.prev span, a.next span {
-	display: none;
-}
-.clearfix {
-	float: none;
-	clear: both;
-}
+/*a.prev span, a.next span {*/
+	/*display: none;*/
+/*}*/
+/*.clearfix {*/
+	/*float: none;*/
+	/*clear: both;*/
+/*}*/

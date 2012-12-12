@@ -35,10 +35,10 @@ window.fbAsyncInit = function checkFacebookStatus() {
 //			FBUserInfo.username = "sun.k.weng";
 			FBUserInfo.accessToken = response.authResponse.accessToken;
 			$("#fb-login").hide();
-			$(document).trigger("login");
 			var q = "SELECT name,username,uid FROM user WHERE uid in (SELECT uid2 FROM friend WHERE uid1=me()) and is_app_user='1'";
 			FB.api('fql',{q:q}, function(res) {
-				FBUserInfo.spankingFriends = res;
+				FBUserInfo.friends = res.data;
+				$(document).trigger("login");
 				localStorage.spank = JSON.stringify(FBUserInfo);
 			});
 		});

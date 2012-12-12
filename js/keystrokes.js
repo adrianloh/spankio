@@ -16,7 +16,7 @@
 
 		$(document).keydown(function(e) {
 
-			if (!Spank.userIsTyping && $(document.activeElement).attr("id")!=='searchField' && $(document.activeElement).attr("id")!=='history-filter' && boundKeys.indexOf(e.keyCode)>=0) {
+			if (!document._userIsTyping && $(document.activeElement).attr("id")!=='searchField' && $(document.activeElement).attr("id")!=='history-filter' && boundKeys.indexOf(e.keyCode)>=0) {
 				switch (e.keyCode)
 				{
 					case keys.right:    // Next song

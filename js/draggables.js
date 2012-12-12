@@ -2,9 +2,9 @@
 
 	$(document).ready(function() {
 
-		Spank.userIsTyping = false;
+		document._userIsTyping = false;
 
-		var draggedHistoryItem = {};
+		document._draggedHistoryItem = {};
 
 		$(".mxThumb").mouseover(function() {
 			$(this).css("z-index","1");
@@ -16,59 +16,42 @@
 			tolerance: "pointer",
 			hoverClass: "bgOver",
 			drop: function addDroppedTrackToPlaylistView() {
-				var droppedHistoryItem = JSON.parse(JSON.stringify(draggedHistoryItem));
-				Spank.playlistScroller.addSongToPlaylist(Spank.charts.currentPlaylistTitle, droppedHistoryItem);
+				setTimeout(function() {
+					if (document._ignoreDrop===true) return false;
+					var droppedHistoryItem = JSON.parse(JSON.stringify(document._draggedHistoryItem));
+					Spank.playlistScroller.addSongToPlaylist(Spank.charts.currentPlaylistTitle, droppedHistoryItem);
+				},250);
 			}
 		});
 
 		ko.bindingHandlers.cartDeleteIcons = {
 			init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-				$(element).mouseover(function mousein() {
-					$(this).parent().find(".tweetDelete").show();
-					$(this).parent().find(".tweetDownload").show();
-				}).mouseout(function() {
-					$(this).parent().find(".tweetDelete").hide();
-					$(this).parent().find(".tweetDownload").hide();
-				});
-			}
-		};
-
-		ko.bindingHandlers.makeDroppablePlaylistTile = {
-			init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-				var data = valueAccessor();
-				if (data.url!=="#") {
-					return false;
+				var data = ko.toJS(valueAccessor()),
+					li = $(element),
+					ul = li.parent();
+				if (data.hasOwnProperty("gift")) {
+					var img = '<img class="tweetGift" src="/img/gift.png" from="@" message="#" />';
+					img = img.replace("@", data.gift.from).replace("#", data.gift.message);
+					li.prepend(img);
 				}
-				try {
-					Spank.rescanChildren(element);
-				} catch(err) {}
-				bindDroppablePlaylists(element);
-			}
-		};
-
-		ko.bindingHandlers.bindPlaylistButtons = {
-			init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-				var data = valueAccessor();
-				if (data.url!=="#") {
-					return false;
+				function display(mode) {
+					li.find(".tweetDelete")[mode]();
+					li.find(".tweetDownload")[mode]();
 				}
-				$(element).find(".playlistName").click(function() {
-					Spank.userIsTyping = true;
-				}).editable({
-					editBy:'click',
-					onSubmit: function(o) {
-						Spank.userIsTyping = false;
-						var oldname = o.previous,
-							newname = o.current;
-						if (oldname!==newname) {
-							if (Spank.playlists[oldname]) {
-								Spank.playlistScroller.renamePlaylist(oldname, newname);
-							} else {
-								alert("Can't rename me cause I'm empty! Add some songs first...");
-								$(this).text(oldname);
-							}
-						}
+				li.mouseover(function() {
+					var thisGift = li.find('.tweetGift');
+					if (thisGift.length>0) {
+						$(".giftFrom:first").text(thisGift.attr("from"));
+						$(".giftMessage:first").text(thisGift.attr("message"));
+						var pos = li.offset(),
+							top = parseInt(pos.top-70),
+							left = parseInt(pos.left);
+						$(".giftPopup").css("top", top).css("left", left).show();
 					}
+					display('show')
+				}).mouseout(function() {
+					$(".giftPopup").hide();
+					display('hide')
 				});
 			}
 		};
@@ -94,7 +77,7 @@
 					cursor: '-webkit-grabbing',
 					zIndex:999,
 					start:function( event ) {
-						draggedHistoryItem = ko.toJS(valueAccessor()); // Gets us the raw JSON object of the history item that was picked up
+						document._draggedHistoryItem = ko.toJS(valueAccessor()); // Gets us the raw JSON object of the history item that was picked up
 						var searchZone = $("#playlistSearchZone");
 						if (Spank.charts.currentPlaylistTitle) {
 							searchZone.removeClass("searchFullWidth").show();
@@ -122,8 +105,8 @@
 			accept: ".tweetThumb",
 			hoverClass: "bgOver",
 			drop: function searchMusixForDroppedArtist() {
-				if (draggedHistoryItem!==null) {
-					$("#searchField").val("artist: " + draggedHistoryItem.artist).trigger("keyup");
+				if (document._draggedHistoryItem!==null) {
+					$("#searchField").val("artist: " + document._draggedHistoryItem.artist).trigger("keyup");
 				}
 			}
 		});
@@ -132,42 +115,19 @@
 			accept: ".tweetThumb",
 			hoverClass: "bgOver",
 			drop: function getSimilarAsDroppedTrack(event) {
-				var similar_url = "http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=@&track=#&autocorrect=1&limit=200&api_key=0325c588426d1889087a065994d30fa1&format=json";
-				if (draggedHistoryItem!==null) {
-					var url = similar_url.replace("@",encodeURIComponent(draggedHistoryItem.artist)).replace("#", encodeURIComponent(draggedHistoryItem.title));
-					Spank.charts.populateResultsWithUrl(url, function extract(res) {
-						return res.similartracks.track;
-					}, function noresults() {
-						alert("Couldn't find any similar songs!");
-					});
-				}
-			}
-		});
-
-		var bindDroppablePlaylists = function(o) {
-			$(o).droppable({
-				accept: ".tweetThumb",
-				tolerance: "pointer",
-				hoverClass: "bgOver",
-				drop: function addDroppedTrackToPlaylistInScrollbar() {
-					if (draggedHistoryItem!==null) {
-						var droppedHistoryItem = JSON.parse(JSON.stringify(draggedHistoryItem)),
-							playlistThumb = $(this).find(".playlistThumb"),
-							playlistThumbThatWasClicked = {
-								title:playlistThumb.attr("title"),
-								cover:playlistThumb.attr("src"),
-								url:playlistThumb.attr("url")
-							},
-							playname = playlistThumbThatWasClicked.title;
-						Spank.playlistScroller.addSongToPlaylist(playname, droppedHistoryItem);
+				setTimeout(function () {
+					if (document._ignoreDrop===true) return false;
+					var similar_url = "http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=@&track=#&autocorrect=1&limit=200&api_key=0325c588426d1889087a065994d30fa1&format=json";
+					if (document._draggedHistoryItem!==null) {
+						var url = similar_url.replace("@",encodeURIComponent(document._draggedHistoryItem.artist)).replace("#", encodeURIComponent(document._draggedHistoryItem.title));
+						Spank.charts.populateResultsWithUrl(url, function extract(res) {
+							return res.similartracks.track;
+						}, function noresults() {
+							alert("Couldn't find any similar songs!");
+						});
 					}
-				}
-			});
-		};
-
-		bindDroppablePlaylists(".droppablePlaylist");
-		$(".bx-prev, .bx-next").live("click", function() {
-			bindDroppablePlaylists(".droppablePlaylist");
+				},250);
+			}
 		});
 
 	});

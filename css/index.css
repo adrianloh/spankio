@@ -1,6 +1,31 @@
+.giftPopup {
+	position: fixed;
+	color: rgb(94, 91, 82);
+	background-color: rgb(255, 255, 255);
+	width: 200px;
+	z-index: 999;
+	padding: 10px;
+	border: 6px solid rgb(59, 156, 202);
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 14px;
+	-moz-box-shadow: -10px 10px 10px rgba(0, 0, 0, 0.16);
+	-webkit-box-shadow: -10px 10px 10px rgba(0, 0, 0, 0.16);
+	box-shadow: -10px 10px 10px rgba(0, 0, 0, 0.16);
+}
+
+.giftFrom {
+    font: 13px "PT Sans Narrow";
+    font-weight: 800;
+}
+
+.giftMessage {
+    font: 12px "PT Sans Narrow";
+}
+
 .history-filter-container2 {
-    margin-left: 5;
-    margin-top: 3;
+    margin-left: 5px;
+    margin-top: 3px;
     display: inline-block;
     zoom: 1; /* ie7 hack for display:inline-block */
     *display: inline;
@@ -348,7 +373,7 @@ INPUT:-ms-input-placeholder
     z-index: 9;
     position: fixed;
     left: 10%;
-    top: 16%;
+    top: 110px;
     width: 55%;
     height: 80%;
     overflow: hidden;
@@ -531,6 +556,40 @@ ul.lastfm-buttons {
     height: 28%;
 }
 
+#friendList-container {
+    display: none;
+    background-color: whiteSmoke;
+    color: #111;
+    font: 800 14px "PT Sans Narrow";
+    width: 250px;
+    position: absolute;
+    z-index: 2;
+    left: 41%;
+    top: 13%;
+    height: 78%;
+    overflow: auto;
+    border: 4px solid rgb(151, 151, 151);
+}
+
+#friendList {
+    padding: 0;
+    background-color: blue;
+}
+
+.friendItem {
+    background-color: #CFCFCF;
+    height: 58px;
+    border-bottom: 3px solid whiteSmoke;
+}
+
+.friendPic {
+    width: 50px;
+    height: 50px;
+    float: left;
+    margin: 4px;
+    margin-right: 15px;
+}
+
 #playHistory a {
     color: #111111;
     font: 800 15px "PT Sans Narrow";
@@ -594,6 +653,13 @@ ul.lastfm-buttons {
     cursor: pointer;
     float: right;
     margin-right: 10px;
+    margin-top: 22px;
+}
+
+.tweetGift {
+    height: 18px;
+    float: right;
+    margin-right: 30px;
     margin-top: 22px;
 }
 

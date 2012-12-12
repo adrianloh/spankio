@@ -9,14 +9,86 @@
  */
 
 ;(function($){
-	
+
+//	setInterval(function(){
+//		$(".bx-clone").css("border","3px solid red");
+//	},500);
+
+	var bindDroppablePlaylists = function(o) {
+		var userPlaylists = [];
+		try {
+			if (('length' in o) && (o.length>0) && (o[0].className.match(/playlistEntry/))) {
+				$.each(o, function(i,li) {
+					if ($(li).find("img").attr("url")==="#") {
+						userPlaylists.push(li);
+					}
+				});
+			} else if (typeof(o.className)==='string' && o.className.match(/playlistEntry/)) {
+				if ($(o).find("img").attr("url")==="#") {
+					userPlaylists.push(o);
+				} else {
+					console.warn("Got not user playlist");
+				}
+			} else {
+				console.error("bindDroppablePlaylists asked to bind unknown object. Check thingee...")
+				thingee = o;
+				return;
+			}
+		} catch(err) {
+			console.error("Check badThing...");
+			badThing = o;
+			return false;
+		}
+		if (userPlaylists.length===0) return false;
+		$.each(userPlaylists, function(i,li) {
+			$(li).droppable({
+				accept: ".tweetThumb",
+				tolerance: "pointer",
+				hoverClass: "bgOver",
+				drop: function addDroppedTrackToPlaylistInScrollbar() {
+					if (document._draggedHistoryItem!==null) {
+						var droppedHistoryItem = JSON.parse(JSON.stringify(document._draggedHistoryItem)),
+							playlistThumb = $(this).find(".playlistThumb"),
+							playlistThumbThatWasClicked = {
+								title:playlistThumb.attr("title"),
+								cover:playlistThumb.attr("src"),
+								url:playlistThumb.attr("url")
+							},
+							playname = playlistThumbThatWasClicked.title;
+						Spank.playlistScroller.addSongToPlaylist(playname, droppedHistoryItem);
+					}
+				}
+			});
+			var playlistNameElement = $(li).find(".playlistName")[0];
+			$(playlistNameElement).click(function() {
+				document._userIsTyping = true;
+			});
+			$(playlistNameElement).editable({
+				editBy:'click',
+				onSubmit: function(change) {
+					document._userIsTyping = false;
+					var oldname = change.previous,
+						newname = change.current;
+					if (oldname!==newname) {
+//						if (Spank.playlists[oldname]) {
+//							Spank.playlistScroller.renamePlaylist(oldname, newname);
+//						} else {
+//							alert("Can't rename me cause I'm empty! Add some songs first...");
+//							$(this).text(oldname);
+//						}
+					}
+				}
+			});
+		});
+	};
+
 	var defaults = {
 		
 		// GENERAL
 		mode: 'horizontal',
 		slideSelector: '',
 		infiniteLoop: true,
-		hideControlOnEnd: false,
+		hideControlOnEnd: true,
 		speed: 500,
 		easing: null,
 		slideMargin: 0,
@@ -33,7 +105,7 @@
 		useCSS: true,
 		
 		// PAGER
-		pager: true,
+		pager: false,
 		pagerType: 'full',
 		pagerShortSeparator: ' / ',
 		pagerSelector: null,
@@ -86,6 +158,8 @@
 		
 		// create a namespace to be used throughout the plugin
 		var slider = {};
+		thingo = slider;
+
 		// set a reference to our slider element
 		var el = this;
 
@@ -146,6 +220,9 @@
 		 */
 		var setup = function(){
 			slider.children = $(".playlistEntry").removeAttr("style");
+			slider.children.each(function(i,e) {
+				bindDroppablePlaylists(e);
+			});
 			// wrap el in a wrapper
 			el.wrap('<div class="bx-wrapper"><div class="bx-viewport"></div></div>');
 			// store a namspace reference to .bx-viewport
@@ -205,6 +282,8 @@
 				var slice = slider.settings.mode == 'vertical' ? slider.settings.minSlides : slider.settings.maxSlides;
 				var sliceAppend = slider.children.slice(0, slice).clone().addClass('bx-clone');
 				var slicePrepend = slider.children.slice(-slice).clone().addClass('bx-clone');
+				bindDroppablePlaylists(sliceAppend);
+				bindDroppablePlaylists(slicePrepend);
 				el.append(sliceAppend).prepend(slicePrepend);
 				// var cloneAppend = slider.children.first().clone().addClass('bx-clone');
 				// var clonePrepend = slider.children.last().clone().addClass('bx-clone');
@@ -255,9 +334,24 @@
 
 		Spank.setupScroller = setup;
 
+		Spank.__rescanChildren = function() {
+			$(".bx-clone").remove();
+			slider.children = $(".playlistEntry").removeAttr("style");
+			var slice = slider.settings.mode == 'vertical' ? slider.settings.minSlides : slider.settings.maxSlides;
+			var sliceAppend = slider.children.slice(0, slice).clone().addClass('bx-clone');
+			var slicePrepend = slider.children.slice(-slice).clone().addClass('bx-clone');
+			bindDroppablePlaylists(sliceAppend);
+			bindDroppablePlaylists(slicePrepend);
+			el.append(sliceAppend).prepend(slicePrepend);
+			bindDroppablePlaylists($(".droppablePlaylist "));
+		}
+
 		Spank.rescanChildren = function(){
 			$(".bx-clone").remove();
 			slider.children = $(".playlistEntry").removeAttr("style");
+			slider.children.each(function(i,e) {
+				bindDroppablePlaylists(e);
+			});
 			slider.children.css({
 				float: slider.settings.mode == 'horizontal' ? 'left' : 'none',
 				position: 'relative',
@@ -266,19 +360,13 @@
 				marginRight: slider.settings.mode == 'horizontal' ? slider.settings.slideMargin : 0,
 				marginBottom: slider.settings.mode == 'vertical' ? slider.settings.slideMargin: 0
 			});
-			if(slider.settings.infiniteLoop && slider.settings.mode != 'fade' && !slider.settings.ticker){
-				var slice = slider.settings.mode == 'vertical' ? slider.settings.minSlides : slider.settings.maxSlides;
-				var sliceAppend = slider.children.slice(0, slice).clone().addClass('bx-clone');
-				var slicePrepend = slider.children.slice(-slice).clone().addClass('bx-clone');
-				el.append(sliceAppend).prepend(slicePrepend);
-				// var cloneAppend = slider.children.first().clone().addClass('bx-clone');
-				// var clonePrepend = slider.children.last().clone().addClass('bx-clone');
-				// el.append(cloneAppend).prepend(clonePrepend);
-			}
-			// check if startSlide is last slide
+			var slice = slider.settings.mode == 'vertical' ? slider.settings.minSlides : slider.settings.maxSlides;
+			var sliceAppend = slider.children.slice(0, slice).clone().addClass('bx-clone');
+			var slicePrepend = slider.children.slice(-slice).clone().addClass('bx-clone');
+			bindDroppablePlaylists(sliceAppend);
+			bindDroppablePlaylists(slicePrepend);
+			el.append(sliceAppend).prepend(slicePrepend);
 			slider.active.last = slider.settings.startSlide == getPagerQty() - 1;
-			// only check for control addition if not in "ticker" mode
-			//populatePager();
 		};
 
 		/**
@@ -327,7 +415,8 @@
 					return $(this).outerHeight(false);
 				}).get());
 			}
-			return height+10;
+////			return height+10;
+			return 186;
 		}
 		
 		/**
@@ -349,7 +438,8 @@
 					newElWidth = (wrapWidth - (slider.settings.slideMargin * (slider.settings.minSlides - 1))) / slider.settings.minSlides;
 				}
 			}
-			return newElWidth;
+////			return newElWidth;
+			return 130;
 		}
 		
 		/**
@@ -1094,6 +1184,7 @@
 			// if infiniteLoop is false and last page is showing, disregard call
 			if (!slider.settings.infiniteLoop && slider.active.last) return;
 			var pagerIndex = slider.active.index + 1;
+			console.log(slider.active.index);
 			el.goToSlide(pagerIndex, 'next');
 		}
 		
@@ -1104,6 +1195,7 @@
 			// if infiniteLoop is false and last page is showing, disregard call
 			if (!slider.settings.infiniteLoop && slider.active.index == 0) return;
 			var pagerIndex = slider.active.index - 1;
+			console.log(slider.active.index);
 			el.goToSlide(pagerIndex, 'prev');
 		}
 		

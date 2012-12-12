@@ -21,6 +21,14 @@
 
 	$(document).ready(function() {
 
+		$('#playlists-scroller-list').bxSlider({
+			minSlides: 4,
+			maxSlides: 7,
+			slideWidth: 130,
+			slideMargin: 5,
+			moveSlides: 3
+		});
+
 		var dereference = function(o) {
 			//JSON.parse(JSON.stringify(this_playlist));
 			var t;
@@ -112,16 +120,6 @@
 
 		});
 
-		var deleteDuplicate =  function(o, array) {
-			var i = array.length;
-			while (i--) {
-				var item = array[i];
-				if (item.url===o.url || ($.trim(item.title.toLowerCase())=== $.trim(o.title.toLowerCase()) && $.trim(item.artist.toLowerCase())=== $.trim(o.artist.toLowerCase()))) {
-					array.splice(i,1);
-				}
-			}
-		};
-
 		Spank.playlistScroller = {
 			playlistItems: ko.observableArray([]),
 			getPlaylistInScrollerWithName: function(name) {
@@ -195,17 +193,8 @@
 
 		ko.applyBindings(Spank.playlistScroller, document.getElementById('playlistScroller'));
 
-		var scroller_config = {
-			width:"100%",
-			auto: false,
-			scroll:{items:2},
-			prev: "#foo2_prev",
-			next: "#foo2_next"
-		};
-
-//		$("#playlists-scroller-list").carouFredSel(scroller_config);
 		Spank.playlistScroller.playlistItems.subscribe(function(list) {
-//			$("#playlists-scroller-list").carouFredSel(scroller_config);
+			Spank.rescanChildren();
 		});
 
 		Spank.playlistScroller.push({cover:'/img/emptyplaylist.png'});
@@ -218,15 +207,6 @@
 				// with one of the charts... note that we wait a bit first to let FB do
 				// it's thing cause once this starts, all the bandwidth will be sucked
 				// by downloading album art!
-				$('#playlists-scroller-list').bxSlider({
-					minSlides: 1,
-					maxSlides: 10,
-					slideWidth: 130,
-					slideMargin: 5,
-					moveSlides: 3,
-					hideControlOnEnd: true,
-					pager: false
-				});
 				//Spank.rescanChildren();
 				var t1 = setTimeout(function() {
 					$(".playlistThumb[title='Billboards UK']").trigger("click");
@@ -396,6 +376,5 @@
 		});
 
 	});
-
 
 })();

@@ -16,3 +16,7 @@ Spank.utils.padToFour = function(number) {
 Spank.utils.randomHexColor = function() {
 	return '#'+Math.floor(Math.random()*16777215).toString(16);
 };
+
+Spank.utils.toFirebaseName = function(name) {
+	return name.replace(/[\.#\$\[\]]/g,"_");
+};

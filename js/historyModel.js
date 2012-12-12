@@ -5,8 +5,9 @@
 		$("#funkyPlayer").css("background", 'url(' + Spank.genericAlbumArt + ')');
 
 		$(document).one("login", function() {
-			var firebaseOKName = FBUserInfo.username.replace(/[\.#\$\[\]]/g,"_"); // Illegal characters for Firebase urls
-			Spank.base.url = 'https://wild.firebaseio.com/spank/users/' + firebaseOKName;
+			var firebaseOKName = Spank.utils.toFirebaseName(FBUserInfo.username); // Illegal characters for Firebase urls
+			Spank.base.users = 'https://wild.firebaseio.com/spank/users/';
+			Spank.base.url = Spank.base.users + firebaseOKName;
 			Spank.base.history = new Firebase(Spank.base.url + "/history");
 			$(document).trigger("baseReady");
 			Spank.base.history.on('value', function(snapshot) {
@@ -170,6 +171,12 @@
 					$("iframe").remove();
 				},60000);
 			};
+
+			//// Keep this around...
+			self.isThisAGift = function(data) {
+				return true;
+			};
+
 			return self;
 		})();
 

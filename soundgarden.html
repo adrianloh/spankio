@@ -92,13 +92,10 @@
     <!-- Enable 'live searching' in the searchbar -->
     <script type="text/javascript" src="/js/livesearch.js"></script>
 
-    <!-- bxSlider CSS file -->
+     <!--bxSlider CSS file -->
+    <link rel="stylesheet" type="text/css" href="/css/scroller.css" />
     <script src="/js/jquery.bxslider/jquery.bxslider.js"></script>
     <link href="/js/jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />
-
-    <!-- The courousel/playlist bar at the bottom of the page  -->
-    <link rel="stylesheet" type="text/css" href="/css/scroller.css" />
-    <script type="text/javascript" src="/js/jquery.carouFredSel.js"></script>
 
     <!-- Make playlists, a KO observable array, sortable -->
     <script type="text/javascript" src="/js/knockout-sortable.min.js"></script>
@@ -107,12 +104,13 @@
     -->
     <script type="text/javascript" src="/js/utils.js"></script>
     <script type="text/javascript" src="/js/tooltips.js"></script>
+    <script type="text/javascript" src="/js/playlists.js"></script>
     <script type="text/javascript" src="/js/draggables.js"></script>
     <script type="text/javascript" src="/js/musicPlayerModel.js"></script>
     <script type="text/javascript" src="/js/historyModel.js"></script>
     <script type="text/javascript" src="/js/chartsModel.js"></script>
     <script type="text/javascript" src="/js/index.js"></script>
-    <script type="text/javascript" src="/js/playlists.js"></script>
+    <script type="text/javascript" src="/js/friends.js"></script>
     <script type="text/javascript" src="/js/keystrokes.js"></script>
     <script type="text/javascript" src="/js/snippets.js"></script>
 
@@ -133,6 +131,11 @@
     <script language="JavaScript" type="text/javascript">
         function ImgError(source) {
             source.src = Spank.genericAlbumArt;
+            source.onerror = "";
+            return true;
+        }
+        function UserImgError(source) {
+            source.src = "/img/user.jpg";
             source.onerror = "";
             return true;
         }
@@ -413,6 +416,11 @@
         </div>
     </div>
 
+    <div class="giftPopup">
+        <div class="giftFrom">Adrian Loh</div>
+        <div class="giftMessage">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin consectetur nisl ut lectus vestibulum ultricies id in sem.</div>
+    </div>
+
     <div id="playHistory">
         <div id="history-filter-container">
             <div class="history-filter-container2">
@@ -420,9 +428,10 @@
             </div>
         </div>
         <ul id="history-stream-list" data-bind="sortable: {data: stream, afterMove: saveHistory }">
-            <li class="tweetItem tweetStop" data-bind="cartDeleteIcons:[]">
+            <li class="tweetItem tweetStop" data-bind="cartDeleteIcons:$data">
                 <img class="tweetThumb" onerror="ImgError(this)" data-bind="pickupStreamItems:$data, attr: { src: thumb }" />
                 <a class="tweetDownloadLink" data-bind="attr: { href: direct }"><img class="tweetDownload" src="/img/cart.png" /></a>
+                <!--<img class="tweetGift" src="/img/gift.png" data-bind="visible: $root.isThisAGift($data)" />-->
                 <img class="tweetDelete" src="/img/deleteTweet.png" data-bind="click: $root.deleteHistoryItem" />
                 <div class="tweetDetails" data-bind="click: $root.playHistoryItem">
                     <div class="tweetTrackName" data-bind="text: title"></div>
@@ -467,20 +476,27 @@
 
     </div>
 
-    <div id="playlistScroller">
-        <ul id="playlists-scroller-list" data-bind="foreach: playlistItems">
-            <li class="playlistEntry" data-bind="css: { droppablePlaylist: url==='#' }, makeDroppablePlaylistTile:$data, bindPlaylistButtons:$data">
-                <img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />
-                <div class="playlistName" data-bind="text:title"></div>
+    <div id="friendList-container">
+        <ul id="friendList" data-bind="foreach: friendlist">
+            <li class="friendItem" data-bind="droppableFriend:$data">
+                <div class="friendDetails">
+                    <img class="friendPic" onerror="UserImgError(this)" data-bind="attr: {src: picture} " />
+                    <div class="friendName" data-bind="text: name"></div>
+                </div>
             </li>
         </ul>
-        <!--<div class="clearfix"></div>-->
+    </div>
+
+    <div id="playlistScroller">
+            <ul id="playlists-scroller-list" data-bind="foreach: playlistItems">
+                <li class="playlistEntry" data-bind="css: { droppablePlaylist: url==='#' }">
+                    <img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />
+                    <div class="playlistName" data-bind="text:title"></div>
+                </li>
+            </ul>
         <div id="toggle-playlist-button">
             <button class="hideshow-playlist-button">Hide Playlists</button>
         </div>
-        <!--<a class="prev" id="foo2_prev" href="#"><span>prev</span></a>-->
-        <!--<a class="next" id="foo2_next" href="#"><span>next</span></a>-->
-        <!--<div class="pagination" id="foo2_pag"></div>-->
     </div>
 
 </body>
