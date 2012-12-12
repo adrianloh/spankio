@@ -118,6 +118,9 @@
     <script type="text/javascript" src="/js/keystrokes.js"></script>
     <script type="text/javascript" src="/js/snippets.js"></script>
 
+    <!-- Edit-in-place Playlist Names -->
+    <script type="text/javascript" src="/js/jquery.editable.js"></script>
+
 </head>
 <body>
 <div id="config-panel" style="opacity: 0;">
@@ -464,7 +467,7 @@
             <ul id="playlists-scroller-list" data-bind="foreach: playlistItems">
                 <li class="playlistEntry" data-bind="css: { droppablePlaylist: url==='#' }">
                     <img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />
-                    <div class="playlistName" data-bind="text:title"></div>
+                    <div class="playlistName" data-bind="text: title()"></div>
                 </li>
             </ul>
         <div id="toggle-playlist-button">
@@ -475,9 +478,6 @@
     <!-- Context menu plugin -->
     <link rel="stylesheet" type="text/css" href="/js/contextMenu/jquery.contextmenu.css" />
     <script type="text/javascript" src="/js/contextMenu/jquery.contextmenu.js"></script>
-
-    <!-- Edit-in-place Playlist Names -->
-    <script type="text/javascript" src="/js/jquery.jeditable.mini.js"></script>
 
     <!-- A library to generate md5 hashes  -->
     <script type="text/javascript" src="/js/md5-min.js"></script>

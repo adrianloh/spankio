@@ -61,17 +61,15 @@
 			});
 			var playlistNameElement = $(li).find(".playlistName")[0];
 			$(playlistNameElement).editable({
-				editBy:'click',
 				onSubmit: function(change) {
 					document._userIsTyping = false;
-					var oldname = change.previous,
+					var oldname = change.previous==='<input>' ? Spank.currentlyClickedPlaylistItemName : change.previous,
 						newname = change.current;
 					if (oldname!==newname) {
-						if (Spank.playlists[oldname]) {
+						if (Spank.playlists[oldname] && newname.length!==0) {
 							Spank.playlistScroller.renamePlaylist(oldname, newname);
 						} else {
-							alert("Can't rename me cause I'm empty! Add some songs first...");
-							$(this).text(oldname);
+							$(this).text(Spank.currentlyClickedPlaylistItemName);
 						}
 					}
 				}

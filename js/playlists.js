@@ -199,6 +199,7 @@
 		ko.applyBindings(Spank.playlistScroller, document.getElementById('playlistScroller'));
 
 		Spank.playlistScroller.playlistItems.subscribe(function(list) {
+			console.log("!")
 			Spank.rescanChildren();
 		});
 

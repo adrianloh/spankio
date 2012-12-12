@@ -384,24 +384,7 @@ INPUT:-ms-input-placeholder
 	box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
 	border: 2px solid #BBB;
 }
-#___lightBox {
-    display: none;
-	outline-color: black;
-	outline: 3px;
-	background-size: 2px 3px;
-	background-image: -webkit-repeating-linear-gradient(90deg, rgba(0, 0, 0, .7), rgb(255, 255, 255) 1px, transparent 2px, transparent 15px), -webkit-repeating-linear-gradient(-90deg, rgba(255, 255, 255, 0.6), rgb(0, 0, 0) 1px, transparent 2px, transparent 15px);
-    background-image: -moz-repeating-linear-gradient(90deg, rgba(0, 0, 0, .7), rgb(255, 255, 255) 1px, transparent 2px, transparent 15px), -moz-repeating-linear-gradient(-90deg, rgba(255, 255, 255, 0.6), rgb(0, 0, 0) 1px, transparent 2px, transparent 15px);
-	z-index: 9999;
-	position: fixed;
-	left: 10%;
-	top: 16%;
-	width: 70%;
-	height: 80%;
-    overflow: hidden;
-	-moz-box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
-	-webkit-box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
-	box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
-}
+
 #lightBox-content-container {
 	width: 100%;
 	height: 100%;
