@@ -12,54 +12,19 @@
     <link rel="stylesheet" type="text/css" href="/css/buttons.css" />
     <link rel="stylesheet" type="text/css" href="/css/scrollbars.css" />
 
-	<!-- 360 Player STUFF START-->
-
-    <link rel="stylesheet" type="text/css" href="./360_files/flashblock.css">
-    <link rel="stylesheet" type="text/css" href="./360_files/360player.css">
-    <link rel="stylesheet" type="text/css" href="./360_files/360player-visualization.css">
-    <link rel="stylesheet" type="text/css" href="./360_files/slider.css">
-    <link rel="stylesheet" type="text/css" href="./360_files/colorpicker.css">
-    <link rel="stylesheet" type="text/css" href="./360_files/demo-slider-controls.css">
-    <style>
-        .sm2-timing.alignTweak {
-            display: none;
-        }
-    </style>
-    <script type="text/javascript" src="./360_files/berniecode-animator.js"></script>
-    <script type="text/javascript" src="./360_files/soundmanager2.js"></script>
-    <script type="text/javascript" src="./360_files/360player_custom.js"></script>
-    <script type="text/javascript" src="./360_files/yahoo-dom-event.js"></script>
-    <script type="text/javascript" src="./360_files/animation-min.js"></script>
-    <script type="text/javascript" src="./360_files/dragdrop-min.js"></script>
-    <script type="text/javascript" src="./360_files/slider-min.js"></script>
-    <script type="text/javascript" src="./360_files/element-min.js"></script>
-    <script type="text/javascript" src="./360_files/colorpicker-min.js"></script>
-    <script type="text/javascript" src="./360_files/demo-slider-controls.js"></script>
-    <!--<script type="text/javascript" src="./360_files/init.js"></script>-->
-    <!-- Init 360 with our settings instead of the one (above) that came with the demo -->
-    <script type="text/javascript" src="/js/init360.js"></script>
-    <style>
-        /* Hide the customization panel of 360 player  */
-        #config-panel { display:none; }
-    </style>
-    <!-- 360 Player STUFF END-->
-
-    <script type='text/javascript' src='https://static.firebase.com/v0/firebase.js'></script>
-    <script src="http://www.parsecdn.com/js/parse-1.1.14.min.js"></script>
-
     <script type="text/javascript">
         VK = {
-                keys:[
+            keys:[
                 "b1661341bae6b03fbae6b03fd4bacddc5abbae6bae88c20ea21e811daf9e2c67fdd8f78",
                 "13e47ebc10ca8da510ca8da57510e1e1c0110ca10c4b1ba407dcd8718254eba6cdd201b",
                 "633b3aa76851ba026851ba0223687ad66766851685f861d38e74dc981cb38cbe200a017",
                 "b63e1d33bf6561b4bf6561b4b9bf4e0dd1bbf65bf6b5dabefccf0d187e2dbaa4ac0b03e",
                 "1d1aa7ae14a55a8e14a55a8e1d148e36eb114a514ab669144121a3185704c3e628ca24d"],
-                pick:0,
-                getToken: function() {
-                    return this.keys[++this.pick%this.keys.length];
-                }
-            };
+            pick:0,
+            getToken: function() {
+                return this.keys[++this.pick%this.keys.length];
+            }
+        };
         // The global object/ui components exported by this webapp
         Spank = {
             base:{},
@@ -72,30 +37,46 @@
             genericAlbumArt: "http://lh5.googleusercontent.com/-iNJ6fFP1ESk/ULlYVjb-m6I/AAAAAAAAVZU/QFfGVNT2pb8/s0/hi-512-5.png"
         };
 
+        // Load a default image in case we get 404s
+        function ImgError(source) {
+            source.src = Spank.genericAlbumArt;
+            source.onerror = "";
+            return true;
+        }
+        function UserImgError(source) {
+            source.src = "/img/user.jpg";
+            source.onerror = "";
+            return true;
+        }
+
         //Parse.initialize("743mZmF65tx9xVPvWWrCeAJuEA2LLNm89VMcNzQm", "8bynNa8lvkA8k6bPdCfGAHb6A1W3oSS1ipjMBVl1");
         //UserData = Parse.Object.extend("UserData");   // constructor
 
     </script>
 
-    <!-- jQuery and Knockout.JS
-    -->
-    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.js"></script>-->
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js"></script>
-    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.1.0/knockout-min.js"></script>
-
     <!-- Login to Facebook, which triggers the global 'login' event on successful login
     -->
+
     <script type="text/javascript" src="/js/fb.js"></script>
+    <!--<script src="http://www.parsecdn.com/js/parse-1.1.14.min.js"></script>-->
+
+    <script type='text/javascript' src='https://static.firebase.com/v0/firebase.js'></script>
+
+    <!-- jQuery and Knockout.JS -->
+
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.1.0/knockout-min.js"></script>
+
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 
     <!-- Enable 'live searching' in the searchbar -->
     <script type="text/javascript" src="/js/livesearch.js"></script>
 
      <!--bxSlider CSS file -->
     <link rel="stylesheet" type="text/css" href="/css/scroller.css" />
-    <script src="/js/jquery.bxslider/jquery.bxslider.js"></script>
     <link href="/js/jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />
+    <script src="/js/jquery.bxslider/jquery.bxslider.js"></script>
 
     <!-- Make playlists, a KO observable array, sortable -->
     <script type="text/javascript" src="/js/knockout-sortable.min.js"></script>
@@ -113,37 +94,6 @@
     <script type="text/javascript" src="/js/friends.js"></script>
     <script type="text/javascript" src="/js/keystrokes.js"></script>
     <script type="text/javascript" src="/js/snippets.js"></script>
-
-    <!-- Context menu plugin -->
-    <link rel="stylesheet" type="text/css" href="/js/contextMenu/jquery.contextmenu.css" />
-    <script type="text/javascript" src="/js/contextMenu/jquery.contextmenu.js"></script>
-
-    <!-- Edit-in-place Playlist Names -->
-    <script type="text/javascript" src="/js/jquery.jeditable.mini.js"></script>
-
-    <!-- A library to generate md5 hashes  -->
-    <script type="text/javascript" src="/js/md5-min.js"></script>
-
-    <!-- Makes playlist item names renamable via double clicking -->
-    <!--<script type="text/javascript" src="/js/jquery.jeditable.mini.js"></script>-->
-
-    <!-- Load a default image in case we get 404s  -->
-    <script language="JavaScript" type="text/javascript">
-        function ImgError(source) {
-            source.src = Spank.genericAlbumArt;
-            source.onerror = "";
-            return true;
-        }
-        function UserImgError(source) {
-            source.src = "/img/user.jpg";
-            source.onerror = "";
-            return true;
-        }
-    </script>
-
-    <link rel="stylesheet" type="text/css" href="/js/tipped/tipped.css">
-    <link rel="stylesheet" type="text/css" href="/js/tipped/custom.css">
-    <script type="text/javascript" src="/js/tipped/tipped.js"></script>
 
 </head>
 <body>
@@ -498,6 +448,52 @@
             <button class="hideshow-playlist-button">Hide Playlists</button>
         </div>
     </div>
+
+    <!-- Context menu plugin -->
+    <link rel="stylesheet" type="text/css" href="/js/contextMenu/jquery.contextmenu.css" />
+    <script type="text/javascript" src="/js/contextMenu/jquery.contextmenu.js"></script>
+
+    <!-- Edit-in-place Playlist Names -->
+    <script type="text/javascript" src="/js/jquery.jeditable.mini.js"></script>
+
+    <!-- A library to generate md5 hashes  -->
+    <script type="text/javascript" src="/js/md5-min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/js/tipped/tipped.css">
+    <link rel="stylesheet" type="text/css" href="/js/tipped/custom.css">
+    <script type="text/javascript" src="/js/tipped/tipped.js"></script>
+
+    <!-- 360 Player STUFF START-->
+
+    <link rel="stylesheet" type="text/css" href="./360_files/flashblock.css">
+    <link rel="stylesheet" type="text/css" href="./360_files/360player.css">
+    <link rel="stylesheet" type="text/css" href="./360_files/360player-visualization.css">
+    <link rel="stylesheet" type="text/css" href="./360_files/slider.css">
+    <link rel="stylesheet" type="text/css" href="./360_files/colorpicker.css">
+    <link rel="stylesheet" type="text/css" href="./360_files/demo-slider-controls.css">
+    <style>
+        .sm2-timing.alignTweak {
+            display: none;
+        }
+    </style>
+    <script type="text/javascript" src="./360_files/berniecode-animator.js"></script>
+    <script type="text/javascript" src="./360_files/soundmanager2.js"></script>
+    <script type="text/javascript" src="./360_files/360player_custom.js"></script>
+    <script type="text/javascript" src="./360_files/yahoo-dom-event.js"></script>
+    <script type="text/javascript" src="./360_files/animation-min.js"></script>
+    <script type="text/javascript" src="./360_files/dragdrop-min.js"></script>
+    <script type="text/javascript" src="./360_files/slider-min.js"></script>
+    <script type="text/javascript" src="./360_files/element-min.js"></script>
+    <script type="text/javascript" src="./360_files/colorpicker-min.js"></script>
+    <script type="text/javascript" src="./360_files/demo-slider-controls.js"></script>
+    <!--<script type="text/javascript" src="./360_files/init.js"></script>-->
+    <!-- Init 360 with our settings instead of the one (above) that came with the demo -->
+    <script type="text/javascript" src="/js/init360.js"></script>
+    <style>
+            /* Hide the customization panel of 360 player  */
+        #config-panel { display:none; }
+    </style>
+    <!-- 360 Player STUFF END-->
 
 </body>
 
