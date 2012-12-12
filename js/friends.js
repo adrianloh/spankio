@@ -11,29 +11,6 @@
 //				FBUserInfo.friends.push(o);
 //			});
 
-			$.each(FBUserInfo.friends, function (i,FBo) {
-					var SpankO = {};
-					var FBUsername = FBo.username==="" ? FBo.uid : FBo.username;
-					SpankO.name = FBo.name;
-					SpankO.username = Spank.utils.toFirebaseName(FBUsername);
-					SpankO.picture = "https://graph.facebook.com/" + FBUsername + "/picture";
-					SpankO.frequency = 0;
-
-					var friendUrl = Spank.base.friends + "/" + SpankO.username;
-					var friendBase = new Firebase(friendUrl);
-					friendBase.on('value', function (snapshot) {
-						var friendData = snapshot.val();
-						if (friendData===null) {
-							console.error("Pushing new friend:" + SpankO.username);
-							friendBase.set(SpankO)
-						} else {
-							console.warn("Pulling friend to list: " + friendData.username);
-							Spank.friends.addNewFriend(friendData);
-						}
-						friendBase.off("value");
-					});
-			});
-
 			Spank.friends = {
 				bases:{},
 				friendlist: ko.observableArray([]),
@@ -54,6 +31,29 @@
 
 			ko.applyBindings(Spank.friends, document.getElementById('friendList'));
 
+			$.each(FBUserInfo.friends, function (i,FBo) {
+				var SpankO = {};
+				var FBUsername = FBo.username==="" ? FBo.uid : FBo.username;
+				SpankO.name = FBo.name;
+				SpankO.username = Spank.utils.toFirebaseName(FBUsername);
+				SpankO.picture = "https://graph.facebook.com/" + FBUsername + "/picture";
+				SpankO.frequency = 0;
+
+				var friendUrl = Spank.base.friends + "/" + SpankO.username;
+				var friendBase = new Firebase(friendUrl);
+				friendBase.on('value', function (snapshot) {
+					var friendData = snapshot.val();
+					if (friendData===null) {
+						console.error("Pushing new friend:" + SpankO.username);
+						friendBase.set(SpankO)
+					} else {
+						console.warn("Pulling friend to list: " + friendData.username);
+						Spank.friends.addNewFriend(friendData);
+					}
+					friendBase.off("value");
+				});
+			});
+			
 			ko.bindingHandlers.droppableFriend = {
 				init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 					$(element).droppable({

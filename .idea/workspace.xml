@@ -2,34 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="32ba444c-fc18-4642-a53c-06c7d6e77d49" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/.idea/.name" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/.idea/encodings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/.idea/inspectionProfiles/profiles_settings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/.idea/js.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/.idea/misc.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/.idea/modules.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/.idea/scopes/scope_settings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/.idea/vcs.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/.idea/workspace.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/touchcarousel/black-and-white-skin/black-and-white-skin.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/touchcarousel/black-and-white-skin/sprite.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/touchcarousel/grab.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/touchcarousel/grabbing.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/touchcarousel/grey-blue-skin/grey-blue-skin.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/touchcarousel/grey-blue-skin/sprite.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/touchcarousel/jquery.touchcarousel-1.1.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/touchcarousel/jquery.touchcarousel-1.1.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/touchcarousel/minimal-light-skin/minimal-light-skin.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/touchcarousel/minimal-light-skin/sprite.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/touchcarousel/three-d-skin/sprite.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/touchcarousel/three-d-skin/three-d-skin.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/js/touchcarousel/touchcarousel.css" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/scroller.css" afterPath="$PROJECT_DIR$/css/scroller.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/index.js" afterPath="$PROJECT_DIR$/js/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/jquery.bxslider/jquery.bxslider.js" afterPath="$PROJECT_DIR$/js/jquery.bxslider/jquery.bxslider.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/keystrokes.js" afterPath="$PROJECT_DIR$/js/keystrokes.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/playlists.js" afterPath="$PROJECT_DIR$/js/playlists.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/friends.js" afterPath="$PROJECT_DIR$/js/friends.js" />
     </list>
     <ignored path="soundgarden-heroku.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -58,6 +31,15 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="friends.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/js/friends.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="55" column="12" selection-start="4693" selection-end="4693" vertical-scroll-proportion="0.772973">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="livesearch.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/livesearch.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -78,10 +60,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="index.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="178" column="0" selection-start="6408" selection-end="6408" vertical-scroll-proportion="0.49469966">
+            <state line="178" column="0" selection-start="6408" selection-end="6408" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -151,7 +133,6 @@
         <option value="$PROJECT_DIR$/js/tooltips.js" />
         <option value="$PROJECT_DIR$/js/tipped/custom.css" />
         <option value="$PROJECT_DIR$/css/scrollbars.css" />
-        <option value="$PROJECT_DIR$/js/friends.js" />
         <option value="$PROJECT_DIR$/js/draggables.js" />
         <option value="$PROJECT_DIR$/js/jquery.bxslider/jquery.bxslider.css" />
         <option value="$PROJECT_DIR$/js/touchcarousel/jquery.touchcarousel-1.1.js" />
@@ -163,6 +144,7 @@
         <option value="$PROJECT_DIR$/js/keystrokes.js" />
         <option value="$PROJECT_DIR$/soundgarden.html" />
         <option value="$PROJECT_DIR$/js/index.js" />
+        <option value="$PROJECT_DIR$/js/friends.js" />
       </list>
     </option>
   </component>
@@ -449,11 +431,6 @@
         <state line="42" column="0" selection-start="1670" selection-end="1670" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/friends.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="0" selection-start="3207" selection-end="3207" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/css/scrollbars.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="26" column="0" selection-start="723" selection-end="723" vertical-scroll-proportion="0.0">
@@ -519,13 +496,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/playlists.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="201" column="0" selection-start="7949" selection-end="7949" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/livesearch.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
@@ -544,7 +514,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="178" column="0" selection-start="6408" selection-end="6408" vertical-scroll-proportion="0.49469966">
+        <state line="178" column="0" selection-start="6408" selection-end="6408" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/playlists.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="201" column="0" selection-start="7949" selection-end="7949" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/friends.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="55" column="12" selection-start="4693" selection-end="4693" vertical-scroll-proportion="0.772973">
           <folding />
         </state>
       </provider>
