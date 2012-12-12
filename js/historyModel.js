@@ -5,13 +5,13 @@
 		$("#funkyPlayer").css("background", 'url(' + Spank.genericAlbumArt + ')');
 
 		$(document).one("login", function() {
+
 			var firebaseOKName = Spank.utils.toFirebaseName(FBUserInfo.username); // Illegal characters for Firebase urls
 			Spank.base.users = 'https://wild.firebaseio.com/spank/users/';
 			Spank.base.url = Spank.base.users + firebaseOKName;
 			Spank.base.history = new Firebase(Spank.base.url + "/history");
 			$(document).trigger("baseReady");
 			Spank.base.history.on('value', function(snapshot) {
-				console.warn("Firebase HISTORY PULL");
 				var newHistory = snapshot.val();
 				if (Array.isArray(newHistory) && newHistory.length>0) {
 					var koHistory = $.map(newHistory, function(o) {

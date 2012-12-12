@@ -76,9 +76,9 @@
 					}
 				}
 			});
-			$(playlistNameElement).click(function(){
-				document._userIsTyping = true;
-			});
+//			$(playlistNameElement).click(function(){
+//				document._userIsTyping = true;
+//			});
 		});
 	};
 

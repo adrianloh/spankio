@@ -92,6 +92,7 @@
 				delete Spank.bases.known[snapshot.name()];
 				console.error("Removing DOM: " + playname);
 				playlistThumbnail.parent().remove();
+				window.notify.error("Deleted playlist " + playname);
 				Spank.rescanChildren();
 				if (Spank.charts.currentPlaylistTitle===playname) {
 					$(".playlistThumb[title='Billboards UK']").trigger("click");
@@ -149,6 +150,7 @@
 					var data = {title: playname, list:tracklist},
 						newRef = Spank.bases.playlists.push();
 					newRef.set(data, function afterSave(ok) {
+						window.notify.success("Created new playlist " + playname);
 						Spank.bases[playname] = new Firebase(newRef.toString());
 						if (callback) callback();
 					});
@@ -156,6 +158,7 @@
 					Spank.bases[playname].transaction(function(currentData) {
 						return {title: playname, list: tracklist};
 					}, function(newData) {
+						window.notify.information("Saved " + playname + " with " + tracklist.length + " tracks");
 						if (callback) callback(newData);
 					});
 				}

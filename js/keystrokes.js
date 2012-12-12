@@ -14,6 +14,7 @@
 			},
 			boundKeys = $.map(keys, function(o) { return o; });
 
+		document._userIsTyping = true;
 		$(document).keydown(function(e) {
 
 			if (!document._userIsTyping && $(document.activeElement).attr("id")!=='searchField' && $(document.activeElement).attr("id")!=='history-filter' && boundKeys.indexOf(e.keyCode)>=0) {

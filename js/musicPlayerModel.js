@@ -64,6 +64,10 @@
 					if (newDirectLink) {
 						//console.log("Playing direct: " + newDirectLink);
 						Spank.player.current_url(newDirectLink);
+						$(".noty_text:first").trigger("mouseenter");
+						setTimeout(function() {
+							Spank.notifyCurrentSong(o.title + " - " + o.artist);
+						},1000)
 						var koo = Spank.history.findWithUrl(o.url);
 						o.direct = newDirectLink;
 						if (koo!==null) {
