@@ -164,6 +164,9 @@
 				} else {
 					self.prependToHistory(koo, true);
 				}
+				if ($("#history-filter").val()!=='Filter stream') {
+					$("#history-filter").trigger("blur");
+				}
 			};
 			self.downloadHistoryItem = function(koo, event) {
 				$('<iframe width="0" height="0" frameborder="0" src="@"></iframe>'.replace("@", koo.direct())).appendTo("body");
