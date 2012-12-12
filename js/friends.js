@@ -53,7 +53,7 @@
 					friendBase.off("value");
 				});
 			});
-			
+
 			ko.bindingHandlers.droppableFriend = {
 				init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 					$(element).droppable({

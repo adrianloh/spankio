@@ -18,5 +18,6 @@ Spank.utils.randomHexColor = function() {
 };
 
 Spank.utils.toFirebaseName = function(name) {
+	console.log(name);
 	return name.replace(/[\.#\$\[\]]/g,"_");
 };
