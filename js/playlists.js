@@ -215,7 +215,6 @@
 				//Spank.rescanChildren();
 				var t1 = setTimeout(function() {
 					$(".playlistThumb[title='Billboards UK']").trigger("click");
-					$(".hideshow-playlist-button").click();
 					clearTimeout(t1);
 				},2000);
 			}

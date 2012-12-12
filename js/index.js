@@ -168,7 +168,7 @@
 
 		$("#searchField").livesearch({
 			searchCallback: $.searchByWire,
-			innerText: "You're every move and waking sound",
+			innerText: "Tune in. Drop out.",
 			queryDelay:500,
 			minimumSearchLength: 3
 		});

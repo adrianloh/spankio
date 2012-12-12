@@ -22,7 +22,13 @@
 						return koo;
 					});
 					Spank.history.stream(koHistory);
-					window.notify.information("Go!");
+					setTimeout(function() {
+						window.notify.information("Go!");
+					},1000);
+					var t2 = setTimeout(function() {
+						$(".hideshow-playlist-button").click();
+						clearTimeout(t2);
+					},1500);
 					Spank.base.history.off('value');
 					Spank.base.history.on('child_changed', addNewHistoryItem);
 					Spank.base.history.on('child_added', addNewHistoryItem);
