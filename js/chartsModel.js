@@ -11,7 +11,7 @@ Array.prototype.shuffle = function() {
 (function() {
 
 	$(document).ready(function() {
-		
+
 		Spank.charts = (function() {
 			var self = {};
 			self.currentPlaylistTitle = undefined;
@@ -80,6 +80,7 @@ Array.prototype.shuffle = function() {
 				return bad ? false : track;
 			};
 			self.pushBatch = function(list, mode) {
+				$("#resultsSection").show();
 				//console.warn("Batch adding " + list.length + ' items.');
 				var newItems = $.map(list, function(item) {
 					item = self.process(item);

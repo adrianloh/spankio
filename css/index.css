@@ -352,6 +352,7 @@ INPUT:-ms-input-placeholder
 	cursor: pointer;
 }
 #resultsSection {
+    display: none;
     text-shadow: 2px 2px 2px rgba(151, 24, 64, 0.2);
     position: absolute;
     width: 70%;

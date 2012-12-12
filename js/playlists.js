@@ -188,6 +188,7 @@
 					url: '#'
 				};
 				default_item.title = o.title ? o.title : default_item.title;
+				default_item.title = ko.observable(default_item.title);
 				default_item.cover = o.cover ? o.cover : default_item.cover;
 				default_item.url = o.url ? o.url : default_item.url;
 				default_item.value = ko.observable(default_item.title);
@@ -214,6 +215,7 @@
 				//Spank.rescanChildren();
 				var t1 = setTimeout(function() {
 					$(".playlistThumb[title='Billboards UK']").trigger("click");
+					$(".hideshow-playlist-button").click();
 					clearTimeout(t1);
 				},2000);
 			}

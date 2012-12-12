@@ -14,10 +14,10 @@
 			},
 			boundKeys = $.map(keys, function(o) { return o; });
 
-		document._userIsTyping = true;
 		$(document).keydown(function(e) {
 
-			if (!document._userIsTyping && $(document.activeElement).attr("id")!=='searchField' && $(document.activeElement).attr("id")!=='history-filter' && boundKeys.indexOf(e.keyCode)>=0) {
+			if ($(document.activeElement)[0].tagName.toLowerCase()!=='input' && boundKeys.indexOf(e.keyCode)>=0) {
+				console.log($(document.activeElement)[0].tagName);
 				switch (e.keyCode)
 				{
 					case keys.right:    // Next song

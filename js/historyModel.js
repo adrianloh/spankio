@@ -22,6 +22,7 @@
 						return koo;
 					});
 					Spank.history.stream(koHistory);
+					window.notify.information("Go!");
 					Spank.base.history.off('value');
 					Spank.base.history.on('child_changed', addNewHistoryItem);
 					Spank.base.history.on('child_added', addNewHistoryItem);
