@@ -1,4 +1,5 @@
 .giftPopup {
+    display: none;
 	position: fixed;
 	color: rgb(94, 91, 82);
 	background-color: rgb(255, 255, 255);
