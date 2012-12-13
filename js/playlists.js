@@ -77,6 +77,7 @@
 							isInView = Spank.charts.currentPlaylistTitle===this_playname;
 						Spank.playlists[this_playname] = dereference(this_playlist);
 						if (isInView) Spank.charts.pushBatch(this_playlist, 'replace');
+						window.notify.information("Playlist updated '" + playname + "'");
 						this_PlaylistThumbnail.attr("src", this_playlist[0].thumb);
 					}
 				});
@@ -104,7 +105,7 @@
 				if ((snapshot.name() in Spank.bases.known) && (o.title!==Spank.bases.known[snapshot.name()])) {
 					var newname = o.title,
 						oldname = Spank.bases.known[snapshot.name()];
-					console.warn("Renamed " + oldname + " >>> " + newname);
+					window.notify.information("Playlist '" + oldname + "' changed to '" + newname + "'");
 					Spank.bases[newname] = Spank.bases[oldname];
 					Spank.playlists[newname] = Spank.playlists[oldname];
 					Spank.bases.known[snapshot.name()] = newname;
@@ -158,7 +159,6 @@
 					Spank.bases[playname].transaction(function(currentData) {
 						return {title: playname, list: tracklist};
 					}, function(newData) {
-						window.notify.information("Saved " + playname + " with " + tracklist.length + " tracks");
 						if (callback) callback(newData);
 					});
 				}

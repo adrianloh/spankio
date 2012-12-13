@@ -11,6 +11,7 @@
 	<link rel="stylesheet" type="text/css" href="/css/index.css" />
     <link rel="stylesheet" type="text/css" href="/css/buttons.css" />
     <link rel="stylesheet" type="text/css" href="/css/scrollbars.css" />
+    <link rel="stylesheet" type="text/css" href="/css/boxcenter.css" />
 
     <script type="text/javascript">
         VK = {
@@ -394,7 +395,7 @@
 
     <div class="giftPopup">
         <div class="giftFrom">Adrian Loh</div>
-        <div class="giftMessage">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin consectetur nisl ut lectus vestibulum ultricies id in sem.</div>
+        <div class="giftMessage">Lorem ipsum dolor sit amet</div>
     </div>
 
     <div id="playHistory">
@@ -437,7 +438,9 @@
             </div>
         </div>
         <div id="resultsSection">
-            <div id="playlistSearchZone" class="playlistSearchZone searchFullWidth"><span class="dropSpans">Search for similar tracks</span></div>
+            <div id="playlistSearchZone" class="playlistSearchZone searchFullWidth">
+                <span class="dropSpans">Search for similar tracks</span>
+            </div>
             <div id="playlistDropZone" class="playlistDropZone"><span class="dropSpans">Add to this playlist</span></div>
             <div id="track_count_current" data-bind="text: totalChartTracks"></div>
             <ul class="results-list" data-bind="sortable: {data:chartTracks, afterMove: onResort }">

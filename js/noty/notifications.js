@@ -23,13 +23,15 @@
 		}
 
 		var types = ['alert', 'information', 'error', 'warning', 'notification', 'success'];
-		window.notify = {last_message:""};
+		window.notify = {last_message:"", lastMessageTime:0};
 
 		$.each(types, function(i,k) {
 			window.notify[k] = function(message) {
-				if (!(message===window.notify.last_message)) {
+				var timeDelta = new Date().getTime()-window.notify.lastMessageTime;
+				if (!(message===window.notify.last_message) && (timeDelta>1000)) {
 					generate(k, message);
 					window.notify.last_message = message;
+					window.notify.lastMessageTime = new Date().getTime();
 				}
 			}
 		});
