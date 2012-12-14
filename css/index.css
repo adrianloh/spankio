@@ -599,15 +599,6 @@ ul.lastfm-buttons {
      margin-top: 42px;
 }
 
-.tweetPlay {
-    color:white;
-    background-color: rgb(201, 24, 95);
-}
-
-.tweetStop {
-    color: black;
-    background-color: white;
-}
 
 .tweetItem {
 /* These three are neccessary to slide out*/
@@ -617,6 +608,13 @@ ul.lastfm-buttons {
 /* Essential */
     height: 58px;
     border-bottom: 3px solid whitesmoke;
+    color: black;
+    background-color: white;
+}
+
+.tweetPlay {
+    color:white;
+    background-color: rgb(201, 24, 95);
 }
 
 .tweetItem_drag {

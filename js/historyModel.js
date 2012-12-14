@@ -67,7 +67,7 @@
 			self.highlightCurrentlyPlayingSong = function() {
 				setTimeout(function() {
 					$(".tweetItem").removeClass("tweetPlay");
-					$(".tweetItem[url='"+ Spank.player.current_ownerid() + "']").removeClass("tweetStop").addClass("tweetPlay");
+					$(".tweetItem[url='"+ Spank.player.current_ownerid() + "']").addClass("tweetPlay");
 				},10)
 			};
 
