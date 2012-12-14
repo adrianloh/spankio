@@ -68,7 +68,7 @@
 						setTimeout(function() {
 							Spank.notifyCurrentSong(o.title + " - " + o.artist);
 						},1000)
-						var koo = Spank.history.findWithUrl(o.url);
+						var koo = Spank.history.findHistoryItemWithUrl(o.url);
 						o.direct = newDirectLink;
 						if (koo!==null) {
 							koo.direct(newDirectLink);
@@ -89,7 +89,7 @@
 					try {
 						var images = res.results.trackmatches.track.image;
 						if (Array.isArray(images) && images.length>0) {
-							var koo = Spank.history.findWithUrl(o.url);
+							var koo = Spank.history.findHistoryItemWithUrl(o.url);
 							if (koo!==null) {
 								var newCoverUrl = images[images.length-1]['#text'];
 								koo.thumb(newCoverUrl);
@@ -159,7 +159,7 @@
 				next_play_index = Spank.utils.randrange(0, underlyingArray.length-1);
 			} else if (underlyingArray.length > 1) {
 				// Normal play, no modes
-				var koo = Spank.history.findWithUrl(Spank.player.lastPlayedObject.url),
+				var koo = Spank.history.findHistoryItemWithUrl(Spank.player.lastPlayedObject.url),
 					next_index = Spank.history.stream.indexOf(koo)+1;
 				next_play_index = next_index < underlyingArray.length && next_index || 0;
 			} else if (threeSixtyPlayer.config.loop===false) {

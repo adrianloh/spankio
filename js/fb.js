@@ -9,18 +9,23 @@ window.fbAsyncInit = function checkFacebookStatus() {
 		xfbml      : true  // parse XFBML tags on this page?
 	};
 
-	var dev_settings = {
-		appId      : '	573967942630120', // App ID from the App Dashboard
-		channelUrl : '//xerxes.local:8888/channel.html', // Channel File for x-domain communication
-		status     : true, // check the login status upon init?
-		cookie     : true, // set sessions cookies to allow your server to access the session?
-		xfbml      : true  // parse XFBML tags on this page?
+	var dev_settings = function(url) {
+		return {
+			appId      : '	573967942630120', // App ID from the App Dashboard
+			channelUrl : '//' + url + '/channel.html',
+			status     : true, // check the login status upon init?
+			cookie     : true, // set sessions cookies to allow your server to access the session?
+			xfbml      : true  // parse XFBML tags on this page?
+		};
 	};
 
 	var settings = {
-		"spank.io": production_settings,
-		"xerxes.local:8888": dev_settings
+		"spank.io": production_settings
 	};
+
+	["xerxes.local:8888", "matterhorn.local:8888"].forEach(function(url) {
+		settings[url] = dev_settings(url);
+	});
 
 	FB.init(settings[window.location.host]);
 

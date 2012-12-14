@@ -407,10 +407,11 @@
         <ul id="history-stream-list" data-bind="sortable: {data: stream, afterMove: saveHistory }">
             <li class="tweetItem tweetStop" data-bind="cartDeleteIcons:$data">
                 <img class="tweetThumb" onerror="ImgError(this)" data-bind="pickupStreamItems:$data, attr: { src: thumb }" />
-                <a class="tweetDownloadLink" data-bind="attr: { href: direct }"><img class="tweetDownload" src="/img/cart.png" /></a>
-                <!--<img class="tweetGift" src="/img/gift.png" data-bind="visible: $root.isThisAGift($data)" />-->
-                <img class="tweetDelete" src="/img/deleteTweet.png" data-bind="click: $root.deleteHistoryItem" />
-                <div class="tweetDetails" data-bind="click: $root.playHistoryItem">
+                <a class="tweetDownloadLink" href="#" data-bind="event: { mouseover: $root.downloadHistoryItemOnClick }">
+                    <img class="tweetDownload" src="/img/cart.png" />
+                </a>
+                <img class="tweetDelete" src="/img/deleteTweet.png" data-bind="click: $root.deleteHistoryItemOnClick" />
+                <div class="tweetDetails" data-bind="click: $root.playHistoryItemOnClick">
                     <div class="tweetTrackName" data-bind="text: title"></div>
                     <div class="tweetTrackArtist" data-bind="text: artist"></div>
                 </div>
@@ -520,6 +521,8 @@
         #config-panel { display:none; }
     </style>
     <!-- 360 Player STUFF END-->
+
+    <script type="text/javascript" src="/js/jquery.download.js"></script>
 
 </body>
 

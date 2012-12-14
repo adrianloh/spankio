@@ -6,7 +6,7 @@
 
 		$(document).one("login", function() {
 
-			var firebaseOKName = Spank.utils.toFirebaseName(FBUserInfo.username); // Illegal characters for Firebase urls
+			var firebaseOKName = Spank.utils.toFirebaseName(FBUserInfo.username);
 			Spank.base.users = 'https://wild.firebaseio.com/spank/users/';
 			Spank.base.url = Spank.base.users + firebaseOKName;
 			Spank.base.history = new Firebase(Spank.base.url + "/history");
@@ -30,20 +30,22 @@
 						clearTimeout(t2);
 					},1500);
 					Spank.base.history.off('value');
-					Spank.base.history.on('child_changed', addNewHistoryItem);
-					Spank.base.history.on('child_added', addNewHistoryItem);
+					Spank.base.history.on('child_changed', updateHistoryItem);
+					Spank.base.history.on('child_added', updateHistoryItem);
 					Spank.base.history.on('child_removed', function(snapshot) {
+						// Fix for an off-by-one error everytime we remove
+						// something from the history list
 						Spank.history.stream.pop();
-					})
+					});
 				} else {
 					console.error(snapshot.val());
 				}
 			});
 
-			var addNewHistoryItem = function(snapshot) {
+			var updateHistoryItem = function(snapshot) {
 				var o = snapshot.val();
 				if (o!==null) {
-					var atHistoryIndex = parseInt(snapshot.name()),
+					var atHistoryIndex = parseInt(snapshot.name(),10),
 						koo = {};
 					$.each(o, function(k,v) {
 						koo[k] = ko.observable(v);
@@ -59,27 +61,61 @@
 		});
 
 		Spank.history = (function() {
-			var self = {},
-				utils = {
-					deleteFromArray: function(o, array) {
-						var newArray = $.map(array, function(item){
-							if (item.url===o.url || ($.trim(item.title.toLowerCase())=== $.trim(o.title.toLowerCase()) && $.trim(item.artist.toLowerCase())=== $.trim(o.artist.toLowerCase()))) {
-								// pass
-							} else {
-								return item
-							}
-						});
-						if (Array.isArray(newArray)) {
-							return newArray
-						} else {
-							return undefined;
-						}
-					}
-				};
+			var self = {};
 			self.stream = ko.observableArray([]);
-			self.findWithUrl = function(url) {
-				return ko.utils.arrayFirst(self.stream(), function(o) { return o.url()===url })
+
+			function similarArtistAndTitle(o1, o2) {
+				var isSimilar = false,
+					attr = ['title', 'artist'],
+					strip = $.trim;
+				$.each(attr, function(i,a) {
+					if (strip(o1[a].toLowerCase())===strip(o2[a].toLowerCase())) {
+						isSimilar = true;
+					}
+				});
+				return isSimilar;
+			}
+
+			function isTheSameGift(gift,o) {
+				if (o.gift===undefined) {
+					return false;
+				} else {
+					return (o.gift.from===gift.from && o.gift.message===gift.message)
+				}
+			}
+
+			self.transaction_deleteFromHistory = function(o, array, add) {
+				var newArray = $.map(array, function(item) {
+					if ('gift' in o && !isTheSameGift(o, item)) {
+						return item;
+					} else if (item.url===o.url || similarArtistAndTitle(o, item)) {
+						// If any item in History is similar to the one we're deleting
+						// do not return this item to the new array e.g. don't save it.
+						// e.g. make sure we only keep unique items in history
+					} else {
+						return item;
+					}
+				});
+				if (Array.isArray(newArray)) {
+					if (add===true) {
+						newArray.unshift(o);
+					}
+					return newArray;
+				} else {
+					return undefined;
+				}
 			};
+
+			self.transaction_addNewHistoryItemAndMakeUnique = function(o, currentData) {
+				return self.transaction_deleteFromHistory(o, currentData, true);
+			};
+
+			self.findHistoryItemWithUrl = function(url) {
+				return ko.utils.arrayFirst(self.stream(), function(o) {
+					return o.url()===url;
+				});
+			};
+
 			self.highlightPlayingSong = function() {
 				setTimeout(function() {
 					var playingNow = threeSixtyPlayer.lastSound!==null ? !threeSixtyPlayer.lastSound.paused : false;
@@ -94,6 +130,7 @@
 					}
 				},10);
 			};
+
 			self.saveHistory = function(moveEvent) {
 				// E.g. the user moved an item
 				if (moveEvent===true || (typeof(moveEvent)!=='undefined' && ('item' in moveEvent) && ('sourceIndex' in moveEvent) && ('targetIndex' in moveEvent))) {
@@ -102,6 +139,7 @@
 					});
 				}
 			};
+
 			self.prependToHistory = function(xo, playNow) {
 				var koo = {},
 					stop = false;
@@ -116,29 +154,21 @@
 					}
 				});
 				// WARNING! Only KO observables allowed pass this point!!!
-				if (koo===Spank.player.lastPlayedObject) {
-					return false;
-				}
 				Spank.base.history.transaction(function update(currentData) {
 						var o = ko.toJS(koo);                               //// Back to Vanilla Jane objects
 						if (currentData===null) {
 							// currentData is null if history is empty
 							return [o];
 						} else if (Array.isArray(currentData)) {
-							// normal. Check to make sure we're getting an array
-							currentData = utils.deleteFromArray(o, currentData);
-							if (Array.isArray(currentData)) {
-								currentData.unshift(o);
-							}
-							return currentData;
+							return self.transaction_addNewHistoryItemAndMakeUnique(o, currentData);
 						} else {
 							// Abort the transaction
 							console.error("ERROR: Did not get an array from history.transaction");
 							console.error(currentData);
 							return undefined;
 						}
-					}, function onComplete(ok) {
-						//console.warn("Firebase HISTORY PUSHED");
+					}, function onComplete(success, snapshot) {
+						console.warn("Firebase HISTORY PUSH : " + success);
 					});
 				if (playNow) {
 					Spank.player.playObject(ko.toJS(koo));                      //// Back to Vanilla Jane objects
@@ -147,23 +177,25 @@
 					threeSixtyPlayer.config.jumpToTop = true;
 				}
 			};
-			self.deleteHistoryItem = function(koo, event) {
+
+			self.deleteHistoryItemOnClick = function(koo, event) {
 				// When you click on the red 'minus' icon
 				$(event.target).parent().animate({"left": "-=500px"}, 500, function() {
+					// If we're deleting an item that is currently playing, jump to next track
 					if (Spank.player.lastPlayedObject!==null && Spank.player.lastPlayedObject.url===koo.url()) {
 						Spank.player.suspendLoopAndTrigger(function() {
 							$(document).trigger('fatManFinish');
 						});
 					}
 					Spank.base.history.transaction(function update(currentData) {
-						currentData = utils.deleteFromArray(ko.toJS(koo), currentData);
-						return currentData;
-					}, function onComplete(ok) {
-						console.warn("Firebase HISTORY DELETE");
+						return self.transaction_deleteFromHistory(ko.toJS(koo), currentData);
+					}, function onComplete(success, snapshot) {
+						console.warn("Firebase HISTORY DELETE: " + JSON.stringify(success));
 					});
 				});
 			};
-			self.playHistoryItem = function(koo, event) { // When clicking a History item, push it to the top and play it
+
+			self.playHistoryItemOnClick = function(koo, event) { // When clicking a History item, push it to the top and play it
 				if (Spank.history.stream.indexOf(koo)>1) {
 					$(event.target).parent().parent().animate({"top": "-=1000px"}, 500, function() {
 						self.prependToHistory(koo, true);
@@ -171,33 +203,34 @@
 				} else {
 					self.prependToHistory(koo, true);
 				}
-				if ($("#history-filter").val()!=='Filter stream') {
-					$("#history-filter").trigger("blur");
+				var historyFilterBox = $("#history-filter");
+				if (historyFilterBox.val()!=='Filter stream') {
+					historyFilterBox.trigger("blur");
 				}
 			};
-			self.downloadHistoryItem = function(koo, event) {
-				$('<iframe width="0" height="0" frameborder="0" src="@"></iframe>'.replace("@", koo.direct())).appendTo("body");
-				setTimeout(function(){
-					$("iframe").remove();
-				},60000);
-			};
 
-			//// Keep this around...
-			self.isThisAGift = function(data) {
-				return true;
+			self.downloadHistoryItemOnClick = function(koo, event) {
+				var owner_id = koo.url().split(".")[0],
+					url = "https://api.vkontakte.ru/method/audio.getById?audios=" + owner_id + "&access_token=" + VK.getToken() + "&callback=?";
+				$.getJSON(url, function getActualVKLink(data) {
+					if(data.response && data.response.length>0) {
+						var newDirectLink = data.response[0].url;
+						koo.direct(newDirectLink);
+						$.fileDownload(newDirectLink);
+					}
+				});
 			};
 
 			return self;
+
 		})();
 
 		ko.applyBindings(Spank.history, document.getElementById('playHistory'));
 
 		var firstload = true;
 		Spank.history.stream.subscribe(function saveHistory() {
-			if (firstload) {    // The first time we load history, don't save it
-				firstload = false;
-				return true;
-			}
+			firstload = !firstload;
+			if (!firstload) return;
 			Spank.history.saveHistory();
 		});
 

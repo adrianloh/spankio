@@ -45,10 +45,10 @@
 			Spank.lightBox.lyricsTitle("");
 			Spank.lightBox.lyricsThumb("");
 			$("#vk-results-list").remove();
-			$("#lightBox").slideUp('fast','swing');
+			$("#lightBox").slideUp('fast','swing', function(){});
 			$("#closeButton").hide();
+			$("html").removeClass("busy");
 			$("#lightBox_jspPane").html("");
-			$(this).removeClass('busy');
 			$(".t_Tooltip_controlButtons2").remove();
 			vk_search_in_progress = false;
 			mx_get_lyrics_in_progress = false;

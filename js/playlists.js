@@ -59,7 +59,7 @@
 					selector = ".playlistThumb[title='@']".replace("@",playname);
 				if (!Array.isArray(playlist)) return;
 				if ($(selector).length===0) {
-					console.warn("Adding playlist thumbnail: " + playname);
+					//console.warn("Adding playlist thumbnail: " + playname);
 					Spank.playlistScroller.push({
 						title: playname,
 						cover: playlist[0].thumb
@@ -199,7 +199,6 @@
 		ko.applyBindings(Spank.playlistScroller, document.getElementById('playlistScroller'));
 
 		Spank.playlistScroller.playlistItems.subscribe(function(list) {
-			console.log("!")
 			Spank.rescanChildren();
 		});
 
