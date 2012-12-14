@@ -45,8 +45,9 @@
 		var fakeSource = "/static/silence.mp3";
 		Spank.player = {
 			current_url: ko.observable(fakeSource),
-			lastLastPlayedObject: null,
-			lastPlayedObject: null,
+			current_ownerid: ko.observable(""),
+			lastLastPlayedObject: {},
+			lastPlayedObject: {},
 			playObject: function(o) {
 				o = ko.toJS(o);             // Double make sure we are dealing with Plain Janes here and not koo's
 				this.lastLastPlayedObject = this.lastPlayedObject;
@@ -62,18 +63,16 @@
 				$.getJSON(url, function getActualVKLink(data) {
 					var newDirectLink = data.response[0].url;
 					if (newDirectLink) {
-						//console.log("Playing direct: " + newDirectLink);
 						Spank.player.current_url(newDirectLink);
-						$(".noty_text:first").trigger("mouseenter");
+						Spank.player.current_ownerid(o.url);
+						Spank.history.highlightCurrentlyPlayingSong();
+						$("#noty_topRight_layout_container").remove();
 						setTimeout(function() {
 							Spank.notifyCurrentSong(o.title + " - " + o.artist);
-						},1000)
+						},1000);
 						var koo = Spank.history.findHistoryItemWithUrl(o.url);
 						o.direct = newDirectLink;
-						if (koo!==null) {
-							koo.direct(newDirectLink);
-							Spank.history.highlightPlayingSong();
-						}
+						if (koo!==null) koo.direct(newDirectLink);
 						var pushData = {track:ko.toJS(o), position:0};
 						Spank.base.live.set(pushData);
 						$("#funkyPlayer").css("background", bgImage);
@@ -177,7 +176,7 @@
 			//console.log(data);
 		});
 
-
+		$(document).trigger("playerReady");
 
 	});
 

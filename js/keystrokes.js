@@ -26,20 +26,17 @@
 						});
 						break;
 					case keys.spacebar: // Toggle play/pause
-						if (Spank.player.lastPlayedObject===null && threeSixtyPlayer.config.loop) {
-							// The very first time we land and hit spacebar
-							threeSixtyPlayer.config.loop = false;
-							$(".sm2-360btn").trigger('click');
-							setTimeout(function() {
-								threeSixtyPlayer.config.loop = true;
-							},2000);
+						if (threeSixtyPlayer.lastSound===null) {
+							Spank.player.suspendLoopAndTrigger(function() {
+								$(document).trigger('fatManFinish');
+							});
 						} else {
 							$(".sm2-360btn").trigger('click');
 						}
 						break;
 					case keys.left:     // Previous song
 						var prevSong = Spank.player.lastLastPlayedObject;
-						if (prevSong!==null) {
+						if (prevSong.url) {
 							Spank.player.playObject(prevSong);
 						}
 						break;

@@ -52,7 +52,7 @@
 					});
 					Spank.history.stream()[atHistoryIndex] = koo;
 					Spank.history.stream.valueHasMutated();
-					Spank.history.highlightPlayingSong();
+					Spank.history.highlightCurrentlyPlayingSong();
 				} else {
 					console.error(o);
 				}
@@ -63,6 +63,13 @@
 		Spank.history = (function() {
 			var self = {};
 			self.stream = ko.observableArray([]);
+
+			self.highlightCurrentlyPlayingSong = function() {
+				setTimeout(function() {
+					$(".tweetItem").removeClass("tweetPlay");
+					$(".tweetItem[url='"+ Spank.player.current_ownerid() + "']").removeClass("tweetStop").addClass("tweetPlay");
+				},10)
+			};
 
 			function similarArtistAndTitle(o1, o2) {
 				var isSimilar = false,
@@ -116,21 +123,6 @@
 				});
 			};
 
-			self.highlightPlayingSong = function() {
-				setTimeout(function() {
-					var playingNow = threeSixtyPlayer.lastSound!==null ? !threeSixtyPlayer.lastSound.paused : false;
-					if (playingNow) {
-						//console.log("Last sound: " + threeSixtyPlayer.lastSound.url);
-						var tweetDownloadLink = $(".tweetDownloadLink[href='#']".replace('#', threeSixtyPlayer.lastSound.url));
-						if (tweetDownloadLink.length>0) {
-							var tweetItem = tweetDownloadLink.parent();
-							$(".tweetPlay").removeClass("tweetPlay");
-							tweetItem.removeClass("tweetStop").addClass("tweetPlay");
-						}
-					}
-				},10);
-			};
-
 			self.saveHistory = function(moveEvent) {
 				// E.g. the user moved an item
 				if (moveEvent===true || (typeof(moveEvent)!=='undefined' && ('item' in moveEvent) && ('sourceIndex' in moveEvent) && ('targetIndex' in moveEvent))) {
@@ -153,6 +145,10 @@
 						}
 					}
 				});
+				if (Spank.player.lastPlayedObject.url===koo.url()) {
+					// When user clicks the currently playing song
+					return false;
+				}
 				// WARNING! Only KO observables allowed pass this point!!!
 				Spank.base.history.transaction(function update(currentData) {
 						var o = ko.toJS(koo);                               //// Back to Vanilla Jane objects
@@ -182,7 +178,7 @@
 				// When you click on the red 'minus' icon
 				$(event.target).parent().animate({"left": "-=500px"}, 500, function() {
 					// If we're deleting an item that is currently playing, jump to next track
-					if (Spank.player.lastPlayedObject!==null && Spank.player.lastPlayedObject.url===koo.url()) {
+					if (Spank.player.lastPlayedObject.url===koo.url()) {
 						Spank.player.suspendLoopAndTrigger(function() {
 							$(document).trigger('fatManFinish');
 						});
