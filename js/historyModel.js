@@ -216,7 +216,7 @@
 					if(data.response && data.response.length>0) {
 						var newDirectLink = data.response[0].url;
 						koo.direct(newDirectLink);
-						$.fileDownload(newDirectLink);
+						$(event.target).parent().click(function() { return false; }).src("href",newDirectLink);
 					}
 				});
 			};
