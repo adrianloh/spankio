@@ -90,34 +90,22 @@ class XDomainFileHandler(tornado.web.RequestHandler):
 <cross-domain-policy>
 <allow-access-from domain="*" />
 </cross-domain-policy>""")
-
-class PlaylistHandler(tornado.web.RequestHandler):
-
-	@tornado.gen.engine
-	@tornado.web.asynchronous
-	def get(self, redkey):
-		self.set_header("Content-Type", "application/json")
-		redkey = urldecode(redkey)
-		tracklist = yield tornado.gen.Task(RED.get, redkey)
-		if tracklist: self.write(tracklist if (tracklist is not None) else json.dumps([]))
-		self.finish()
-
+	
 class MXSearchHandler(tornado.web.RequestHandler):
 
 	@tornado.gen.engine
 	@tornado.web.asynchronous
 	def get(self):
 		self.set_header("Content-Type", "application/json")
-#		data = json.loads(urldecode(o))
 		search_string = self.get_argument("q")
 		page = self.get_argument("page")
 		params = mx_parse_search(search_string, page=page)
 		params['apikey'] = MX_API_KEY
 		params['format'] = 'json'
-		params['quorum_factor'] = 0.85	# Level of fuzzy logic
+		# params['quorum_factor'] = 0.85	# Level of fuzzy logic
 		# Enabling these two options will sort by popularity
-		#params['g_common_track'] = 1
-		#params['s_track_rating'] = 'desc'
+		# params['g_common_track'] = 1
+		# params['s_track_rating'] = 'desc'
 		url = "http://api.musixmatch.com/ws/1.1/track.search?" + urlencode(params)
 		req = tornado.httpclient.HTTPRequest(url, user_agent=MX_AGENT, connect_timeout=10.0, request_timeout=10.0)
 		res = yield tornado.gen.Task(async_client.fetch, req)
@@ -136,7 +124,6 @@ application = tornado.web.Application([
 	(r"/", MainHandler),
 	(r"/channel.html", FBChannelFileHandler),
 	(r"/crossdomain.xml", XDomainFileHandler),
-	(r"/playlist/(.*)", PlaylistHandler), # Keep around for old users
 	(r"/mxsearch", MXSearchHandler),
 	(r"/static/(.*)", MyStaticHandler, {"path": site_root}),
 	(r"/js/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/js"}),

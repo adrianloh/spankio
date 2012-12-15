@@ -30,7 +30,6 @@
 		});
 
 		var dereference = function(o) {
-			//JSON.parse(JSON.stringify(this_playlist));
 			var t;
 			if (Array.isArray(o)) {
 				t = $.map(o, function(e) {
