@@ -81,12 +81,16 @@
 				});
 			});
 
+			var sentMailSound = new Audio("/static/sounds/mailsent.mp3");
+			sentMailSound.load();
+
 			$("#sendSongForm").submit(function(event) {
 				var messageField = $("#sendMessage"),
 					message = messageField.val();
 				Spank.sendToFriend(message);
 				$(this).hide();
 				messageField.val("");
+				sentMailSound.play();
 				return false;
 			});
 
@@ -111,6 +115,7 @@
 								friendData = ko.toJS(koo),
 								friendsHistory = Spank.friends.bases[friendData.username].history,
 								droppedHistoryItem = JSON.parse(JSON.stringify(document._draggedHistoryItem));
+							// This is a callback function for $("#sendSongForm").submit
 							Spank.sendToFriend = function(message) {
 								message = message.length>0 ? message : "This is awwweesooomme!";
 								friendsHistory.transaction(function(currentData) {

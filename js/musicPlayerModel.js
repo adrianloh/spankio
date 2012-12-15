@@ -45,7 +45,7 @@
 			}
 		});
 
-		var fakeSource = "/static/silence.mp3";
+		var fakeSource = "/static/sounds/silence.mp3";
 		Spank.player = {
 			current_url: ko.observable(fakeSource),
 			current_ownerid: ko.observable(""),

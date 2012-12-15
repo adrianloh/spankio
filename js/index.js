@@ -55,6 +55,7 @@
 			mx_get_lyrics_in_progress = false;
 			if (playlistScrollerWasVisible) {
 				Spank.playlistScroller.visible(true);
+				playlistScrollerWasVisible = false;
 			}
 		};
 

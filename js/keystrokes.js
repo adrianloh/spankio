@@ -10,6 +10,7 @@
 			backspace: 81112, // Don't intercept backspace, too risky
 			alpha_o: 79,
 			alpha_p: 80,
+			alpha_q: 81,
 			alpha_i: 73
 			},
 			boundKeys = $.map(keys, function(o) { return o; });
@@ -45,10 +46,8 @@
 							$(".tweetPlay").find(".tweetDelete").trigger("click");
 						});
 						break;
-					case keys.backspace: // Delete currently playing track from stream and go to next song
-						Spank.player.suspendLoopAndTrigger(function() {
-							$(".tweetPlay").find(".tweetDelete").trigger("click");
-						});
+					case keys.alpha_q: // Open/hide friends list
+						$("#friends_button").trigger("click");
 						break;
 					case keys.alpha_o:  // Toggle loop mode
 						$('.playModeButtons[src="/css/loop_on.png"]').trigger("click");
