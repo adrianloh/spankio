@@ -40,7 +40,8 @@
 		//
 		// When we CLOSE the LIGHTBOX
 		//
-		var tearDownLightBox = function() {
+		var playlistScrollerWasVisible = false;
+		Spank.tearDownLightBox = function() {
 			Spank.lightBox.lyricsText("");
 			Spank.lightBox.lyricsTitle("");
 			Spank.lightBox.lyricsThumb("");
@@ -52,11 +53,13 @@
 			$(".t_Tooltip_controlButtons2").remove();
 			vk_search_in_progress = false;
 			mx_get_lyrics_in_progress = false;
-			//$("#lyrics").focus();
+			if (playlistScrollerWasVisible) {
+				Spank.playlistScroller.visible(true);
+			}
 		};
 
 		$("#closeButton").click(function() {	// Close the lightbox. Stop playing music.
-			tearDownLightBox();
+			Spank.tearDownLightBox();
 		});
 
 		var attempts = 0;
@@ -147,7 +150,8 @@
 		$.searchByWire = function(search_term) {
 			// Each time we start a new search...
 			Spank.charts.ok_to_fetch_more = true;
-			tearDownLightBox();                                               // Close the lightbox
+			Spank.tearDownLightBox();                                               // Close the lightbox
+			Spank.friends.visible(false);                                     // Close the friends list
 			$(".playlistEntry").css("border","5px solid rgb(204, 204, 204)"); // Don't highlight any playlist items
 			if ($.trim(search_term)!=='') {
 				setTimeout(function() {
@@ -287,7 +291,8 @@
 //		});
 
 		$(".lyricLink").live('click', function openLightbox() {
-			if (!vk_search_in_progress && !mx_get_lyrics_in_progress && $("#lightBox").css("display")!='block') {
+			var lightBox = $("#lightBox");
+			if (!vk_search_in_progress && !mx_get_lyrics_in_progress && lightBox.css("display")!='block') {
 				var anchor = $(this),
 					trackEntry = anchor.parent().parent(),
 					title = anchor.text(),
@@ -301,7 +306,9 @@
 					mxid:mxid, thumb:thumb});
 				Spank.lightBox.lyricsThumb(thumb);
 				Spank.lightBox.lyricsTitle(title + " | " + artist);
-				$("#lightBox").slideDown('fast','swing', function() {
+				playlistScrollerWasVisible = Spank.playlistScroller.visible();
+				Spank.playlistScroller.visible(false);
+				lightBox.slideDown('fast','swing', function() {
 					$("#closeButton").show();
 				});
 			}

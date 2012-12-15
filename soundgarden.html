@@ -91,8 +91,8 @@
 
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.1.0/knockout-min.js"></script>
 
-    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
 
     <!-- Enable 'live searching' in the searchbar -->
     <script type="text/javascript" src="/js/livesearch.js"></script>
@@ -373,7 +373,7 @@
     <div id="logo">Spank.io</div>
 
     <div id="spank-player-controls">
-        <img id="chat_button" style="display:none;" class="playModeButtons" src="/img/chat.png" />
+        <img id="friends_button" class="playModeButtons" title="Friends [ q ]" src="/img/chat.png" />
         <img id="random_button" title="Shuffle chart entries [ i ]" class="playModeButtons" src="/css/random_on.png" />
         <img id="loop_button" title="Loop Mode [ o ]" class="playModeButtons" src="/css/loop_on.png" />
         <img id="shuffle_button" title="Shuffle Mode [ p ]" class="playModeButtons" src="/css/shuffle_on.png" />
@@ -386,10 +386,8 @@
     </div>
 
     <div id="funkyPlayer">
-        <div id="funkyPlayer-container">
-            <div class="ui360 ui360-vis" title="Play/Pause [ space ]">
-                <a class="fatManLink" data-bind="attr: { href: current_url }"></a>
-            </div>
+        <div class="ui360 ui360-vis funkyPlayer-container" title="Play/Pause [ space ]">
+            <a class="fatManLink" data-bind="attr: { href: current_url }"></a>
         </div>
     </div>
 
@@ -458,9 +456,9 @@
 
     <div id="friendList-container">
         <ul id="friendList" data-bind="foreach: friendlist">
-            <li class="friendItem" data-bind="droppableFriend:$data">
+            <li class="friendItem" data-bind="attr: { frequency: frequency }, droppableFriend:$data">
                 <div class="friendDetails">
-                    <img class="friendPic" onerror="UserImgError(this)" data-bind="attr: {src: picture} " />
+                    <img class="friendPic" onerror="UserImgError(this)" data-bind="attr: { src: picture} " />
                     <div class="friendName" data-bind="text: name"></div>
                 </div>
             </li>

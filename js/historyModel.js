@@ -11,7 +11,7 @@
 			Spank.base.url = Spank.base.users + firebaseOKName;
 			Spank.base.history = new Firebase(Spank.base.url + "/history");
 			$(document).trigger("baseReady");
-			Spank.base.history.on('value', function(snapshot) {
+			Spank.base.history.once('value', function(snapshot) {
 				var newHistory = snapshot.val();
 				if (Array.isArray(newHistory) && newHistory.length>0) {
 					var koHistory = $.map(newHistory, function(o) {
@@ -29,7 +29,6 @@
 						$(".hideshow-playlist-button").click();
 						clearTimeout(t2);
 					},1500);
-					Spank.base.history.off('value');
 					Spank.base.history.on('child_changed', updateHistoryItem);
 					Spank.base.history.on('child_added', updateHistoryItem);
 					Spank.base.history.on('child_removed', function(snapshot) {
@@ -83,26 +82,41 @@
 				return isSimilar;
 			}
 
-			function isTheSameGift(gift,o) {
+			function isTheSameGift(gift, o) {
 				if (o.gift===undefined) {
 					return false;
 				} else {
-					return (o.gift.from===gift.from && o.gift.message===gift.message)
+					return (similarArtistAndTitle(o, gift) && o.gift.from===gift.gift.from && o.gift.message===gift.gift.message);
 				}
 			}
 
 			self.transaction_deleteFromHistory = function(o, array, add) {
-				var newArray = $.map(array, function(item) {
-					if ('gift' in o && !isTheSameGift(o, item)) {
-						return item;
-					} else if (item.url===o.url || similarArtistAndTitle(o, item)) {
-						// If any item in History is similar to the one we're deleting
-						// do not return this item to the new array e.g. don't save it.
-						// e.g. make sure we only keep unique items in history
-					} else {
-						return item;
-					}
-				});
+				// This is executed within a Firebase transaction, if *anything*
+				// goes wrong, we must return undefined so the transaction is aborted.
+				var newArray;
+				if ('gift' in o) {
+					// Note that this branch ONLY happens when we manually delete a gift
+					newArray = $.map(array, function(item) {
+						if (!isTheSameGift(o, item)) {
+							return item;
+						} else {
+							console.log("Found this gift");
+						}
+					});
+				} else {
+					newArray = $.map(array, function(item) {
+						if (item.url===o.url || similarArtistAndTitle(o, item)) {
+							if ('gift' in item) {
+								return item;
+							}
+							// If any item in History is similar to the one we're deleting
+							// do not return this item to the new array e.g. don't save it.
+							// e.g. make sure we only keep unique items in history
+						} else {
+							return item;
+						}
+					});
+				}
 				if (Array.isArray(newArray)) {
 					if (add===true) {
 						newArray.unshift(o);

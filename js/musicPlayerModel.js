@@ -13,10 +13,13 @@
 		});
 
 		$(".playModeButtons").click(function() {
-			var attr = $(this).attr("src").match(/\/css\/(.+)_on/)[1];
-			threeSixtyPlayer.config[attr] = !threeSixtyPlayer.config[attr];
-			playerControlModel[attr](threeSixtyPlayer.config[attr]);
-			localStorage[attr] = threeSixtyPlayer.config[attr];
+			var match = $(this).attr("src").match(/\/css\/(.+)_on/);
+			if (match) {
+				var attr = match[1];
+				threeSixtyPlayer.config[attr] = !threeSixtyPlayer.config[attr];
+				playerControlModel[attr](threeSixtyPlayer.config[attr]);
+				localStorage[attr] = threeSixtyPlayer.config[attr];
+			}
 		});
 
 		var playerControlModel = {
@@ -170,13 +173,6 @@
 				Spank.player.playObject(underlyingArray[next_play_index]);
 			}
 		});
-
-		$(document).bind('fatManPlay', function(e,data) {
-			//console.log("Song started...");
-			//console.log(data);
-		});
-
-		$(document).trigger("playerReady");
 
 	});
 

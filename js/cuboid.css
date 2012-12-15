@@ -1,0 +1,62 @@
+#options {
+    position: absolute;
+    bottom: 10px;
+    z-index: 100;
+    margin-bottom: 40px;
+}
+
+button {
+    font-size: 16px;
+    -webkit-appearance: push-button;
+}
+
+.cubes {
+    width:100%;
+    height: 100%;
+    position: absolute;
+    -webkit-transform-style: preserve-3d;
+    /*-webkit-transform: translateZ(-#px).replace("#", half);*/
+    -webkit-transition: -webkit-transform 1s;
+}
+
+.container {
+    -webkit-perspective: 2000;
+}
+
+#myList {
+    position: absolute;
+    display: none;
+}
+
+#myList li {
+    position: relative;
+    left: 0px;
+    width: 100%;
+    /* Essential */
+    height: 58px;
+    border-bottom: 3px solid whitesmoke;
+    color: black;
+    background-color: white;
+}
+
+#facefuck-container {
+    color: #111111;
+    font: 800 15px "PT Sans Narrow";
+    width: 30%;
+    position: fixed;
+    z-index: 9;
+    right: 0;
+    top: 38%;
+    height: 62%;
+    overflow: auto;
+    background-color: whitesmoke;
+}
+
+#facefuck {
+    position: absolute;
+    width: 100%;
+    height: 350px;
+    background-color: whitesmoke;
+    background-size: 50% auto;
+    background-repeat: no-repeat;
+}

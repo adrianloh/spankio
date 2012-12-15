@@ -47,6 +47,7 @@
 				hoverClass: "bgOver",
 				drop: function addDroppedTrackToPlaylistInScrollbar() {
 					if (document._draggedHistoryItem!==null) {
+						document._ignoreDrop = true;
 						var droppedHistoryItem = JSON.parse(JSON.stringify(document._draggedHistoryItem)),
 							playlistThumb = $(this).find(".playlistThumb"),
 							playlistThumbThatWasClicked = {
@@ -56,6 +57,9 @@
 							},
 							playname = playlistThumbThatWasClicked.title;
 						Spank.playlistScroller.addSongToPlaylist(playname, droppedHistoryItem);
+						setTimeout(function() {
+							document._ignoreDrop = false;
+						},300);
 					}
 				}
 			});

@@ -54,7 +54,7 @@
 		});
 
 		Tipped.create("#playlistScroller", function(element) {
-			if (!Spank.charts.currentPlaylistTitle) {
+			if (!Spank.charts.currentPlaylistTitle()) {
 				return "Drop on a playlist thumbnail to add to it";
 			} else {
 				return "Drop to other playlists to add to them";
@@ -66,10 +66,16 @@
 			hook: 'topleft'
 		});
 
-		Tipped.create("#resultsSection", "Drop here to find similar songs", {
+		Tipped.create("#resultsSection", function(element) {
+			if (Spank.friends.visible()) {
+				return "Drop a song on a friend to share!"
+			} else {
+				return "Drop here to find similar songs"
+			}
+		}, {
 			skin:'dropTip',
 			showOn:false,
-			offset: { x: 300, y: 0 },
+			offset: { x: 300, y: -100 },
 			hook: 'leftmiddle'
 		});
 

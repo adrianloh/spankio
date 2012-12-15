@@ -14,7 +14,7 @@ Array.prototype.shuffle = function() {
 
 		Spank.charts = (function() {
 			var self = {};
-			self.currentPlaylistTitle = undefined;
+			self.currentPlaylistTitle = ko.observable(undefined);
 			self.current_url = null;
 			self.ok_to_fetch_more = true;
 			self.shoppingCart = ko.observableArray([]);
@@ -23,8 +23,8 @@ Array.prototype.shuffle = function() {
 				return Spank.utils.padToFour(self.chartTracks().length);
 			});
 			self.onResort = function(o) {
-				if (self.currentPlaylistTitle) {
-					Spank.playlistScroller.savePlaylist(self.currentPlaylistTitle, self.chartTracks());
+				if (self.currentPlaylistTitle()) {
+					Spank.playlistScroller.savePlaylist(self.currentPlaylistTitle(), self.chartTracks());
 				}
 			};
 			self.fetchMore = function() {
@@ -99,7 +99,7 @@ Array.prototype.shuffle = function() {
 			};
 			self.populateResultsWithUrl = function(url, extract_function, error_callback) {
 				// This function is called to look for Similar artists/Similar tracks
-				self.currentPlaylistTitle = undefined;
+				self.currentPlaylistTitle(undefined);
 				$("html").addClass('busy');
 				$.getJSON(url, function(res) {
 					var tracklist;
@@ -156,9 +156,9 @@ Array.prototype.shuffle = function() {
 			if (list.length===0) {
 				Spank.charts.shoppingCart.removeAll();
 			}
-			// $(".trackEntry.unwobbled").each(function(i,elem) {
-			// 	Spank.utils.wobble(elem,-8,8);
-			// });
+			$(".trackEntry.unwobbled").each(function(i,elem) {
+				Spank.utils.wobble(elem,-7,7);
+			});
 		});
 
 		$("#random_button").mousedown(function onClickShuffleResultsButton() {

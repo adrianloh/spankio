@@ -10,25 +10,10 @@
 			$(this).css("z-index","1");
 		});
 
-		$("#playlistDropZone").droppable({
-			accept: ".tweetThumb",
-			greedy: true,
-			tolerance: "pointer",
-			hoverClass: "bgOver",
-			drop: function addDroppedTrackToPlaylistView() {
-				setTimeout(function() {
-					if (document._ignoreDrop===true) return false;
-					var droppedHistoryItem = JSON.parse(JSON.stringify(document._draggedHistoryItem));
-					Spank.playlistScroller.addSongToPlaylist(Spank.charts.currentPlaylistTitle, droppedHistoryItem);
-				},250);
-			}
-		});
-
 		ko.bindingHandlers.cartDeleteIcons = {
 			init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 				var data = ko.toJS(valueAccessor()),
-					li = $(element),
-					ul = li.parent();
+					li = $(element);
 				if (data.hasOwnProperty("gift")) {
 					var img = '<img class="tweetGift" src="/img/gift.png" from="@" message="#" />';
 					img = img.replace("@", data.gift.from).replace("#", data.gift.message);
@@ -58,7 +43,7 @@
 
 		var historyDropZones = function(op) {
 			var tipsToShow = ['#searchField','#playlistScroller'];
-			if (!Spank.charts.currentPlaylistTitle) {
+			if (!Spank.charts.currentPlaylistTitle()) {
 				tipsToShow.push('#resultsSection');
 			}
 			$.each(tipsToShow, function(i,o) {
@@ -74,12 +59,13 @@
 					scroll: false,
 					helper: 'clone',
 					revert: 'invalid',
-					cursor: '-webkit-grabbing',
+//					cursor: '-webkit-grabbing',
 					zIndex:999,
-					start:function( event ) {
+					start:function( event, ui ) {
+						document._draggedHistoryItemUIParent = $(element).parent();
 						document._draggedHistoryItem = ko.toJS(valueAccessor()); // Gets us the raw JSON object of the history item that was picked up
 						var searchZone = $("#playlistSearchZone");
-						if (Spank.charts.currentPlaylistTitle) {
+						if (Spank.charts.currentPlaylistTitle()) {
 							searchZone.removeClass("searchFullWidth").show();
 							$("#playlistDropZone").show();
 						} else {
@@ -111,6 +97,20 @@
 			}
 		});
 
+		$("#playlistDropZone").droppable({
+			accept: ".tweetThumb",
+			greedy: true,
+			tolerance: "pointer",
+			hoverClass: "bgOver",
+			drop: function addDroppedTrackToPlaylistView() {
+				setTimeout(function() {
+					if (document._ignoreDrop===true) return false;
+					var droppedHistoryItem = JSON.parse(JSON.stringify(document._draggedHistoryItem));
+					Spank.playlistScroller.addSongToPlaylist(Spank.charts.currentPlaylistTitle(), droppedHistoryItem);
+				},250);
+			}
+		});
+
 		$("#playlistSearchZone").droppable({
 			accept: ".tweetThumb",
 			hoverClass: "bgOver",
@@ -123,7 +123,7 @@
 						Spank.charts.populateResultsWithUrl(url, function extract(res) {
 							return res.similartracks.track;
 						}, function noresults() {
-							alert("Couldn't find any similar songs!");
+							window.notify.error("Couldn't find any similar songs!");
 						});
 					}
 				},250);

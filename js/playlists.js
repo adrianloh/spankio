@@ -74,7 +74,7 @@
 							this_playlist = o.list,
 							this_selector = ".playlistThumb[title='@']".replace("@", this_playname),
 							this_PlaylistThumbnail = $(this_selector),
-							isInView = Spank.charts.currentPlaylistTitle===this_playname;
+							isInView = Spank.charts.currentPlaylistTitle()===this_playname;
 						Spank.playlists[this_playname] = dereference(this_playlist);
 						if (isInView) Spank.charts.pushBatch(this_playlist, 'replace');
 						window.notify.information("Playlist updated '" + playname + "'");
@@ -95,7 +95,7 @@
 				playlistThumbnail.parent().remove();
 				window.notify.error("Deleted playlist " + playname);
 				Spank.rescanChildren();
-				if (Spank.charts.currentPlaylistTitle===playname) {
+				if (Spank.charts.currentPlaylistTitle()===playname) {
 					$(".playlistThumb[title='Billboards UK']").trigger("click");
 				}
 			});
@@ -109,8 +109,8 @@
 					Spank.bases[newname] = Spank.bases[oldname];
 					Spank.playlists[newname] = Spank.playlists[oldname];
 					Spank.bases.known[snapshot.name()] = newname;
-					if (Spank.charts.currentPlaylistTitle===oldname) {
-						Spank.charts.currentPlaylistTitle = newname;
+					if (Spank.charts.currentPlaylistTitle()===oldname) {
+						Spank.charts.currentPlaylistTitle(newname);
 					}
 					// Change the attribute attached to the thumb of this playlist
 					var selector = ".playlistThumb[title='@']".replace("@", oldname),
@@ -123,6 +123,7 @@
 		});
 
 		Spank.playlistScroller = {
+			visible: ko.observable(false),
 			playlistItems: ko.observableArray([]),
 			getPlaylistInScrollerWithName: function(name) {
 				var list = ko.utils.arrayFilter(this.playlistItems(), function(item) {
@@ -165,7 +166,7 @@
 			},
 			addSongToPlaylist: function(playname, track) {
 				var isNewPlaylist = typeof(Spank.playlists[playname])==='undefined',
-					isInView = Spank.charts.currentPlaylistTitle === playname,
+					isInView = Spank.charts.currentPlaylistTitle() === playname,
 					tracklist = [],
 					selector = ".playlistThumb[title='@']".replace("@",playname);
 				if (!isNewPlaylist) {
@@ -204,6 +205,25 @@
 
 		Spank.playlistScroller.push({cover:'/img/emptyplaylist.png'});
 
+		Spank.playlistScroller.visible.subscribe(function(isTrue) {
+			var button = $(".hideshow-playlist-button"),
+				scroller = $("#playlistScroller");
+			if (isTrue) {
+				scroller.animate({bottom: '0px'}, 500, 'swing', function(){
+					button.text("Hide Playlists");
+				});
+			} else {
+				scroller.animate({bottom: '-200px'}, 500, 'swing', function() {
+					button.text("Show Playlists");
+				});
+			}
+		});
+
+		$(".hideshow-playlist-button").click(function() {
+			var current = Spank.playlistScroller.visible();
+			Spank.playlistScroller.visible(!current);
+		});
+
 		$.each(chartPlaylistItems, function(i,o) {
 			// Populate the playlist bar with charts
 			Spank.playlistScroller.push(o);
@@ -229,7 +249,7 @@
 				}).css("border", default_color);
 				this_image.parent().css("border", highlight_border);
 			};
-			Spank.charts.currentPlaylistTitle = title;  // NOTE: This is undefined for all results *except* when a user's playlist is open
+			Spank.charts.currentPlaylistTitle(title);  // NOTE: This is undefined for all results *except* when a user's playlist is open
 			Spank.charts.current_url = url;             // This is "#" when a user's playlist is open
 			if (reset) {
 				// E.g. the first time we click on a playlist item and load new results...
@@ -253,6 +273,12 @@
 			// Note, we also artificially trigger this event when we're autopaging. In
 			// which case myUrl (usually page=2||page=3, etc.) is used, otherwise the url
 			// is gotten from the playlist thumbnail itself.
+			try {
+				// This might not be ready on first launch, doesn't matter
+				Spank.friends.visible(false);
+				Spank.tearDownLightBox();
+			} catch(err) {};
+
 			var this_image = $(this),
 				tracklist,
 				url = myUrl || $(this).attr("url"),
@@ -335,7 +361,7 @@
 		});
 
 		$(".trash").click(function() {
-			var playname = Spank.charts.currentPlaylistTitle;
+			var playname = Spank.charts.currentPlaylistTitle();
 			if (playname) {
 				var activeShoppingCart = Spank.charts.shoppingCart(),
 					currentPlaylist = Spank.playlists[playname];
@@ -361,22 +387,6 @@
 			} else {
 				console.error("Attempted to save playlist but cannot get playlist name");
 				Spank.charts.shoppingCart.removeAll();
-			}
-		});
-
-		$(".hideshow-playlist-button").click(function() {
-			var button = $(this),
-				scroller = $("#playlistScroller");
-			if (scroller.css("bottom") >= '0px') {
-				// Hide playlists
-				scroller.animate({bottom: '-200px'}, 500, 'swing', function() {
-					button.text("Show Playlists");
-				});
-			} else {
-				// Reveal playlists
-				scroller.animate({bottom: '0px'}, 500, 'swing', function(){
-					button.text("Hide Playlists");
-				});
 			}
 		});
 
