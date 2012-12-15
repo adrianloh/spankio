@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="32ba444c-fc18-4642-a53c-06c7d6e77d49" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/draggables.js" afterPath="$PROJECT_DIR$/js/draggables.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/friends.js" afterPath="$PROJECT_DIR$/js/friends.js" />
     </list>
     <ignored path="soundgarden-heroku.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -81,10 +81,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="draggables.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="draggables.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/draggables.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="33" column="24" selection-start="1072" selection-end="1072" vertical-scroll-proportion="0.42733812">
+            <state line="34" column="21" selection-start="1136" selection-end="1136" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -110,10 +110,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="friends.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="friends.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/friends.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="117" column="40" selection-start="7051" selection-end="7051" vertical-scroll-proportion="0.0">
+            <state line="116" column="0" selection-start="7011" selection-end="7011" vertical-scroll-proportion="0.3266187">
               <folding />
             </state>
           </provider>
@@ -146,8 +146,8 @@
         <option value="$PROJECT_DIR$/js/historyModel.js" />
         <option value="$PROJECT_DIR$/js/noty/notifications.js" />
         <option value="$PROJECT_DIR$/js/fb.js" />
-        <option value="$PROJECT_DIR$/js/friends.js" />
         <option value="$PROJECT_DIR$/js/draggables.js" />
+        <option value="$PROJECT_DIR$/js/friends.js" />
       </list>
     </option>
   </component>
@@ -504,13 +504,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/playlists.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="378" column="17" selection-start="14929" selection-end="14929" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/noty/notifications.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="34" column="16" selection-start="963" selection-end="963" vertical-scroll-proportion="0.0">
@@ -527,13 +520,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/historyModel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="20" selection-start="1044" selection-end="1044" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/soundgarden.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="389" column="45" selection-start="16810" selection-end="16810" vertical-scroll-proportion="-4.6666665">
@@ -546,16 +532,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/friends.js">
+    <entry file="file://$PROJECT_DIR$/js/draggables.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="117" column="40" selection-start="7051" selection-end="7051" vertical-scroll-proportion="0.0">
+        <state line="34" column="21" selection-start="1136" selection-end="1136" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/draggables.js">
+    <entry file="file://$PROJECT_DIR$/js/historyModel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="24" selection-start="1072" selection-end="1072" vertical-scroll-proportion="0.42733812">
+        <state line="30" column="20" selection-start="1044" selection-end="1044" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/playlists.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="378" column="17" selection-start="14929" selection-end="14929" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/friends.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="116" column="0" selection-start="7011" selection-end="7011" vertical-scroll-proportion="0.3266187">
           <folding />
         </state>
       </provider>

@@ -112,7 +112,7 @@
 								friendsHistory = Spank.friends.bases[friendData.username].history,
 								droppedHistoryItem = JSON.parse(JSON.stringify(document._draggedHistoryItem));
 							Spank.sendToFriend = function(message) {
-								message = message.length>0 ? message : "Check this out!";
+								message = message.length>0 ? message : "This is awwweesooomme!";
 								friendsHistory.transaction(function(currentData) {
 									droppedHistoryItem.gift = {
 										from:FBUserInfo.name,
