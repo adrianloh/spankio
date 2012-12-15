@@ -10,6 +10,10 @@
 	to {-webkit-transform: rotateZ(3deg);}
 }
 
+.funkyPlayer-container {
+    left: 20%;
+}
+
 #friendList-container {
     position: absolute;
     z-index: 10;
@@ -216,7 +220,7 @@
 
 .friendHover {
     color: #000000;
-    background-color: rgba(218, 226, 115, 0.47);
+    background-color: rgba(50, 217, 238, 0.5);
     -webkit-transform: scale(1.2);
     -webkit-animation-name: wiggle;
     -webkit-animation-duration: .2s;
@@ -236,19 +240,11 @@
 html.busy, html.busy * {
 	cursor: wait;
 }
-BODY
-{
-	/*background-position: -20% 20%;*/
-	/*background-size: cover;*/
-	/*font-size: 12px;*/
-	/*line-height: 1.5em;*/
-	/*font-weight: 300;*/
-	/*text-align: center;*/
+body {
 	overflow: hidden;
 	background-color: rgb(241, 241, 241);
 }
-A
-{
+a {
 	color: #FFFFFF;
 	text-decoration: none;
 	-webkit-transition: color 0.3s ease-out;
@@ -256,8 +252,7 @@ A
 	-o-transition: color 0.3s ease-out;
 	transition: color 0.3s ease-out;
 }
-A:hover
-{
+a:hover {
 	color: #000;
 }
 
@@ -275,25 +270,15 @@ ul.results-list {
 }
 
 /* Disable the bullet thing on list items */
-ul
-{
+ul {
 	list-style-type: none;
 	/*list-style-position: inside;
 	list-style-image: url('/static/img/finger.png');
 	*/
 }
-iframe {
-	margin: 0;
-	border: none;
-	width: 110%;
-	height: 110%;
-	margin-top: -10px;
-	margin-left: -10px;
-}
 /* The search form
 ==================================================*/
-FORM
-{
+#searchForm form {
 	position: fixed;
 	font-size: 68px;
 	font-weight: 900;
@@ -303,8 +288,7 @@ FORM
 	margin-left: 9%;
 	/*margin: 0 auto;*/
 }
-#searchField
-{
+#searchField {
 	font: 44.5%/1 Oswald;
 	text-shadow: -0.095em 0 red, 0.095em 0 cyan;
 	letter-spacing: 0px;
@@ -314,18 +298,14 @@ FORM
 	background-color: rgba(255, 255, 255, 1);
 	border: 6px solid rgb(63, 63, 63);
 	color: #000000;
-/*-webkit-transform: rotate(-2deg);*/
 }
-INPUT::-webkit-input-placeholder
-{
+input::-webkit-input-placeholder {
 	color: #222;
 }
-INPUT:-moz-placeholder
-{
+input:-moz-placeholder {
 	color: #222;
 }
-INPUT:-ms-input-placeholder
-{
+input:-ms-input-placeholder {
 	color: #222;
 }
 #searchForm {
@@ -614,10 +594,6 @@ ul.lastfm-buttons {
     height: 28%;
 }
 
-.funkyPlayer-container {
-    left: 20%;
-}
-
 #playHistory a {
     color: #111111;
     font: 800 15px "PT Sans Narrow";
@@ -657,7 +633,8 @@ ul.lastfm-buttons {
 
 .tweetPlay {
     color:white;
-    background-color: rgb(201, 24, 95);
+    background-color: #4399ee;
+    /*background-color: rgb(201, 24, 95);*/
 }
 
 .tweetItem_drag {
@@ -734,35 +711,3 @@ ul.lastfm-buttons {
     float: right;
     margin-right: 5%;
 }​
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -43,7 +43,8 @@ window.fbAsyncInit = function checkFacebookStatus() {
 			var q = "SELECT name,username,uid FROM user WHERE uid in (SELECT uid2 FROM friend WHERE uid1=me()) and is_app_user='1'";
 			FB.api('fql',{q:q}, function(res) {
 				FBUserInfo.friends = res.data;
-				window.notify.success("Logged into Facebook");
+				window.notify.success("Logged in! Gathering intelligence...");
+				window.notify.suspended = true;
 				$(document).trigger("login");
 				localStorage.spank = JSON.stringify(FBUserInfo);
 			});

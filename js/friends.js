@@ -81,6 +81,15 @@
 				});
 			});
 
+			$("#sendSongForm").submit(function(event) {
+				var messageField = $("#sendMessage"),
+					message = messageField.val();
+				Spank.sendToFriend(message);
+				$(this).hide();
+				messageField.val("");
+				return false;
+			});
+
 			ko.bindingHandlers.droppableFriend = {
 				init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 					$(element).droppable({
@@ -89,7 +98,8 @@
 						tolerance: "pointer",
 						hoverClass: "friendHover",
 						drop: function(event, ui) {
-							document._ignoreDrop = true; // prevent intercept of drop by other elements underneath
+//// Prevent intercept of drop by other elements underneath
+							document._ignoreDrop = true;
 							setTimeout(function() {
 								document._ignoreDrop = false;
 							},1000);
@@ -100,24 +110,29 @@
 							var koo = valueAccessor(),
 								friendData = ko.toJS(koo),
 								friendsHistory = Spank.friends.bases[friendData.username].history,
-								droppedHistoryItem = document._draggedHistoryItem;
-							friendsHistory.transaction(function(currentData) {
-								droppedHistoryItem.gift = {
-									from:FBUserInfo.name,
-									message:"Reminded me of you!"
-								};
-								if (currentData!==null) {
-									currentData.unshift(droppedHistoryItem);
-								}
-								return currentData;
-							}, function onSendComplete(success, data) {
-								Spank.friends.bases[friendData.username].base.transaction(function(currentData) {
-									currentData.frequency = currentData.frequency+1;
+								droppedHistoryItem = JSON.parse(JSON.stringify(document._draggedHistoryItem));
+							Spank.sendToFriend = function(message) {
+								message = message.length>0 ? message : "Check this out!";
+								friendsHistory.transaction(function(currentData) {
+									droppedHistoryItem.gift = {
+										from:FBUserInfo.name,
+										message: message
+									};
+									if (currentData!==null) {
+										currentData.unshift(droppedHistoryItem);
+									}
 									return currentData;
-								}, function onUpdateFreqComplete(success, data) {
-									window.notify.information("Shared '" + droppedHistoryItem.title + "' with " + friendData.name);
+								}, function onSendComplete(success, data) {
+									Spank.friends.bases[friendData.username].base.transaction(function(currentData) {
+										currentData.frequency = currentData.frequency+1;
+										return currentData;
+									}, function onUpdateFreqComplete(success, data) {
+										console.log(data.val());
+										window.notify.information("Shared '" + droppedHistoryItem.title + "' with " + friendData.name);
+									});
 								});
-							});
+							};
+							$("#sendSongForm").slideDown('fast','swing');
 						}
 					});
 				}

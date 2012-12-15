@@ -23,8 +23,9 @@
 					});
 					Spank.history.stream(koHistory);
 					setTimeout(function() {
+						window.notify.suspended = false;
 						window.notify.information("Go!");
-					},1000);
+					},2000);
 					var t2 = setTimeout(function() {
 						$(".hideshow-playlist-button").click();
 						clearTimeout(t2);

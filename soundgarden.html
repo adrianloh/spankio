@@ -8,6 +8,8 @@
     <link href='http://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
 
 	<link rel="stylesheet" type="text/css" href="/css/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="/css/fontawesome/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="/css/forms.css" />
 	<link rel="stylesheet" type="text/css" href="/css/index.css" />
     <link rel="stylesheet" type="text/css" href="/css/buttons.css" />
     <link rel="stylesheet" type="text/css" href="/css/scrollbars.css" />
@@ -121,6 +123,10 @@
 
     <!-- Edit-in-place Playlist Names -->
     <script type="text/javascript" src="/js/jquery.editable.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/js/contextMenu/jquery.contextmenu.css" />
+    <link rel="stylesheet" type="text/css" href="/js/tipped/tipped.css">
+    <link rel="stylesheet" type="text/css" href="/js/tipped/custom.css">
 
 </head>
 <body>
@@ -455,6 +461,18 @@
     </div>
 
     <div id="friendList-container">
+        <div id="sendSongForm">
+            <form class="form-5 clearfix">
+                <div class="p">
+                    <div class="formTitle">Send it with a message!</div>
+                    <input type="text" id="sendMessage" placeholder="This is aawwwesomee">
+                </div>
+                <button id="sendMessageButton">
+                    <i class="icon-arrow-right"></i>
+                    <span>Send</span>
+                </button>
+            </form>
+        </div>
         <ul id="friendList" data-bind="foreach: friendlist">
             <li class="friendItem" data-bind="attr: { frequency: frequency }, droppableFriend:$data">
                 <div class="friendDetails">
@@ -478,14 +496,12 @@
     </div>
 
     <!-- Context menu plugin -->
-    <link rel="stylesheet" type="text/css" href="/js/contextMenu/jquery.contextmenu.css" />
     <script type="text/javascript" src="/js/contextMenu/jquery.contextmenu.js"></script>
 
     <!-- A library to generate md5 hashes  -->
     <script type="text/javascript" src="/js/md5-min.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="/js/tipped/tipped.css">
-    <link rel="stylesheet" type="text/css" href="/js/tipped/custom.css">
+    <!-- Tooltips  -->
     <script type="text/javascript" src="/js/tipped/tipped.js"></script>
 
     <!-- 360 Player STUFF START-->
@@ -520,7 +536,7 @@
     </style>
     <!-- 360 Player STUFF END-->
 
-    <script type="text/javascript" src="/js/jquery.download.js"></script>
+    <script type="text/javascript" src="/js/jquery.textchange.min.js"></script>
 
 </body>
 
