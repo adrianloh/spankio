@@ -153,8 +153,9 @@
 				// next song is to jump to it
 				next_play_index = 0;
 				threeSixtyPlayer.config.jumpToTop = false;
-			} else if (threeSixtyPlayer.config.loop) {
-				// Loop ON, do nothing because loop is built into 360 Player
+			} else if (threeSixtyPlayer.config.loop && !(threeSixtyPlayer.lastSound.url.match(/silence\.mp3/))) {
+				// Loop ON *and* this is not the first time we're playing,
+				// do nothing because loop is built into 360 Player
 				next_play_index = -1;
 			} else if (threeSixtyPlayer.config.shuffle && underlyingArray.length > 1) {
 				// Shuffle ON when there's more than one song
