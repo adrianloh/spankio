@@ -71,15 +71,12 @@
 			};
 
 			function similarArtistAndTitle(o1, o2) {
-				var isSimilar = false,
-					attr = ['title', 'artist'],
-					strip = $.trim;
-				$.each(attr, function(i,a) {
-					if (strip(o1[a].toLowerCase())===strip(o2[a].toLowerCase())) {
-						isSimilar = true;
-					}
-				});
-				return isSimilar;
+				var strip = $.trim,
+					o1_artist = strip(o1.artist.toLowerCase()),
+					o2_artist = strip(o2.artist.toLowerCase()),
+					o1_title = strip(o1.title.toLowerCase()),
+					o2_title = strip(o2.title.toLowerCase());
+				return o1_artist===o2_artist && o1_title===o2_title;
 			}
 
 			function isTheSameGift(gift, o) {

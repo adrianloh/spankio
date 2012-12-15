@@ -87,7 +87,7 @@
 						greedy: true,
 						accept: ".tweetThumb",
 						tolerance: "pointer",
-						hoverClass: "bgOver",
+						hoverClass: "friendHover",
 						drop: function(event, ui) {
 							document._ignoreDrop = true; // prevent intercept of drop by other elements underneath
 							setTimeout(function() {

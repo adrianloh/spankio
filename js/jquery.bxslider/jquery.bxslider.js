@@ -44,7 +44,7 @@
 			$(li).droppable({
 				accept: ".tweetThumb",
 				tolerance: "pointer",
-				hoverClass: "bgOver",
+				hoverClass: "playlistHover",
 				drop: function addDroppedTrackToPlaylistInScrollbar() {
 					if (document._draggedHistoryItem!==null) {
 						document._ignoreDrop = true;

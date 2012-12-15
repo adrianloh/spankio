@@ -1,3 +1,15 @@
+@-webkit-keyframes wiggle {
+	from {-webkit-transform: rotateZ(6deg);}
+	50% {-webkit-transform: rotateZ(-6deg);}
+	to {-webkit-transform: rotateZ(6deg);}
+}
+
+@-webkit-keyframes wiggle-mild {
+	from {-webkit-transform: rotateZ(3deg);}
+	50% {-webkit-transform: rotateZ(-3deg);}
+	to {-webkit-transform: rotateZ(3deg);}
+}
+
 #friendList-container {
     position: absolute;
     z-index: 10;
@@ -24,6 +36,7 @@
     border-bottom: 3px solid whiteSmoke;
     background-color: white;
     -webkit-border-radius: 25px;
+    -webkit-transition: all .2s ease-in-out;
 }
 
 .friendPic {
@@ -173,7 +186,7 @@
     top: 35%;
     position: fixed;
     right: 37%;
-    z-index: 20;
+    z-index: 9;
     width: 20px;
     display: none;
 }
@@ -195,8 +208,29 @@
     background-color: rgba(218, 226, 115, 0.47);
 }
 
+.playlistHover {
+    color: #000000;
+    background-color: rgba(218, 226, 115, 0.47);
+    -webkit-transform: scale(1.2);
+}
+
+.friendHover {
+    color: #000000;
+    background-color: rgba(218, 226, 115, 0.47);
+    -webkit-transform: scale(1.2);
+    -webkit-animation-name: wiggle;
+    -webkit-animation-duration: .2s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: ease-in-out;
+}
+
 .selectedPlaylistItem {
     border:solid 6px rgb(247, 255, 113);
+    -webkit-transform: scale(0.6);
+    -webkit-animation-name: wiggle-mild;
+    -webkit-animation-duration: .4s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: ease-in-out;
 }
 
 html.busy, html.busy * {
@@ -364,14 +398,18 @@ INPUT:-ms-input-placeholder
     margin-bottom: 26px;
     margin-left: 15px;
 }
+
 .mxThumb {
     width: 150px;
     height: 150px;
     cursor: pointer;
-/*	-moz-box-shadow: 1px 1px 5px #999;
-	-webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, 2.92);
-	box-shadow: 1px 1px 5px #999;*/
+   -webkit-transition: all .2s ease-in-out;
 }
+
+/*.mxThumb:hover {*/
+    /*-webkit-transform: scale(1.2);*/
+/*}*/
+
 .trackName {
 	width: 150px;
 	color: #111111;
@@ -696,3 +734,35 @@ ul.lastfm-buttons {
     float: right;
     margin-right: 5%;
 }​
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

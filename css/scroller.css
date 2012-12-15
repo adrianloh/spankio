@@ -53,4 +53,5 @@
     margin: 6px;
     display: block;
     float: left;
+    -webkit-transition: all .2s ease-in-out;
 }
