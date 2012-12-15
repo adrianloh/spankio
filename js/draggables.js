@@ -26,7 +26,7 @@
 				li.mouseover(function() {
 					var thisGift = li.find('.tweetGift');
 					if (thisGift.length>0) {
-						$(".giftFrom:first").text(thisGift.attr("from"));
+						$(".giftFrom:first").text("from: " + thisGift.attr("from"));
 						$(".giftMessage:first").text(thisGift.attr("message"));
 						var pos = li.offset(),
 							top = parseInt(pos.top-70),
