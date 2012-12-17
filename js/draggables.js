@@ -63,7 +63,8 @@
 					zIndex:999,
 					start:function( event, ui ) {
 						document._draggedHistoryItemUIParent = $(element).parent();
-						document._draggedHistoryItem = ko.toJS(valueAccessor()); // Gets us the raw JSON object of the history item that was picked up
+						// Gets us the object of the history item that was picked up
+						document._draggedHistoryItem = ko.toJS(valueAccessor());
 						var searchZone = $("#playlistSearchZone");
 						if (Spank.charts.currentPlaylistTitle()) {
 							searchZone.removeClass("searchFullWidth").show();
@@ -107,7 +108,7 @@
 					if (document._ignoreDrop===true) return false;
 					var droppedHistoryItem = JSON.parse(JSON.stringify(document._draggedHistoryItem));
 					Spank.playlistScroller.addSongToPlaylist(Spank.charts.currentPlaylistTitle(), droppedHistoryItem);
-				},250);
+				}, 250);
 			}
 		});
 
@@ -119,14 +120,14 @@
 					if (document._ignoreDrop===true) return false;
 					var similar_url = "http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=@&track=#&autocorrect=1&limit=200&api_key=0325c588426d1889087a065994d30fa1&format=json";
 					if (document._draggedHistoryItem!==null) {
-						var url = similar_url.replace("@",encodeURIComponent(document._draggedHistoryItem.artist)).replace("#", encodeURIComponent(document._draggedHistoryItem.title));
+						var url = similar_url.replace("@", encodeURIComponent(document._draggedHistoryItem.artist)).replace("#", encodeURIComponent(document._draggedHistoryItem.title));
 						Spank.charts.populateResultsWithUrl(url, function extract(res) {
 							return res.similartracks.track;
 						}, function noresults() {
 							window.notify.error("Couldn't find any similar songs!");
 						});
 					}
-				},250);
+				}, 250);
 			}
 		});
 

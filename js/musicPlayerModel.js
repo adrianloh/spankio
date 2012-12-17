@@ -3,7 +3,7 @@
 	$(document).ready(function() {
 
 		$(document).one("baseReady", function() {
-			Spank.base.live = new Firebase(Spank.base.url + "/live");
+			Spank.base.live = Spank.base.me.child("live");
 			Spank.base.live.on('value', function(snapshot) {
 				if (snapshot.val()!==null) {
 					var data = snapshot.val();
@@ -134,13 +134,14 @@
 				threeSixtyPlayer.config[attr] = Spank.utils.randomHexColor();
 			});
 			// The FINAL actual playing of the audio file!!! Pheeewwweee!
+			var playButton = $(".sm2-360btn");
 			if (typeof(threeSixtyPlayer.indexByURL[url])!=='undefined') {
-				$(".sm2-360btn").trigger('click');
+				playButton.trigger('click');
 			} else {
 				var index = threeSixtyPlayer.links.length;
 				threeSixtyPlayer.indexByURL[url] = index;
 				threeSixtyPlayer.links[index] = a;
-				$(".sm2-360btn").trigger('click');
+				playButton.trigger('click');
 			}
 		});
 

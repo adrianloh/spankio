@@ -7,11 +7,38 @@
 		$(document).one("login", function() {
 
 			Spank.username = Spank.utils.toFirebaseName(FBUserInfo.username);
-			Spank.base.users = 'https://wild.firebaseio.com/spank/users/';
-			Spank.base.url = Spank.base.users + Spank.username;
-			Spank.base.me = new Firebase(Spank.base.url);
+			Spank.base.users = new Firebase('https://wild.firebaseio.com/spank/users');
+			Spank.base.me = Spank.base.users.child(Spank.username);
 			Spank.base.history = Spank.base.me.child("history");
 			$(document).trigger("baseReady");
+			Spank.base.history.once('value', function(snapshot) {
+				var newHistory = snapshot.val();
+				if (Array.isArray(newHistory) && newHistory.length>0) {
+					var koHistory = $.map(newHistory, function(o) {
+						var koo = {};
+						$.each(o, function(k,v) {
+							koo[k] = ko.observable(v);
+						});
+						return koo;
+					});
+					Spank.history.stream(koHistory);
+					setTimeout(function() {
+						window.notify.information("Go!");
+					}, 2000);
+					setTimeout(function() {
+						Spank.playlistScroller.visible(true);
+					}, 1500);
+					Spank.base.history.on('child_changed', updateHistoryItem);
+					Spank.base.history.on('child_added', updateHistoryItem);
+					Spank.base.history.on('child_removed', function(snapshot) {
+						// Fix for an off-by-one error everytime we remove
+						// something from the history list
+						Spank.history.stream.pop();
+					});
+				} else {
+					console.error(snapshot.val());
+				}
+			});
 
 			var updateHistoryItem = function(snapshot) {
 				var o = snapshot.val();
@@ -29,23 +56,6 @@
 				}
 			};
 
-			setTimeout(function() {
-				window.notify.suspended = false;
-				window.notify.information("Go!");
-			},2000);
-			var t2 = setTimeout(function() {
-				$(".hideshow-playlist-button").click();
-				clearTimeout(t2);
-			},1500);
-
-			Spank.base.history.on('child_changed', updateHistoryItem);
-			Spank.base.history.on('child_added', updateHistoryItem);
-			Spank.base.history.on('child_removed', function(snapshot) {
-				// Fix for an off-by-one error everytime we remove
-				// something from the history list
-				Spank.history.stream.pop();
-			});
-
 		});
 
 		Spank.history = (function() {
@@ -59,22 +69,24 @@
 				},10)
 			};
 
-			function similarArtistAndTitle(o1, o2) {
+			var similarArtistAndTitle = function(o1, o2) {
 				var strip = $.trim,
 					o1_artist = strip(o1.artist.toLowerCase()),
 					o2_artist = strip(o2.artist.toLowerCase()),
 					o1_title = strip(o1.title.toLowerCase()),
 					o2_title = strip(o2.title.toLowerCase());
 				return o1_artist===o2_artist && o1_title===o2_title;
-			}
+			};
 
-			function isTheSameGift(gift, o) {
+			var isTheSameGift = function(gift, o) {
 				if (o.gift===undefined) {
 					return false;
 				} else {
-					return (similarArtistAndTitle(o, gift) && o.gift.from===gift.gift.from && o.gift.message===gift.gift.message);
+					return (similarArtistAndTitle(o, gift)
+						&& o.gift.from===gift.gift.from
+						&& o.gift.message===gift.gift.message);
 				}
-			}
+			};
 
 			self.transaction_deleteFromHistory = function(o, array, add) {
 				// This is executed within a Firebase transaction, if *anything*
@@ -92,21 +104,14 @@
 				} else {
 					newArray = $.map(array, function(item) {
 						if (item.url===o.url || similarArtistAndTitle(o, item)) {
-							if ('gift' in item) {
-								return item;
-							}
-							// If any item in History is similar to the one we're deleting
-							// do not return this item to the new array e.g. don't save it.
-							// e.g. make sure we only keep unique items in history
+							if ('gift' in item) return item;
 						} else {
 							return item;
 						}
 					});
 				}
 				if (Array.isArray(newArray)) {
-					if (add===true) {
-						newArray.unshift(o);
-					}
+					if (add===true) newArray.unshift(o);
 					return newArray;
 				} else {
 					return undefined;

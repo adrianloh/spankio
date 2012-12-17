@@ -112,7 +112,7 @@
     <script type="text/javascript" src="/js/utils.js"></script>
     <script type="text/javascript" src="/js/tooltips.js"></script>
     <script type="text/javascript" src="/js/playlists.js"></script>
-    <script type="text/javascript" src="/js/playlists2.js"></script>
+    <!--<script type="text/javascript" src="/js/playlists2.js"></script>-->
     <script type="text/javascript" src="/js/draggables.js"></script>
     <script type="text/javascript" src="/js/musicPlayerModel.js"></script>
     <script type="text/javascript" src="/js/historyModel.js"></script>
@@ -486,10 +486,12 @@
 
     <div id="playlistScroller">
             <ul id="playlists-scroller-list" data-bind="foreach: playlistItems">
+                <!-- ko if: $data!==undefined -->
                 <li class="playlistEntry" data-bind="css: { droppablePlaylist: url==='#' }">
                     <img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />
                     <div class="playlistName" data-bind="text: title()"></div>
                 </li>
+                <!-- /ko -->
             </ul>
         <div id="toggle-playlist-button">
             <button class="hideshow-playlist-button">Hide Playlists</button>

@@ -50,7 +50,6 @@
 			Spank.bases = {};
 			Spank.bases.playlistRefs = Spank.base.me.child("playlistRefs");
 			Spank.bases.playlists = Spank.base.me.child("playlists");
-
 			Spank.bases.known = {};
 			Spank.bases.playlists.on('child_added', function(snapshot) {
 				var o = snapshot.val(),
@@ -142,12 +141,18 @@
 			removePlaylistWithName: function(playname) {
 				var refID = Spank.bases[playname].name();
 				Spank.bases.playlistRefs.transaction(function(currentData) {
-					var atIndex = currentData.indexOf(refID);
-					currentData.splice(atIndex,1);
+					if (currentData!==null) {
+						var atIndex = currentData.indexOf(refID);
+						currentData.splice(atIndex,1);
+					}
 					return currentData;
 				}, function onComplete(ok) {
-					Spank.bases[playname].remove();
-					delete Spank.playlists[playname];
+					if (ok) {
+						console.log("Deleting " + playname);
+						Spank.bases[playname].off('value');
+						Spank.bases[playname].remove();
+						delete Spank.playlists[playname];
+					}
 				});
 			},
 			savePlaylist: function(playname, tracklist, callback) {
