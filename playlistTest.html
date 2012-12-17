@@ -1,0 +1,53 @@
+<html>
+<head>
+    <title>Welcome to Spank!</title>
+    <!-- Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Condiment' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
+    <link href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="/css/fontawesome/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="/css/forms.css" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css" />
+    <link rel="stylesheet" type="text/css" href="/css/buttons.css" />
+    <link rel="stylesheet" type="text/css" href="/css/scrollbars.css" />
+    <link rel="stylesheet" type="text/css" href="/css/boxcenter.css" />
+
+    <script type='text/javascript' src='https://static.firebase.com/v0/firebase.js'></script>
+
+    <!-- jQuery and Knockout.JS -->
+
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.1.0/knockout-min.js"></script>
+
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+
+    <!--bxSlider CSS file -->
+    <link rel="stylesheet" type="text/css" href="/css/scroller.css" />
+    <link href="/js/jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />
+    <script src="/js/jquery.bxslider/jquery.bxslider.js"></script>
+
+    <!-- Make playlists, a KO observable array, sortable -->
+    <script type="text/javascript" src="/js/knockout-sortable.min.js"></script>
+
+    <script type="text/javascript" src="/js/playlists2.js"></script>
+
+</head>
+<body>
+<div id="playlistScroller">
+    <ul id="playlists-scroller-list" data-bind="foreach: playlistItems">
+        <li class="playlistEntry" data-bind="css: { droppablePlaylist: url==='#' }">
+            <img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />
+            <div class="playlistName" data-bind="text: title()"></div>
+        </li>
+    </ul>
+    <div id="toggle-playlist-button">
+        <button class="hideshow-playlist-button">Hide Playlists</button>
+    </div>
+</div>
+
+</body>
+
+</html>

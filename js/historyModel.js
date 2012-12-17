@@ -6,41 +6,12 @@
 
 		$(document).one("login", function() {
 
-			var firebaseOKName = Spank.utils.toFirebaseName(FBUserInfo.username);
+			Spank.username = Spank.utils.toFirebaseName(FBUserInfo.username);
 			Spank.base.users = 'https://wild.firebaseio.com/spank/users/';
-			Spank.base.url = Spank.base.users + firebaseOKName;
-			Spank.base.history = new Firebase(Spank.base.url + "/history");
+			Spank.base.url = Spank.base.users + Spank.username;
+			Spank.base.me = new Firebase(Spank.base.url);
+			Spank.base.history = Spank.base.me.child("history");
 			$(document).trigger("baseReady");
-			Spank.base.history.once('value', function(snapshot) {
-				var newHistory = snapshot.val();
-				if (Array.isArray(newHistory) && newHistory.length>0) {
-					var koHistory = $.map(newHistory, function(o) {
-						var koo = {};
-						$.each(o, function(k,v) {
-							koo[k] = ko.observable(v);
-						});
-						return koo;
-					});
-					Spank.history.stream(koHistory);
-					setTimeout(function() {
-						window.notify.suspended = false;
-						window.notify.information("Go!");
-					},2000);
-					var t2 = setTimeout(function() {
-						$(".hideshow-playlist-button").click();
-						clearTimeout(t2);
-					},1500);
-					Spank.base.history.on('child_changed', updateHistoryItem);
-					Spank.base.history.on('child_added', updateHistoryItem);
-					Spank.base.history.on('child_removed', function(snapshot) {
-						// Fix for an off-by-one error everytime we remove
-						// something from the history list
-						Spank.history.stream.pop();
-					});
-				} else {
-					console.error(snapshot.val());
-				}
-			});
 
 			var updateHistoryItem = function(snapshot) {
 				var o = snapshot.val();
@@ -57,6 +28,23 @@
 					console.error(o);
 				}
 			};
+
+			setTimeout(function() {
+				window.notify.suspended = false;
+				window.notify.information("Go!");
+			},2000);
+			var t2 = setTimeout(function() {
+				$(".hideshow-playlist-button").click();
+				clearTimeout(t2);
+			},1500);
+
+			Spank.base.history.on('child_changed', updateHistoryItem);
+			Spank.base.history.on('child_added', updateHistoryItem);
+			Spank.base.history.on('child_removed', function(snapshot) {
+				// Fix for an off-by-one error everytime we remove
+				// something from the history list
+				Spank.history.stream.pop();
+			});
 
 		});
 

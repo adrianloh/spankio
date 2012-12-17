@@ -145,11 +145,9 @@ Array.prototype.shuffle = function() {
 		ko.applyBindings(Spank.charts, document.getElementById('resultsSection'));
 
 		Spank.charts.shoppingCart.subscribe(function(list) {
-			if (list.length===0) {
-				$("#resultsOps").hide();
-			} else {
-				$("#resultsOps").show();
-			}
+			var resultOps = $("#resultsOps"),
+				mode = list.length===0 ? 'hide' : 'show';
+			resultOps[mode]();
 		});
 
 		Spank.charts.chartTracks.subscribe(function(list) {

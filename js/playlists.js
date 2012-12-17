@@ -1,23 +1,23 @@
 (function(){
 
 	var chartUrls = {
-		lastfm_base:"http://ws.audioscrobbler.com/2.0/?method=METHOD&page=1&limit=200&api_key=0325c588426d1889087a065994d30fa1&format=json&callback=?",
-		billboards_base:"http://api.musixmatch.com/ws/1.1/chart.tracks.get?page=1&page_size=100&country=#&f_has_lyrics=1&apikey=316bd7524d833bb192d98be44fe43017&format=jsonp&callback=?",
-		lastfm_hyped:function () { return this.lastfm_base.replace("METHOD","chart.gethypedtracks"); },
-		lastfm_top:function () { return this.lastfm_base.replace("METHOD","chart.gettoptracks"); },
-		lastfm_loved:function () { return this.lastfm_base.replace("METHOD","chart.getlovedtracks"); },
-		billboards_uk:function () { return this.billboards_base.replace("#","uk"); },
-		billboards_us:function () { return this.billboards_base.replace("#","us"); },
-		itunes_store:function () { return "https://itunes.apple.com/us/rss/topsongs/limit=300/explicit=true/json"; }
-	};
-	var chartPlaylistItems = [
-		{title:'last.fm Top', cover:'/img/last_top.png', url: chartUrls.lastfm_top() },
-		{title:'last.fm Loved', cover:'/img/last_loved.png', url: chartUrls.lastfm_loved() },
-		{title:'last.fm Hyped', cover:'/img/last_hyped.png', url: chartUrls.lastfm_hyped() },
-		{title:'Billboards UK', cover:'/img/bill_uk.jpg', url: chartUrls.billboards_uk() },
-		{title:'Billboards US', cover:'/img/bill_us.jpg', url: chartUrls.billboards_us() },
-		{title:'iTunes Store', cover:'/img/iTunes.png', url: chartUrls.itunes_store() }
-	];
+			lastfm_base: "http://ws.audioscrobbler.com/2.0/?method=METHOD&page=1&limit=200&api_key=0325c588426d1889087a065994d30fa1&format=json&callback=?",
+			billboards_base: "http://api.musixmatch.com/ws/1.1/chart.tracks.get?page=1&page_size=100&country=#&f_has_lyrics=1&apikey=316bd7524d833bb192d98be44fe43017&format=jsonp&callback=?",
+			lastfm_hyped: function () { return this.lastfm_base.replace("METHOD","chart.gethypedtracks"); },
+			lastfm_top: function () { return this.lastfm_base.replace("METHOD","chart.gettoptracks"); },
+			lastfm_loved: function () { return this.lastfm_base.replace("METHOD","chart.getlovedtracks"); },
+			billboards_uk: function () { return this.billboards_base.replace("#","uk"); },
+			billboards_us: function () { return this.billboards_base.replace("#","us"); },
+			itunes_store: function () { return "https://itunes.apple.com/us/rss/topsongs/limit=300/explicit=true/json"; }
+		},
+		chartPlaylistItems = [
+			{title: 'last.fm Top', cover: '/img/last_top.png', url: chartUrls.lastfm_top() },
+			{title: 'last.fm Loved', cover: '/img/last_loved.png', url: chartUrls.lastfm_loved() },
+			{title: 'last.fm Hyped', cover: '/img/last_hyped.png', url: chartUrls.lastfm_hyped() },
+			{title: 'Billboards UK', cover: '/img/bill_uk.jpg', url: chartUrls.billboards_uk() },
+			{title: 'Billboards US', cover: '/img/bill_us.jpg', url: chartUrls.billboards_us() },
+			{title: 'iTunes Store', cover: '/img/iTunes.png', url: chartUrls.itunes_store() }
+		];
 
 	$(document).ready(function() {
 
@@ -47,9 +47,10 @@
 		};
 
 		$(document).one("baseReady", function() {
-			Spank.base.playlists_url = Spank.base.url + "/playlists/";
 			Spank.bases = {};
-			Spank.bases.playlists = new Firebase(Spank.base.playlists_url);
+			Spank.bases.playlistRefs = Spank.base.me.child("playlistRefs");
+			Spank.bases.playlists = Spank.base.me.child("playlists");
+
 			Spank.bases.known = {};
 			Spank.bases.playlists.on('child_added', function(snapshot) {
 				var o = snapshot.val(),
@@ -90,7 +91,6 @@
 				// If we deleted this branch, then this_playlist === null
 				// e.g. it's like calling for an object at a location that doesn't exists
 				delete Spank.bases.known[snapshot.name()];
-				console.error("Removing DOM: " + playname);
 				playlistThumbnail.parent().remove();
 				window.notify.error("Deleted playlist " + playname);
 				Spank.rescanChildren();
@@ -100,22 +100,21 @@
 			});
 
 			Spank.bases.playlists.on('child_changed', function(snapshot) {
-				var o = snapshot.val();
-				if ((snapshot.name() in Spank.bases.known) && (o.title!==Spank.bases.known[snapshot.name()])) {
+				var basename = snapshot.name(),
+					o = snapshot.val();
+				if ((basename in Spank.bases.known) && (o.title!==Spank.bases.known[basename])) {
 					var newname = o.title,
-						oldname = Spank.bases.known[snapshot.name()];
+						oldname = Spank.bases.known[basename];
 					window.notify.information("Playlist '" + oldname + "' changed to '" + newname + "'");
 					Spank.bases[newname] = Spank.bases[oldname];
 					Spank.playlists[newname] = Spank.playlists[oldname];
-					Spank.bases.known[snapshot.name()] = newname;
+					Spank.bases.known[basename] = newname;
 					if (Spank.charts.currentPlaylistTitle()===oldname) {
 						Spank.charts.currentPlaylistTitle(newname);
 					}
 					// Change the attribute attached to the thumb of this playlist
-					var selector = ".playlistThumb[title='@']".replace("@", oldname),
-						playlistThumbnail = $(selector);
-					playlistThumbnail.attr("title", newname);
-					playlistThumbnail.parent().find(".playlistName").text(newname);
+					var selector = ".playlistThumb[title='@']".replace("@", oldname);
+					$(selector).attr("title", newname).parent().find(".playlistName").text(newname);
 				}
 			});
 
@@ -141,23 +140,40 @@
 				Spank.bases[oldname].update(data);
 			},
 			removePlaylistWithName: function(playname) {
-				delete Spank.playlists[playname];
-				Spank.bases[playname].remove();
+				var refID = Spank.bases[playname].name();
+				Spank.bases.playlistRefs.transaction(function(currentData) {
+					var atIndex = currentData.indexOf(refID);
+					currentData.splice(atIndex,1);
+					return currentData;
+				}, function onComplete(ok) {
+					Spank.bases[playname].remove();
+					delete Spank.playlists[playname];
+				});
 			},
 			savePlaylist: function(playname, tracklist, callback) {
 				var isNewPlaylist = typeof(Spank.bases[playname])==='undefined',
-					saveList = JSON.parse(JSON.stringify(tracklist)); // !! IMPORTANT !! Dereference the objects in tracklist from their original...
+					saveData = {
+						title: playname,
+						list:tracklist,
+						owners:[Spank.username]
+					};
 				if (isNewPlaylist) {
-					var data = {title: playname, list:tracklist},
-						newRef = Spank.bases.playlists.push();
-					newRef.set(data, function afterSave(ok) {
+					var newRef = Spank.bases.playlists.push(saveData, function afterSave(ok) {
 						window.notify.success("Created new playlist " + playname);
-						Spank.bases[playname] = new Firebase(newRef.toString());
+						Spank.bases[playname] = newRef;
+						Spank.bases.playlistRefs.transaction(function(currentData) {
+							if (currentData===null) {
+								return [newRef.name()]
+							} else {
+								currentData.push(newRef.name());
+								return currentData;
+							}
+						});
 						if (callback) callback();
 					});
 				} else {
 					Spank.bases[playname].transaction(function(currentData) {
-						return {title: playname, list: tracklist};
+						return saveData;
 					}, function(newData) {
 						if (callback) callback(newData);
 					});
@@ -165,14 +181,16 @@
 			},
 			addSongToPlaylist: function(playname, track) {
 				var isNewPlaylist = typeof(Spank.playlists[playname])==='undefined',
-					isInView = Spank.charts.currentPlaylistTitle() === playname,
+					isInView = Spank.charts.currentPlaylistTitle()===playname,
 					tracklist = [],
 					selector = ".playlistThumb[title='@']".replace("@",playname);
 				if (!isNewPlaylist) {
 					tracklist = Spank.playlists[playname];
 				}
 				// The 'unshift' argument makes the charts view prepend the track vs. the default append to bottom
-				if (isInView) Spank.charts.pushBatch([track], "unshift");
+				if (isInView) {
+					Spank.charts.pushBatch([track], "unshift");
+				}
 				//deleteDuplicate(track, Spank.playlists[playname]);
 				tracklist.unshift(track);
 				this.savePlaylist(playname, tracklist);
@@ -182,17 +200,15 @@
 				}
 			},
 			push: function(o) {
-				var default_item = {
-					title: "Playlist " + hex_md5(String(new Date().getTime())).slice(0,5),
-					cover: Spank.genericAlbumArt,
-					url: '#'
-				};
-				default_item.title = o.title ? o.title : default_item.title;
-				default_item.title = ko.observable(default_item.title);
-				default_item.cover = o.cover ? o.cover : default_item.cover;
-				default_item.url = o.url ? o.url : default_item.url;
-				default_item.value = ko.observable(default_item.title);
-				this.playlistItems.push(default_item);
+				var name = hex_md5(String(new Date().getTime())).slice(0,5),
+					defaults = {
+						title: "Playlist " + name,
+						cover: Spank.genericAlbumArt,
+						url: '#'
+					};
+				$.extend(defaults, o);
+				defaults.title = ko.observable(defaults.title);
+				this.playlistItems.push(defaults);
 			}
 		};
 
@@ -233,9 +249,10 @@
 				// by downloading album art!
 				//Spank.rescanChildren();
 				var t1 = setTimeout(function() {
-					$(".playlistThumb[title='Billboards UK']").trigger("click");
+					var selector = ".playlistThumb[title='Billboards UK']";
+					$(selector).trigger("click");
 					clearTimeout(t1);
-				},2000);
+				}, 2000);
 			}
 		});
 
@@ -276,8 +293,7 @@
 				// This might not be ready on first launch, doesn't matter
 				Spank.friends.visible(false);
 				Spank.tearDownLightBox();
-			} catch(err) {};
-
+			} catch(err) {}
 			var this_image = $(this),
 				tracklist,
 				url = myUrl || $(this).attr("url"),

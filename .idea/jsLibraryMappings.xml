@@ -1,3 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project version="4" />
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <file url="file://$PROJECT_DIR$/soundgarden.html" libraries="{firebase, jquery, jquery-ui, knockout}" />
+    <file url="PROJECT" libraries="{Knockout-2.1.0, jQuery UI-1.9.1, jQuery-1.8.2}" />
+  </component>
+</project>
 
