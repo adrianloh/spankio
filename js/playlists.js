@@ -168,7 +168,7 @@
 						Spank.bases[playname] = newRef;
 						Spank.bases.playlistRefs.transaction(function(currentData) {
 							if (currentData===null) {
-								return [newRef.name()]
+								return [newRef.name()];
 							} else {
 								currentData.push(newRef.name());
 								return currentData;
@@ -248,15 +248,9 @@
 			// Populate the playlist bar with charts
 			Spank.playlistScroller.push(o);
 			if (i===chartPlaylistItems.length-1) {
-				// After injecting the very last Playlist item, fill the results section
-				// with one of the charts... note that we wait a bit first to let FB do
-				// it's thing cause once this starts, all the bandwidth will be sucked
-				// by downloading album art!
-				//Spank.rescanChildren();
-				var t1 = setTimeout(function() {
+				setTimeout(function() {
 					var selector = ".playlistThumb[title='Billboards UK']";
 					$(selector).trigger("click");
-					clearTimeout(t1);
 				}, 2000);
 			}
 		});
