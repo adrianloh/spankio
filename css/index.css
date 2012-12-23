@@ -571,8 +571,8 @@ input:-ms-input-placeholder {
     width: 70%;
     position: relative;
     left: 10%;
-    color: black;
-    font: 14px/26px "proxima-nova-1";
+    font: 12px/23px "proxima-nova-1";
+    color: #ffffff;
     letter-spacing: 1px;
 }
 #closeButton {
