@@ -112,14 +112,15 @@
 			element.addClass("active_search");
 			element.removeClass("inactive_search");
 			element.val("");
-		};
+		}
 
 		function disableSearch() {
 			element.addClass("inactive_search");
 			element.removeClass("active_search");
 ////
-			element.val(Spank.tagline);
-		};
+			var message = settings.innerText === 'Filter stream' ? settings.innerText : Spank.tagline;
+ 			element.val(message);
+		}
 
 	};
 
