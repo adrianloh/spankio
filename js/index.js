@@ -45,12 +45,12 @@
 			Spank.lightBox.lyricsText("");
 			Spank.lightBox.lyricsTitle("");
 			Spank.lightBox.lyricsThumb("");
-			$("#vk-results-list").remove();
 			$("#lightBox").slideUp('fast','swing', function(){});
 			$("#closeButton").hide();
 			$("html").removeClass("busy");
 			$("#lightBox_jspPane").html("");
 			$(".t_Tooltip_controlButtons2").remove();
+			$("#myonoffswitch").prop('checked', false);
 			vk_search_in_progress = false;
 			mx_get_lyrics_in_progress = false;
 			if (playlistScrollerWasVisible) {
@@ -66,6 +66,7 @@
 		var attempts = 0;
 		var searchVK = function(params) {
 			vk_search_in_progress = true;
+			$("#vk-results-list").remove();
 			$('<ul id="vk-results-list"></ul>').appendTo('#vk-results-container');
 			var url = "https://api.vkontakte.ru/method/audio.search?q=QUERY&access_token=TOKEN&count=100&callback=?",
 				token = VK.getToken();
@@ -150,23 +151,40 @@
 		});
 
 		$.searchByWire = function(search_term) {
-			// Each time we start a new search...
-			Spank.charts.ok_to_fetch_more = true;
-			Spank.tearDownLightBox();                                               // Close the lightbox
-			Spank.friends.visible(false);                                           // Close the friends list
-			$(".playlistEntry").css("border","5px solid rgb(204, 204, 204)");       // Don't highlight any playlist items
-			if ($.trim(search_term)!=='') {
+			var queryVKDirectly = $("#myonoffswitch").is(":checked");
+			if (queryVKDirectly) {
 				setTimeout(function() {
-					var url = '/mxsearch?q=#&page=1'.replace("#",search_term);
-					Spank.charts.populateResultsWithUrl(url, function extract(res) {
-						return res.message.body.track_list;
-					}, function onNoResults() {
-						$("#searchField").val("");
-						window.notify.error("No results.",'force');
-					});
-				}, 250);
+					var lightBox = $("#lightBox");
+					if (!vk_search_in_progress && !mx_get_lyrics_in_progress) {
+						var query_string = search_term.replace(/\?/,"");
+						searchVK({q:query_string,
+							mxid:'09061980', thumb:Spank.genericAlbumArt});
+						playlistScrollerWasVisible = Spank.playlistScroller.visible();
+						Spank.playlistScroller.visible(false);
+						lightBox.slideDown('fast','swing', function() {
+							$("#closeButton").show();
+						});
+					}
+				}, 1000);
 			} else {
-				return false;
+				// Each time we start a new search...
+				Spank.charts.ok_to_fetch_more = true;
+				Spank.tearDownLightBox();                                               // Close the lightbox
+				Spank.friends.visible(false);                                           // Close the friends list
+				$(".playlistEntry").css("border","5px solid rgb(204, 204, 204)");       // Don't highlight any playlist items
+				if ($.trim(search_term)!=='') {
+					setTimeout(function() {
+						var url = '/mxsearch?q=#&page=1'.replace("#",search_term);
+						Spank.charts.populateResultsWithUrl(url, function extract(res) {
+							return res.message.body.track_list;
+						}, function onNoResults() {
+							$("#searchField").val("");
+							window.notify.error("No results.",'force');
+						});
+					}, 250);
+				} else {
+					return false;
+				}
 			}
 		};
 
