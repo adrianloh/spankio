@@ -117,7 +117,8 @@
 		function disableSearch() {
 			element.addClass("inactive_search");
 			element.removeClass("active_search");
-			element.val(settings.innerText);
+////
+			element.val(Spank.tagline);
 		};
 
 	};

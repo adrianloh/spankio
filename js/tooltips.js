@@ -66,6 +66,22 @@
 			hook: 'topleft'
 		});
 
+		$(".onoffswitch-label").click(function() {
+			Tipped.hide(".onoffswitch-label");
+			$(".onoffswitch-label").trigger("mousemove");
+		});
+
+		Tipped.create(".onoffswitch-label", function(element) {
+			if ($("#myonoffswitch").is(":checked")) {
+				return "Ignore lyrics. Search directly."
+			} else {
+				return "Search with lyrics"
+			}
+		}, {
+			skin:'controlButtons',
+			offset: { x: 0, y: -20 }
+		});
+
 		Tipped.create("#resultsSection", function(element) {
 			if (Spank.friends.visible()) {
 				return "Drop a song on a friend to share!"

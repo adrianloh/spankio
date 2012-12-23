@@ -58,7 +58,7 @@
 				var thumb_path = o.thumb || Spank.genericAlbumArt,
 					bgImage = "url(#)".replace("#",thumb_path);
 				if (thumb_path===Spank.genericAlbumArt) {
-					// Do this async cause we don't care when this returns;
+					// Do this async because we don't care when this returns;
 					this.applyNewCoverArt(o);
 				}
 				var owner_id = o.url.split(".")[0],
@@ -72,13 +72,13 @@
 						$("#noty_topRight_layout_container").remove();
 						setTimeout(function() {
 							Spank.notifyCurrentSong(o.title + " - " + o.artist);
-						},1000);
+						}, 1000);
 						var koo = Spank.history.findHistoryItemWithUrl(o.url);
 						o.direct = newDirectLink;
 						if (koo!==null) koo.direct(newDirectLink);
 						var pushData = {track:ko.toJS(o), position:0};
 						Spank.base.live.set(pushData);
-						$("#funkyPlayer").css("background", bgImage);
+						$("#funkyPlayer").css("background-image", bgImage);
 					} else {
 						alert("Yipes! This audio file has gone missing! Replace it with another one!");
 					}
@@ -96,7 +96,7 @@
 								var newCoverUrl = images[images.length-1]['#text'];
 								koo.thumb(newCoverUrl);
 								Spank.history.saveHistory(true);
-								$("#funkyPlayer").css("background", "url(#)".replace("#", newCoverUrl));
+								$("#funkyPlayer").css("background-image", "url(#)".replace("#", newCoverUrl));
 							}
 						}
 					} catch(err) {

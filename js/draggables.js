@@ -93,7 +93,11 @@
 			hoverClass: "bgOver",
 			drop: function searchMusixForDroppedArtist() {
 				if (document._draggedHistoryItem!==null) {
-					$("#searchField").val("artist: " + document._draggedHistoryItem.artist).trigger("keyup");
+					var searchString = document._draggedHistoryItem.artist;
+					if (!($("#myonoffswitch").is(":checked"))) {
+						searchString = "artist: ".concat(searchString);
+					}
+					$("#searchField").val(searchString).trigger("keyup");
 				}
 			}
 		});

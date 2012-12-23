@@ -68,7 +68,7 @@
 			vk_search_in_progress = true;
 			$("#vk-results-list").remove();
 			$('<ul id="vk-results-list"></ul>').appendTo('#vk-results-container');
-			var url = "https://api.vkontakte.ru/method/audio.search?q=QUERY&access_token=TOKEN&count=100&callback=?",
+			var url = "https://api.vkontakte.ru/method/audio.search?q=QUERY&access_token=TOKEN&count=200&callback=?",
 				token = VK.getToken();
 			url = url.replace("TOKEN", token).replace("QUERY", params.q);
 			$("html").addClass("busy");
@@ -134,22 +134,6 @@
 			});
 		};
 
-		//
-		//	LIVE SEARCH FORM
-		//
-		// Suppress the ENTER key
-//		$("#lyrics").keydown(function(e){
-//			if ( e.keyCode===13 ) {
-//				return false;
-//			}
-//		});
-
-		// Don't allow the form to be submitted or we'll jump away
-		// from the page!
-		$("#searchLyrics").submit(function(e) {
-			return false;
-		});
-
 		$.searchByWire = function(search_term) {
 			var queryVKDirectly = $("#myonoffswitch").is(":checked");
 			if (queryVKDirectly) {
@@ -193,9 +177,21 @@
 			$("#searchField").val("artist: " + artist).trigger("keyup");
 		});
 
+		var taglineBase = new Firebase("https://wild.firebaseio.com/spank/tagline");
+		taglineBase.on("value", function(snapshot) {
+			Spank.tagline = snapshot.val();
+			$("#searchField").val(snapshot.val());
+		});
+
+		// Don't allow the form to be submitted or we'll jump away
+		// from the page!
+		$("#searchLyrics").submit(function(e) {
+			return false;
+		});
+
 		$("#searchField").livesearch({
 			searchCallback: $.searchByWire,
-			innerText: "Tune in. Drop out.",
+			innerText: Spank.tagline,
 			queryDelay:500,
 			minimumSearchLength: 3
 		});
