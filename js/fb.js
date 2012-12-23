@@ -39,7 +39,7 @@ window.fbAsyncInit = function checkFacebookStatus() {
 			}
 //			FBUserInfo.username = "sam_beckett_92102";
 			FBUserInfo.accessToken = response.authResponse.accessToken;
-			//$("#fb-login").hide();
+			$("#fb-login").hide();
 			var q = "SELECT name,username,uid FROM user WHERE uid in (SELECT uid2 FROM friend WHERE uid1=me()) and is_app_user='1'";
 			FB.api('fql',{q:q}, function(res) {
 				FBUserInfo.friends = res.data;
@@ -52,44 +52,20 @@ window.fbAsyncInit = function checkFacebookStatus() {
 	}
 
 	function updateButton(response) {
-		var loginTimeout = setTimeout(function(){
-			if (typeof(FBUserInfo)==='undefined' && typeof(localStorage.spank)==='string') {
-				FBUserInfo = JSON.parse(localStorage.spank);
-				$(document).trigger("login");
-			}
-			clearTimeout(loginTimeout);
-		},5000);
-		var button = document.getElementById('fb-auth');
 		if (response.status === 'connected') {
-			//user is already logged in and connected
 			initFB(response);
-//			button.innerHTML = 'Logout';
-//			button.onclick = function() {
-//				FB.logout(function(response) {
-//					$(document).trigger("logout");
-//					FB_userInfo = null;
-//					document.location.reload(true);
-//				});
-//			};
 		} else {
-			clearTimeout(loginTimeout);
-			$("#fb-login").show();
 			//user is not connected to your app or logged out
-//			button.innerHTML = 'Login';
-//			button.onclick = function() {
-//				FB.login(function(response) {
-//					if (response.status === 'connected') {
-//						initFB(response);
-//					} else {
-//						//user cancelled login or did not grant authorization
-//						console.log("User cancelled login/authorization.");
-//					}
-//				}, {scope:'email, publish_stream'});
-//			};
+			FB.login(function(response) {
+				if (response.status === 'connected') {
+					initFB(response);
+				} else {
+					//user cancelled login or did not grant authorization
+					console.log("User cancelled login/authorization.");
+				}
+			}, {scope:'email, publish_stream'});
 		}
 	}
-//	$('<button id="fb-auth" style="display: none;">Login</button>').appendTo("#searchForm"); // Keep this button around for debug
-//	$('<div id="fb-login" class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1" scope="email, publish_stream"></div>').appendTo("#searchForm");
 	// run once with current status and whenever the status changes
 	FB.getLoginStatus(updateButton);
 	FB.Event.subscribe('auth.statusChange', updateButton);
