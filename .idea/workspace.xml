@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="32ba444c-fc18-4642-a53c-06c7d6e77d49" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/index.css" afterPath="$PROJECT_DIR$/css/index.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/fb.js" afterPath="$PROJECT_DIR$/js/fb.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/index.js" afterPath="$PROJECT_DIR$/js/index.js" />
     </list>
     <ignored path="soundgarden-heroku.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,10 +41,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.css" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="index.css" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/css/index.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="582" column="0" selection-start="12743" selection-end="12743" vertical-scroll-proportion="0.52230215">
+            <state line="582" column="0" selection-start="12743" selection-end="12743" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -67,10 +68,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="index.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="150" column="8" selection-start="5518" selection-end="5518" vertical-scroll-proportion="0.0">
+            <state line="178" column="0" selection-start="6609" selection-end="6609" vertical-scroll-proportion="0.7381295">
               <folding />
             </state>
           </provider>
@@ -88,7 +89,7 @@
       <file leaf-file-name="fb.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/fb.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="75" column="0" selection-start="2494" selection-end="2494" vertical-scroll-proportion="0.0">
+            <state line="72" column="0" selection-start="2333" selection-end="2333" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -136,11 +137,11 @@
         <option value="$PROJECT_DIR$/css/scroller.css" />
         <option value="$PROJECT_DIR$/js/chartsModel.js" />
         <option value="$PROJECT_DIR$/js/noty/notifications.js" />
-        <option value="$PROJECT_DIR$/js/index.js" />
         <option value="$PROJECT_DIR$/soundgarden.html" />
         <option value="$PROJECT_DIR$/js/historyModel.js" />
-        <option value="$PROJECT_DIR$/js/fb.js" />
         <option value="$PROJECT_DIR$/css/index.css" />
+        <option value="$PROJECT_DIR$/js/fb.js" />
+        <option value="$PROJECT_DIR$/js/index.js" />
       </list>
     </option>
   </component>
@@ -431,13 +432,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="150" column="8" selection-start="5518" selection-end="5518" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/noty/notifications.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="40" column="8" selection-start="1106" selection-end="1106" vertical-scroll-proportion="0.0">
@@ -482,14 +476,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/fb.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="75" column="0" selection-start="2494" selection-end="2494" vertical-scroll-proportion="0.0">
+        <state line="72" column="0" selection-start="2333" selection-end="2333" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/css/index.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="582" column="0" selection-start="12743" selection-end="12743" vertical-scroll-proportion="0.52230215">
+        <state line="582" column="0" selection-start="12743" selection-end="12743" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="178" column="0" selection-start="6609" selection-end="6609" vertical-scroll-proportion="0.7381295">
           <folding />
         </state>
       </provider>

@@ -62,6 +62,14 @@ window.fbAsyncInit = function checkFacebookStatus() {
 		}, {scope:'email, publish_stream'});
 	});
 
+	var fblogout = function() {
+		FB.logout(function(response) {
+			$(document).trigger("logout");
+			FB_userInfo = null;
+			document.location.reload(true);
+		});
+	};
+
 	function updateButton(response) {
 		if (response.status === 'connected') {
 			initFB(response);
