@@ -63,33 +63,33 @@ window.fbAsyncInit = function checkFacebookStatus() {
 		if (response.status === 'connected') {
 			//user is already logged in and connected
 			initFB(response);
-			button.innerHTML = 'Logout';
-			button.onclick = function() {
-				FB.logout(function(response) {
-					$(document).trigger("logout");
-					FB_userInfo = null;
-					document.location.reload(true);
-				});
-			};
+//			button.innerHTML = 'Logout';
+//			button.onclick = function() {
+//				FB.logout(function(response) {
+//					$(document).trigger("logout");
+//					FB_userInfo = null;
+//					document.location.reload(true);
+//				});
+//			};
 		} else {
 			clearTimeout(loginTimeout);
 			$("#fb-login").show();
 			//user is not connected to your app or logged out
-			button.innerHTML = 'Login';
-			button.onclick = function() {
-				FB.login(function(response) {
-					if (response.status === 'connected') {
-						initFB(response);
-					} else {
-						//user cancelled login or did not grant authorization
-						console.log("User cancelled login/authorization.");
-					}
-				}, {scope:'email, publish_stream'});
-			};
+//			button.innerHTML = 'Login';
+//			button.onclick = function() {
+//				FB.login(function(response) {
+//					if (response.status === 'connected') {
+//						initFB(response);
+//					} else {
+//						//user cancelled login or did not grant authorization
+//						console.log("User cancelled login/authorization.");
+//					}
+//				}, {scope:'email, publish_stream'});
+//			};
 		}
 	}
-	$('<button id="fb-auth" style="display: none;">Login</button>').appendTo("#searchForm"); // Keep this button around for debug
-	$('<div id="fb-login" class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1" scope="email, read_friendlists, publish_stream"></div>').appendTo("#searchForm");
+//	$('<button id="fb-auth" style="display: none;">Login</button>').appendTo("#searchForm"); // Keep this button around for debug
+//	$('<div id="fb-login" class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1" scope="email, publish_stream"></div>').appendTo("#searchForm");
 	// run once with current status and whenever the status changes
 	FB.getLoginStatus(updateButton);
 	FB.Event.subscribe('auth.statusChange', updateButton);
