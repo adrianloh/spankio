@@ -23,6 +23,7 @@
 					});
 					Spank.history.stream(koHistory);
 					setTimeout(function() {
+						window.notify.suspended = false;
 						window.notify.information("Go!");
 					}, 2000);
 					setTimeout(function() {

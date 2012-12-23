@@ -114,10 +114,8 @@ Array.prototype.shuffle = function() {
 						self.chartTracks.removeAll();
 						self.pushBatch(tracklist);
 					} else {
-						if (error_callback) {
+						if (error_callback!==undefined) {
 							error_callback();
-						} else {
-							alert("No tracks found");
 						}
 					}
 				});

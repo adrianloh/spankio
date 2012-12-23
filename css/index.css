@@ -21,7 +21,7 @@
     height: 90%;
     top: 84px;
     left: 0;
-    background-color: whiteSmoke;
+    background-color: rgba(255, 255, 255, 0.97);
     color: #111;
     font: 800 14px "PT Sans Narrow";
     overflow: auto;
@@ -37,7 +37,7 @@
     width: 110px;
     display: inline-block;
     border-bottom: 3px solid whiteSmoke;
-    background-color: white;
+    background-color: #E9E9E9;
     -webkit-border-radius: 25px;
     -webkit-transition: all .2s ease-in-out;
 }
@@ -56,19 +56,19 @@
 
 .giftPopup {
     display: none;
-	position: fixed;
-	color: rgb(94, 91, 82);
-	background-color: rgb(255, 255, 255);
-	width: 200px;
-	z-index: 999;
-	padding: 10px;
-	border: 6px solid rgb(59, 156, 202);
-	-webkit-border-radius: 8px;
-	-moz-border-radius: 8px;
-	border-radius: 14px;
-	-moz-box-shadow: -10px 10px 10px rgba(0, 0, 0, 0.16);
-	-webkit-box-shadow: -10px 10px 10px rgba(0, 0, 0, 0.16);
-	box-shadow: -10px 10px 10px rgba(0, 0, 0, 0.16);
+    position: fixed;
+    color: rgb(94, 91, 82);
+    background-color: rgb(255, 255, 255);
+    width: 200px;
+    z-index: 999;
+    padding: 10px;
+    border: 6px solid rgb(59, 156, 202);
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 14px;
+    -moz-box-shadow: -10px 10px 10px rgba(0, 0, 0, 0.16);
+    -webkit-box-shadow: -10px 10px 10px rgba(0, 0, 0, 0.16);
+    box-shadow: -10px 10px 10px rgba(0, 0, 0, 0.16);
 }
 
 .giftFrom {
@@ -237,22 +237,22 @@
 }
 
 html.busy, html.busy * {
-	cursor: wait;
+    cursor: wait;
 }
 body {
-	overflow: hidden;
-	background-color: rgb(241, 241, 241);
+    overflow: hidden;
+    background-color: rgb(241, 241, 241);
 }
 a {
-	color: #FFFFFF;
-	text-decoration: none;
-	-webkit-transition: color 0.3s ease-out;
-	-moz-transition: color 0.3s ease-out;
-	-o-transition: color 0.3s ease-out;
-	transition: color 0.3s ease-out;
+    color: black;
+    text-decoration: none;
+    -webkit-transition: color 0.3s ease-out;
+    -moz-transition: color 0.3s ease-out;
+    -o-transition: color 0.3s ease-out;
+    transition: color 0.2s ease-out;
 }
 a:hover {
-	color: #000;
+    color: #209aee;
 }
 
 /* Disable the blur border around selected/focused elements */
@@ -264,109 +264,108 @@ button:focus {
 }
 
 ul.results-list {
-	margin-top: 28px;
+    margin-top: 106px;
     margin-left: -40px;
 }
 
 /* Disable the bullet thing on list items */
 ul {
-	list-style-type: none;
-	/*list-style-position: inside;
-	list-style-image: url('/static/img/finger.png');
-	*/
+    list-style-type: none;
+    /*list-style-position: inside;
+     list-style-image: url('/static/img/finger.png');
+     */
 }
 /* The search form
 ==================================================*/
 #searchForm form {
-	position: fixed;
-	font-size: 68px;
-	font-weight: 900;
-	width: 80%;
-	top: 11px;
-	left: 0px;
-	margin-left: 9%;
-	/*margin: 0 auto;*/
+    position: fixed;
+    font-size: 68px;
+    font-weight: 900;
+    width: 80%;
+    top: 11px;
+    left: 0px;
+    margin-left: 9%;
+    /*margin: 0 auto;*/
 }
 #searchField {
-	font: 44.5%/1 Oswald;
-	text-shadow: -0.095em 0 red, 0.095em 0 cyan;
-	letter-spacing: 0px;
-	height: 100%;
-	width: 68%;
-	padding: 3px 10px 5px;
-	background-color: rgba(255, 255, 255, 1);
-	border: 6px solid rgb(63, 63, 63);
-	color: #000000;
+    font: 44.5%/1 Oswald;
+    text-shadow: -0.095em 0 red, 0.095em 0 cyan;
+    letter-spacing: 0px;
+    height: 100%;
+    width: 68%;
+    padding: 3px 10px 5px;
+    background-color: rgba(255, 255, 255, 1);
+    border: 6px solid rgb(63, 63, 63);
+    color: #000000;
 }
 input::-webkit-input-placeholder {
-	color: #222;
+    color: #222;
 }
 input:-moz-placeholder {
-	color: #222;
+    color: #222;
 }
 input:-ms-input-placeholder {
-	color: #222;
+    color: #222;
 }
 #searchForm {
-	z-index: 200;
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 84px;
-	-moz-box-shadow: 0 020px 20px rgba(0, 0, 0, 0.7);
-	-webkit-box-shadow: 0 020px 20px rgba(0, 0, 0, 0.7);
-	box-shadow: 0 020px 20px rgba(0, 0, 0, 0.7);
+    z-index: 200;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 84px;
+    -moz-box-shadow: 0 020px 20px rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.77);
 }
 
 /* Navigation & Page Number
 ==================================================*/
 #pageNumber {
-	display:none;
-	z-index:500;
-	position: fixed;
-	letter-spacing: -1.8px;
-	color: #ffffff;
-	font: 150px "Oswald";
-	left: 7%;
-	top: 7%;
+    display:none;
+    z-index:500;
+    position: fixed;
+    letter-spacing: -1.8px;
+    color: #ffffff;
+    font: 150px "Oswald";
+    left: 7%;
+    top: 7%;
 }
 #track_count_current {
     position: fixed;
+    top: 90px;
+    right: 32%;
+    letter-spacing: -1.8px;
+    color: #CACACA;
+    font: 20 "Oswald";
+    z-index: 0;
+ }
+#track_count_total {
+    z-index: 500;
+    position: fixed;
     letter-spacing: -1.8px;
     color: rgb(255, 255, 255);
-    font: 20 "Oswald";
-    right: 32%;
-    z-index: 0;
-    margin-top: 10px;
-}
-#track_count_total {
-	z-index: 500;
-	position: fixed;
-	letter-spacing: -1.8px;
-    color: rgb(255, 255, 255);
-	font: 51px "Oswald";
-	left: 24%;
-	top: -1.5%;
+    font: 51px "Oswald";
+    left: 24%;
+    top: -1.5%;
     margin-left: 21px;
 }
 #prev_page{
-	z-index:500;
-	position: fixed;
-	left: 7%;
-	top: 7%;
-	cursor: pointer;
-	-moz-transform:rotate(7deg); /* Firefox */
-	-webkit-transform:scale(0.72) rotate(7deg); /* Safari and Chrome */
+    z-index:500;
+    position: fixed;
+    left: 7%;
+    top: 7%;
+    cursor: pointer;
+    -moz-transform:rotate(7deg); /* Firefox */
+    -webkit-transform:scale(0.72) rotate(7deg); /* Safari and Chrome */
 }
 #next_page{
-	z-index:500;
-	position: fixed;
-	left: 18%;
-	top: 8%;
-	cursor: pointer;
-	-moz-transform:scale(0.5) rotate(170deg); /* Firefox */
-	-webkit-transform:scale(0.7) rotate(170deg); /* Safari and Chrome */
+    z-index:500;
+    position: fixed;
+    left: 18%;
+    top: 8%;
+    cursor: pointer;
+    -moz-transform:scale(0.5) rotate(170deg); /* Firefox */
+    -webkit-transform:scale(0.7) rotate(170deg); /* Safari and Chrome */
 }
 
 /* MusixMatch Results section
@@ -382,43 +381,41 @@ input:-ms-input-placeholder {
     width: 150px;
     height: 150px;
     cursor: pointer;
-   -webkit-transition: all .2s ease-in-out;
+    -webkit-transition: all .2s ease-in-out;
 }
 
 /*.mxThumb:hover {*/
-    /*-webkit-transform: scale(1.2);*/
+/*-webkit-transform: scale(1.2);*/
 /*}*/
 
 .trackName {
-	width: 150px;
-	color: #111111;
-	font: 800 15px "PT Sans Narrow";
-	display: inline-block;
-    background-color: rgba(73, 45, 45, 0.57);
-	clear: both;
+    width: 150px;
+    font: 800 15px "PT Sans Narrow";
+    display: inline-block;
+    clear: both;
 
-	height:20px;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
+    height:20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .trackArtist {
-	letter-spacing: -1.8px;
-	color: rgb(114, 114, 114);
-	font: italic 600 13px "proxima-nova-1";
-	cursor: pointer;
+    letter-spacing: -1.8px;
+    color: #494949;
+    font: italic 600 11px "proxima-nova-1";
+    cursor: pointer;
 }
 #resultsSection {
     display: none;
-    text-shadow: 2px 2px 2px rgba(151, 24, 64, 0.2);
+    /*text-shadow: 2px 2px 2px transparent;*/
     position: absolute;
     width: 70%;
-    top: 86px;
+    top: 0;
     left: 0;
     text-align: center;
     line-height: 20px;
     -webkit-backface-visibility: hidden;
-    height: 90%;
+    height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 2;
@@ -436,17 +433,17 @@ input:-ms-input-placeholder {
     width: 55%;
     height: 80%;
     overflow: hidden;
-	-moz-box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
-	-webkit-box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
-	box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
-	border: 2px solid #BBB;
+    -moz-box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
+    -webkit-box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
+    box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
+    border: 2px solid #BBB;
 }
 
 #lightBox-content-container {
-	width: 100%;
-	height: 100%;
-	overflow: auto;
-	margin-top: 2%;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    margin-top: 2%;
 }
 #lyricsThumb {
     display: none;
@@ -459,83 +456,100 @@ input:-ms-input-placeholder {
     overflow-y: scroll;
     overflow-x: hidden;
 }
+
 #logo {
     margin: 0 auto;
-	opacity: 0.96;
-	top: -38px;
-	position: fixed;
-	text-align: center;
-	text-indent: -.12em;
-	color: rgb(249, 253, 255);
-	font: 360px "anchor-web-1","anchor-web-2", 'Impact', sans-serif;
-	font-weight: 900;
-	line-height: 1;
-	text-shadow: rgb(245, 25, 148) .01em .01em 0, rgb(245, 25, 148) .02em .02em 0, rgb(245, 25, 148) .03em .03em 0, rgb(245, 25, 148) .04em .04em 0, rgb(245, 25, 148) .05em .05em 0, rgb(245, 25, 148) .06em .06em 0, rgb(245, 25, 148) .07em .07em 0, rgb(245, 25, 148) .08em .08em 0, rgb(245, 25, 148) .09em .09em 0, rgb(245, 25, 148) .1em .1em 0;
+    opacity: 0.96;
+    top: 149px;
+    position: fixed;
+    text-align: center;
+    text-indent: -.12em;
+    color: rgba(46, 66, 77, 0);
+    font: 360px "anchor-web-1","anchor-web-2", 'Impact', sans-serif;
+    font-weight: 900;
+    line-height: 1;
+}
+
+#orignal_logo {
+    margin: 0 auto;
+    opacity: 0.96;
+
+    top: 149px;
+    position: fixed;
+    text-align: center;
+    text-indent: -.12em;
+
+    color: #2E424D;
+    font: 360px "anchor-web-1","anchor-web-2", 'Impact', sans-serif;
+    font-weight: 900;
+    line-height: 1;
+
+    text-shadow: rgb(245, 25, 148) .01em .01em 0, rgb(245, 25, 148) .02em .02em 0, rgb(245, 25, 148) .03em .03em 0, rgb(245, 25, 148) .04em .04em 0, rgb(245, 25, 148) .05em .05em 0, rgb(245, 25, 148) .06em .06em 0, rgb(245, 25, 148) .07em .07em 0, rgb(245, 25, 148) .08em .08em 0, rgb(245, 25, 148) .09em .09em 0, rgb(245, 25, 148) .1em .1em 0;
 }
 
 #lyricsButtons {
-	width: 293px;
+    width: 293px;
     margin: 10px auto;
 }
 #lyricsTitle {
-/*	text-shadow: 0 1px 0 #ccc,
-	0 2px 0 #c9c9c9,
-	0 3px 0 #bbb,
-	0 4px 0 #b9b9b9,
-	0 5px 0 #aaa,
-	0 6px 0 #aaa,
-	0 6px 1px rgba(0,0,0,.1),
-	0 0 5px rgba(0,0,0,.1),
-	0 1px 3px rgba(0,0,0,.3),
-	0 3px 5px rgba(0,0,0,.2),
-	0 5px 10px rgba(0,0,0,.25),
-	0 10px 10px rgba(0,0,0,.2),
-	0 20px 20px rgba(0,0,0,.15);
-*/	font: 45px Oswald;
-	letter-spacing: -2px;
-	text-align: left;
-	line-height: 53px;
-	color: black;
-	font-weight: 700;
-	z-index: 10;
-	margin-bottom: 2%;
-	margin-top: 2%;
+    /*	text-shadow: 0 1px 0 #ccc,
+        0 2px 0 #c9c9c9,
+        0 3px 0 #bbb,
+        0 4px 0 #b9b9b9,
+        0 5px 0 #aaa,
+        0 6px 0 #aaa,
+        0 6px 1px rgba(0,0,0,.1),
+        0 0 5px rgba(0,0,0,.1),
+        0 1px 3px rgba(0,0,0,.3),
+        0 3px 5px rgba(0,0,0,.2),
+        0 5px 10px rgba(0,0,0,.25),
+        0 10px 10px rgba(0,0,0,.2),
+        0 20px 20px rgba(0,0,0,.15);
+    */	font: 45px Oswald;
+    letter-spacing: -2px;
+    text-align: left;
+    line-height: 53px;
+    color: black;
+    font-weight: 700;
+    z-index: 10;
+    margin-bottom: 2%;
+    margin-top: 2%;
 }
 #lyricstext {
-	display: none;
-	width: 70%;
-	position: relative;
-	left: 10%;
-	color: black;
-	font: 14px/26px "proxima-nova-1";
-	letter-spacing: 1px;
+    display: none;
+    width: 70%;
+    position: relative;
+    left: 10%;
+    color: black;
+    font: 14px/26px "proxima-nova-1";
+    letter-spacing: 1px;
 }
 #closeButton {
-	display: none;
+    display: none;
     z-index: 10;
-	cursor:pointer;
-	position: fixed;
-	left: 8%;
-	top:45%;
+    cursor:pointer;
+    position: fixed;
+    left: 8%;
+    top:45%;
 }
 /* List items of tracks from VK
 ==================================================*/
 .dummy {
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	padding-right: 40px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 40px;
 }
 
 #vk-results-list {
-	margin-top: 80px;
+    margin-top: 80px;
 }
 .vkMessage {
-	color: black;
-	font: bold 18px "PT Sans Narrow";
-	letter-spacing: 3px;
-	margin-top: -68px;
-	margin-bottom: 22px;
+    color: black;
+    font: bold 18px "PT Sans Narrow";
+    letter-spacing: 3px;
+    margin-top: -68px;
+    margin-bottom: 22px;
 }
 .vkTrackEntry {
     background-color: whitesmoke;
@@ -561,15 +575,15 @@ input:-ms-input-placeholder {
     margin-right: 5px;
 }
 #fb-login {
-	z-index: 999;
-	position: fixed;
-	left: 20px;
-	top: 20px;
-	display: none;
+    z-index: 999;
+    position: fixed;
+    left: 20px;
+    top: 20px;
+    display: none;
 }
 
 .resultsBody {
-	z-index: 10;
+    z-index: 10;
 }
 
 ul.lastfm-buttons {
@@ -609,21 +623,21 @@ ul.lastfm-buttons {
     top: 38%;
     height: 62%;
     overflow: auto;
-/*    -webkit-box-shadow: 19px -16px 21px rgba(0, 0, 0, 0.7);*/
+    /*    -webkit-box-shadow: 19px -16px 21px rgba(0, 0, 0, 0.7);*/
 }
 
 #history-stream-list {
-     margin-left: -40px; /* Must put this correction after we hack the scrollbar */
-     margin-top: 42px;
+    margin-left: -40px; /* Must put this correction after we hack the scrollbar */
+    margin-top: 42px;
 }
 
 
 .tweetItem {
-/* These three are neccessary to slide out*/
+    /* These three are neccessary to slide out*/
     position: relative;
     left: 0px;
     width: 100%;
-/* Essential */
+    /* Essential */
     height: 58px;
     border-bottom: 3px solid whitesmoke;
     color: black;

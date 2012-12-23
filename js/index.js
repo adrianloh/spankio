@@ -152,15 +152,18 @@
 			// Each time we start a new search...
 			Spank.charts.ok_to_fetch_more = true;
 			Spank.tearDownLightBox();                                               // Close the lightbox
-			Spank.friends.visible(false);                                     // Close the friends list
-			$(".playlistEntry").css("border","5px solid rgb(204, 204, 204)"); // Don't highlight any playlist items
+			Spank.friends.visible(false);                                           // Close the friends list
+			$(".playlistEntry").css("border","5px solid rgb(204, 204, 204)");       // Don't highlight any playlist items
 			if ($.trim(search_term)!=='') {
 				setTimeout(function() {
 					var url = '/mxsearch?q=#&page=1'.replace("#",search_term);
 					Spank.charts.populateResultsWithUrl(url, function extract(res) {
 						return res.message.body.track_list;
+					}, function onNoResults() {
+						$("#searchField").val("");
+						window.notify.error("No results.",'force');
 					});
-				},250);
+				}, 250);
 			} else {
 				return false;
 			}

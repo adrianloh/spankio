@@ -29,7 +29,7 @@
 /** THEME
 ===================================*/
 
-.bx-wrapper .bx-viewport {
+.original_bx-wrapper .original_bx-viewport {
 	-moz-box-shadow: 0 0 5px #ccc;
 	-webkit-box-shadow: 0 0 5px #ccc;
 	box-shadow: 0 0 5px #ccc;
@@ -39,6 +39,14 @@
    -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
     border-radius: 8px;
+}
+
+.bx-wrapper .bx-viewport {
+left: -5px;
+background: #525252;
+-webkit-border-radius: 8px;
+-moz-border-radius: 8px;
+border-radius: 8px;
 }
 
 .bx-wrapper .bx-pager,
