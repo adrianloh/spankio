@@ -22,24 +22,28 @@
 						return koo;
 					});
 					Spank.history.stream(koHistory);
-					setTimeout(function() {
-						window.notify.suspended = false;
-						window.notify.information("Go!");
-					}, 2000);
-					setTimeout(function() {
-						Spank.playlistScroller.visible(true);
-					}, 1500);
-					Spank.base.history.on('child_changed', updateHistoryItem);
-					Spank.base.history.on('child_added', updateHistoryItem);
-					Spank.base.history.on('child_removed', function(snapshot) {
-						// Fix for an off-by-one error everytime we remove
-						// something from the history list
-						Spank.history.stream.pop();
-					});
+					start();
 				} else {
-					console.error(snapshot.val());
+					start();
 				}
 			});
+
+			var start = function() {
+				setTimeout(function() {
+					window.notify.suspended = false;
+					window.notify.information("Go!");
+				}, 2000);
+				setTimeout(function() {
+					Spank.playlistScroller.visible(true);
+				}, 1500);
+				Spank.base.history.on('child_changed', updateHistoryItem);
+				Spank.base.history.on('child_added', updateHistoryItem);
+				Spank.base.history.on('child_removed', function(snapshot) {
+					// Fix for an off-by-one error everytime we remove
+					// something from the history list
+					Spank.history.stream.pop();
+				});
+			};
 
 			var updateHistoryItem = function(snapshot) {
 				var o = snapshot.val();
