@@ -176,7 +176,7 @@
 
 		$("#searchField").livesearch({
 			searchCallback: $.searchByWire,
-			innerText: "You've come a long way, baby",
+			innerText: "Tune in. Drop out.",
 			queryDelay:500,
 			minimumSearchLength: 3
 		});
