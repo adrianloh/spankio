@@ -162,7 +162,6 @@
 						Spank.charts.populateResultsWithUrl(url, function extract(res) {
 							return res.message.body.track_list;
 						}, function onNoResults() {
-							$("#searchField").val("");
 							window.notify.error("No results.",'force');
 						});
 					}, 250);

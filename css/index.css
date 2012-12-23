@@ -79,6 +79,11 @@
     font: 800 14px "PT Sans Narrow";
     overflow: auto;
     display: none;
+
+    -webkit-transform: translate3d(0,0,0);
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    -webkit-transform-style: flat;
 }
 
 #friendList {
@@ -195,7 +200,7 @@
 
 #history-filter-container {
     position: fixed;
-    width: 30%;
+    width: 100%;
     z-index: 1;
     background-color: whitesmoke;
     height: 42px;
@@ -367,6 +372,11 @@ input:-ms-input-placeholder {
     width: 100%;
     height: 78px;
     background: rgba(0, 0, 0, 0.77);
+
+    -webkit-transform: translate3d(0,0,0);
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    -webkit-transform-style: flat;
 }
 
 /* Navigation & Page Number
@@ -683,6 +693,11 @@ ul.lastfm-buttons {
     height: 70%;
     overflow: auto;
     /*    -webkit-box-shadow: 19px -16px 21px rgba(0, 0, 0, 0.7);*/
+
+    -webkit-transform: translate3d(0,0,0);
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    -webkit-transform-style: flat;
 }
 
 #history-stream-list {
