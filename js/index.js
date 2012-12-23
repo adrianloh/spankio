@@ -70,7 +70,6 @@
 			var url = "https://api.vkontakte.ru/method/audio.search?q=QUERY&access_token=TOKEN&count=100&callback=?",
 				token = VK.getToken();
 			url = url.replace("TOKEN", token).replace("QUERY", params.q);
-			console.log(url);
 			$("html").addClass("busy");
 			var xhr = $.getJSON(url, function(data) {
 			$("html").removeClass("busy");
