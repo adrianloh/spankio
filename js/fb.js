@@ -39,7 +39,7 @@ window.fbAsyncInit = function checkFacebookStatus() {
 			}
 //			FBUserInfo.username = "sam_beckett_92102";
 			FBUserInfo.accessToken = response.authResponse.accessToken;
-			$("#fb-login").hide();
+			//$("#fb-login").hide();
 			var q = "SELECT name,username,uid FROM user WHERE uid in (SELECT uid2 FROM friend WHERE uid1=me()) and is_app_user='1'";
 			FB.api('fql',{q:q}, function(res) {
 				FBUserInfo.friends = res.data;
