@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="32ba444c-fc18-4642-a53c-06c7d6e77d49" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/fb.js" afterPath="$PROJECT_DIR$/js/fb.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/historyModel.js" afterPath="$PROJECT_DIR$/js/historyModel.js" />
     </list>
     <ignored path="soundgarden-heroku.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -86,12 +85,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="fb.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="fb.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/fb.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="39" column="0" selection-start="1319" selection-end="1319" vertical-scroll-proportion="0.0">
+            <state line="39" column="2" selection-start="1321" selection-end="1321" vertical-scroll-proportion="0.76546764">
               <folding>
-                <marker date="1356234108000" expanded="true" signature="3074:3088" placeholder="..." />
+                <marker date="1356234398000" expanded="true" signature="3076:3090" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -106,10 +105,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="historyModel.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="historyModel.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/historyModel.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="48" column="0" selection-start="1502" selection-end="1502" vertical-scroll-proportion="0.94532377">
+            <state line="48" column="0" selection-start="1502" selection-end="1502" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -142,8 +141,8 @@
         <option value="$PROJECT_DIR$/js/index.js" />
         <option value="$PROJECT_DIR$/css/index.css" />
         <option value="$PROJECT_DIR$/soundgarden.html" />
-        <option value="$PROJECT_DIR$/js/fb.js" />
         <option value="$PROJECT_DIR$/js/historyModel.js" />
+        <option value="$PROJECT_DIR$/js/fb.js" />
       </list>
     </option>
   </component>
@@ -434,20 +433,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/playlists.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="93" column="68" selection-start="3904" selection-end="3956" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/playlists2.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="56" selection-start="367" selection-end="367" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/css/index.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="403" column="19" selection-start="8785" selection-end="8785" vertical-scroll-proportion="0.0">
@@ -469,19 +454,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/fb.js">
+    <entry file="file://$PROJECT_DIR$/js/historyModel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="0" selection-start="1319" selection-end="1319" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1356234108000" expanded="true" signature="3074:3088" placeholder="..." />
-          </folding>
+        <state line="48" column="0" selection-start="1502" selection-end="1502" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/historyModel.js">
+    <entry file="file://$PROJECT_DIR$/js/playlists.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="0" selection-start="1502" selection-end="1502" vertical-scroll-proportion="0.94532377">
+        <state line="93" column="68" selection-start="3904" selection-end="3956" vertical-scroll-proportion="0.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/playlists2.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="56" selection-start="367" selection-end="367" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/fb.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="39" column="2" selection-start="1321" selection-end="1321" vertical-scroll-proportion="0.76546764">
+          <folding>
+            <marker date="1356234398000" expanded="true" signature="3076:3090" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
