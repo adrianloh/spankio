@@ -70,7 +70,7 @@ window.fbAsyncInit = function checkFacebookStatus() {
 		});
 	};
 
-	function updateButton(response) {
+	function mine_updateButton(response) {
 		var loginTimeout = setTimeout(function(){
 			if (typeof(FBUserInfo)==='undefined' && typeof(localStorage.spank)==='string') {
 				FBUserInfo = JSON.parse(localStorage.spank);
@@ -108,7 +108,7 @@ window.fbAsyncInit = function checkFacebookStatus() {
 		}
 	}
 
-	function _updateButton(response) {
+	function updateButton(response) {
 		if (response.status === 'connected') {
 			initFB(response);
 		} else {
