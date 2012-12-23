@@ -51,19 +51,22 @@ window.fbAsyncInit = function checkFacebookStatus() {
 		});
 	}
 
+	$("#fb-login").click(function() {
+		FB.login(function(response) {
+			if (response.status === 'connected') {
+				initFB(response);
+			} else {
+				//user cancelled login or did not grant authorization
+				console.log("User cancelled login/authorization.");
+			}
+		}, {scope:'email, publish_stream'});
+	});
+
 	function updateButton(response) {
 		if (response.status === 'connected') {
 			initFB(response);
 		} else {
 			//user is not connected to your app or logged out
-			FB.login(function(response) {
-				if (response.status === 'connected') {
-					initFB(response);
-				} else {
-					//user cancelled login or did not grant authorization
-					console.log("User cancelled login/authorization.");
-				}
-			}, {scope:'email, publish_stream'});
 		}
 	}
 	// run once with current status and whenever the status changes
