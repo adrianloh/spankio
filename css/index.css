@@ -574,12 +574,14 @@ input:-ms-input-placeholder {
     cursor: pointer;
     margin-right: 5px;
 }
-#fb-login {
-    z-index: 999;
-    position: fixed;
-    left: 20px;
-    top: 20px;
+
+#fb-auth {
+    /*z-index: 999;*/
+    /*position: fixed;*/
+    /*left: 20px;*/
+    /*top: 20px;*/
     cursor: pointer;
+    font: 16px "Oswald";
 }
 
 .resultsBody {

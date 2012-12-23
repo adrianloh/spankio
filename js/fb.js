@@ -71,6 +71,44 @@ window.fbAsyncInit = function checkFacebookStatus() {
 	};
 
 	function updateButton(response) {
+		var loginTimeout = setTimeout(function(){
+			if (typeof(FBUserInfo)==='undefined' && typeof(localStorage.spank)==='string') {
+				FBUserInfo = JSON.parse(localStorage.spank);
+				$(document).trigger("login");
+			}
+			clearTimeout(loginTimeout);
+		},5000);
+		var button = document.getElementById('fb-auth');
+		if (response.status === 'connected') {
+			//user is already logged in and connected
+			initFB(response);
+			button.innerHTML = 'Logout';
+			button.onclick = function() {
+				FB.logout(function(response) {
+					$(document).trigger("logout");
+					FB_userInfo = null;
+					document.location.reload(true);
+				});
+			};
+		} else {
+			clearTimeout(loginTimeout);
+//			$("#fb-login").show();
+			//user is not connected to your app or logged out
+			button.innerHTML = 'Login';
+			button.onclick = function() {
+				FB.login(function(response) {
+					if (response.status === 'connected') {
+						initFB(response);
+					} else {
+						//user cancelled login or did not grant authorization
+						console.log("User cancelled login/authorization.");
+					}
+				}, {scope:'email, publish_stream'});
+			};
+		}
+	}
+
+	function _updateButton(response) {
 		if (response.status === 'connected') {
 			initFB(response);
 		} else {
