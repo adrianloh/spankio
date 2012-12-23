@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="32ba444c-fc18-4642-a53c-06c7d6e77d49" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/index.css" afterPath="$PROJECT_DIR$/css/index.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/scroller.css" afterPath="$PROJECT_DIR$/css/scroller.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/jquery.bxslider/jquery.bxslider.css" afterPath="$PROJECT_DIR$/js/jquery.bxslider/jquery.bxslider.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/jquery.bxslider/jquery.bxslider.js" afterPath="$PROJECT_DIR$/js/jquery.bxslider/jquery.bxslider.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/playlists.js" afterPath="$PROJECT_DIR$/js/playlists.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/index.js" afterPath="$PROJECT_DIR$/js/index.js" />
     </list>
     <ignored path="soundgarden-heroku.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -36,26 +31,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="jquery.bxslider.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/jquery.bxslider/jquery.bxslider.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="81" column="4" selection-start="2655" selection-end="2655" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="historyModel.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/js/historyModel.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="50" selection-start="832" selection-end="832" vertical-scroll-proportion="0.62877697">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="index.css" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/css/index.css">
           <provider selected="true" editor-type-id="text-editor">
@@ -65,10 +40,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="index.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="132" column="10" selection-start="5204" selection-end="5204" vertical-scroll-proportion="0.0">
+            <state line="322" column="11" selection-start="10900" selection-end="10900" vertical-scroll-proportion="0.76847976">
               <folding />
             </state>
           </provider>
@@ -78,42 +53,6 @@
         <entry file="file://$PROJECT_DIR$/css/scroller.css">
           <provider selected="true" editor-type-id="text-editor">
             <state line="42" column="0" selection-start="750" selection-end="750" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="jquery.bxslider.css" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/jquery.bxslider/jquery.bxslider.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="0" selection-start="458" selection-end="458" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="chartsModel.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/chartsModel.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="121" column="12" selection-start="3787" selection-end="3787" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="fb.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/fb.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="0" selection-start="777" selection-end="777" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="soundgarden.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/soundgarden.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="491" column="77" selection-start="21881" selection-end="21898" vertical-scroll-proportion="-19.0">
               <folding />
             </state>
           </provider>
@@ -141,18 +80,18 @@
         <option value="$PROJECT_DIR$/js/noty/notifications.js" />
         <option value="$PROJECT_DIR$/js/fb.js" />
         <option value="$PROJECT_DIR$/soundgarden.html" />
-        <option value="$PROJECT_DIR$/js/index.js" />
         <option value="$PROJECT_DIR$/css/index.css" />
         <option value="$PROJECT_DIR$/js/jquery.bxslider/jquery.bxslider.css" />
         <option value="$PROJECT_DIR$/js/jquery.bxslider/jquery.bxslider.js" />
         <option value="$PROJECT_DIR$/js/playlists.js" />
         <option value="$PROJECT_DIR$/css/scroller.css" />
         <option value="$PROJECT_DIR$/js/historyModel.js" />
+        <option value="$PROJECT_DIR$/js/index.js" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="82" />
+    <option name="x" value="81" />
     <option name="y" value="22" />
     <option name="width" value="1510" />
     <option name="height" value="878" />
@@ -316,7 +255,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="82" y="22" width="1510" height="878" extended-state="0" />
+    <frame x="81" y="22" width="1510" height="878" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -435,6 +374,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/css/scrollbars.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/js/chartsModel.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="121" column="12" selection-start="3787" selection-end="3787" vertical-scroll-proportion="0.0">
@@ -442,9 +388,25 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/index.js">
+    <entry file="file://$PROJECT_DIR$/js/historyModel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="132" column="10" selection-start="5204" selection-end="5204" vertical-scroll-proportion="0.0">
+        <state line="193" column="0" selection-start="6211" selection-end="6211" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/jquery.bxslider/jquery.bxslider.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="81" column="4" selection-start="2655" selection-end="2655" vertical-scroll-proportion="2.2143884">
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/playlists.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="234" column="20" selection-start="8731" selection-end="8731" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -458,14 +420,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/jquery.bxslider/jquery.bxslider.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="0" selection-start="458" selection-end="458" vertical-scroll-proportion="0.0">
+        <state line="25" column="0" selection-start="458" selection-end="458" vertical-scroll-proportion="0.65068495">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/css/scrollbars.css">
+    <entry file="file://$PROJECT_DIR$/soundgarden.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="491" column="77" selection-start="21881" selection-end="21898" vertical-scroll-proportion="0.6014388">
           <folding />
         </state>
       </provider>
@@ -477,32 +439,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/soundgarden.html">
+    <entry file="file://$PROJECT_DIR$/js/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="491" column="77" selection-start="21881" selection-end="21898" vertical-scroll-proportion="-19.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/playlists.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="234" column="20" selection-start="8731" selection-end="8731" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/jquery.bxslider/jquery.bxslider.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="81" column="4" selection-start="2655" selection-end="2655" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/historyModel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="50" selection-start="832" selection-end="832" vertical-scroll-proportion="0.62877697">
+        <state line="322" column="11" selection-start="10900" selection-end="10900" vertical-scroll-proportion="0.76847976">
           <folding />
         </state>
       </provider>

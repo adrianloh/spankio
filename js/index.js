@@ -69,8 +69,10 @@
 			$('<ul id="vk-results-list"></ul>').appendTo('#vk-results-container');
 			var url = "https://api.vkontakte.ru/method/audio.search?q=QUERY&access_token=TOKEN&count=100&callback=?",
 				token = VK.getToken();
+			url = url.replace("TOKEN", token).replace("QUERY", params.q);
+			console.log(url);
 			$("html").addClass("busy");
-			var xhr = $.getJSON(url.replace("TOKEN", token).replace("QUERY",params.q), function(data) {
+			var xhr = $.getJSON(url, function(data) {
 			$("html").removeClass("busy");
 				vk_search_in_progress = false;
 				var message = "";
@@ -302,10 +304,11 @@
 					title = anchor.text(),
 					thumb = trackEntry.find(".mxThumb").attr("src"),
 					artist = trackEntry.find(".trackArtist").text(),
-					query_string = title + " " + artist,
+					query_string = title + " " + artist.replace(/\W/," "),
 					mxid = anchor.attr("mxid"),
 					mxData = {artist:artist, title:title, mxid:mxid};
 				getLyricsWithMxid(mxData);
+				query_string = query_string.replace(/\?/,"");
 				searchVK({q:query_string,
 					mxid:mxid, thumb:thumb});
 				Spank.lightBox.lyricsThumb(thumb);
