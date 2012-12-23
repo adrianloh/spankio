@@ -233,7 +233,7 @@
 					button.text("Hide Playlists");
 				});
 			} else {
-				scroller.animate({bottom: '-200px'}, 500, 'swing', function() {
+				scroller.animate({bottom: '-160px'}, 500, 'swing', function() {
 					button.text("Show Playlists");
 				});
 			}

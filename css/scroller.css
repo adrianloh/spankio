@@ -1,12 +1,12 @@
 #playlistScroller {
     padding: 10px 15px 0px 15px;
     position: fixed;
-	bottom:-200px;
-	left:3%;
+	bottom:-160px;
+	left:8%;
     z-index: 10;
-    background-color: #313131;
-    width:90%;
-    height:194px;
+    background-color: rgba(49, 49, 49, 0.84);
+    width:80%;
+    height:160px;
     -webkit-border-radius: 1em;
     -moz-border-radius: 1em;
     border-radius: 1em;
@@ -20,8 +20,7 @@
 }
 
 .playlistThumb {
- 	width: 120px;
-	height: 120px;
+	height: 100px;
  	border: 1px solid #ccc;
     background-color: white;
     margin: 0px auto 5px auto;
@@ -38,17 +37,16 @@
 }
 
 .playlistName {
-	color: #666;
-	font: 800 15px "PT Sans Narrow";
-	clear:  both;
+    color: #3D3D3D;
+    font: 13px "PT Sans Narrow";
+    clear: both;
 }
 
 #playlistScroller li {
     text-align: center;
     background-color: #f0f0f0;
     border: 5px solid #ccc;
-    width: 130px;
-    height: 168px;
+    height: 134px;
     padding: 0;
     margin: 6px;
     display: block;

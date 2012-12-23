@@ -418,7 +418,7 @@
 				}).get());
 			}
 ////			return height+10;
-			return 186;
+			return 150;
 		}
 		
 		/**
@@ -441,7 +441,7 @@
 				}
 			}
 ////			return newElWidth;
-			return 130;
+			return 100;
 		}
 		
 		/**

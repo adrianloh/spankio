@@ -11,7 +11,8 @@
 }
 
 .funkyPlayer-container {
-    left: 20%;
+    left: 13%;
+    top: 10%;
 }
 
 #friendList-container {
@@ -607,14 +608,12 @@ ul.lastfm-buttons {
 
 #funkyPlayer {
     width: 30%;
-    background-color: whitesmoke;
-    background-size: 100% auto;
     background-repeat: no-repeat;
     position: fixed;
     z-index: 8;
     right: 0;
-    top: 86px;
-    height: 28%;
+    top: 0px;
+    height: 40%;
 }
 
 #playHistory a {
@@ -630,8 +629,8 @@ ul.lastfm-buttons {
     position: fixed;
     z-index: 9;
     right: 0;
-    top: 38%;
-    height: 62%;
+    top: 30%;
+    height: 70%;
     overflow: auto;
     /*    -webkit-box-shadow: 19px -16px 21px rgba(0, 0, 0, 0.7);*/
 }
