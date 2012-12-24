@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="32ba444c-fc18-4642-a53c-06c7d6e77d49" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/index.css" afterPath="$PROJECT_DIR$/css/index.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/index.js" afterPath="$PROJECT_DIR$/js/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/fb.js" afterPath="$PROJECT_DIR$/js/fb.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/playlists.js" afterPath="$PROJECT_DIR$/js/playlists.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/soundgarden.html" afterPath="$PROJECT_DIR$/soundgarden.html" />
     </list>
     <ignored path="soundgarden-heroku.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,16 +28,16 @@
       <file leaf-file-name="playlists.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/playlists.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="234" column="20" selection-start="8731" selection-end="8731" vertical-scroll-proportion="0.0">
+            <state line="257" column="0" selection-start="9403" selection-end="9403" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.css" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="index.css" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/css/index.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="776" column="18" selection-start="16967" selection-end="16967" vertical-scroll-proportion="0.60431653">
+            <state line="97" column="19" selection-start="2766" selection-end="2774" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -45,15 +47,6 @@
         <entry file="file://$PROJECT_DIR$/js/index.js">
           <provider selected="true" editor-type-id="text-editor">
             <state line="147" column="71" selection-start="5836" selection-end="5836" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="tooltips.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/tooltips.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="89" column="0" selection-start="2030" selection-end="2030" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -95,10 +88,42 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="soundgarden.html" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="soundgarden.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/soundgarden.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="41" column="10" selection-start="2092" selection-end="2092" vertical-scroll-proportion="0.0">
+            <state line="73" column="0" selection-start="3214" selection-end="3214" vertical-scroll-proportion="0.028231798">
+              <folding>
+                <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="tag#div#0;tag#body#0;tag#html#0" expanded="false" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#input#1;n#div#0;n#div#0;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#input#2;n#div#0;n#div#0;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#dd#2;n#dl#0;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#dd#5;n#dl#0;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#dd#8;n#dl#0;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#dd#11;n#dl#0;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#dd#14;n#dl#0;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#dd#17;n#dl#0;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#p#0;n#div#2;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#3;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#3;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#1;n#div#3;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#ul#2;n#div#1;n#div#2;n#div#3;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#3;n#div#3;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#4;n#div#3;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#4;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#code#0;n#pre#0;n#div#4;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="fb.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/fb.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="42" column="41" selection-start="1491" selection-end="1491" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -129,25 +154,25 @@
         <option value="$PROJECT_DIR$/js/playlists2.js" />
         <option value="$PROJECT_DIR$/js/chartsModel.js" />
         <option value="$PROJECT_DIR$/js/noty/notifications.js" />
-        <option value="$PROJECT_DIR$/js/fb.js" />
         <option value="$PROJECT_DIR$/js/jquery.bxslider/jquery.bxslider.css" />
         <option value="$PROJECT_DIR$/js/jquery.bxslider/jquery.bxslider.js" />
-        <option value="$PROJECT_DIR$/js/playlists.js" />
         <option value="$PROJECT_DIR$/css/scroller.css" />
         <option value="$PROJECT_DIR$/js/musicPlayerModel.js" />
         <option value="$PROJECT_DIR$/js/draggables.js" />
-        <option value="$PROJECT_DIR$/soundgarden.html" />
         <option value="$PROJECT_DIR$/js/tooltips.js" />
         <option value="$PROJECT_DIR$/js/livesearch.js" />
         <option value="$PROJECT_DIR$/js/historyModel.js" />
         <option value="$PROJECT_DIR$/js/index.js" />
+        <option value="$PROJECT_DIR$/js/playlists.js" />
+        <option value="$PROJECT_DIR$/js/fb.js" />
         <option value="$PROJECT_DIR$/css/index.css" />
+        <option value="$PROJECT_DIR$/soundgarden.html" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="36" />
-    <option name="y" value="133" />
+    <option name="x" value="66" />
+    <option name="y" value="136" />
     <option name="width" value="1463" />
     <option name="height" value="878" />
   </component>
@@ -220,6 +245,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="soundgarden-heroku" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="hidden-bayou-5179" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="360_files" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -310,7 +349,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="36" y="133" width="1463" height="878" extended-state="0" />
+    <frame x="66" y="136" width="1463" height="878" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -394,11 +433,6 @@
         <state line="126" column="19" selection-start="4647" selection-end="5618" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/fb.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="0" selection-start="777" selection-end="777" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/css/scrollbars.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
@@ -417,13 +451,6 @@
     <entry file="file://$PROJECT_DIR$/js/jquery.bxslider/jquery.bxslider.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="25" column="0" selection-start="458" selection-end="458" vertical-scroll-proportion="0.65068495" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/soundgarden.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="10" selection-start="2092" selection-end="2092" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/tooltips.js">
@@ -454,20 +481,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/playlists.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="234" column="20" selection-start="8731" selection-end="8731" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="147" column="71" selection-start="5836" selection-end="5836" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/musicPlayerModel.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="102" column="24" selection-start="3823" selection-end="3823" vertical-scroll-proportion="0.0">
@@ -482,10 +495,61 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/js/playlists.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="257" column="0" selection-start="9403" selection-end="9403" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="147" column="71" selection-start="5836" selection-end="5836" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/fb.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="41" selection-start="1491" selection-end="1491" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/css/index.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="776" column="18" selection-start="16967" selection-end="16967" vertical-scroll-proportion="0.60431653">
+        <state line="97" column="19" selection-start="2766" selection-end="2774" vertical-scroll-proportion="0.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/soundgarden.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="73" column="0" selection-start="3214" selection-end="3214" vertical-scroll-proportion="0.028231798">
+          <folding>
+            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="tag#div#0;tag#body#0;tag#html#0" expanded="false" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#1;n#div#0;n#div#0;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#2;n#div#0;n#div#0;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#dd#2;n#dl#0;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#dd#5;n#dl#0;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#dd#8;n#dl#0;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#dd#11;n#dl#0;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#dd#14;n#dl#0;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#dd#17;n#dl#0;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#p#0;n#div#2;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#3;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#3;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#1;n#div#3;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#ul#2;n#div#1;n#div#2;n#div#3;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#3;n#div#3;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#4;n#div#3;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#4;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#code#0;n#pre#0;n#div#4;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

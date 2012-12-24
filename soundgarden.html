@@ -2,18 +2,15 @@
 <head>
     <title>Welcome to Spank!</title>
     <!-- Fonts -->
-    <link href='http://fonts.googleapis.com/css?family=Condiment' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow" rel="stylesheet" type="text/css">
     <link href='http://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
 
-	<link rel="stylesheet" type="text/css" href="/css/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css" />
     <link rel="stylesheet" type="text/css" href="/css/fontawesome/css/font-awesome.css" />
     <link rel="stylesheet" type="text/css" href="/css/forms.css" />
-	<link rel="stylesheet" type="text/css" href="/css/index.css" />
     <link rel="stylesheet" type="text/css" href="/css/buttons.css" />
     <link rel="stylesheet" type="text/css" href="/css/scrollbars.css" />
-    <link rel="stylesheet" type="text/css" href="/css/boxcenter.css" />
 
     <script type="text/javascript">
         VK = {
@@ -37,16 +34,18 @@
             playlistScroller: null,
             history: null,
             utils: {},
-            genericAlbumArt: "http://lh5.googleusercontent.com/-iNJ6fFP1ESk/ULlYVjb-m6I/AAAAAAAAVZU/QFfGVNT2pb8/s0/hi-512-5.png",
+            genericAlbumArt: "https://lh5.googleusercontent.com/-I-hfjhp58Yg/UNiOPdDTi8I/AAAAAAAAXRY/eDxTsIxWlAs/s0/hi-512-5.png",
             tagline: "Search"
         };
 
-        // Load a default image in case we get 404s
+        // Load a default image for cover art in case we get 404s
         function ImgError(source) {
             source.src = Spank.genericAlbumArt;
             source.onerror = "";
             return true;
         }
+
+        // Load a default user image in case we get 404s
         function UserImgError(source) {
             source.src = "/img/user.jpg";
             source.onerror = "";
@@ -58,40 +57,26 @@
 
     </script>
 
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
     <!-- Login to Facebook, which triggers the global 'login' event on successful login
     -->
+    <script type="text/javascript" src="/js/fb.js"></script>
 
-    <!-- Notifications
+    <!-- Notifications with 'noty' plugin
     -->
-    <!-- noty -->
     <script type="text/javascript" src="/js/noty/jquery.noty.js"></script>
-
-    <!-- layouts -->
-    <script type="text/javascript" src="/js/noty/layouts/bottom.js"></script>
-    <script type="text/javascript" src="/js/noty/layouts/bottomCenter.js"></script>
-    <script type="text/javascript" src="/js/noty/layouts/bottomLeft.js"></script>
-    <script type="text/javascript" src="/js/noty/layouts/bottomRight.js"></script>
-    <script type="text/javascript" src="/js/noty/layouts/center.js"></script>
-    <script type="text/javascript" src="/js/noty/layouts/centerLeft.js"></script>
-    <script type="text/javascript" src="/js/noty/layouts/centerRight.js"></script>
-    <script type="text/javascript" src="/js/noty/layouts/inline.js"></script>
-    <script type="text/javascript" src="/js/noty/layouts/top.js"></script>
-    <script type="text/javascript" src="/js/noty/layouts/topCenter.js"></script>
     <script type="text/javascript" src="/js/noty/layouts/topLeft.js"></script>
     <script type="text/javascript" src="/js/noty/layouts/topRight.js"></script>
-
-    <!-- themes -->
     <script type="text/javascript" src="/js/noty/themes/default.js"></script>
     <script type="text/javascript" src="/js/noty/notifications.js"></script>
 
-    <script type="text/javascript" src="/js/fb.js"></script>
     <!--<script src="http://www.parsecdn.com/js/parse-1.1.14.min.js"></script>-->
 
+    <!-- Firebase -->
     <script type='text/javascript' src='https://static.firebase.com/v0/firebase.js'></script>
 
     <!-- jQuery and Knockout.JS -->
-
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.1.0/knockout-min.js"></script>
 
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
@@ -377,136 +362,144 @@
     <!-- BEGIN MY STUFF -->
 
     <div id="fb-root"></div>
-
-    <div id="logo">Spank.io</div>
-
-    <div id="spank-player-controls">
-        <img id="friends_button" class="playModeButtons" title="Friends" src="/img/chat.png" />
-        <img id="random_button" title="Shuffle chart entries [ i ]" class="playModeButtons" src="/css/random_on.png" />
-        <img id="loop_button" title="Loop Mode [ o ]" class="playModeButtons" src="/css/loop_on.png" />
-        <img id="shuffle_button" title="Shuffle Mode [ p ]" class="playModeButtons" src="/css/shuffle_on.png" />
-    </div>
-
-    <div id="searchForm">
-        <!--<button id="fb-auth">Login</button>-->
-        <div id="fb-login" class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1" scope="email, publish_stream"></div>
-        <form id="searchLyrics">
-            <input type="text" name="lyrics" id="searchField" size="120" value="" class="text-input" />
-            <div class="onoffswitch">
-                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
-                <label class="onoffswitch-label" for="myonoffswitch">
-                    <div class="onoffswitch-inner"></div>
-                    <div class="onoffswitch-switch"></div>
-                </label>
-            </div>
-        </form>
-    </div>
-
-    <div id="funkyPlayer">
-        <div class="ui360 ui360-vis funkyPlayer-container" title="Play/Pause [ space ]">
-            <a class="fatManLink" data-bind="attr: { href: current_url }"></a>
-        </div>
-    </div>
-
-    <div class="giftPopup">
-        <div class="giftFrom">Adrian Loh</div>
-        <div class="giftMessage">Lorem ipsum dolor sit amet</div>
-    </div>
-
-    <div id="playHistory">
-        <div id="history-filter-container">
-            <div class="history-filter-container2">
-                <input type="text" id="history-filter" value="" class="text-input" />
+    <div id="loginFacade">
+        <div class="loginContentVerticalCenter">
+            <div class="loginContent">
+                <h1>Human powered music discovery</h1>
+                <div id="fb-login" class="fb-login-button" data-size="large" data-show-faces="false" data-width="200" data-max-rows="1" scope="email, publish_stream"></div>
             </div>
         </div>
-        <ul id="history-stream-list" data-bind="sortable: {data: stream, afterMove: saveHistory }">
-            <li class="tweetItem" data-bind="attr: { url: url }, cartDeleteIcons:$data">
-                <img class="tweetThumb" onerror="ImgError(this)" data-bind="pickupStreamItems:$data, attr: { src: thumb }" />
-                <a class="tweetDownloadLink" href="#" data-bind="event: { mouseover: $root.downloadHistoryItemOnClick }">
-                    <img class="tweetDownload" src="/img/cart.png" />
-                </a>
-                <img class="tweetDelete" src="/img/deleteTweet.png" data-bind="click: $root.deleteHistoryItemOnClick" />
-                <div class="tweetDetails" data-bind="click: $root.playHistoryItemOnClick">
-                    <div class="tweetTrackName" data-bind="text: title"></div>
-                    <div class="tweetTrackArtist" data-bind="text: artist"></div>
+    </div>
+
+    <div id="applicationBody">
+
+        <div id="spank-player-controls">
+            <img id="friends_button" class="playModeButtons" title="Friends" src="/img/chat.png" />
+            <img id="random_button" title="Shuffle chart entries [ i ]" class="playModeButtons" src="/css/random_on.png" />
+            <img id="loop_button" title="Loop Mode [ o ]" class="playModeButtons" src="/css/loop_on.png" />
+            <img id="shuffle_button" title="Shuffle Mode [ p ]" class="playModeButtons" src="/css/shuffle_on.png" />
+        </div>
+
+        <div id="searchForm">
+            <form id="searchLyrics">
+                <input type="text" name="lyrics" id="searchField" size="120" value="" class="text-input" />
+                <div class="onoffswitch">
+                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
+                    <label class="onoffswitch-label" for="myonoffswitch">
+                        <div class="onoffswitch-inner"></div>
+                        <div class="onoffswitch-switch"></div>
+                    </label>
                 </div>
-            </li>
-        </ul>
-    </div>
-
-    <div id="resultsOps">
-        <img src="/img/arrowright.png" class="arrowright" />
-        <img src="/img/trash.png" class="trash" />
-    </div>
-
-    <div class="resultsBody">
-        <img id="closeButton" src="/img/close.png" />
-        <div id="lightBox">
-            <!--<div id="lyricsTitle" data-bind="text : lyricsTitle"></div>-->
-            <img id="lyricsThumb" data-bind="attr: { src: lyricsThumb }" />
-            <div id="lyricsButtons">
-                <button class="thoughtbot">Musical</button>
-                <button class="thoughtbot">Lyrical</button>
-            </div>
-            <div id="lightBox-content-container">
-                <pre id="lyricsText" data-bind="text : lyricsText"></pre>
-                <div id="vk-results-container"></div>
-            </div>
-        </div>
-        <div id="resultsSection">
-            <div id="playlistSearchZone" class="playlistSearchZone searchFullWidth">
-                <span class="dropSpans">Search for similar tracks</span>
-            </div>
-            <div id="playlistDropZone" class="playlistDropZone"><span class="dropSpans">Add to this playlist</span></div>
-            <div id="track_count_current" data-bind="text: totalChartTracks"></div>
-            <ul class="results-list" data-bind="sortable: {data:chartTracks, afterMove: onResort }">
-                <li class="trackEntry unwobbled">
-                    <img class="mxThumb" onerror="ImgError(this)" data-bind="click: $root.addToShoppingCart, attr: { src: thumb }" />
-                    <!--<div class="trackName"><a class="lyricLink" href="#" data-bind="text: title, attr: { mxid: mxid }"></a></div>-->
-                    <div class="trackName"><a class="lyricLink" href="#" data-bind="text: title, attr: { mxid: mxid }"></a></div>
-                    <div class="trackArtist" data-bind="text: artist"></div>
-                </li>
-            </ul>
-        </div>
-
-    </div>
-
-    <div id="friendList-container">
-        <div id="sendSongForm">
-            <form class="form-5 clearfix">
-                <div class="p">
-                    <div class="formTitle">Send it with a message!</div>
-                    <input type="text" id="sendMessage" placeholder="This is aawwwesomee">
-                </div>
-                <button id="sendMessageButton">
-                    <i class="icon-arrow-right"></i>
-                    <span>Send</span>
-                </button>
             </form>
         </div>
-        <ul id="friendList" data-bind="foreach: friendlist">
-            <li class="friendItem" data-bind="attr: { frequency: frequency }, droppableFriend:$data">
-                <div class="friendDetails">
-                    <img class="friendPic" onerror="UserImgError(this)" data-bind="attr: { src: picture} " />
-                    <div class="friendName" data-bind="text: name"></div>
-                </div>
-            </li>
-        </ul>
-    </div>
 
-    <div id="playlistScroller">
-            <ul id="playlists-scroller-list" data-bind="foreach: playlistItems">
-                <!-- ko if: $data!==undefined -->
-                <li class="playlistEntry" data-bind="css: { droppablePlaylist: url==='#' }">
-                    <img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />
-                    <div class="playlistName" data-bind="text: title()"></div>
-                </li>
-                <!-- /ko -->
-            </ul>
-        <div id="toggle-playlist-button">
-            <button class="hideshow-playlist-button">Hide Playlists</button>
+        <div id="funkyPlayer">
+            <div class="ui360 ui360-vis funkyPlayer-container" title="Play/Pause [ space ]">
+                <a class="fatManLink" data-bind="attr: { href: current_url }"></a>
+            </div>
         </div>
-    </div>
+
+        <div class="giftPopup">
+            <div class="giftFrom"></div>
+            <div class="giftMessage"></div>
+        </div>
+
+        <div id="playHistory">
+            <div id="history-filter-container">
+                <div class="history-filter-container2">
+                    <input type="text" id="history-filter" value="" class="text-input" />
+                </div>
+            </div>
+            <ul id="history-stream-list" data-bind="sortable: {data: stream, afterMove: saveHistory }">
+                <li class="tweetItem" data-bind="attr: { url: url }, cartDeleteIcons:$data">
+                    <img class="tweetThumb" onerror="ImgError(this)" data-bind="pickupStreamItems:$data, attr: { src: thumb }" />
+                    <a class="tweetDownloadLink" href="#" data-bind="event: { mouseover: $root.downloadHistoryItemOnClick }">
+                        <img class="tweetDownload" src="/img/cart.png" />
+                    </a>
+                    <img class="tweetDelete" src="/img/deleteTweet.png" data-bind="click: $root.deleteHistoryItemOnClick" />
+                    <div class="tweetDetails" data-bind="click: $root.playHistoryItemOnClick">
+                        <div class="tweetTrackName" data-bind="text: title"></div>
+                        <div class="tweetTrackArtist" data-bind="text: artist"></div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div id="resultsOps">
+            <img src="/img/arrowright.png" class="arrowright" />
+            <img src="/img/trash.png" class="trash" />
+        </div>
+
+        <div class="resultsBody">
+            <img id="closeButton" src="/img/close.png" />
+            <div id="lightBox">
+                <!--<div id="lyricsTitle" data-bind="text : lyricsTitle"></div>-->
+                <img id="lyricsThumb" data-bind="attr: { src: lyricsThumb }" />
+                <div id="lyricsButtons">
+                    <button class="thoughtbot">Musical</button>
+                    <button class="thoughtbot">Lyrical</button>
+                </div>
+                <div id="lightBox-content-container">
+                    <pre id="lyricsText" data-bind="text : lyricsText"></pre>
+                    <div id="vk-results-container"></div>
+                </div>
+            </div>
+            <div id="resultsSection">
+                <div id="playlistSearchZone" class="playlistSearchZone searchFullWidth">
+                    <span class="dropSpans">Search for similar tracks</span>
+                </div>
+                <div id="playlistDropZone" class="playlistDropZone"><span class="dropSpans">Add to this playlist</span></div>
+                <div id="track_count_current" data-bind="text: totalChartTracks"></div>
+                <ul class="results-list" data-bind="sortable: {data:chartTracks, afterMove: onResort }">
+                    <li class="trackEntry unwobbled">
+                        <img class="mxThumb" onerror="ImgError(this)" data-bind="click: $root.addToShoppingCart, attr: { src: thumb }" />
+                        <!--<div class="trackName"><a class="lyricLink" href="#" data-bind="text: title, attr: { mxid: mxid }"></a></div>-->
+                        <div class="trackName"><a class="lyricLink" href="#" data-bind="text: title, attr: { mxid: mxid }"></a></div>
+                        <div class="trackArtist" data-bind="text: artist"></div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div id="friendList-container">
+            <div id="sendSongForm">
+                <form class="form-5 clearfix">
+                    <div class="p">
+                        <div class="formTitle">Send it with a message!</div>
+                        <input type="text" id="sendMessage" placeholder="This is aawwwesomee">
+                    </div>
+                    <button id="sendMessageButton">
+                        <i class="icon-arrow-right"></i>
+                        <span>Send</span>
+                    </button>
+                </form>
+            </div>
+            <ul id="friendList" data-bind="foreach: friendlist">
+                <li class="friendItem" data-bind="attr: { frequency: frequency }, droppableFriend:$data">
+                    <div class="friendDetails">
+                        <img class="friendPic" onerror="UserImgError(this)" data-bind="attr: { src: picture} " />
+                        <div class="friendName" data-bind="text: name"></div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div id="playlistScroller">
+                <ul id="playlists-scroller-list" data-bind="foreach: playlistItems">
+                    <!-- ko if: $data!==undefined -->
+                    <li class="playlistEntry" data-bind="css: { droppablePlaylist: url==='#' }">
+                        <img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />
+                        <div class="playlistName" data-bind="text: title()"></div>
+                    </li>
+                    <!-- /ko -->
+                </ul>
+            <div id="toggle-playlist-button">
+                <button class="hideshow-playlist-button">Hide Playlists</button>
+            </div>
+        </div>
+
+    </div> <!-- #applicationBody END -->
 
     <!-- Context menu plugin -->
     <script type="text/javascript" src="/js/contextMenu/jquery.contextmenu.js"></script>
@@ -525,13 +518,8 @@
     <link rel="stylesheet" type="text/css" href="./360_files/slider.css">
     <link rel="stylesheet" type="text/css" href="./360_files/colorpicker.css">
     <link rel="stylesheet" type="text/css" href="./360_files/demo-slider-controls.css">
-    <style>
-        .sm2-timing.alignTweak {
-            display: none;
-        }
-    </style>
     <script type="text/javascript" src="./360_files/berniecode-animator.js"></script>
-    <script type="text/javascript" src="./360_files/soundmanager2.js"></script>
+    <script type="text/javascript" src="./360_files/soundmanager2-nodebug-jsmin.js"></script>
     <script type="text/javascript" src="./360_files/360player_custom.js"></script>
     <script type="text/javascript" src="./360_files/yahoo-dom-event.js"></script>
     <script type="text/javascript" src="./360_files/animation-min.js"></script>
@@ -544,12 +532,14 @@
     <!-- Init 360 with our settings instead of the one (above) that came with the demo -->
     <script type="text/javascript" src="/js/init360.js"></script>
     <style>
-            /* Hide the customization panel of 360 player  */
+        /* Hide player's running time, glitchy if done programmatically  */
+        .sm2-timing.alignTweak {
+            display: none;
+        }
+        /* Hide the customization panel of 360 player  */
         #config-panel { display:none; }
     </style>
     <!-- 360 Player STUFF END-->
-
-    <script type="text/javascript" src="/js/jquery.textchange.min.js"></script>
 
 </body>
 

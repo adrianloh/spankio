@@ -39,7 +39,8 @@ window.fbAsyncInit = function checkFacebookStatus() {
 			}
 //			FBUserInfo.username = "sam_beckett_92102";
 			FBUserInfo.accessToken = response.authResponse.accessToken;
-			$("#fb-login").hide();
+			$("#loginFacade").hide();
+			$("#applicationBody").show();
 			var q = "SELECT name,username,uid FROM user WHERE uid in (SELECT uid2 FROM friend WHERE uid1=me()) and is_app_user='1'";
 			FB.api('fql',{q:q}, function(res) {
 				FBUserInfo.friends = res.data;
@@ -110,9 +111,12 @@ window.fbAsyncInit = function checkFacebookStatus() {
 
 	function updateButton(response) {
 		if (response.status === 'connected') {
+			//user is already logged in and connected
 			initFB(response);
 		} else {
 			//user is not connected to your app or logged out
+			$("#applicationBody").hide();
+			$("#loginFacade").show();
 		}
 	}
 	// run once with current status and whenever the status changes

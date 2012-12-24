@@ -223,8 +223,6 @@
 			Spank.rescanChildren();
 		});
 
-		Spank.playlistScroller.push({cover:'/img/emptyplaylist.png'});
-
 		Spank.playlistScroller.visible.subscribe(function(isTrue) {
 			var button = $(".hideshow-playlist-button"),
 				scroller = $("#playlistScroller");
@@ -244,15 +242,16 @@
 			Spank.playlistScroller.visible(!current);
 		});
 
-		$.each(chartPlaylistItems, function(i,o) {
-			// Populate the playlist bar with charts
-			Spank.playlistScroller.push(o);
-			if (i===chartPlaylistItems.length-1) {
-				setTimeout(function() {
-					var selector = ".playlistThumb[title='Billboards UK']";
-					$(selector).trigger("click");
-				}, 2000);
-			}
+		$(document).one("login", function() {
+			Spank.playlistScroller.push({cover:'/img/emptyplaylist.png'});
+			$.each(chartPlaylistItems, function(i,o) {
+				// Populate the playlist bar with charts
+				Spank.playlistScroller.push(o);
+			});
+			setTimeout(function() {
+				var selector = ".playlistThumb[title='Billboards UK']";
+				$(selector).trigger("click");
+			}, 2000);
 		});
 
 		var appendToResults = function(title, url, tracklist, this_image, reset) {
