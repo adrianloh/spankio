@@ -164,7 +164,7 @@
 						}, function onNoResults() {
 							window.notify.error("No results.",'force');
 						});
-					}, 250);
+					}, 0);
 				} else {
 					return false;
 				}

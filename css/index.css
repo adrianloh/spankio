@@ -340,7 +340,7 @@ ul {
     width: 70%;
     top: 11px;
     left: 0px;
-    margin-left: 9%;
+    margin-left: 7%;
     /*margin: 0 auto;*/
 }
 #searchField {
@@ -684,7 +684,7 @@ ul.lastfm-buttons {
 #playHistory {
     background-color: whitesmoke;
     color: #111111;
-    font: 800 15px "PT Sans Narrow";
+    font: 400 14px "PT Sans Narrow";
     width: 30%;
     position: fixed;
     z-index: 9;
@@ -774,6 +774,7 @@ ul.lastfm-buttons {
 }
 
 .tweetTrackName {
+    font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
