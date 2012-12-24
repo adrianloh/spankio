@@ -63,6 +63,17 @@
 			Spank.tearDownLightBox();
 		});
 
+		Spank.busy = {
+			on: function() {
+				$("html").addClass("busy");
+				$("#searchField").css("background-color", "rgba(187, 252, 143, 1)");
+			},
+			off: function() {
+				$("html").removeClass("busy");
+				$("#searchField").css("background-color", "rgba(255, 255, 255, 1)");
+			}
+		};
+
 		var attempts = 0;
 		var searchVK = function(params) {
 			vk_search_in_progress = true;
@@ -71,9 +82,9 @@
 			var url = "https://api.vkontakte.ru/method/audio.search?q=QUERY&access_token=TOKEN&count=200&callback=?",
 				token = VK.getToken();
 			url = url.replace("TOKEN", token).replace("QUERY", params.q);
-			$("html").addClass("busy");
+			Spank.busy.on();
 			var xhr = $.getJSON(url, function(data) {
-			$("html").removeClass("busy");
+				Spank.busy.off();
 				vk_search_in_progress = false;
 				var message = "";
 				if (data.error) {
@@ -131,6 +142,7 @@
 			});
 			$("#closeButton").click(function() { // Crash close lightbox, don't load VK results
 				xhr.abort();
+				Spank.busy.off();
 			});
 		};
 
@@ -158,11 +170,14 @@
 				$(".playlistEntry").css("border","5px solid rgb(204, 204, 204)");       // Don't highlight any playlist items
 				if ($.trim(search_term)!=='') {
 					setTimeout(function() {
+						Spank.busy.on();
 						var url = '/mxsearch?q=#&page=1'.replace("#",search_term);
 						Spank.charts.populateResultsWithUrl(url, function extract(res) {
+							Spank.busy.off();
 							return res.message.body.track_list;
 						}, function onNoResults() {
 							window.notify.error("No results.",'force');
+							Spank.busy.off();
 						});
 					}, 0);
 				} else {
@@ -195,12 +210,9 @@
 			minimumSearchLength: 3
 		});
 
-		$("#history-filter").blur(function() {
-			$(".tweetItem").show();
-			$(this).val("");
-		});
+		var streamFilterField = $("#history-filter");
 
-		$("#history-filter").livesearch({
+		streamFilterField.livesearch({
 			searchCallback: function(input) {
 				var re = new RegExp(input, "i");
 				$(".tweetDetails").each(function() {
@@ -215,6 +227,11 @@
 			innerText: "Filter stream",
 			queryDelay:150,
 			minimumSearchLength: 2
+		});
+
+		streamFilterField.blur(function() {
+			$(".tweetItem").show();
+			$(this).val("");
 		});
 
 		$(".lickButton").live('click', function prependVKTrackToHistoryAndPlay() {

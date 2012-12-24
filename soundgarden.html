@@ -366,7 +366,7 @@
         <div class="loginContentVerticalCenter">
             <div class="loginContent">
                 <h1>Human powered music discovery</h1>
-                <div id="fb-login" class="fb-login-button" data-size="large" data-show-faces="false" data-width="200" data-max-rows="1" scope="email, publish_stream"></div>
+                <div id="fb-login" class="fb-login-button" data-size="large" data-show-faces="true" data-width="400" data-max-rows="1" scope="email, publish_stream"></div>
             </div>
         </div>
     </div>
@@ -410,6 +410,7 @@
                     <input type="text" id="history-filter" value="" class="text-input" />
                 </div>
             </div>
+            <div id="history-stream-list-container">
             <ul id="history-stream-list" data-bind="sortable: {data: stream, afterMove: saveHistory }">
                 <li class="tweetItem" data-bind="attr: { url: url }, cartDeleteIcons:$data">
                     <img class="tweetThumb" onerror="ImgError(this)" data-bind="pickupStreamItems:$data, attr: { src: thumb }" />
@@ -423,6 +424,7 @@
                     </div>
                 </li>
             </ul>
+            </div>
         </div>
 
         <div id="resultsOps">

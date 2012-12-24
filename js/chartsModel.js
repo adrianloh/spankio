@@ -100,10 +100,9 @@ Array.prototype.shuffle = function() {
 			self.populateResultsWithUrl = function(url, extract_function, error_callback) {
 				// This function is called to look for Similar artists/Similar tracks
 				self.currentPlaylistTitle(undefined);
-				$("html").addClass('busy');
+				Spank.busy.on();
 				$.getJSON(url, function(res) {
 					var tracklist;
-					$("html").removeClass('busy');
 					if (extract_function) {
 						tracklist = extract_function(res);
 					} else {
@@ -118,6 +117,7 @@ Array.prototype.shuffle = function() {
 							error_callback();
 						}
 					}
+					Spank.busy.off();
 				});
 			};
 			self.addToShoppingCart = function(data, event) {

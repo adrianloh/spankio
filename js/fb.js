@@ -9,6 +9,14 @@ window.fbAsyncInit = function checkFacebookStatus() {
 		xfbml      : true  // parse XFBML tags on this page?
 	};
 
+	var production_settings2 = {
+		appId      : '412279742177294', // App ID from the App Dashboard
+		channelUrl : '//singular-merovingian.rhcloud.com/channel.html', // Channel File for x-domain communication
+		status     : true, // check the login status upon init?
+		cookie     : true, // set sessions cookies to allow your server to access the session?
+		xfbml      : true  // parse XFBML tags on this page?
+	};
+
 	var dev_settings = function(url) {
 		return {
 			appId      : '	573967942630120', // App ID from the App Dashboard
@@ -20,7 +28,8 @@ window.fbAsyncInit = function checkFacebookStatus() {
 	};
 
 	var settings = {
-		"spank.io": production_settings
+		"spank.io": production_settings,
+		"singular-merovingian.rhcloud.com": production_settings2
 	};
 
 	["xerxes.local:8888", "matterhorn.local:8888"].forEach(function(url) {
@@ -39,7 +48,10 @@ window.fbAsyncInit = function checkFacebookStatus() {
 			}
 //			FBUserInfo.username = "sam_beckett_92102";
 			FBUserInfo.accessToken = response.authResponse.accessToken;
-			$("#loginFacade").hide();
+			$("#loginFacade").addClass("flipper");
+			setTimeout(function() {
+				$("#loginFacade").removeClass("flipper").hide();
+			}, 2000);
 			$("#applicationBody").show();
 			var q = "SELECT name,username,uid FROM user WHERE uid in (SELECT uid2 FROM friend WHERE uid1=me()) and is_app_user='1'";
 			FB.api('fql',{q:q}, function(res) {

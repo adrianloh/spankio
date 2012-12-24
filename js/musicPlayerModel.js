@@ -96,7 +96,7 @@
 								var newCoverUrl = images[images.length-1]['#text'];
 								koo.thumb(newCoverUrl);
 								Spank.history.saveHistory(true);
-								$("#funkyPlayer").css("background-image", "url(#)".replace("#", newCoverUrl));
+								$("#funkyPlayer").css("background-image", newCoverUrl);
 							}
 						}
 					} catch(err) {

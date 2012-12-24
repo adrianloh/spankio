@@ -43,19 +43,19 @@
 }
 
 /* Let's get this party started */
-#playHistory::-webkit-scrollbar {
+#history-stream-list-container::-webkit-scrollbar {
     width: 5px;
 }
 
 /* Track */
-#playHistory::-webkit-scrollbar-track {
+#history-stream-list-container::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
     -webkit-border-radius: 10px;
     border-radius: 10px;
 }
 
 /* Handle */
-#playHistory::-webkit-scrollbar-thumb {
+#history-stream-list-container::-webkit-scrollbar-thumb {
     /* Enable these two to round off the corners */
     /*-webkit-border-radius: 10px;*/
     /*border-radius: 10px;*/

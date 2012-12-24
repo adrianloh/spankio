@@ -2,8 +2,6 @@
 
 	$(document).ready(function() {
 
-		$("#funkyPlayer").css("background", 'url(' + Spank.genericAlbumArt + ')');
-
 		$(document).one("login", function() {
 
 			Spank.username = Spank.utils.toFirebaseName(FBUserInfo.username);
