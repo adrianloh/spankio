@@ -9,6 +9,7 @@
 }
 
 .ui360-vis {
+opacity: 0.7;
  position:relative;
  /* a little extra spacing */
  padding-top:1px;

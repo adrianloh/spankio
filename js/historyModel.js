@@ -10,25 +10,42 @@
 			Spank.base.history = Spank.base.me.child("history");
 			$(document).trigger("baseReady");
 			Spank.base.history.once('value', function(snapshot) {
+				window.notify.suspended = false;
+				window.notify.information("Retrieving your stream...");
 				var newHistory = snapshot.val();
 				if (Array.isArray(newHistory) && newHistory.length>0) {
-					var koHistory = $.map(newHistory, function(o) {
-						var koo = {};
-						$.each(o, function(k,v) {
-							koo[k] = ko.observable(v);
-						});
-						return koo;
+					var tracks = $.map(newHistory, function(o) {
+						if (typeof(o)==='object') return o;
 					});
-					Spank.history.stream(koHistory);
-					start();
+					Spank.base.history.set(tracks, function onComplete() {
+						Spank.base.history.once('value', function(snapshot) {
+							var cleanHistory = snapshot.val();
+							if (Array.isArray(cleanHistory) && cleanHistory.length>0) {
+								var koHistory = $.map(cleanHistory, function(o) {
+									var koo = {};
+									if (typeof(o)==='object') {
+										$.each(o, function(k,v) {
+											koo[k] = ko.observable(v);
+										});
+										return koo;
+									} else {
+										return o;
+									}
+								});
+								koHistory.reverse();
+								Spank.history.stream(koHistory);
+								start();
+							}
+						});
+					});
 				} else {
 					start();
 				}
 			});
 
 			var start = function() {
+				$("#history-stream-list-container").css("background-image","none");
 				setTimeout(function() {
-					window.notify.suspended = false;
 					window.notify.information("Go!");
 				}, 2000);
 				setTimeout(function() {
@@ -39,19 +56,27 @@
 				Spank.base.history.on('child_removed', function(snapshot) {
 					// Fix for an off-by-one error everytime we remove
 					// something from the history list
-					Spank.history.stream.pop();
+					Spank.history.stream.shift();
 				});
 			};
 
 			var updateHistoryItem = function(snapshot) {
 				var o = snapshot.val();
 				if (o!==null) {
-					var atHistoryIndex = parseInt(snapshot.name(),10),
+					var atHistoryIndex = Spank.history.stream().length-1-parseInt(snapshot.name(),10),
 						koo = {};
-					$.each(o, function(k,v) {
-						koo[k] = ko.observable(v);
-					});
-					Spank.history.stream()[atHistoryIndex] = koo;
+					if (typeof(o)==='object') {
+						$.each(o, function(k,v) {
+							koo[k] = ko.observable(v);
+						});
+					} else {
+						koo = o;
+					}
+					if (atHistoryIndex<0) {
+						Spank.history.stream().unshift(koo);
+					} else {
+						Spank.history.stream()[atHistoryIndex] = koo;
+					}
 					Spank.history.stream.valueHasMutated();
 					Spank.history.highlightCurrentlyPlayingSong();
 				} else {
@@ -106,15 +131,20 @@
 					});
 				} else {
 					newArray = $.map(array, function(item) {
+						if (typeof(item)!=='object') return item;
 						if (item.url===o.url || similarArtistAndTitle(o, item)) {
-							if ('gift' in item) return item;
+							if ('gift' in item) {
+								return item;
+							} else {
+								return "nicegapbaby"
+							}
 						} else {
 							return item;
 						}
 					});
 				}
 				if (Array.isArray(newArray)) {
-					if (add===true) newArray.unshift(o);
+					if (add===true) newArray.push(o);
 					return newArray;
 				} else {
 					return undefined;
@@ -135,7 +165,9 @@
 				// E.g. the user moved an item
 				if (moveEvent===true || (typeof(moveEvent)!=='undefined' && ('item' in moveEvent) && ('sourceIndex' in moveEvent) && ('targetIndex' in moveEvent))) {
 					Spank.base.history.transaction(function(currentData) {
-						return ko.toJS(self.stream);                            //// Back to Vanilla Jane objects
+						var currentStream = ko.toJS(self.stream);
+						currentStream.reverse();
+						return currentStream;                            //// Back to Vanilla Jane objects
 					});
 				}
 			};
@@ -159,21 +191,21 @@
 				}
 				// WARNING! Only KO observables allowed pass this point!!!
 				Spank.base.history.transaction(function update(currentData) {
-						var o = ko.toJS(koo);                               //// Back to Vanilla Jane objects
-						if (currentData===null) {
-							// currentData is null if history is empty
-							return [o];
-						} else if (Array.isArray(currentData)) {
-							return self.transaction_addNewHistoryItemAndMakeUnique(o, currentData);
-						} else {
-							// Abort the transaction
-							console.error("ERROR: Did not get an array from history.transaction");
-							console.error(currentData);
-							return undefined;
-						}
-					}, function onComplete(success, snapshot) {
-						console.warn("Firebase HISTORY PUSH : " + success);
-					});
+					var o = ko.toJS(koo);                               //// Back to Vanilla Jane objects
+					if (currentData===null) {
+						// currentData is null if history is empty
+						return [o];
+					} else if (Array.isArray(currentData)) {
+						return self.transaction_addNewHistoryItemAndMakeUnique(o, currentData);
+					} else {
+						// Abort the transaction
+						console.error("ERROR: Did not get an array from history.transaction");
+						console.error(currentData);
+						return undefined;
+					}
+				}, function onComplete(success, snapshot) {
+					console.warn("Firebase HISTORY PUSH : " + success);
+				});
 				if (playNow) {
 					Spank.player.playObject(ko.toJS(koo));                      //// Back to Vanilla Jane objects
 					threeSixtyPlayer.config.jumpToTop = false;

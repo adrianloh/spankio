@@ -74,6 +74,12 @@
 			}
 		};
 
+		var images = ['/img/play.png','/img/plus.png'];
+		images.forEach(function(src) {
+			var img = new Image();
+			img.src = src;
+		});
+
 		var attempts = 0;
 		var searchVK = function(params) {
 			vk_search_in_progress = true;
@@ -84,8 +90,8 @@
 			url = url.replace("TOKEN", token).replace("QUERY", params.q);
 			Spank.busy.on();
 			var xhr = $.getJSON(url, function(data) {
-				Spank.busy.off();
 				vk_search_in_progress = false;
+				Spank.busy.off();
 				var message = "";
 				if (data.error) {
 					if (data.error.error_code===6 && attempts<3) {
@@ -93,18 +99,16 @@
 						searchVK(params);
 					} else {
 						attempts = 0;
-						message = '<li class="vkMessage">Oopsies, something went wrong. Try again.</li>';
+						message = '<li class="vkMessage">Oops, something went wrong. Try again.</li>';
 						$(message).appendTo("#vk-results-list");
 					}
 				} else {
 					attempts = 0;
-					if (data.response[0]===0) {
-						message = '<li class="vkMessage">Unbelievable. Couldn\'t find this song.</li>';
-					} else {
-						message = '<li class="vkMessage">Found @MESSAGE@ track(s)</li>'.replace("@MESSAGE@", data.response[0]);
-					}
-					$(message).appendTo("#vk-results-list");
-					$.each(data.response.slice(1), function (i, track) {
+					var trackResults = data.response.slice(1),
+						resultsTotal = trackResults.length,
+						lick = '<img class="lickButton" src="/img/play.png" thumb="@THUMB@" mxid="@MXID@" artist="@ARTIST@" songtitle="@TITLE@" url="@URL@" direct="@DIRECT@"/>',
+						plus = '<img class="lickButton" src="/img/plus.png" thumb="@THUMB@" mxid="@MXID@" artist="@ARTIST@" songtitle="@TITLE@" url="@URL@" direct="@DIRECT@"/>';
+					trackResults.forEach(function (track) {
 						track.mxid = params.mxid;
 						var trackAttr = [],
 							title = track.title.slice(0,60) + ' -- ' + track.artist.slice(0,60);
@@ -112,17 +116,21 @@
 							// VERY VERY IMPORTANT!
 							// The lick button contains ALL the data we need to reconstruct every entry of the playlist
 							// Where: MXID is MusixMatch's ID used in API tracks.get and URL is a VK song's OWNER_ID+TRACK_ID
-							var lick = '<img class="lickButton" src="/img/play.png" thumb="@THUMB@" mxid="@MXID@" artist="@ARTIST@" songtitle="@TITLE@" url="@URL@" direct="@DIRECT@"/>',
-								plus = '<img class="lickButton" src="/img/plus.png" thumb="@THUMB@" mxid="@MXID@" artist="@ARTIST@" songtitle="@TITLE@" url="@URL@" direct="@DIRECT@"/>',
-								trackurl = track.owner_id + "_" + track.aid + ".mp3";
-							lick = lick.replace("@DIRECT@", track.url).replace("@THUMB@", params.thumb).replace("@MXID@", params.mxid).replace("@ARTIST@", track.artist).replace("@TITLE@", track.title).replace("@URL@", trackurl);
-							plus = plus.replace("@DIRECT@", track.url).replace("@THUMB@", params.thumb).replace("@MXID@", params.mxid).replace("@ARTIST@", track.artist).replace("@TITLE@", track.title).replace("@URL@", trackurl);
-							// Add the 360 player. The player plays the href of the first <a> it finds after div.ui360
-							trackAttr.push('<div class="dummy">' + '<div class="lickContainer">' + lick + plus + '</div>' + '<a class="vkDownloadLink" href="' + track.url +'">' + title + '</a>'+'</div>');
-							//trackAttr.push('<a class="vkDownloadLink" href="' + track.url +'">'+ lick + title + '</a>');
+							var trackurl = track.owner_id + "_" + track.aid + ".mp3",
+								_lick = lick.replace("@DIRECT@", track.url).replace("@THUMB@", params.thumb).replace("@MXID@", params.mxid).replace("@ARTIST@", track.artist).replace("@TITLE@", track.title).replace("@URL@", trackurl),
+								_plus = plus.replace("@DIRECT@", track.url).replace("@THUMB@", params.thumb).replace("@MXID@", params.mxid).replace("@ARTIST@", track.artist).replace("@TITLE@", track.title).replace("@URL@", trackurl);
+							trackAttr.push('<div class="vkTrackEntry-container">' + '<div class="lickContainer">' + _lick + _plus + '</div>' + '<a class="vkDownloadLink" href="' + track.url +'">' + title + '</a>'+'</div>');
 							$('<li class="vkTrackEntry">' + trackAttr.join('') + '</li>').appendTo("#vk-results-list");
+						} else {
+							--resultsTotal;
 						}
 					});
+					if (resultsTotal<=0) {
+						message = '<li class="vkMessage">Sorry, we\'re all out of this song!</li>';
+					} else {
+						message = '<li class="vkMessage">Found @MESSAGE@ track(s)</li>'.replace("@MESSAGE@", resultsTotal);
+					}
+					$("#vk-results-list").prepend(message);
 					Tipped.create(".lickButton", function(element) {
 						if ($(element).attr("src").match(/plus/)) {
 							return "Save for later";
@@ -239,39 +247,35 @@
 				attributes = ["songtitle", "artist", "url", "thumb", "direct"],
 				data = {},
 				that = $(this);
-			try {
-				$.each(attributes, function(i, attr) {
-					var save_attr = attr.replace(/song/,"");
-					data[save_attr] = that.attr(attr);
-				});
-				var ok = true,
-					must_have_keys = ["title", "artist", "url", "thumb", "direct"];
-				$.each(must_have_keys, function(i, attr) {
-					if (!data.hasOwnProperty(attr)) {
-						console.error(attr);
-						ok = false;
-					}
-				});
-				$.each(data, function(k,v) {
-					try {
-						if (!v.match(/\w/g)) {
-							console.error(k + " > " + v);
-							ok = false;
-						}
-					} catch(err) {
+			$.each(attributes, function(i, attr) {
+				var save_attr = attr.replace(/song/,"");
+				data[save_attr] = that.attr(attr);
+			});
+			var ok = true,
+				must_have_keys = ["title", "artist", "url", "thumb", "direct"];
+			$.each(must_have_keys, function(i, attr) {
+				if (!data.hasOwnProperty(attr)) {
+					console.error(attr);
+					ok = false;
+				}
+			});
+			$.each(data, function(k,v) {
+				try {
+					if (!v.match(/\w/g)) {
 						console.error(k + " > " + v);
 						ok = false;
 					}
-				});
-				if (ok) {
-					if (button.attr("src").match(/play/)) {
-						Spank.history.prependToHistory(data, true);
-					} else {
-						Spank.history.prependToHistory(data, false);
-					}
+				} catch(err) {
+					console.error(k + " > " + v);
+					ok = false;
 				}
-			} catch(err) {
-				console.log(err);
+			});
+			if (ok) {
+				if (button.attr("src").match(/play/)) {
+					Spank.history.prependToHistory(data, true);
+				} else {
+					Spank.history.prependToHistory(data, false);
+				}
 			}
 			return false;
 		});

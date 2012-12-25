@@ -411,9 +411,11 @@
                 </div>
             </div>
             <div id="history-stream-list-container">
-            <ul id="history-stream-list" data-bind="sortable: {data: stream, afterMove: saveHistory }">
+            <!--<ul id="history-stream-list" data-bind="sortable: {data: stream, afterMove: saveHistory }">-->
+            <ul id="history-stream-list" data-bind="foreach: stream">
+                <!-- ko if: typeof($data)==='object' -->
                 <li class="tweetItem" data-bind="attr: { url: url }, cartDeleteIcons:$data">
-                    <img class="tweetThumb" onerror="ImgError(this)" data-bind="pickupStreamItems:$data, attr: { src: thumb }" />
+                    <img class="tweetThumb" src="/img/grey.gif" onerror="ImgError(this)" data-bind="pickupStreamItems:$data, attr: { src : thumb }" />
                     <a class="tweetDownloadLink" href="#" data-bind="event: { mouseover: $root.downloadHistoryItemOnClick }">
                         <img class="tweetDownload" src="/img/cart.png" />
                     </a>
@@ -423,6 +425,7 @@
                         <div class="tweetTrackArtist" data-bind="text: artist"></div>
                     </div>
                 </li>
+                <!-- /ko -->
             </ul>
             </div>
         </div>
@@ -454,7 +457,7 @@
                 <div id="track_count_current" data-bind="text: totalChartTracks"></div>
                 <ul class="results-list" data-bind="sortable: {data:chartTracks, afterMove: onResort }">
                     <li class="trackEntry unwobbled">
-                        <img class="mxThumb" onerror="ImgError(this)" data-bind="click: $root.addToShoppingCart, attr: { src: thumb }" />
+                        <img class="mxThumb" src="/img/grey.gif" onerror="ImgError(this)" data-bind="click: $root.addToShoppingCart, attr: { src: thumb }" />
                         <!--<div class="trackName"><a class="lyricLink" href="#" data-bind="text: title, attr: { mxid: mxid }"></a></div>-->
                         <div class="trackName"><a class="lyricLink" href="#" data-bind="text: title, attr: { mxid: mxid }"></a></div>
                         <div class="trackArtist" data-bind="text: artist"></div>

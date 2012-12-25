@@ -137,11 +137,13 @@
 			var playButton = $(".sm2-360btn");
 			if (typeof(threeSixtyPlayer.indexByURL[url])!=='undefined') {
 				playButton.trigger('click');
+				console.log(">>>");
 			} else {
 				var index = threeSixtyPlayer.links.length;
 				threeSixtyPlayer.indexByURL[url] = index;
 				threeSixtyPlayer.links[index] = a;
 				playButton.trigger('click');
+				console.log(">>>");
 			}
 		});
 

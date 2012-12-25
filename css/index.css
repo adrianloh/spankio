@@ -662,7 +662,7 @@ input:-ms-input-placeholder {
 }
 /* List items of tracks from VK
 ==================================================*/
-.dummy {
+.vkTrackEntry-container {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -759,11 +759,14 @@ ul.lastfm-buttons {
 #history-stream-list-container {
     height: 95%;
     overflow: auto;
-    margin-left: -40px;
     margin-top: 45px;
+    background-image: url(/img/loading.gif);
+    background-repeat: no-repeat;
+    background-position: center 35%;
 }
 
 #history-stream-list {
+    margin-left: -40px;
     margin-top: 0;
 }
 

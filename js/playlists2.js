@@ -26,7 +26,7 @@
 								title: ko.observable(""),
 								url: "#",
 								owners: ko.observableArray(ownersList),
-								cover: ko.observable('/img/emptyplaylist.png'),
+								cover: ko.observable('/img/emptyplaylist.jpg'),
 								refID: refID,
 								base: Playlist.makeBaseObject(thisPlaylistRef)
 							};

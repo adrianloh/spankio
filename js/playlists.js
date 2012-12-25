@@ -201,7 +201,7 @@
 				this.savePlaylist(playname, tracklist);
 				if (isNewPlaylist) {
 					// Add a new playlist dropzone since we used this one already
-					Spank.playlistScroller.push({cover:'/img/emptyplaylist.png'});
+					Spank.playlistScroller.push({cover:'/img/emptyplaylist.jpg'});
 				}
 			},
 			push: function(o) {
@@ -243,15 +243,13 @@
 		});
 
 		$(document).one("login", function() {
-			Spank.playlistScroller.push({cover:'/img/emptyplaylist.png'});
+			Spank.playlistScroller.push({cover:'/img/emptyplaylist.jpg'});
 			$.each(chartPlaylistItems, function(i,o) {
 				// Populate the playlist bar with charts
 				Spank.playlistScroller.push(o);
 			});
-			setTimeout(function() {
-				var selector = ".playlistThumb[title='Billboards UK']";
-				$(selector).trigger("click");
-			}, 2000);
+			var selector = ".playlistThumb[title='Billboards UK']";
+			$(selector).trigger("click");
 		});
 
 		var appendToResults = function(title, url, tracklist, this_image, reset) {

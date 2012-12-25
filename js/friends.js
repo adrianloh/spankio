@@ -119,7 +119,7 @@
 										from:FBUserInfo.name,
 										message: message
 									};
-									if (currentData!==null) currentData.unshift(droppedHistoryItem);
+									if (currentData!==null) currentData.push(droppedHistoryItem);
 									return currentData;
 								}, function onSendComplete(success, data) {
 									Spank.friends.bases[friendData.username].base.transaction(function(currentData) {
