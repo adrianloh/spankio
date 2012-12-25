@@ -81,7 +81,6 @@ Array.prototype.shuffle = function() {
 			};
 			self.pushBatch = function(list, mode) {
 				$("#resultsSection").show();
-				//console.warn("Batch adding " + list.length + ' items.');
 				var newItems = $.map(list, function(item) {
 					item = self.process(item);
 					if (item!==false) {
@@ -95,7 +94,8 @@ Array.prototype.shuffle = function() {
 				} else {
 					self.chartTracks.push.apply(self.chartTracks, newItems);
 				}
-				//console.warn("Rendering " + newItems.length + ' items.');
+				var t1 = new Date().getTime().toString();
+				History.pushState(self.chartTracks(), t1, "?state="+t1);
 			};
 			self.populateResultsWithUrl = function(url, extract_function, error_callback) {
 				// This function is called to look for Similar artists/Similar tracks
