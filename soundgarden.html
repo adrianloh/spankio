@@ -97,8 +97,8 @@
     -->
     <script type="text/javascript" src="/js/utils.js"></script>
     <script type="text/javascript" src="/js/tooltips.js"></script>
-    <!--<script type="text/javascript" src="/js/playlists.js"></script>-->
-    <script type="text/javascript" src="/js/playlists2.js"></script>
+    <script type="text/javascript" src="/js/playlists.js"></script>
+    <!--<script type="text/javascript" src="/js/playlists2.js"></script>-->
     <script type="text/javascript" src="/js/playlistAction.js"></script>
     <script type="text/javascript" src="/js/draggables.js"></script>
     <script type="text/javascript" src="/js/musicPlayerModel.js"></script>
@@ -491,31 +491,31 @@
             </ul>
         </div>
 
-        <div id="playlistScroller">
-            <ul id="playlists-scroller-list" data-bind="sortable: {data: dockItemsMe, beforeMove: moveState.beforeMovePlaylistItem, afterMove: moveState.afterMovePlaylistItem }">
-                <li class="playlistEntry" data-bind="click: $root.onClick">
-                    <img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />
-                    <div class="playlistName" data-bind="text: title()"></div>
-                </li>
-            </ul>
-            <div id="toggle-playlist-button">
-                <button class="hideshow-playlist-button">Hide Playlists</button>
-            </div>
-        </div>
-
         <!--<div id="playlistScroller">-->
-                <!--<ul id="playlists-scroller-list" data-bind="foreach: playlistItems">-->
-                    <!--&lt;!&ndash; ko if: $data!==undefined &ndash;&gt;-->
-                    <!--<li class="playlistEntry" data-bind="css: { droppablePlaylist: url==='#' }">-->
-                        <!--<img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />-->
-                        <!--<div class="playlistName" data-bind="text: title()"></div>-->
-                    <!--</li>-->
-                    <!--&lt;!&ndash; /ko &ndash;&gt;-->
-                <!--</ul>-->
+            <!--<ul id="playlists-scroller-list" data-bind="sortable: {data: dockItemsMe, beforeMove: moveState.beforeMovePlaylistItem, afterMove: moveState.afterMovePlaylistItem }">-->
+                <!--<li class="playlistEntry" data-bind="click: $root.onClick">-->
+                    <!--<img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />-->
+                    <!--<div class="playlistName" data-bind="text: title()"></div>-->
+                <!--</li>-->
+            <!--</ul>-->
             <!--<div id="toggle-playlist-button">-->
                 <!--<button class="hideshow-playlist-button">Hide Playlists</button>-->
             <!--</div>-->
         <!--</div>-->
+
+        <div id="playlistScroller">
+                <ul id="playlists-scroller-list" data-bind="foreach: playlistItems">
+                    <!-- ko if: $data!==undefined -->
+                    <li class="playlistEntry" data-bind="css: { droppablePlaylist: url==='#' }">
+                        <img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />
+                        <div class="playlistName" data-bind="text: title()"></div>
+                    </li>
+                    <!-- /ko -->
+                </ul>
+            <div id="toggle-playlist-button">
+                <button class="hideshow-playlist-button">Hide Playlists</button>
+            </div>
+        </div>
 
     </div> <!-- #applicationBody END -->
 

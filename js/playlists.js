@@ -46,7 +46,7 @@
 			return t;
 		};
 
-		$(document).one("__baseReady", function() {
+		$(document).one("baseReady", function() {
 			Spank.bases = {};
 			Spank.bases.playlistRefs = Spank.base.me.child("playlistRefs");
 			Spank.bases.playlists = Spank.base.me.child("playlists");
@@ -216,7 +216,7 @@
 			}
 		};
 
-		//ko.applyBindings(Spank.playlistScroller, document.getElementById('playlistScroller'));
+		ko.applyBindings(Spank.playlistScroller, document.getElementById('playlistScroller'));
 
 		Spank.playlistScroller.playlistItems.subscribe(function(list) {
 			Spank.rescanChildren();
@@ -241,7 +241,7 @@
 			Spank.playlistScroller.visible(!current);
 		});
 
-		$(document).one("__login", function() {
+		$(document).one("login", function() {
 			Spank.playlistScroller.push({cover:'/img/emptyplaylist.jpg'});
 			$.each(chartPlaylistItems, function(i,o) {
 				// Populate the playlist bar with charts
