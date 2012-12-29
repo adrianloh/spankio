@@ -15,6 +15,7 @@ Array.prototype.shuffle = function() {
 		Spank.charts = (function() {
 			var self = {};
 			self.currentPlaylistTitle = ko.observable(undefined);
+			self.current_query = null;
 			self.current_url = null;
 			self.ok_to_fetch_more = true;
 			self.shoppingCart = ko.observableArray([]);
@@ -79,6 +80,13 @@ Array.prototype.shuffle = function() {
 				});
 				return bad ? false : track;
 			};
+			var stateHash = function() {
+				if (self.current_url!=="#") {
+					return hex_md5(self.current_url.replace(/page=\d+/,""));
+				} else {
+					return encodeURI(self.currentPlaylistTitle());
+				}
+			};
 			self.pushBatch = function(list, mode) {
 				$("#resultsSection").show();
 				var newItems = $.map(list, function(item) {
@@ -87,15 +95,19 @@ Array.prototype.shuffle = function() {
 						return item;
 					}
 				});
+				var query = $("#searchField").val();
 				if (mode && mode==='unshift') {
 					self.chartTracks.unshift.apply(self.chartTracks, newItems);
+					History.datastore[stateHash()] = {q:query, tracks:self.chartTracks()};
 				} else if (mode && mode==='replace') {
 					self.chartTracks(newItems);
+					var hash = stateHash();
+					History.datastore[hash] = {q:query, tracks:self.chartTracks()};
+					History.pushState({stateKey:hash}, null, "?state="+hash);
 				} else {
 					self.chartTracks.push.apply(self.chartTracks, newItems);
+					History.datastore[stateHash()] = {q:query, tracks:self.chartTracks()};
 				}
-				var t1 = new Date().getTime().toString();
-				History.pushState(self.chartTracks(), t1, "?state="+t1);
 			};
 			self.populateResultsWithUrl = function(url, extract_function, error_callback) {
 				// This function is called to look for Similar artists/Similar tracks
@@ -110,8 +122,8 @@ Array.prototype.shuffle = function() {
 					}
 					if (Array.isArray(tracklist) && tracklist.length>0) {
 						self.current_url = url;
-						self.chartTracks.removeAll();
-						self.pushBatch(tracklist);
+						console.log(url);
+						self.pushBatch(tracklist, 'replace');
 					} else {
 						if (error_callback!==undefined) {
 							error_callback();

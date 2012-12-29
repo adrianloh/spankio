@@ -137,10 +137,11 @@
     position: absolute;
     z-index: 10;
     width: 70%;
-    height: 90%;
+    height: 95%;
     top: 78px;
     left: 0;
-    background-color: rgba(255, 255, 255, 0.97);
+    background-image: url(/img/textures/white_texture.png);
+    /*background-color: rgba(255, 255, 255, 0.97);*/
     color: #111;
     font: 800 14px "PT Sans Narrow";
     overflow-y: auto;
@@ -161,8 +162,8 @@
     height: 110px;
     width: 110px;
     display: inline-block;
-    border-bottom: 3px solid whiteSmoke;
-    background-color: #E9E9E9;
+    border: 2px solid rgb(218, 218, 218);
+    background-color: #ffffff;
     -webkit-border-radius: 25px;
     -webkit-transition: all .2s ease-in-out;
 }
@@ -366,7 +367,8 @@ html.busy, html.busy * {
 }
 body {
     overflow: hidden;
-    background-color: rgb(241, 241, 241);
+    /*background-color: rgb(241, 241, 241);*/
+    background-image: url(/img/textures/noise_pattern_with_crosslines.png);
 }
 a {
     color: black;
@@ -724,12 +726,12 @@ ul.lastfm-buttons {
     top: 0;
     height: 40%;
     background: url(https://lh5.googleusercontent.com/-KrI-djzBat8/UNiqHTlsiYI/AAAAAAAAXRw/xME4x5hxQkA/s0/3536ipod4.jpg);
-    background-repeat: repeat-x;
-    background-position: left top;
-    -moz-background-size: auto 100%;
-    -webkit-background-size: auto 100%;
-    -o-background-size: auto 100%;
-    background-size: auto 100%;
+    background-repeat: repeat-y;
+    background-position: right top;
+    -moz-background-size: 100% auto;
+    -webkit-background-size: 100% auto;
+    -o-background-size: 100% auto;
+    background-size: 100% auto;
 }
 
 

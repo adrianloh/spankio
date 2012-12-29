@@ -1,10 +1,10 @@
 (function () {
 
-	$(document).ready(function() {
+	$(document).one("baseready", function() {
 
 		Head = {
 			users: new Firebase("https://wild.firebaseio.com/spank/users/"),
-			username: "restbeckett"
+			username: Spank.username
 		};
 
 		var Playlist = {};
@@ -78,7 +78,7 @@
 				}
 			});
 
-			// Listen for changes of playlist coers
+			// Listen for changes of playlist covers
 			coverRef.on('value', function(snapshot) {
 				var refID = snapshot.ref().parent().parent().name(),
 					newValue = snapshot.val(),
@@ -89,9 +89,8 @@
 			});
 		};
 
-		var me = Head.username;
-		Playlist.watchPlaylistRefsBelongingTo(me);
-		Head.users.child(me).child("playlistRefs").on('value', function(snapshot) {
+		Playlist.watchPlaylistRefsBelongingTo(Spank.username);
+		Spank.base.me.child("playlistRefs").on('value', function(snapshot) {
 			var currentLayout = snapshot.val();
 			if (currentLayout!==null) {
 				var newDockItems = $.map(currentLayout, function(refID) {
@@ -115,6 +114,7 @@
 
 		Head.playlists = (function () {
 			var self = {};
+			self.visible = ko.observable(true);
 			self.itemsByRef = {};
 			self.dockItemsMe = ko.observableArray([]);
 			self.dockItemsOthers = ko.observableArray([]);
@@ -181,6 +181,38 @@
 		})();
 
 		ko.applyBindings(Head.playlists, document.getElementById('playlistScroller'));
+
+		Head.playlists.visible.subscribe(function(isTrue) {
+			var button = $(".hideshow-playlist-button"),
+				scroller = $("#playlistScroller");
+			if (isTrue) {
+				scroller.animate({bottom: '0px'}, 500, 'swing', function(){
+					button.text("Hide Playlists");
+				});
+			} else {
+				scroller.animate({bottom: '-160px'}, 500, 'swing', function() {
+					button.text("Show Playlists");
+				});
+			}
+		});
+
+		$(".hideshow-playlist-button").click(function() {
+			var current = Head.playlists.visible();
+			Head.playlists.visible(!current);
+		});
+
+		(function() {
+			var name = hex_md5(String(new Date().getTime())).slice(0,5),
+				playlist = {
+					title: ko.observable(name),
+					url: "#",
+					owners: ko.observableArray([Spank.username]),
+					cover: ko.observable('/img/emptyplaylist.jpg'),
+					refID: null,
+					base: null
+			};
+			Head.playlists.push(playlist);
+		})();
 
 	});
 

@@ -64,8 +64,8 @@
 				var owner_id = o.url.split(".")[0],
 					url = "https://api.vkontakte.ru/method/audio.getById?audios=" + owner_id + "&access_token=" + VK.getToken() + "&callback=?";
 				$.getJSON(url, function getActualVKLink(data) {
-					var newDirectLink = data.response[0].url;
-					if (newDirectLink) {
+					if (data.response.length>0) {
+						var newDirectLink = data.response[0].url;
 						Spank.player.current_url(newDirectLink);
 						Spank.player.current_ownerid(o.url);
 						Spank.history.highlightCurrentlyPlayingSong();
@@ -80,7 +80,12 @@
 						Spank.base.live.set(pushData);
 						$("#funkyPlayer").css("background-image", bgImage);
 					} else {
-						alert("Yipes! This audio file has gone missing! Replace it with another one!");
+						window.notify.error("Crap! I've misplaced this audio file. Get a new one!", 30000);
+						var query = o.artist + " " + o.title;
+						$("#myonoffswitch").prop('checked', true);
+						setTimeout(function() {
+							$("#searchField").val(query).trigger("keyup");
+						},1000);
 					}
 				});
 			},
@@ -96,7 +101,7 @@
 								var newCoverUrl = images[images.length-1]['#text'];
 								koo.thumb(newCoverUrl);
 								Spank.history.saveHistory(true);
-								$("#funkyPlayer").css("background-image", newCoverUrl);
+								$("#funkyPlayer").css("background-image", "url(" + newCoverUrl + ")");
 							}
 						}
 					} catch(err) {
@@ -162,12 +167,29 @@
 				next_play_index = -1;
 			} else if (threeSixtyPlayer.config.shuffle && underlyingArray.length > 1) {
 				// Shuffle ON when there's more than one song
-				next_play_index = Spank.utils.randrange(0, underlyingArray.length-1);
+				(function pickRandomSong() {
+					next_play_index = Spank.utils.randrange(0, underlyingArray.length-1);
+					var next_song = Spank.history.stream()[next_play_index];
+					if (typeof(next_song)!=='object') {
+						pickRandomSong();
+					} else {
+						return;
+					}
+				})();
 			} else if (underlyingArray.length > 1) {
 				// Normal play, no modes
 				var koo = Spank.history.findHistoryItemWithUrl(Spank.player.lastPlayedObject.url),
 					next_index = Spank.history.stream.indexOf(koo)+1;
-				next_play_index = next_index < underlyingArray.length && next_index || 0;
+				(function pickNextSong() {
+					next_play_index = next_index < underlyingArray.length && next_index || 0;
+					var next_song = Spank.history.stream()[next_play_index];
+					if (typeof(next_song)!=='object') {
+						++next_index;
+						pickNextSong();
+					} else {
+						return;
+					}
+				})();
 			} else if (threeSixtyPlayer.config.loop===false) {
 				// There's only one song in history
 				$("#loop_button").trigger("click");

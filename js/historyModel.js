@@ -9,48 +9,53 @@
 			Spank.base.me = Spank.base.users.child(Spank.username);
 			Spank.base.history = Spank.base.me.child("history");
 			$(document).trigger("baseReady");
-			Spank.base.history.once('value', function(snapshot) {
-				window.notify.suspended = false;
-				window.notify.information("Retrieving your stream...");
+			var firstPass = true;
+			function assemble(snapshot) {
 				var newHistory = snapshot.val();
 				if (Array.isArray(newHistory) && newHistory.length>0) {
-					var tracks = $.map(newHistory, function(o) {
-						if (typeof(o)==='object') return o;
-					});
-					Spank.base.history.set(tracks, function onComplete() {
-						Spank.base.history.once('value', function(snapshot) {
-							var cleanHistory = snapshot.val();
-							if (Array.isArray(cleanHistory) && cleanHistory.length>0) {
-								var koHistory = $.map(cleanHistory, function(o) {
-									var koo = {};
-									if (typeof(o)==='object') {
-										$.each(o, function(k,v) {
-											koo[k] = ko.observable(v);
-										});
-										return koo;
-									} else {
-										return o;
-									}
-								});
-								koHistory.reverse();
-								Spank.history.stream(koHistory);
-								start();
-							}
+					if (firstPass) {
+						window.notify.suspended = false;
+						window.notify.information("Retrieving stream...");
+						firstPass = false;
+						var tracks = $.map(newHistory, function(o) {
+							if (typeof(o)==='object') return o;
 						});
-					});
+						if (tracks.length===newHistory.length) {
+							assemble(snapshot);
+						} else {
+							Spank.base.history.set(tracks);
+						}
+					} else {
+						var koHistory = $.map(newHistory, function(o) {
+							var koo = {};
+							$.each(o, function(k,v) {
+								koo[k] = ko.observable(v);
+							});
+							return koo;
+						});
+						koHistory.reverse();
+						Spank.history.stream(koHistory);
+						start();
+					}
 				} else {
 					start();
 				}
-			});
+			}
 
+			Spank.base.history.on("value", assemble);
+
+			var started = false;
 			var start = function() {
+				if (started) return;
+				Spank.base.history.off('value', assemble);
+				started = true;
 				$("#history-stream-list-container").css("background-image","none");
 				setTimeout(function() {
 					window.notify.information("Go!");
 				}, 2000);
-				setTimeout(function() {
-					Spank.playlistScroller.visible(true);
-				}, 1500);
+//				setTimeout(function() {
+//					Spank.playlistScroller.visible(true);
+//				}, 1500);
 				Spank.base.history.on('child_changed', updateHistoryItem);
 				Spank.base.history.on('child_added', updateHistoryItem);
 				Spank.base.history.on('child_removed', function(snapshot) {
@@ -157,7 +162,11 @@
 
 			self.findHistoryItemWithUrl = function(url) {
 				return ko.utils.arrayFirst(self.stream(), function(o) {
-					return o.url()===url;
+					try {
+						return o.url()===url;
+					} catch(err) {
+						return false;
+					}
 				});
 			};
 
