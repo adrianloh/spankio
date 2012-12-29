@@ -130,7 +130,7 @@
 
 .funkyPlayer-container {
     left: 13%;
-    top: 10%;
+    top: 6%;
 }
 
 #friendList-container {
@@ -138,7 +138,7 @@
     z-index: 10;
     width: 70%;
     height: 95%;
-    top: 78px;
+    top: 62px;
     left: 0;
     background-image: url(/img/textures/white_texture.png);
     /*background-color: rgba(255, 255, 255, 0.97);*/
@@ -355,12 +355,12 @@
 
 .selectedPlaylistItem {
     border:solid 6px rgb(247, 255, 113);
-    -webkit-transform: scale(0.6);
+/*    -webkit-transform: scale(0.6);
     -webkit-animation-name: wiggle-mild;
     -webkit-animation-duration: .4s;
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-timing-function: ease-in-out;
-}
+*/}
 
 html.busy, html.busy * {
     cursor: wait;
@@ -407,7 +407,7 @@ ul {
 #searchForm form {
     position: fixed;
     width: 70%;
-    top: 11px;
+    top: 6px;
     left: 0px;
     margin-left: 7%;
     /*margin: 0 auto;*/
@@ -439,9 +439,8 @@ input:-ms-input-placeholder {
     top: 0;
     left: 0;
     width: 100%;
-    height: 78px;
+    height: 62px;
     background: rgba(0, 0, 0, 0.77);
-
     -webkit-transform: translate3d(0,0,0);
     -webkit-backface-visibility: hidden;
     -webkit-perspective: 1000;
@@ -462,7 +461,7 @@ input:-ms-input-placeholder {
 }
 #track_count_current {
     position: fixed;
-    top: 90px;
+    top: 66px;
     right: 32%;
     letter-spacing: -1.8px;
     color: #CACACA;
@@ -855,13 +854,14 @@ ul.lastfm-buttons {
 .playModeButtons {
     cursor: pointer;
     position: relative;
-    height: 68px;
+    height: 58px;
     margin-right: 0px;
     z-index: 999;
     -webkit-filter: grayscale(1);
 }
 
 #spank-player-controls {
+    margin-top: -8px;
     float: right;
     margin-right: 5%;
 }​

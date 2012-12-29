@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="32ba444c-fc18-4642-a53c-06c7d6e77d49" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/playlists.js" afterPath="$PROJECT_DIR$/js/playlists.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/soundgarden.html" afterPath="$PROJECT_DIR$/soundgarden.html" />
-    </list>
+    <list default="true" id="32ba444c-fc18-4642-a53c-06c7d6e77d49" name="Default" comment="" />
     <ignored path="soundgarden-heroku.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -32,10 +29,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="historyModel.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="historyModel.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/historyModel.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="60" column="0" selection-start="1809" selection-end="1809" vertical-scroll-proportion="1.5899582">
+            <state line="60" column="0" selection-start="1809" selection-end="1809" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -50,10 +47,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="playlists2.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="playlists2.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/playlists2.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="218" column="0" selection-start="6794" selection-end="6794" vertical-scroll-proportion="0.0">
+            <state line="218" column="0" selection-start="6794" selection-end="6794" vertical-scroll-proportion="5.6739726">
               <folding />
             </state>
           </provider>
@@ -101,8 +98,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="177" />
-    <option name="y" value="145" />
+    <option name="x" value="125" />
+    <option name="y" value="141" />
     <option name="width" value="1463" />
     <option name="height" value="878" />
   </component>
@@ -227,7 +224,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="177" y="145" width="1463" height="878" extended-state="0" />
+    <frame x="125" y="141" width="1463" height="878" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -368,20 +365,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/playlists2.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="218" column="0" selection-start="6794" selection-end="6794" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/playlists.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="301" column="5" selection-start="11027" selection-end="11027" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/soundgarden.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="524" column="0" selection-start="23634" selection-end="23634" vertical-scroll-proportion="-29.863636">
@@ -405,7 +388,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/historyModel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="60" column="0" selection-start="1809" selection-end="1809" vertical-scroll-proportion="1.5899582">
+        <state line="60" column="0" selection-start="1809" selection-end="1809" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/playlists.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="301" column="5" selection-start="11027" selection-end="11027" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/playlists2.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="218" column="0" selection-start="6794" selection-end="6794" vertical-scroll-proportion="5.6739726">
           <folding />
         </state>
       </provider>
