@@ -12,16 +12,16 @@
 				this_image.parent().css("border", highlight_border);
 			};
 			Spank.charts.currentPlaylistTitle(title);   // NOTE: This is undefined for all results *except* when a user's playlist is open
-			Spank.charts.current_url = url;             // This is "#" when a user's playlist is open
+			Spank.charts.current_url(url);             // This is "#" when a user's playlist is open
 			if (reset) {
 				// E.g. the first time we click on a playlist item and load new results...
 				highlightCurrentPlaylistItem(this_image);
 				Spank.charts.pushBatch(tracklist, 'replace');
-				$("#searchField").val(Spank.tagline);
+				$("#searchField").val("Search");
 			} else {
 				Spank.charts.pushBatch(tracklist);
 			}
-			Spank.charts.ok_to_fetch_more = true;
+			Spank.charts.ok_to_fetch_more(true);
 		}
 
 		// Use localStorage to cache JSONs returned from external APIs
@@ -64,7 +64,7 @@
 				var stored = resultsCache[url],
 					timeSinceLastCache = new Date().getTime()-stored.timestamp;
 				if (timeSinceLastCache<86400000) { // Keep cache for 24 hours
-					appendToResults(title, url, stored.data, this_image, (!myUrl));
+					appendToResults(undefined, url, stored.data, this_image, !myUrl);
 					return false;
 				}
 			} else if (timeDelta<2000) {
@@ -85,7 +85,7 @@
 						tracklist = res;
 					}
 					if (tracklist.length>0) {
-						appendToResults(title, url, tracklist, this_image, (!myUrl));
+						appendToResults(title, url, tracklist, this_image, !myUrl);
 						resultsCache[url] = {
 							timestamp:new Date().getTime(),
 							data:tracklist
@@ -98,7 +98,7 @@
 							localStorage.resultsCache = JSON.stringify({});
 						}
 					} else {
-						Spank.charts.ok_to_fetch_more = false;
+						Spank.charts.ok_to_fetch_more(false);
 					}
 					$("html").removeClass('busy');
 					this_image.css('cursor','pointer');

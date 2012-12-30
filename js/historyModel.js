@@ -14,8 +14,6 @@
 				var newHistory = snapshot.val();
 				if (Array.isArray(newHistory) && newHistory.length>0) {
 					if (firstPass) {
-						window.notify.suspended = false;
-						window.notify.information("Retrieving stream...");
 						firstPass = false;
 						var tracks = $.map(newHistory, function(o) {
 							if (typeof(o)==='object') return o;
@@ -51,11 +49,12 @@
 				started = true;
 				$("#history-stream-list-container").css("background-image","none");
 				setTimeout(function() {
+                    window.notify.suspended = false;
 					window.notify.information("Go!");
 				}, 2000);
-//				setTimeout(function() {
-//					Spank.playlistScroller.visible(true);
-//				}, 1500);
+				setTimeout(function() {
+					Spank.playlistScroller.visible(true);
+				}, 3000);
 				Spank.base.history.on('child_changed', updateHistoryItem);
 				Spank.base.history.on('child_added', updateHistoryItem);
 				Spank.base.history.on('child_removed', function(snapshot) {
@@ -248,10 +247,6 @@
 				} else {
 					self.prependToHistory(koo, true);
 				}
-				var historyFilterBox = $("#history-filter");
-				if (historyFilterBox.val()!=='Filter stream') {
-					historyFilterBox.trigger("blur");
-				}
 			};
 
 			self.downloadHistoryItemOnClick = function(koo, event) {
@@ -282,12 +277,3 @@
 	});
 
 })();
-
-
-
-
-
-
-
-
-

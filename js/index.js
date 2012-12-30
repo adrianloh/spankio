@@ -155,6 +155,7 @@
 		};
 
 		$.searchByWire = function(search_term) {
+			if (search_term==='Search') return;
 			var queryVKDirectly = $("#myonoffswitch").is(":checked");
 			if (queryVKDirectly) {
 				setTimeout(function() {
@@ -172,21 +173,32 @@
 				}, 1000);
 			} else {
 				// Each time we start a new search...
-				Spank.charts.ok_to_fetch_more = true;
+				Spank.charts.ok_to_fetch_more(true);
 				Spank.tearDownLightBox();                                               // Close the lightbox
 				Spank.friends.visible(false);                                           // Close the friends list
 				$(".playlistEntry").css("border","5px solid rgb(204, 204, 204)");       // Don't highlight any playlist items
 				if ($.trim(search_term)!=='') {
 					setTimeout(function() {
 						Spank.busy.on();
-						var url = '/mxsearch?q=#&page=1'.replace("#",search_term);
-						Spank.charts.populateResultsWithUrl(url, function extract(res) {
-							Spank.busy.off();
-							return res.message.body.track_list;
-						}, function onNoResults() {
-							window.notify.error("No results.",'force');
-							Spank.busy.off();
-						});
+						if (search_term.match(/similarto/)) {
+							try {
+								var matches = search_term.match(/similarto:(.+)---(.+)/),
+									data = {
+										artist: $.trim(matches[1]).toLowerCase(),
+										title: $.trim(matches[2]).toLowerCase()
+									};
+								Spank.charts.getSimilar(data);
+							} catch(err) { }
+						} else {
+							var url = '/mxsearch?q=#&page=1'.replace("#",search_term);
+							Spank.charts.populateResultsWithUrl(url, function extract(res) {
+								Spank.busy.off();
+								return res.message.body.track_list;
+							}, function onNoResults() {
+								window.notify.error("No results.",'force');
+								Spank.busy.off();
+							});
+						}
 					}, 0);
 				} else {
 					return false;
@@ -199,11 +211,11 @@
 			$("#searchField").val("artist: " + artist).trigger("keyup");
 		});
 
-		var taglineBase = new Firebase("https://wild.firebaseio.com/spank/tagline");
-		taglineBase.on("value", function(snapshot) {
-			Spank.tagline = snapshot.val();
-			$("#searchField").val(snapshot.val());
-		});
+//		var taglineBase = new Firebase("https://wild.firebaseio.com/spank/tagline");
+//		taglineBase.on("value", function(snapshot) {
+//			Spank.tagline = snapshot.val();
+//			$("#searchField").val(snapshot.val());
+//		});
 
 		// Don't allow the form to be submitted or we'll jump away
 		// from the page!
@@ -214,33 +226,45 @@
 		$("#searchField").livesearch({
 			searchCallback: $.searchByWire,
 			innerText: Spank.tagline,
-			queryDelay:500,
+			queryDelay: 500,
 			minimumSearchLength: 3
 		});
 
 		var streamFilterField = $("#history-filter");
 
-		streamFilterField.livesearch({
+        streamFilterField.submit(function(e) {
+            return false;
+        });
+
+        streamFilterField.livesearch({
 			searchCallback: function(input) {
-				var re = new RegExp(input, "i");
-				$(".tweetDetails").each(function() {
-					var self = $(this);
-					if (self.children().text().match(re)) {
-						self.parent().show();
-					} else {
-						self.parent().hide();
-					}
-				});
+                var re = new RegExp(input, "i"),
+                    tweetItems = document.getElementsByClassName("tweetItem"),
+                    i = tweetItems.length,
+                    li;
+                while (i--) {
+                    li = tweetItems[i];
+                    if (li.getAttribute("artist").match(re) || li.getAttribute("songtitle").match(re)) {
+                        li.style.display = "list-item";
+                    } else {
+                        li.style.display = "none";
+                    }
+                }
 			},
 			innerText: "Filter stream",
 			queryDelay:150,
 			minimumSearchLength: 2
 		});
 
-		streamFilterField.blur(function() {
-			$(".tweetItem").show();
-			$(this).val("");
-		});
+//		streamFilterField.blur(function() {
+//            var tweetItems = document.getElementsByClassName("tweetItem"),
+//                i = tweetItems.length;
+//            setTimeout(function() {
+//                while (i--) {
+//                    tweetItems[i].style.display = "list-item";
+//                }
+//            },2000);
+//		});
 
 		$(".lickButton").live('click', function prependVKTrackToHistoryAndPlay() {
 			var button = $(this),

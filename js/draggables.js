@@ -122,14 +122,11 @@
 			drop: function getSimilarAsDroppedTrack(event) {
 				setTimeout(function () {
 					if (document._ignoreDrop===true) return false;
-					var similar_url = "http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=@&track=#&autocorrect=1&limit=200&api_key=0325c588426d1889087a065994d30fa1&format=json";
 					if (document._draggedHistoryItem!==null) {
-						var url = similar_url.replace("@", encodeURIComponent(document._draggedHistoryItem.artist)).replace("#", encodeURIComponent(document._draggedHistoryItem.title));
-						Spank.charts.populateResultsWithUrl(url, function extract(res) {
-							return res.similartracks.track;
-						}, function noresults() {
-							window.notify.error("Couldn't find any similar songs!");
-						});
+						var data = document._draggedHistoryItem,
+							searchString = "similarto: " + data.artist + " --- " + data.title;
+						$("#myonoffswitch").prop('checked', false);
+						$("#searchField").val(searchString).trigger("keyup");
 					}
 				}, 250);
 			}

@@ -15,9 +15,8 @@ Array.prototype.shuffle = function() {
 		Spank.charts = (function() {
 			var self = {};
 			self.currentPlaylistTitle = ko.observable(undefined);
-			self.current_query = null;
-			self.current_url = null;
-			self.ok_to_fetch_more = true;
+			self.current_url = ko.observable(null);
+			self.ok_to_fetch_more = ko.observable(true);
 			self.shoppingCart = ko.observableArray([]);
 			self.chartTracks = ko.observableArray([]);
 			self.totalChartTracks = ko.computed(function(){
@@ -29,11 +28,11 @@ Array.prototype.shuffle = function() {
 				}
 			};
 			self.fetchMore = function() {
-				if (self.ok_to_fetch_more) {
-					var match = self.current_url.match(/page=(\d+)/);
+				if (self.ok_to_fetch_more()) {
+					var match = self.current_url().match(/page=(\d+)/);
 					if (match) {
 						var next = ++match[1],
-							next_url = self.current_url.replace(/page=(\d+)/,"page="+next);
+							next_url = self.current_url().replace(/page=(\d+)/,"page="+next);
 						$($(".playlistThumb")[0]).trigger("click",[next_url]);
 					}
 				}
@@ -81,12 +80,13 @@ Array.prototype.shuffle = function() {
 				return bad ? false : track;
 			};
 			var stateHash = function() {
-				if (self.current_url!=="#") {
-					return hex_md5(self.current_url.replace(/page=\d+/,""));
+				if (self.current_url()!=="#") {
+					return hex_md5(self.current_url().replace(/page=\d+/,""));
 				} else {
 					return encodeURI(self.currentPlaylistTitle());
 				}
 			};
+            var timeoutPushHistory = setTimeout(function(){},0);
 			self.pushBatch = function(list, mode) {
 				$("#resultsSection").show();
 				var newItems = $.map(list, function(item) {
@@ -95,18 +95,29 @@ Array.prototype.shuffle = function() {
 						return item;
 					}
 				});
-				var query = $("#searchField").val();
-				if (mode && mode==='unshift') {
+                clearTimeout(timeoutPushHistory);
+				var query = $("#searchField").val(),
+					chartData = {
+						current_url: self.current_url(),
+						ok_to_fetch_more: self.ok_to_fetch_more(),
+						chartTracks: null
+                    };
+                if (mode && mode==='unshift') {
 					self.chartTracks.unshift.apply(self.chartTracks, newItems);
-					History.datastore[stateHash()] = {q:query, tracks:self.chartTracks()};
+	                chartData.chartTracks = self.chartTracks();
+					History.datastore[stateHash()] = {q:query, chartData: chartData};
 				} else if (mode && mode==='replace') {
 					self.chartTracks(newItems);
 					var hash = stateHash();
-					History.datastore[hash] = {q:query, tracks:self.chartTracks()};
-					History.pushState({stateKey:hash}, null, "?state="+hash);
+					chartData.chartTracks = self.chartTracks();
+	                History.datastore[stateHash()] = {q:query, chartData: chartData};
+                    timeoutPushHistory = setTimeout(function() {
+                        History.pushState({stateKey:hash}, null, "?q="+encodeURIComponent(query));
+                    }, 2500);
 				} else {
 					self.chartTracks.push.apply(self.chartTracks, newItems);
-					History.datastore[stateHash()] = {q:query, tracks:self.chartTracks()};
+	                chartData.chartTracks = self.chartTracks();
+	                History.datastore[stateHash()] = {q:query, chartData: chartData};
 				}
 			};
 			self.populateResultsWithUrl = function(url, extract_function, error_callback) {
@@ -121,7 +132,7 @@ Array.prototype.shuffle = function() {
 						tracklist = res;
 					}
 					if (Array.isArray(tracklist) && tracklist.length>0) {
-						self.current_url = url;
+						self.current_url(url);
 						console.log(url);
 						self.pushBatch(tracklist, 'replace');
 					} else {
@@ -130,6 +141,17 @@ Array.prototype.shuffle = function() {
 						}
 					}
 					Spank.busy.off();
+				});
+			};
+			self.getSimilar = function(data) {
+				var similar_url = "http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=@&track=#&autocorrect=1&limit=200&api_key=0325c588426d1889087a065994d30fa1&format=json";
+				var url = similar_url.replace("@", encodeURIComponent(data.artist)).replace("#", encodeURIComponent(data.title));
+				self.current_url(url);
+				self.ok_to_fetch_more(false);
+				self.populateResultsWithUrl(url, function extract(res) {
+					return res.similartracks.track;
+				}, function noresults() {
+					window.notify.error("Couldn't find any similar songs!");
 				});
 			};
 			self.addToShoppingCart = function(data, event) {

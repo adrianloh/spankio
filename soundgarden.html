@@ -415,7 +415,7 @@
             <!--<ul id="history-stream-list" data-bind="sortable: {data: stream, afterMove: saveHistory }">-->
             <ul id="history-stream-list" data-bind="foreach: stream">
                 <!-- ko if: typeof($data)==='object' -->
-                <li class="tweetItem" data-bind="attr: { url: url }, cartDeleteIcons:$data">
+                <li class="tweetItem" data-bind="attr: { url: url, artist: artist, songtitle: title }, cartDeleteIcons:$data">
                     <img class="tweetThumb" src="/img/grey.gif" onerror="ImgError(this)" data-bind="pickupStreamItems:$data, attr: { src : thumb }" />
                     <a class="tweetDownloadLink" href="#" data-bind="event: { mouseover: $root.downloadHistoryItemOnClick }">
                         <img class="tweetDownload" src="/img/cart.png" />
@@ -557,6 +557,7 @@
         /* Hide the customization panel of 360 player  */
         #config-panel { display:none; }
     </style>
+
     <!-- 360 Player STUFF END-->
 
     <script type="text/javascript" src="/js/history.js/scripts/bundled/html5/jquery.history.js"></script>

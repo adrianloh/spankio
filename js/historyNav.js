@@ -17,12 +17,26 @@
 		var k = State.data.stateKey;
 		if (History.datastore.hasOwnProperty(k)) {
 			var data = History.datastore[k];
-			if (data.hasOwnProperty('tracks')) {
-				Spank.charts.chartTracks(data.tracks);
-				Spank.charts.chartTracks.valueHasMutated();
+			if (data.hasOwnProperty('chartData')) {
+				$.each(data.chartData, function(k,v) {
+					Spank.charts[k](v);
+					Spank.charts[k].valueHasMutated();
+				});
 			}
 			if (data.hasOwnProperty('q')) {
 				$("#searchField").val(data.q);
+			}
+		} else {
+			var queries = {};
+			$.each(document.location.search.substr(1).split('&'),function(c,q){
+				var i = q.split('=');
+				queries[i[0].toString()] = decodeURIComponent(i[1].toString());
+			});
+			//console.log(queries);
+			if (queries.hasOwnProperty("q")) {
+				if (queries.q!=='Search') {
+					$("#searchField").val(queries.q).trigger("keyup");
+				}
 			}
 		}
 	});
