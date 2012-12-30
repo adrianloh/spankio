@@ -409,6 +409,7 @@
             <div id="history-filter-container">
                 <div class="history-filter-container2">
                     <input type="text" id="history-filter" value="" class="text-input" />
+                    <i class="icon-remove-circle historyFilterCancel"></i>
                 </div>
             </div>
             <div id="history-stream-list-container">
@@ -418,9 +419,11 @@
                 <li class="tweetItem" data-bind="attr: { url: url, artist: artist, songtitle: title }, cartDeleteIcons:$data">
                     <img class="tweetThumb" src="/img/grey.gif" onerror="ImgError(this)" data-bind="pickupStreamItems:$data, attr: { src : thumb }" />
                     <a class="tweetDownloadLink" href="#" data-bind="event: { mouseover: $root.downloadHistoryItemOnClick }">
-                        <img class="tweetDownload" src="/img/cart.png" />
+                        <i class="icon-download-alt tweetDownload"></i>
+                        <!--<img class="tweetDownload" src="/img/cart.png" />-->
                     </a>
-                    <img class="tweetDelete" src="/img/deleteTweet.png" data-bind="click: $root.deleteHistoryItemOnClick" />
+                    <i class="icon-remove-sign tweetDelete" data-bind="click: $root.deleteHistoryItemOnClick"></i>
+                    <!--<img class="tweetDelete" src="/img/deleteTweet.png" data-bind="click: $root.deleteHistoryItemOnClick" />-->
                     <div class="tweetDetails" data-bind="click: $root.playHistoryItemOnClick">
                         <div class="tweetTrackName" data-bind="text: title"></div>
                         <div class="tweetTrackArtist" data-bind="text: artist"></div>

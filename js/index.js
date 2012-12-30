@@ -106,8 +106,8 @@
 					attempts = 0;
 					var trackResults = data.response.slice(1),
 						resultsTotal = trackResults.length,
-						lick = '<img class="lickButton" src="/img/play.png" thumb="@THUMB@" mxid="@MXID@" artist="@ARTIST@" songtitle="@TITLE@" url="@URL@" direct="@DIRECT@"/>',
-						plus = '<img class="lickButton" src="/img/plus.png" thumb="@THUMB@" mxid="@MXID@" artist="@ARTIST@" songtitle="@TITLE@" url="@URL@" direct="@DIRECT@"/>';
+						lick = '<i class="icon-play-circle lickButton" src="/img/play.png" thumb="@THUMB@" mxid="@MXID@" artist="@ARTIST@" songtitle="@TITLE@" url="@URL@" direct="@DIRECT@"/></i>',
+						plus = '<i class="icon-plus-sign lickButton" src="/img/plus.png" thumb="@THUMB@" mxid="@MXID@" artist="@ARTIST@" songtitle="@TITLE@" url="@URL@" direct="@DIRECT@"/></i>';
 					trackResults.forEach(function (track) {
 						track.mxid = params.mxid;
 						var trackAttr = [],
@@ -256,15 +256,14 @@
 			minimumSearchLength: 2
 		});
 
-//		streamFilterField.blur(function() {
-//            var tweetItems = document.getElementsByClassName("tweetItem"),
-//                i = tweetItems.length;
-//            setTimeout(function() {
-//                while (i--) {
-//                    tweetItems[i].style.display = "list-item";
-//                }
-//            },2000);
-//		});
+		$(".historyFilterCancel").click(function() {
+            var tweetItems = document.getElementsByClassName("tweetItem"),
+                i = tweetItems.length;
+			$("#history-filter").val("Filter stream");
+			while (i--) {
+				tweetItems[i].style.display = "list-item";
+			}
+		});
 
 		$(".lickButton").live('click', function prependVKTrackToHistoryAndPlay() {
 			var button = $(this),

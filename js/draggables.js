@@ -23,6 +23,7 @@
 					li.find(".tweetDelete")[mode]();
 					li.find(".tweetDownload")[mode]();
 				}
+				display('hide');
 				li.mouseover(function() {
 					var thisGift = li.find('.tweetGift');
 					if (thisGift.length>0) {
