@@ -21,7 +21,7 @@
 
 	$(document).ready(function() {
 
-		$('#playlists-scroller-list').bxSlider({
+		$('#playlists-scroller-list-me').bxSlider({
 			minSlides: 4,
 			maxSlides: 7,
 			slideWidth: 130,
@@ -216,7 +216,7 @@
 			}
 		};
 
-		ko.applyBindings(Spank.playlistScroller, document.getElementById('playlistScroller'));
+		ko.applyBindings(Spank.playlistScroller, document.getElementById('playlists-scroller-list-me'));
 
 		Spank.playlistScroller.playlistItems.subscribe(function(list) {
 			Spank.rescanChildren();

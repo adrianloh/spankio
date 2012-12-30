@@ -723,7 +723,7 @@ input:-ms-input-placeholder {
 }
 
 .lickButton {
-    color: #B3B3B3;
+    color: #AFAFAF;
     font-size: 25px;
     margin-right: -8px;
     height: 25px;
@@ -732,7 +732,7 @@ input:-ms-input-placeholder {
 }
 
 .lickButton:hover {
-    color: #76ec38;
+    color: #71FF27;
 }
 
 .resultsBody {

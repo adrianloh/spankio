@@ -494,27 +494,23 @@
             </ul>
         </div>
 
-        <!--<div id="playlistScroller">-->
-            <!--<ul id="playlists-scroller-list" data-bind="sortable: {data: dockItemsMe, beforeMove: moveState.beforeMovePlaylistItem, afterMove: moveState.afterMovePlaylistItem }">-->
-                <!--<li class="playlistEntry" data-bind="click: $root.onClick">-->
+        <div id="playlistScroller">
+            <ul id="playlists-scroller-list-me" data-bind="foreach: playlistItems">
+                <!-- ko if: $data!==undefined -->
+                <li class="playlistEntry" data-bind="css: { droppablePlaylist: url==='#' }">
+                    <img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />
+                    <div class="playlistName" data-bind="text: title()"></div>
+                </li>
+                <!-- /ko -->
+            </ul>
+            <!--<ul id="playlists-scroller-list-others" data-bind="foreach: playlistItems">-->
+                <!--&lt;!&ndash; ko if: $data!==undefined &ndash;&gt;-->
+                <!--<li class="playlistEntry" data-bind="css: { droppablePlaylist: url==='#' }">-->
                     <!--<img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />-->
                     <!--<div class="playlistName" data-bind="text: title()"></div>-->
                 <!--</li>-->
+                <!--&lt;!&ndash; /ko &ndash;&gt;-->
             <!--</ul>-->
-            <!--<div id="toggle-playlist-button">-->
-                <!--<button class="hideshow-playlist-button">Hide Playlists</button>-->
-            <!--</div>-->
-        <!--</div>-->
-
-        <div id="playlistScroller">
-                <ul id="playlists-scroller-list" data-bind="foreach: playlistItems">
-                    <!-- ko if: $data!==undefined -->
-                    <li class="playlistEntry" data-bind="css: { droppablePlaylist: url==='#' }">
-                        <img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />
-                        <div class="playlistName" data-bind="text: title()"></div>
-                    </li>
-                    <!-- /ko -->
-                </ul>
             <div id="toggle-playlist-button">
                 <button class="hideshow-playlist-button">Hide Playlists</button>
             </div>

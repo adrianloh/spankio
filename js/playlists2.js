@@ -8,6 +8,16 @@
 		};
 
 		var Playlist = {};
+
+		Playlist.makeBaseObject = function(ref)  {
+			var base = {};
+			base.root = ref;
+			base.owners = ref.child("owners");
+			base.title = ref.child("title");
+			base.tracklist = ref.child("list");
+			return base;
+		};
+
 		Playlist.updatePlaylistWithItem = function(snapshot) {
 			var userbase = snapshot.ref().parent().parent(),
 				username = userbase.name(),
@@ -17,11 +27,13 @@
 				thisPlaylistRef = playlists.child(refID),
 				existingKoo = Head.playlists.getByRef(refID);
 			if (existingKoo===null) {
-				// We're not interested in a playlist unless we are one of the owners
-				thisPlaylistRef.child("owners").on('value', function(snapshot) {
+				thisPlaylistRef.child("owners").on("value", function(snapshot) {
 					var ownersList = snapshot.val();
 					if (ownersList!==null) {
-						if (ownersList.indexOf(username)>=0 || ownersList.indexOf('everyone')>=0) {
+						// We're not interested in a playlist unless we're
+						// one of the owners, or the playlist is tagged with "everyone"
+						if (ownersList.indexOf('everyone')>=0 ||
+							ownersList.indexOf(username)>=0) {
 							var playlist = {
 								title: ko.observable(""),
 								url: "#",
@@ -36,6 +48,7 @@
 								Head.playlists.dockItemsMe.valueHasMutated();
 							} else {
 								Head.playlists.dockItemsOthers.unshift(playlist);
+								Head.playlists.dockItemsOthers.valueHasMutated();
 							}
 							Playlist.watchPlaylistInfo(thisPlaylistRef);
 						}
@@ -53,15 +66,6 @@
 		Playlist.watchPlaylistRefsBelongingTo = function(username) {
 			var playlistRefs = Head.users.child(username).child("playlistRefs");
 			playlistRefs.on('child_added', Playlist.updatePlaylistWithItem);
-		};
-
-		Playlist.makeBaseObject = function(ref)  {
-			var base = {};
-			base.root = ref;
-			base.owners = ref.child("owners");
-			base.title = ref.child("title");
-			base.tracklist = ref.child("list");
-			return base;
 		};
 
 		Playlist.watchPlaylistInfo = function(playlistRef) {
@@ -200,8 +204,8 @@
 		});
 
 		(function() {
-			var t = new Date().getTime(),
-				name = hex_md5(String(t)).slice(0,5),
+			var t = new Date().getTime().toString(),
+				name = hex_md5(t).slice(0,5),
 				playlist = {
 					title: ko.observable(name),
 					url: "#",
