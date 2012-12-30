@@ -21,7 +21,7 @@
 				thisPlaylistRef.child("owners").on('value', function(snapshot) {
 					var ownersList = snapshot.val();
 					if (ownersList!==null) {
-						if (ownersList.indexOf(username)>=0) {
+						if (ownersList.indexOf(username)>=0 || ownersList.indexOf('everyone')>=0) {
 							var playlist = {
 								title: ko.observable(""),
 								url: "#",
@@ -67,7 +67,6 @@
 		Playlist.watchPlaylistInfo = function(playlistRef) {
 			var titleRef = playlistRef.child("title"),
 				coverRef = playlistRef.child("list").child("0");
-
 			// Listen for changes of playlist tiles
 			titleRef.on('value', function(snapshot) {
 				var refID = snapshot.ref().parent().name(),
@@ -77,7 +76,6 @@
 					koo.title(newValue);
 				}
 			});
-
 			// Listen for changes of playlist covers
 			coverRef.on('value', function(snapshot) {
 				var refID = snapshot.ref().parent().parent().name(),
@@ -90,7 +88,7 @@
 		};
 
 		Playlist.watchPlaylistRefsBelongingTo(Spank.username);
-		Spank.base.me.child("playlistRefs").on('value', function(snapshot) {
+		Spank.base.me.child("playlistRefs").on("value", function(snapshot) {
 			var currentLayout = snapshot.val();
 			if (currentLayout!==null) {
 				var newDockItems = $.map(currentLayout, function(refID) {
@@ -202,7 +200,8 @@
 		});
 
 		(function() {
-			var name = hex_md5(String(new Date().getTime())).slice(0,5),
+			var t = new Date().getTime(),
+				name = hex_md5(String(t)).slice(0,5),
 				playlist = {
 					title: ko.observable(name),
 					url: "#",
