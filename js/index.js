@@ -29,6 +29,8 @@
 		});
 
 		Spank.lightBox = {
+			currentArtist: ko.observable(""),
+			currentTitle: ko.observable(""),
 			lyricsTitle: ko.observable(""),
 			lyricsText: ko.observable(""),
 			lyricsThumb: ko.observable(""),
@@ -42,6 +44,8 @@
 		//
 		var playlistScrollerWasVisible = false;
 		Spank.tearDownLightBox = function() {
+			Spank.lightBox.currentArtist("");
+			Spank.lightBox.currentTitle("");
 			Spank.lightBox.lyricsText("");
 			Spank.lightBox.lyricsTitle("");
 			Spank.lightBox.lyricsThumb("");
@@ -154,8 +158,15 @@
 			});
 		};
 
+		var timeoutUserIsTyping = setTimeout(function(){},0);
 		$.searchByWire = function(search_term) {
 			if (search_term==='Search') return;
+			clearTimeout(timeoutUserIsTyping);
+			Spank._userIsTyping = true;
+			timeoutUserIsTyping = setTimeout(function() {
+				Spank._userIsTyping = false;
+			}, 5000);
+			search_term = $.trim(search_term);
 			var queryVKDirectly = $("#myonoffswitch").is(":checked");
 			if (queryVKDirectly) {
 				setTimeout(function() {
@@ -177,29 +188,27 @@
 				Spank.tearDownLightBox();                                               // Close the lightbox
 				Spank.friends.visible(false);                                           // Close the friends list
 				$(".playlistEntry").css("border","5px solid rgb(204, 204, 204)");       // Don't highlight any playlist items
-				if ($.trim(search_term)!=='') {
-					setTimeout(function() {
-						Spank.busy.on();
-						if (search_term.match(/similarto/)) {
-							try {
-								var matches = search_term.match(/similarto:(.+)---(.+)/),
-									data = {
-										artist: $.trim(matches[1]).toLowerCase(),
-										title: $.trim(matches[2]).toLowerCase()
-									};
-								Spank.charts.getSimilar(data);
-							} catch(err) { }
-						} else {
-							var url = '/mxsearch?q=#&page=1'.replace("#",search_term);
-							Spank.charts.populateResultsWithUrl(url, function extract(res) {
-								Spank.busy.off();
-								return res.message.body.track_list;
-							}, function onNoResults() {
-								window.notify.error("No results.",'force');
-								Spank.busy.off();
-							});
-						}
-					}, 0);
+				if (search_term!=='') {
+					Spank.busy.on();
+					if (search_term.match(/similarto/)) {
+						try {
+							var matches = search_term.match(/similarto:(.+)---(.+)/),
+								data = {
+									artist: $.trim(matches[1]).toLowerCase(),
+									title: $.trim(matches[2]).toLowerCase()
+								};
+							Spank.charts.getSimilar(data);
+						} catch(err) { }
+					} else {
+						var url = '/mxsearch?q=#&page=1'.replace("#",search_term);
+						Spank.charts.populateResultsWithUrl(url, function extract(res) {
+							Spank.busy.off();
+							return res.message.body.track_list;
+						}, function onNoResults() {
+							window.notify.error("No results.",'force');
+							Spank.busy.off();
+						});
+					}
 				} else {
 					return false;
 				}
@@ -238,6 +247,7 @@
 
         streamFilterField.livesearch({
 			searchCallback: function(input) {
+				if (input.length===0 || input==='Filter stream') return;
                 var re = new RegExp(input, "i"),
                     tweetItems = document.getElementsByClassName("tweetItem"),
                     i = tweetItems.length,
@@ -245,9 +255,9 @@
                 while (i--) {
                     li = tweetItems[i];
                     if (li.getAttribute("artist").match(re) || li.getAttribute("songtitle").match(re)) {
-                        li.style.display = "list-item";
+	                    li.className = "tweetItem tweetShow";
                     } else {
-                        li.style.display = "none";
+                        li.className = "tweetItem";
                     }
                 }
 			},
@@ -257,11 +267,11 @@
 		});
 
 		$(".historyFilterCancel").click(function() {
-            var tweetItems = document.getElementsByClassName("tweetItem"),
-                i = tweetItems.length;
-			$("#history-filter").val("Filter stream");
+			var tweetItems = document.getElementsByClassName("tweetItem"),
+				i = tweetItems.length;
+			$("#history-filter").val("").trigger("blur");
 			while (i--) {
-				tweetItems[i].style.display = "list-item";
+				tweetItems[i].className = "tweetItem tweetShow";
 			}
 		});
 
@@ -334,7 +344,7 @@
 					} catch(err) { }
 				});
 			}
-			if (track.mxid=='na') {
+			if (track.mxid==='na') {
 				mxMatchOne(track.title, track.artist, function onmatch(o) {
 					getLyrics(o.track_id);
 				}, function onerr() {
@@ -368,7 +378,9 @@
 				searchVK({q:query_string,
 					mxid:mxid, thumb:thumb});
 				Spank.lightBox.lyricsThumb(thumb);
-				Spank.lightBox.lyricsTitle(title + " | " + artist);
+				Spank.lightBox.currentArtist(artist);
+				Spank.lightBox.currentTitle(title);
+				Spank.lightBox.lyricsTitle(title + " - " + artist);
 				playlistScrollerWasVisible = Spank.playlistScroller.visible();
 				Spank.playlistScroller.visible(false);
 				lightBox.slideDown('fast','swing', function() {

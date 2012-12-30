@@ -105,7 +105,6 @@ window.fbAsyncInit = function checkFacebookStatus() {
 			};
 		} else {
 			clearTimeout(loginTimeout);
-//			$("#fb-login").show();
 			//user is not connected to your app or logged out
 			button.innerHTML = 'Login';
 			button.onclick = function() {

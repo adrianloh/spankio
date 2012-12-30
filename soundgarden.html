@@ -416,7 +416,7 @@
             <!--<ul id="history-stream-list" data-bind="sortable: {data: stream, afterMove: saveHistory }">-->
             <ul id="history-stream-list" data-bind="foreach: stream">
                 <!-- ko if: typeof($data)==='object' -->
-                <li class="tweetItem" data-bind="attr: { url: url, artist: artist, songtitle: title }, cartDeleteIcons:$data">
+                <li class="tweetItem tweetShow" data-bind="attr: { url: url, artist: artist, songtitle: title }, cartDeleteIcons:$data">
                     <img class="tweetThumb" src="/img/grey.gif" onerror="ImgError(this)" data-bind="pickupStreamItems:$data, attr: { src : thumb }" />
                     <a class="tweetDownloadLink" href="#" data-bind="event: { mouseover: $root.downloadHistoryItemOnClick }">
                         <i class="icon-download-alt tweetDownload"></i>

@@ -26,8 +26,6 @@
 			} else if (typeof(o.className)==='string' && o.className.match(/playlistEntry/)) {
 				if ($(o).find("img").attr("url")==="#") {
 					userPlaylists.push(o);
-				} else {
-					console.warn("Got not user playlist");
 				}
 			} else {
 				console.error("bindDroppablePlaylists asked to bind unknown object. Check thingee...")

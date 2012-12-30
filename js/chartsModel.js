@@ -96,28 +96,30 @@ Array.prototype.shuffle = function() {
 					}
 				});
                 clearTimeout(timeoutPushHistory);
-				var query = $("#searchField").val(),
+				var query = $.trim($("#searchField").val()),
 					chartData = {
 						current_url: self.current_url(),
 						ok_to_fetch_more: self.ok_to_fetch_more(),
 						chartTracks: null
-                    };
+					},
+					setState = function(hash) {
+						hash = hash || stateHash();
+						chartData.chartTracks = self.chartTracks();
+						History.datastore[hash] = {q:query, chartData: chartData};
+					};
                 if (mode && mode==='unshift') {
 					self.chartTracks.unshift.apply(self.chartTracks, newItems);
-	                chartData.chartTracks = self.chartTracks();
-					History.datastore[stateHash()] = {q:query, chartData: chartData};
+	                setState();
 				} else if (mode && mode==='replace') {
 					self.chartTracks(newItems);
 					var hash = stateHash();
-					chartData.chartTracks = self.chartTracks();
-	                History.datastore[stateHash()] = {q:query, chartData: chartData};
+	                setState(hash);
                     timeoutPushHistory = setTimeout(function() {
-                        History.pushState({stateKey:hash}, null, "?q="+encodeURIComponent(query));
+	                    History.pushState({stateKey:hash}, null, "?q="+encodeURIComponent(query));
                     }, 2500);
 				} else {
 					self.chartTracks.push.apply(self.chartTracks, newItems);
-	                chartData.chartTracks = self.chartTracks();
-	                History.datastore[stateHash()] = {q:query, chartData: chartData};
+	                setState();
 				}
 			};
 			self.populateResultsWithUrl = function(url, extract_function, error_callback) {
@@ -133,7 +135,6 @@ Array.prototype.shuffle = function() {
 					}
 					if (Array.isArray(tracklist) && tracklist.length>0) {
 						self.current_url(url);
-						console.log(url);
 						self.pushBatch(tracklist, 'replace');
 					} else {
 						if (error_callback!==undefined) {

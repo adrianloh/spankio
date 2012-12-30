@@ -14,7 +14,8 @@
 	History.Adapter.bind(window,'statechange',function() { // Note: We are using statechange instead of popstate
 		var State = History.getState(); // Note: We are using History.getState() instead of event.state
 //		History.log(State.data, State.title, State.url);
-		var k = State.data.stateKey;
+		var k = State.data.stateKey,
+			searchField = $("#searchField");
 		if (History.datastore.hasOwnProperty(k)) {
 			var data = History.datastore[k];
 			if (data.hasOwnProperty('chartData')) {
@@ -24,7 +25,10 @@
 				});
 			}
 			if (data.hasOwnProperty('q')) {
-				$("#searchField").val(data.q);
+				if (!Spank._userIsTyping) {
+					searchField.val(data.q);
+				}
+				//console.log($(document.activeElement)[0].tagName);
 			}
 		} else {
 			var queries = {};
@@ -35,7 +39,7 @@
 			//console.log(queries);
 			if (queries.hasOwnProperty("q")) {
 				if (queries.q!=='Search') {
-					$("#searchField").val(queries.q).trigger("keyup");
+					searchField.val(queries.q).trigger("keyup");
 				}
 			}
 		}
