@@ -419,10 +419,10 @@
                 <li class="tweetItem tweetShow" data-bind="attr: { url: url, artist: artist, songtitle: title }, cartDeleteIcons:$data">
                     <img class="tweetThumb" src="/img/grey.gif" onerror="ImgError(this)" data-bind="pickupStreamItems:$data, attr: { src : thumb }" />
                     <a class="tweetDownloadLink" href="#" data-bind="event: { mouseover: $root.downloadHistoryItemOnClick }">
-                        <i class="icon-download-alt tweetDownload"></i>
+                        <i class="tweetOpsHide icon-download-alt tweetDownload"></i>
                         <!--<img class="tweetDownload" src="/img/cart.png" />-->
                     </a>
-                    <i class="icon-remove-sign tweetDelete" data-bind="click: $root.deleteHistoryItemOnClick"></i>
+                    <i class="tweetOpsHide icon-remove-sign tweetDelete" data-bind="click: $root.deleteHistoryItemOnClick"></i>
                     <!--<img class="tweetDelete" src="/img/deleteTweet.png" data-bind="click: $root.deleteHistoryItemOnClick" />-->
                     <div class="tweetDetails" data-bind="click: $root.playHistoryItemOnClick">
                         <div class="tweetTrackName" data-bind="text: title"></div>
@@ -495,42 +495,68 @@
         </div>
 
         <div id="playlistScroller">
-            <ul id="playlists-scroller-list-charts" data-bind="foreach: chartItems">
-                <!-- ko if: $data!==undefined -->
-                <li class="playlistEntry">
-                    <img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />
-                    <div class="playlistName" data-bind="text: title"></div>
-                </li>
-                <!-- /ko -->
-            </ul>
-            <ul id="playlists-scroller-list-me" data-bind="foreach: dockItemsMe">
-                <!-- ko if: $data!==undefined -->
-                <li class="playlistEntry" data-bind="css: { droppablePlaylist: $data.url==='#' }">
-                    <img class="playlistThumb" data-bind="attr: { src: $data.cover(), title: $data.title(), url: $data.url }" />
-                    <div class="playlistName" data-bind="text: $data.title()"></div>
-                </li>
-                <!-- /ko -->
-            </ul>
-            <ul id="playlists-scroller-list-friends" data-bind="foreach: dockItemsFriends">
-                <!-- ko if: $data!==undefined -->
-                <li class="playlistEntry" data-bind="css: { droppablePlaylist: url==='#' }">
-                    <img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />
-                    <div class="playlistName" data-bind="text: title()"></div>
-                </li>
-                <!-- /ko -->
-            </ul>
+            <div class="sliderNavLeft">
+                <div class="sbox-valign" data-direction="left">
+                    <i class="icon-caret-left navButton"></i>
+                </div>
+                <div class="square-one-valign">
+                    <i class="icon-home square-one-inner"></i>
+                </div>
+                <div class="sbox-valign" data-direction="right">
+                    <i class="icon-caret-right navButton"></i>
+                </div>
+            </div>
+            <div class="sliderNavRight">
+                <div class="sbox-valign" data-direction="left">
+                    <i class="icon-caret-left navButton"></i>
+                </div>
+                <div class="square-one-valign">
+                    <i class="icon-home square-one-inner"></i>
+                </div>
+                <div class="sbox-valign" data-direction="right">
+                    <i class="icon-caret-right navButton"></i>
+                </div>
+            </div>
+            <div class="viewport">
+                <div class="slider-container">
+                    <ul id="playlists-scroller-list-charts" data-bind="foreach: chartItems">
+                        <!-- ko if: $data!==undefined -->
+                        <li class="playlistEntry">
+                            <img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />
+                            <div class="playlistName" data-bind="text: title"></div>
+                        </li>
+                        <!-- /ko -->
+                    </ul>
+                    <ul id="playlists-scroller-list-me" data-bind="foreach: dockItemsMe">
+                        <!-- ko if: $data!==undefined -->
+                        <li class="playlistEntry" data-bind="css: { droppablePlaylist: $data.url==='#' }">
+                            <img class="playlistThumb" data-bind="attr: { src: $data.cover(), title: $data.title(), url: $data.url }" />
+                            <div class="playlistName" data-bind="text: $data.title()"></div>
+                        </li>
+                        <!-- /ko -->
+                    </ul>
+                    <ul id="playlists-scroller-list-friends" data-bind="foreach: dockItemsFriends">
+                        <!-- ko if: $data!==undefined -->
+                        <li class="playlistEntry" data-bind="css: { droppablePlaylist: url==='#' }">
+                            <img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />
+                            <div class="playlistName" data-bind="text: title()"></div>
+                        </li>
+                        <!-- /ko -->
+                    </ul>
+                </div>
+            </div>
             <div id="playlist-types-buttons">
                 <div id="ptcenter">
-                    <div class="toggle-playlist-btn"><i class="icon-chevron-down"></i></div>
-                    <input type="radio" id="ppi-charts" name="ppi" class="ppi-checkbox">
+                    <div id="toggle-dock-button" class="toggle-playlist-btn"><i class="icon-caret-down"></i></div>
+                    <input type="radio" id="ppi-charts" data-target="#playlists-scroller-list-charts" name="ppi" class="ppi-checkbox">
                     <label class="playlist-type-btn" value="ppi-charts" for="ppi-charts">
                         <i class="icon-music ppi"></i>Charts
                     </label>
-                    <input type="radio" id="ppi-me" name="ppi" class="ppi-checkbox">
+                    <input type="radio" id="ppi-me" data-target="#playlists-scroller-list-me" name="ppi" class="ppi-checkbox">
                     <label class="playlist-type-btn" value="ppi-me" for="ppi-me">
                         <i class="icon-music ppi"></i>Mine
                     </label>
-                    <input type="radio" id="ppi-friends" name="ppi" class="ppi-checkbox">
+                    <input type="radio" id="ppi-friends" data-target="#playlists-scroller-list-friends" name="ppi" class="ppi-checkbox">
                     <label class="playlist-type-btn" value="ppi-friends" for="ppi-friends">
                         <i class="icon-music ppi"></i>Friends
                     </label>

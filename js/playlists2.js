@@ -3,22 +3,30 @@
 	var
 	chartUrls = {
 		lastfm_base: "http://ws.audioscrobbler.com/2.0/?method=METHOD&page=1&limit=200&api_key=0325c588426d1889087a065994d30fa1&format=json&callback=?",
-		billboards_base: "http://api.musixmatch.com/ws/1.1/chart.tracks.get?page=1&page_size=100&country=#&f_has_lyrics=1&apikey=316bd7524d833bb192d98be44fe43017&format=jsonp&callback=?",
+		billboards_base: "http://api.musixmatch.com/ws/1.1/chart.tracks.get?page=1&page_size=100&country=#&f_has_lyrics=0&apikey=316bd7524d833bb192d98be44fe43017&format=jsonp&callback=?",
+		itunes_base: "https://itunes.apple.com/#/rss/topsongs/limit=300/explicit=true/json",
 		lastfm_hyped: function () { return this.lastfm_base.replace("METHOD","chart.gethypedtracks"); },
 		lastfm_top: function () { return this.lastfm_base.replace("METHOD","chart.gettoptracks"); },
-		lastfm_loved: function () { return this.lastfm_base.replace("METHOD","chart.getlovedtracks"); },
-		billboards_uk: function () { return this.billboards_base.replace("#","uk"); },
-		billboards_us: function () { return this.billboards_base.replace("#","us"); },
-		itunes_store: function () { return "https://itunes.apple.com/us/rss/topsongs/limit=300/explicit=true/json"; }
+		lastfm_loved: function () { return this.lastfm_base.replace("METHOD","chart.getlovedtracks"); }
 	},
 	chartPlaylistItems = [
-		{title: 'Billboards UK', cover: '/img/bill_uk.jpg', url: chartUrls.billboards_uk() },
-		{title: 'Billboards US', cover: '/img/bill_us.jpg', url: chartUrls.billboards_us() },
 		{title: 'last.fm Top', cover: '/img/last_top.png', url: chartUrls.lastfm_top() },
 		{title: 'last.fm Loved', cover: '/img/last_loved.png', url: chartUrls.lastfm_loved() },
-		{title: 'last.fm Hyped', cover: '/img/last_hyped.png', url: chartUrls.lastfm_hyped() },
-		{title: 'iTunes Store', cover: '/img/iTunes.png', url: chartUrls.itunes_store() }
+		{title: 'last.fm Hyped', cover: '/img/last_hyped.png', url: chartUrls.lastfm_hyped() }
 	];
+
+	["JP", "DE", "US", "UK"].forEach(function(code) {
+		var bUrl = chartUrls.billboards_base.replace("#", code.toLowerCase()),
+			bCover = '/img/bill_#.jpg'.replace("#", code),
+			bp = {title: 'Billboards ' + code, cover: bCover, url: bUrl};
+		chartPlaylistItems.unshift(bp);
+	});
+
+	["US", "DE", "JP", "IN", "AR"].forEach(function(code) {
+		var iUrl = chartUrls.itunes_base.replace("#", code.toLowerCase()),
+			ip = {title: 'iTunes ' + code, cover: '/img/iTunes.png', url: iUrl };
+		chartPlaylistItems.push(ip);
+	});
 
 	$(document).one("baseReady", function() {
 
@@ -71,8 +79,9 @@
 							Playlist.watchPlaylistInfo(thisPlaylistRef);
 						}
 					} else {
-						// if ownersList is suddenly null, it means a playlistRef we were listening
+						// If ownersList is suddenly null, it means a playlistRef we were listening
 						// to has just been deleted. Always true?
+						Playlist.unwatchPlaylistInfo(thisPlaylistRef);
 						Head.playlists.deletePlaylistItemWithRef(refID);
 					}
 				});
@@ -82,6 +91,7 @@
 					if (username===Spank.username || username==='everyone') {
 						// The owner of this playlist has stopped sharing with
 						// either me or, everyone
+						Playlist.unwatchPlaylistInfo(thisPlaylistRef);
 						Head.playlists.deletePlaylistItemWithRef(refID);
 					}
 				})
@@ -99,27 +109,38 @@
 
 		Spank.watchPlaylistRefsBelongingTo = Playlist.watchPlaylistRefsBelongingTo;
 
+		function watchTitle(snapshot) {
+			var refID = snapshot.ref().parent().name(),
+				newValue = snapshot.val(),
+				koo = Head.playlists.getByRef(refID);
+			if (newValue!==null && koo!==null) {
+				koo.title(newValue);
+			}
+		}
+
+		function watchCover(snapshot) {
+			var refID = snapshot.ref().parent().parent().name(),
+				newValue = snapshot.val(),
+				koo = Head.playlists.getByRef(refID);
+			if (newValue!==null && newValue.hasOwnProperty("thumb") && koo!==null) {
+				koo.cover(newValue.thumb);
+			}
+		}
+
 		Playlist.watchPlaylistInfo = function(playlistRef) {
 			var titleRef = playlistRef.child("title"),
 				coverRef = playlistRef.child("list").child("0");
 			// Listen for changes of playlist tiles
-			titleRef.on('value', function(snapshot) {
-				var refID = snapshot.ref().parent().name(),
-					newValue = snapshot.val(),
-					koo = Head.playlists.getByRef(refID);
-				if (newValue!==null && koo!==null) {
-					koo.title(newValue);
-				}
-			});
+			titleRef.on('value', watchTitle);
 			// Listen for changes of playlist covers
-			coverRef.on('value', function(snapshot) {
-				var refID = snapshot.ref().parent().parent().name(),
-					newValue = snapshot.val(),
-					koo = Head.playlists.getByRef(refID);
-				if (newValue!==null && newValue.hasOwnProperty("thumb") && koo!==null) {
-					koo.cover(newValue.thumb);
-				}
-			});
+			coverRef.on('value', watchCover);
+		};
+
+		Playlist.unwatchPlaylistInfo = function(playlistRef) {
+			var titleRef = playlistRef.child("title"),
+				coverRef = playlistRef.child("list").child("0");
+			titleRef.off('value', watchTitle);
+			coverRef.off('value', watchCover);
 		};
 
 		Playlist.watchPlaylistRefsBelongingTo(Spank.username);
@@ -250,21 +271,21 @@
 		//Spank.playlistScroller.push({cover:'/img/emptyplaylist.jpg'});
 
 		Head.playlists.visible.subscribe(function(isTrue) {
-			var button = $(".toggle-playlist-btn"),
+			var button = $("#toggle-dock-button"),
 				scroller = $("#playlistScroller"),
 				modes = {true: 'removeClass', false: 'addClass'};
-			button.children(0).toggleClass("icon-chevron-down icon-chevron-up");
+			button.children(0).toggleClass("icon-caret-down icon-caret-up");
 			scroller[modes[isTrue]]("docked");
 		});
 
-		$(".toggle-playlist-btn").click(function() {
+		$("#toggle-dock-button").click(function() {
 			var current = Head.playlists.visible();
 			Head.playlists.visible(!current);
 		});
 
 		var docks = ['charts', 'me', 'friends'],
 			PlaylistDocks = {
-				charts: ko.observable(true),
+				charts: ko.observable(false),
 				me: ko.observable(false),
 				friends: ko.observable(false)
 			},
@@ -275,16 +296,35 @@
 					docks.filter(function(name) { return name!==key }).forEach(function(name) {
 						PlaylistDocks[name](false);
 					});
+					$("#ppi-" + key).prop("checked", isTrue);
 				}
-				$("#ppi-" + key).prop("checked", isTrue);
 				$("#playlists-scroller-list-" + key)[modes[isTrue]]();
 			});
 		});
+
+		PlaylistDocks.charts(true);
 
 		$(".playlist-type-btn").click(function() {
 			var name = $(this).attr("value").split("-")[1];
 			Head.playlists.visible(true);
 			PlaylistDocks[name](true);
+		});
+
+		var directionBoxes = $(".sbox-valign");
+		directionBoxes.click(function() {
+			var direction = $(this).attr("data-direction"),
+				targetSlider = $($(".ppi-checkbox:checked").attr("data-target")),
+				animate = function() {
+					var current = parseInt(targetSlider.css("margin-left")),
+						moveBy = direction==='right' ? current-400 : current+400;
+					targetSlider.css('margin-left', moveBy);
+				};
+			animate();
+		});
+
+		$(".square-one-valign").click(function() {
+			var targetSlider = $($(".ppi-checkbox:checked").attr("data-target"));
+			targetSlider.css('margin-left', 0);
 		});
 
 

@@ -4,12 +4,8 @@
 
 		function appendToResults(title, url, tracklist, this_image, reset) {
 			var highlightCurrentPlaylistItem = function(this_image) {
-				var default_color = "5px solid rgb(204, 204, 204)",
-					highlight_border = "5px solid rgb(28, 205, 213)";
-				$(".playlistEntry").filter(function () {
-					return $(this).css("border")===highlight_border;
-				}).css("border", default_color);
-				this_image.parent().css("border", highlight_border);
+				$(".playlistEntry").removeClass("activePlaylist");
+				this_image.parent().addClass("activePlaylist");
 			};
 			Spank.charts.currentPlaylistTitle(title);   // NOTE: This is undefined for all results *except* when a user's playlist is open
 			Spank.charts.current_url(url);             // This is "#" when a user's playlist is open

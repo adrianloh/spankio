@@ -10,6 +10,19 @@
 			$(this).css("z-index","1");
 		});
 
+		var tweetItems = $(".tweetItem");
+		tweetItems.live('mouseover', function() {
+			var elem = $(this);
+			elem.find(".tweetDelete").removeClass("tweetOpsHide");
+			elem.find(".tweetDownload").removeClass("tweetOpsHide");
+		});
+
+		tweetItems.live('mouseout', function() {
+			var elem = $(this);
+			elem.find(".tweetDelete").addClass("tweetOpsHide");
+			elem.find(".tweetDownload").addClass("tweetOpsHide");
+		});
+
 		ko.bindingHandlers.cartDeleteIcons = {
 			init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 				var data = ko.toJS(valueAccessor()),
@@ -18,27 +31,20 @@
 					var img = '<img class="tweetGift" src="/img/gift.png" from="@" message="#" />';
 					img = img.replace("@", data.gift.from).replace("#", data.gift.message);
 					li.prepend(img);
+					li.mouseover(function() {
+						var thisGift = li.find('.tweetGift');
+						if (thisGift.length>0) {
+							$(".giftFrom:first").text("from: " + thisGift.attr("from"));
+							$(".giftMessage:first").text(thisGift.attr("message"));
+							var pos = li.offset(),
+								top = parseInt(pos.top-70),
+								left = parseInt(pos.left);
+							$(".giftPopup").css("top", top).css("left", left).show();
+						}
+					}).mouseout(function() {
+						$(".giftPopup").hide();
+					});
 				}
-				function display(mode) {
-					li.find(".tweetDelete")[mode]();
-					li.find(".tweetDownload")[mode]();
-				}
-				display('hide');
-				li.mouseover(function() {
-					var thisGift = li.find('.tweetGift');
-					if (thisGift.length>0) {
-						$(".giftFrom:first").text("from: " + thisGift.attr("from"));
-						$(".giftMessage:first").text(thisGift.attr("message"));
-						var pos = li.offset(),
-							top = parseInt(pos.top-70),
-							left = parseInt(pos.left);
-						$(".giftPopup").css("top", top).css("left", left).show();
-					}
-					display('show')
-				}).mouseout(function() {
-					$(".giftPopup").hide();
-					display('hide')
-				});
 			}
 		};
 

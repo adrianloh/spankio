@@ -1,19 +1,32 @@
 #playlistScroller {
     position: fixed;
-    left:8%;
-    bottom:0;
-    padding: 6px 15px 0 15px;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 144px;
     z-index: 10;
+    padding: 6px 0 0 0;
     background-color: rgba(49, 49, 49, 0.84);
-    width:80%;
-    height:160px;
-    -webkit-border-radius: 1em;
-    border-radius: 1em;
+    -webkit-border-radius: 0em;
+    border-radius: 0em;
     -webkit-transition: all .4s ease-in-out;
 }
 
 .docked {
-    -webkit-transform: translate(0px, 162px);
+    -webkit-transform: translateY(150px);
+}
+
+.viewport {
+    margin: 0 auto;
+    width: 90%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.slider-container {
+    width: 2000%;
+    height: 156px;
+    /*background-color: #add8e6;*/
 }
 
 #toggle-playlist-button {
@@ -36,8 +49,8 @@
 	margin: 0;
 	padding: 0;
 	list-style: none;
-	display: inline-block;
-	height: 250px;
+	display: none;
+    -webkit-transition: all .25s ease-out;
 }
 
 .playlistName {
@@ -48,29 +61,35 @@
 
 #playlistScroller li {
     text-align: center;
-    background-color: #f0f0f0;
-    border: 5px solid #ccc;
-    height: 134px;
+    background-color: #F0F0F0;
+    border: 2px solid #424242;
+    height: 130px;
     padding: 0;
-    margin: 6px;
+    padding-top: 2px;
+    margin: 0 1px;
+    width: 106px;
     display: block;
     float: left;
     -webkit-transition: all .2s ease-in-out;
 }
 
+.activePlaylist {
+    border: 2px solid rgb(0, 228, 222);
+}
+
 #playlist-types-buttons {
     font: 13px "PT Sans Narrow";
     position: absolute;
-    top: -30px;
+    top: -32px;
     margin: 10px auto;
     width: 100%;
     left: 0;
 }
 
 #ptcenter {
-    width: 334px;
+    width: 339px;
     margin: 0 auto;
-    background: #00AFAF
+    background: rgba(31, 31, 31, 0.8);
 }
 
 .ppi-checkbox {
@@ -79,23 +98,24 @@
 
 .playlist-type-btn {
     cursor: pointer;
-    width: 100px;
+    width: 99px;
     color: white;
     display: inline-block;
     background-color: rgba(49, 49, 49, 0.9);
-    height: 18px;
+    border:1px solid rgba(49, 49, 49, 0.9);
+    height: 17px;
     padding-top: 3px;
-    /*-webkit-transition: background-color 0.3s ease-out;*/
+    -webkit-transition: all 0.3s ease-out;
 }
 
 .playlist-type-btn:hover {
-    color: #545454;
-    background-color: #55EEF5;
+    border:1px solid #55EEF5;
 }
 
 .ppi-checkbox:checked + .playlist-type-btn {
     color: #545454;
     background-color: #55EEF5;
+    border:1px solid #55EEF5;
 }
 
 .icon-music.ppi {
@@ -105,23 +125,20 @@
 
 .toggle-playlist-btn {
     cursor: pointer;
-    height: 15px;
     width: 25px;
     display: inline-block;
     background-color: rgba(49, 49, 49, 0.9);
     padding-top: 6px;
     text-align: center;
     color: white;
+    border: 1px solid rgba(49, 49, 49, 0.9);
     -webkit-transition: background-color 0.3s ease-out;
 }
 
 .toggle-playlist-btn:hover {
     color: #545454;
     background-color: #55EEF5;
-}
-
-.slideRight-btn {
-
+    border:1px solid #55EEF5;
 }
 
 .slideButtons {
@@ -137,4 +154,68 @@
     height: 31px;
     border: 3px solid rgba(29, 29, 29, 0.86);
     text-align: center;
+}
+
+.slidernavleft {
+    float: left;
+    text-align: center;
+    margin-left: 7px;
+}
+
+.slidernavright {
+    float: right;
+    text-align: center;
+    margin-right: 7px;
+}
+
+.sbox-valign {
+    cursor: pointer;
+    height: 53px;
+    display: block;
+    width: 20px;
+    border: 1px solid #2C2C2C;
+    color: #0f0f0f;
+    margin: 1px;
+}
+
+.square-one-valign {
+    cursor: pointer;
+    height: 20px;
+    display: block;
+    width: 20px;
+    border: 1px solid #2C2C2C;
+    color: #0f0f0f;
+    margin: 1px;
+}
+
+.square-one-valign:hover {
+    color: #55EEF5;
+    border: 1px solid #55EEF5;
+}
+
+.square-one-valign:active {
+    color: #0f0f0f;
+    background-color: #55EEF5;
+}
+
+.square-one-inner {
+    position: absolute;
+    margin-left: -7px;
+    margin-top: 4px;
+}
+
+.sbox-valign:hover {
+    color: #55EEF5;
+    border: 1px solid #55EEF5;
+}
+
+.sbox-valign:active {
+    color: #0f0f0f;
+    background-color: #55EEF5;
+}
+
+.navButton {
+    position: absolute;
+    margin-top: 20px;
+    margin-left: -3px;
 }

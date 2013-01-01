@@ -408,7 +408,7 @@ button:focus {
 }
 
 ul.results-list {
-    margin-top: 106px;
+    margin-top: 88px;
     margin-left: -40px;
 }
 
@@ -514,18 +514,18 @@ input:-ms-input-placeholder {
     -webkit-transform:scale(0.7) rotate(170deg); /* Safari and Chrome */
 }
 
+.trackEntry {
+    width: 135px;
+    display: inline-block;
+    margin-bottom: 18px;
+    margin-left: 0;
+}
 /* MusixMatch Results section
 ==================================================*/
-.trackEntry {
-    width: 150px;
-    display: inline-block;
-    margin-bottom: 26px;
-    margin-left: 15px;
-}
 
 .mxThumb {
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
     cursor: pointer;
     -webkit-transition: all .2s ease-in-out;
 }
@@ -535,12 +535,11 @@ input:-ms-input-placeholder {
 /*}*/
 
 .trackName {
-    width: 150px;
-    font: 800 15px "PT Sans Narrow";
+    width: 130px;
+    font: 800 13px "PT Sans Narrow";
     display: inline-block;
     clear: both;
-
-    height:18px;
+    height: 16px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -548,7 +547,7 @@ input:-ms-input-placeholder {
 .trackArtist {
     /*letter-spacing: -1.8px;*/
     color: #494949;
-    font: 400 14px "PT Sans Narrow";
+    font: 12px "PT Sans Narrow";
     cursor: pointer;
 }
 #resultsSection {
@@ -885,8 +884,11 @@ ul.lastfm-buttons {
     margin-top: 22px;
 }
 
+.tweetOpsHide {
+    display: none !important;
+}
+
 .tweetDownload {
-    display: none;
     height: 21px;
     cursor: pointer;
     float: right;

@@ -188,7 +188,7 @@
 				Spank.charts.ok_to_fetch_more(true);
 				Spank.tearDownLightBox();                                               // Close the lightbox
 				Spank.friends.visible(false);                                           // Close the friends list
-				$(".playlistEntry").css("border","5px solid rgb(204, 204, 204)");       // Don't highlight any playlist items
+				$(".playlistEntry").removeClass("activePlaylist");                      // Don't highlight any playlist items
 				if (search_term!=='') {
 					Spank.busy.on();
 					if (search_term.match(/similarto/)) {
@@ -295,7 +295,7 @@
 			});
 			$.each(data, function(k,v) {
 				try {
-					if (!v.match(/\w/g)) {
+					if (!v.length>0) {
 						console.error(k + " > " + v);
 						ok = false;
 					}

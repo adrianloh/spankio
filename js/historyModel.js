@@ -10,6 +10,7 @@
 			Spank.base.history = Spank.base.me.child("history");
 			$(document).trigger("baseReady");
 			var firstPass = true;
+			var ignoreInitial = 0;
 			function assemble(snapshot) {
 				var newHistory = snapshot.val();
 				if (Array.isArray(newHistory) && newHistory.length>0) {
@@ -32,8 +33,13 @@
 							return koo;
 						});
 						koHistory.reverse();
+						ignoreInitial = koHistory.length;
 						Spank.history.stream(koHistory);
-						start();
+//						Spank.history.stream(koHistory.slice(0,20));
+//						setTimeout(function() {
+//							Spank.history.stream.push.apply(Spank.history.stream, koHistory.slice(20));
+							start();
+//						}, 250);
 					}
 				} else {
 					start();
@@ -41,12 +47,8 @@
 			}
 
 			Spank.base.history.on("value", assemble);
-
-			var started = false;
 			var start = function() {
-				if (started) return;
 				Spank.base.history.off('value', assemble);
-				started = true;
 				$("#history-stream-list-container").css("background-image","none");
 				setTimeout(function() {
                     window.notify.suspended = false;
@@ -61,7 +63,10 @@
 				});
 			};
 
+			var current = 0;
 			var updateHistoryItem = function(snapshot) {
+				++current;
+				if (current<=ignoreInitial) return;
 				var o = snapshot.val();
 				if (o!==null) {
 					var atHistoryIndex = Spank.history.stream().length-1-parseInt(snapshot.name(),10),
