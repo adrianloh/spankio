@@ -211,7 +211,7 @@
 .history-filter-container2 {
     height: 26px;
     margin-left: 5px;
-    margin-top: 3px;
+    margin-top: 5px;
     display: inline-block;
     zoom: 1; /* ie7 hack for display:inline-block */
     /**display: inline;*/
@@ -306,11 +306,9 @@
 }
 
 .dropSpans {
-    top: 25%;
-    left: 10%;
-    position: absolute;
+    margin: 40% auto;
     font: 32px "Oswald";
-    color: rgb(255, 255, 255);
+    color: white;
 }
 
 .playlistSearchZone {
@@ -572,7 +570,6 @@ input:-ms-input-placeholder {
 /* The thing that pops up to display lyrics
 ==================================================*/
 #lightBox {
-    display: none;
     background-color: rgba(29, 29, 29, 0.86);
     z-index: 9;
     position: fixed;
@@ -585,6 +582,17 @@ input:-ms-input-placeholder {
     -webkit-box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
     box-shadow: 20px 5px 50px rgba(0, 0, 0, 0.85);
     border: 2px solid #1D1D1D;
+    -webkit-transition: all .3s ease-in-out;
+}
+
+.lboxScaleHide {
+    opacity: 0;
+    -webkit-transform: scale(0);
+}
+
+.lboxScaleShow {
+    opacity: 1.0;
+    -webkit-transform: scale(1);
 }
 
 #lightBox-content-container {
@@ -676,12 +684,18 @@ input:-ms-input-placeholder {
 }
 
 #closeButton {
-    display: none;
+    font-size: 40px;
     z-index: 10;
-    cursor:pointer;
+    cursor: pointer;
     position: fixed;
-    left: 8%;
-    top:45%;
+    left: -19px;
+    top: 43%;
+    color: white;
+    -webkit-border-radius: 31px;
+    background-color: rgba(29, 29, 29, 0.86);
+    height: 31px;
+    border: 3px solid rgba(29, 29, 29, 0.86);
+    text-align: center;
 }
 /* List items of tracks from VK
 ==================================================*/
@@ -694,15 +708,21 @@ input:-ms-input-placeholder {
 
 #vk-results-list {
     margin-top: 80px;
+    margin-left: -8px;
 }
 
 .vkMessage {
     color: white;
-    font: bold 18px "PT Sans Narrow";
+    font: bold 14px "PT Sans Narrow";
     letter-spacing: 1px;
+    width: 194px;
     margin-top: -68px;
-    margin-bottom: 22px;
+    margin-bottom: 18px;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
 }
+
 .vkTrackEntry {
     background-color: whitesmoke;
     height: 36px;
@@ -713,7 +733,7 @@ input:-ms-input-placeholder {
     margin-left: 15px;
     font: 13px "PT Sans Narrow";
     letter-spacing: 0px;
-    color: #4e6af1;
+    color: #252525;
     vertical-align: 6px;
 }
 .lickContainer {
@@ -728,7 +748,7 @@ input:-ms-input-placeholder {
     margin-right: -8px;
     height: 25px;
     cursor: pointer;
-    -webkit-transition: color 0.3s ease-out;
+    -webkit-transition: all .25s ease-in-out;
 }
 
 .lickButton:hover {
@@ -805,7 +825,7 @@ ul.lastfm-buttons {
 .tweetItem {
     /* These three are neccessary to slide out*/
     position: relative;
-    left: 0px;
+    left: 0;
     width: 100%;
     /* Essential */
     height: 52px;
@@ -813,6 +833,15 @@ ul.lastfm-buttons {
     color: black;
     background-color: white;
     display: none;
+    -webkit-transition: -webkit-transform .5s ease-in-out;
+}
+
+.flyup {
+    -webkit-transform: translate(0px, -1000px);
+}
+
+.flyleft {
+    -webkit-transform: translate(-500px, 0px);
 }
 
 .tweetShow {
@@ -887,13 +916,14 @@ ul.lastfm-buttons {
     cursor: pointer;
     padding-top: 9px;
     text-align: left;
+    width: 90%;
 }
 
 .playModeButtons {
     cursor: pointer;
     position: relative;
     height: 58px;
-    margin-right: 0px;
+    margin-right: 0;
     z-index: 999;
     -webkit-filter: grayscale(1);
 }

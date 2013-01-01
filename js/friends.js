@@ -108,6 +108,7 @@
 					koo[k] = ko.observable(v);
 				});
 				self.friendlist.push(koo);
+				Spank.watchPlaylistRefsBelongingTo(friendname);
 				var friendBase = Spank.base.users.child(friendname);
 				self.bases[friendname] = {
 					observable: koo,

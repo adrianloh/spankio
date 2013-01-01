@@ -52,9 +52,6 @@
                     window.notify.suspended = false;
 					window.notify.information("Go!");
 				}, 2000);
-				setTimeout(function() {
-					Spank.playlistScroller.visible(true);
-				}, 3000);
 				Spank.base.history.on('child_changed', updateHistoryItem);
 				Spank.base.history.on('child_added', updateHistoryItem);
 				Spank.base.history.on('child_removed', function(snapshot) {
@@ -224,7 +221,9 @@
 
 			self.deleteHistoryItemOnClick = function(koo, event) {
 				// When you click on the red 'minus' icon
-				$(event.target).parent().animate({"left": "-=500px"}, 500, function() {
+				var li = $(event.target).parent();
+				li.addClass("flyleft");
+				setTimeout(function() {
 					// If we're deleting an item that is currently playing, jump to next track
 					if (Spank.player.lastPlayedObject.url===koo.url()) {
 						Spank.player.suspendLoopAndTrigger(function() {
@@ -236,14 +235,19 @@
 					}, function onComplete(success, snapshot) {
 						console.warn("Firebase HISTORY DELETE: " + JSON.stringify(success));
 					});
-				});
+				},500);
 			};
 
 			self.playHistoryItemOnClick = function(koo, event) { // When clicking a History item, push it to the top and play it
 				if (Spank.history.stream.indexOf(koo)>1) {
-					$(event.target).parent().parent().animate({"top": "-=1000px"}, 500, function() {
+					var li = $(event.target).parent().parent();
+					li.addClass("flyup");
+					setTimeout(function(){
 						self.prependToHistory(koo, true);
-					});
+					}, 250);
+//					$(event.target).parent().parent().animate({"top": "-=1000px"}, 500, function() {
+//						self.prependToHistory(koo, true);
+//					});
 				} else {
 					self.prependToHistory(koo, true);
 				}

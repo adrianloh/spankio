@@ -216,7 +216,7 @@
 			}
 		};
 
-		ko.applyBindings(Spank.playlistScroller, document.getElementById('playlists-scroller-list-me'));
+//		ko.applyBindings(Spank.playlistScroller, document.getElementById('playlists-scroller-list-me'));
 
 		Spank.playlistScroller.playlistItems.subscribe(function(list) {
 			Spank.rescanChildren();

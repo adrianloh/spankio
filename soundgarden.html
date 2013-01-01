@@ -88,7 +88,7 @@
      <!--bxSlider CSS file -->
     <link rel="stylesheet" type="text/css" href="/css/scroller.css" />
     <link href="/js/jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />
-    <script src="/js/jquery.bxslider/jquery.bxslider.js"></script>
+    <script src="/js/jquery.bxslider/jquery.bxslider.mine.js"></script>
 
     <!-- Make playlists, a KO observable array, sortable -->
     <script type="text/javascript" src="/js/knockout-sortable.min.js"></script>
@@ -97,8 +97,8 @@
     -->
     <script type="text/javascript" src="/js/utils.js"></script>
     <script type="text/javascript" src="/js/tooltips.js"></script>
-    <script type="text/javascript" src="/js/playlists.js"></script>
-    <!--<script type="text/javascript" src="/js/playlists2.js"></script>-->
+    <!--<script type="text/javascript" src="/js/playlists.js"></script>-->
+    <script type="text/javascript" src="/js/playlists2.js"></script>
     <script type="text/javascript" src="/js/playlistAction.js"></script>
     <script type="text/javascript" src="/js/draggables.js"></script>
     <script type="text/javascript" src="/js/musicPlayerModel.js"></script>
@@ -440,8 +440,8 @@
         </div>
 
         <div class="resultsBody">
-            <img id="closeButton" src="/img/close.png" />
-            <div id="lightBox">
+            <div id="lightBox" class="lboxScaleHide">
+                <i id="closeButton" class="icon-remove-sign"></i>
                 <!--<div id="lyricsTitle" data-bind="text : lyricsTitle"></div>-->
                 <img id="lyricsThumb" data-bind="attr: { src: lyricsThumb }" />
                 <div id="lyricsButtons">
@@ -455,9 +455,9 @@
             </div>
             <div id="resultsSection">
                 <div id="playlistSearchZone" class="playlistSearchZone searchFullWidth">
-                    <span class="dropSpans">Search for similar tracks</span>
+                    <div class="dropSpans">Search for similar tracks</div>
                 </div>
-                <div id="playlistDropZone" class="playlistDropZone"><span class="dropSpans">Add to this playlist</span></div>
+                <div id="playlistDropZone" class="playlistDropZone"><div class="dropSpans">Add to this playlist</div></div>
                 <div id="track_count_current" data-bind="text: totalChartTracks"></div>
                 <ul class="results-list" data-bind="sortable: {data:chartTracks, afterMove: onResort }">
                     <li class="trackEntry unwobbled">
@@ -495,7 +495,23 @@
         </div>
 
         <div id="playlistScroller">
-            <ul id="playlists-scroller-list-me" data-bind="foreach: playlistItems">
+            <ul id="playlists-scroller-list-charts" data-bind="foreach: chartItems">
+                <!-- ko if: $data!==undefined -->
+                <li class="playlistEntry">
+                    <img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />
+                    <div class="playlistName" data-bind="text: title"></div>
+                </li>
+                <!-- /ko -->
+            </ul>
+            <ul id="playlists-scroller-list-me" data-bind="foreach: dockItemsMe">
+                <!-- ko if: $data!==undefined -->
+                <li class="playlistEntry" data-bind="css: { droppablePlaylist: $data.url==='#' }">
+                    <img class="playlistThumb" data-bind="attr: { src: $data.cover(), title: $data.title(), url: $data.url }" />
+                    <div class="playlistName" data-bind="text: $data.title()"></div>
+                </li>
+                <!-- /ko -->
+            </ul>
+            <ul id="playlists-scroller-list-friends" data-bind="foreach: dockItemsFriends">
                 <!-- ko if: $data!==undefined -->
                 <li class="playlistEntry" data-bind="css: { droppablePlaylist: url==='#' }">
                     <img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />
@@ -503,16 +519,22 @@
                 </li>
                 <!-- /ko -->
             </ul>
-            <!--<ul id="playlists-scroller-list-others" data-bind="foreach: playlistItems">-->
-                <!--&lt;!&ndash; ko if: $data!==undefined &ndash;&gt;-->
-                <!--<li class="playlistEntry" data-bind="css: { droppablePlaylist: url==='#' }">-->
-                    <!--<img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />-->
-                    <!--<div class="playlistName" data-bind="text: title()"></div>-->
-                <!--</li>-->
-                <!--&lt;!&ndash; /ko &ndash;&gt;-->
-            <!--</ul>-->
-            <div id="toggle-playlist-button">
-                <button class="hideshow-playlist-button">Hide Playlists</button>
+            <div id="playlist-types-buttons">
+                <div id="ptcenter">
+                    <div class="toggle-playlist-btn"><i class="icon-chevron-down"></i></div>
+                    <input type="radio" id="ppi-charts" name="ppi" class="ppi-checkbox">
+                    <label class="playlist-type-btn" value="ppi-charts" for="ppi-charts">
+                        <i class="icon-music ppi"></i>Charts
+                    </label>
+                    <input type="radio" id="ppi-me" name="ppi" class="ppi-checkbox">
+                    <label class="playlist-type-btn" value="ppi-me" for="ppi-me">
+                        <i class="icon-music ppi"></i>Mine
+                    </label>
+                    <input type="radio" id="ppi-friends" name="ppi" class="ppi-checkbox">
+                    <label class="playlist-type-btn" value="ppi-friends" for="ppi-friends">
+                        <i class="icon-music ppi"></i>Friends
+                    </label>
+                </div>
             </div>
         </div>
 

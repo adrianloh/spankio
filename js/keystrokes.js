@@ -18,7 +18,6 @@
 		$(document).keydown(function(e) {
 
 			if ($(document.activeElement)[0].tagName.toLowerCase()!=='input' && boundKeys.indexOf(e.keyCode)>=0) {
-				console.log($(document.activeElement)[0].tagName);
 				switch (e.keyCode)
 				{
 					case keys.right:    // Next song

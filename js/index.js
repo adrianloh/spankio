@@ -49,8 +49,8 @@
 			Spank.lightBox.lyricsText("");
 			Spank.lightBox.lyricsTitle("");
 			Spank.lightBox.lyricsThumb("");
-			$("#lightBox").slideUp('fast','swing', function(){});
-			$("#closeButton").hide();
+			$("#lightBox").removeClass("lboxScaleShow");
+//			$("#lightBox").slideUp('fast','swing', function(){});
 			$("html").removeClass("busy");
 			$("#lightBox_jspPane").html("");
 			$(".t_Tooltip_controlButtons2").remove();
@@ -58,7 +58,7 @@
 			vk_search_in_progress = false;
 			mx_get_lyrics_in_progress = false;
 			if (playlistScrollerWasVisible) {
-				Spank.playlistScroller.visible(true);
+				Head.playlists.visible(true);
 				playlistScrollerWasVisible = false;
 			}
 		};
@@ -115,7 +115,7 @@
 					trackResults.forEach(function (track) {
 						track.mxid = params.mxid;
 						var trackAttr = [],
-							title = track.title.slice(0,60) + ' -- ' + track.artist.slice(0,60);
+							title = track.title.slice(0,60) + ' - ' + track.artist.slice(0,60);
 						if (title.length>0 && title.length<80) {
 							// VERY VERY IMPORTANT!
 							// The lick button contains ALL the data we need to reconstruct every entry of the playlist
@@ -175,11 +175,12 @@
 						var query_string = search_term.replace(/\?/,"");
 						searchVK({q:query_string,
 							mxid:'09061980', thumb:Spank.genericAlbumArt});
-						playlistScrollerWasVisible = Spank.playlistScroller.visible();
-						Spank.playlistScroller.visible(false);
-						lightBox.slideDown('fast','swing', function() {
-							$("#closeButton").show();
-						});
+						playlistScrollerWasVisible = Head.playlists.visible();
+						Head.playlists.visible(false);
+						lightBox.addClass("lboxScaleShow");
+//						lightBox.slideDown('fast','swing', function() {
+//							$("#closeButton").show();
+//						});
 					}
 				}, 1000);
 			} else {
@@ -364,7 +365,7 @@
 
 		$(".lyricLink").live('click', function openLightbox() {
 			var lightBox = $("#lightBox");
-			if (!vk_search_in_progress && !mx_get_lyrics_in_progress && lightBox.css("display")!='block') {
+			if (!vk_search_in_progress && !mx_get_lyrics_in_progress && !lightBox.hasClass("lboxScaleShow")) {
 				var anchor = $(this),
 					trackEntry = anchor.parent().parent(),
 					title = anchor.text(),
@@ -381,11 +382,9 @@
 				Spank.lightBox.currentArtist(artist);
 				Spank.lightBox.currentTitle(title);
 				Spank.lightBox.lyricsTitle(title + " - " + artist);
-				playlistScrollerWasVisible = Spank.playlistScroller.visible();
-				Spank.playlistScroller.visible(false);
-				lightBox.slideDown('fast','swing', function() {
-					$("#closeButton").show();
-				});
+				playlistScrollerWasVisible = Head.playlists.visible();
+				Head.playlists.visible(false);
+				lightBox.addClass("lboxScaleShow");
 			}
 			return false;
 		});

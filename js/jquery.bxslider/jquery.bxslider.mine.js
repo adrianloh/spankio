@@ -10,15 +10,85 @@
 
 ;(function($){
 
-	var plugin = {};
-	
+//	setInterval(function(){
+//		$(".bx-clone").css("border","3px solid red");
+//	},500);
+
+	var bindDroppablePlaylists = function(o) {
+		var userPlaylists = [];
+		try {
+			if (('length' in o) && (o.length>0) && (o[0].className.match(/playlistEntry/))) {
+				$.each(o, function(i,li) {
+					if ($(li).find("img").attr("url")==="#") {
+						userPlaylists.push(li);
+					}
+				});
+			} else if (typeof(o.className)==='string' && o.className.match(/playlistEntry/)) {
+				if ($(o).find("img").attr("url")==="#") {
+					userPlaylists.push(o);
+				}
+			} else {
+				console.error("bindDroppablePlaylists asked to bind unknown object. Check thingee...")
+				thingee = o;
+				return;
+			}
+		} catch(err) {
+			console.error("Check badThing...");
+			badThing = o;
+			return false;
+		}
+		if (userPlaylists.length===0) return false;
+		$.each(userPlaylists, function(i,li) {
+			$(li).droppable({
+				accept: ".tweetThumb",
+				tolerance: "pointer",
+				hoverClass: "playlistHover",
+				drop: function addDroppedTrackToPlaylistInScrollbar() {
+					if (document._draggedHistoryItem!==null) {
+						document._ignoreDrop = true;
+						var droppedHistoryItem = JSON.parse(JSON.stringify(document._draggedHistoryItem)),
+							playlistThumb = $(this).find(".playlistThumb"),
+							playlistThumbThatWasClicked = {
+								title:playlistThumb.attr("title"),
+								cover:playlistThumb.attr("src"),
+								url:playlistThumb.attr("url")
+							},
+							playname = playlistThumbThatWasClicked.title;
+						Spank.playlistScroller.addSongToPlaylist(playname, droppedHistoryItem);
+						setTimeout(function() {
+							document._ignoreDrop = false;
+						},300);
+					}
+				}
+			});
+			var playlistNameElement = $(li).find(".playlistName")[0];
+			$(playlistNameElement).editable({
+				onSubmit: function(change) {
+					document._userIsTyping = false;
+					var oldname = change.previous==='<input>' ? Spank.currentlyClickedPlaylistItemName : change.previous,
+						newname = change.current;
+					if (oldname!==newname) {
+						if (Spank.playlists[oldname] && newname.length!==0) {
+							Spank.playlistScroller.renamePlaylist(oldname, newname);
+						} else {
+							$(this).text(Spank.currentlyClickedPlaylistItemName);
+						}
+					}
+				}
+			});
+//			$(playlistNameElement).click(function(){
+//				document._userIsTyping = true;
+//			});
+		});
+	};
+
 	var defaults = {
 		
 		// GENERAL
 		mode: 'horizontal',
 		slideSelector: '',
 		infiniteLoop: true,
-		hideControlOnEnd: false,
+		hideControlOnEnd: true,
 		speed: 500,
 		easing: null,
 		slideMargin: 0,
@@ -35,7 +105,7 @@
 		useCSS: true,
 		
 		// PAGER
-		pager: true,
+		pager: false,
 		pagerType: 'full',
 		pagerShortSeparator: ' / ',
 		pagerSelector: null,
@@ -77,7 +147,7 @@
 	}
 
 	$.fn.bxSlider = function(options){
-		
+
 		if(this.length == 0) return;
 		
 		// support mutltiple elements
@@ -88,12 +158,13 @@
 		
 		// create a namespace to be used throughout the plugin
 		var slider = {};
+
 		// set a reference to our slider element
 		var el = this;
+
 		var which = this.attr("id").split("-").slice(-1)[0];
-		Head.playlists.bxSliders[which] = {el: el, slider:slider};
-		plugin.el = this;
-		
+		Head.playlists.bxSliders[which] = {el: el, slider: slider};
+
 		/**
 		 * ===================================================================================
 		 * = PRIVATE FUNCTIONS
@@ -107,9 +178,9 @@
 			// merge user-supplied options with the defaults
 			slider.settings = $.extend({}, defaults, options);
 			// store the original children
-			slider.children = el.children(slider.settings.slideSelector);
+////			slider.children = el.children(slider.settings.slideSelector);
 			// if random start, set the startSlide setting to random number
-			if(slider.settings.randomStart) slider.settings.startSlide = Math.floor(Math.random() * slider.children.length);
+////			if(slider.settings.randomStart) slider.settings.startSlide = Math.floor(Math.random() * slider.children.length);
 			// store active slide information
 			slider.active = { index: slider.settings.startSlide }
 			// store if the slider is in carousel mode (displaying / moving multiple slides)
@@ -149,11 +220,12 @@
 		/**
 		 * Performs all DOM and CSS modifications
 		 */
-		var setup = function(data){
-			if (typeof(data)!=='undefined') {
-				el = data.el;
-				slider = data.slider;
-			}
+		var setup = function() {
+			var selector = "#" + el.attr('id') + " " + ".playlistEntry";
+			slider.children = $(selector).removeAttr("style");
+			slider.children.each(function(i,e) {
+				bindDroppablePlaylists(e);
+			});
 			// wrap el in a wrapper
 			el.wrap('<div class="bx-wrapper"><div class="bx-viewport"></div></div>');
 			// store a namspace reference to .bx-viewport
@@ -164,8 +236,12 @@
 			// set el to a massive width, to hold any needed slides
 			// also strip any margin and padding from el
 			el.css({
-				width: slider.settings.mode == 'horizontal' ? slider.children.length * 215 + '%' : 'auto',
+				width: slider.settings.mode == 'horizontal' ? '2800%' : 'auto',
+				height: 0,
+				overflow: 'hidden',
 				position: 'relative',
+				margin: 0,
+				padding: 0
 			});
 			// if using CSS, add the easing property
 			if(slider.usingCSS && slider.settings.easing){
@@ -177,19 +253,19 @@
 			// make modifications to the viewport (.bx-viewport)
 			slider.viewport.css({
 				width: '100%',
+				height: '50',
 				overflow: 'hidden',
 				position: 'relative'
 			});
 			// apply css to all slider children
 			slider.children.css({
 				float: slider.settings.mode == 'horizontal' ? 'left' : 'none',
+				position: 'relative',
+				width: getSlideWidth(),
 				listStyle: 'none',
+				marginRight: slider.settings.mode == 'horizontal' ? slider.settings.slideMargin : 0,
+				marginBottom: slider.settings.mode == 'vertical' ? slider.settings.slideMargin: 0
 			});
-			// apply the calculated width after the float is applied to prevent scrollbar interference
-			slider.children.width(getSlideWidth());
-			// if slideMargin is supplied, add the css
-			if(slider.settings.mode == 'horizontal' && slider.settings.slideMargin > 0) slider.children.css('marginRight', slider.settings.slideMargin);
-			if(slider.settings.mode == 'vertical' && slider.settings.slideMargin > 0) slider.children.css('marginBottom', slider.settings.slideMargin);
 			// if "fade" mode, add positioning and z-index CSS
 			if(slider.settings.mode == 'fade'){
 				slider.children.css({
@@ -209,7 +285,12 @@
 				var slice = slider.settings.mode == 'vertical' ? slider.settings.minSlides : slider.settings.maxSlides;
 				var sliceAppend = slider.children.slice(0, slice).clone().addClass('bx-clone');
 				var slicePrepend = slider.children.slice(-slice).clone().addClass('bx-clone');
+				bindDroppablePlaylists(sliceAppend);
+				bindDroppablePlaylists(slicePrepend);
 				el.append(sliceAppend).prepend(slicePrepend);
+				// var cloneAppend = slider.children.first().clone().addClass('bx-clone');
+				// var clonePrepend = slider.children.last().clone().addClass('bx-clone');
+				// el.append(cloneAppend).prepend(clonePrepend);
 			}
 			// check if startSlide is last slide
 			slider.active.last = slider.settings.startSlide == getPagerQty() - 1;
@@ -230,14 +311,17 @@
 			el.children().imagesLoaded(function(){
 				// remove the loading DOM element
 				slider.loader.remove();
+				// make el visible
+				el.css('overflow', 'visible');
 				// set the left / top position of "el"
 				setSlidePosition();
 				// if "vertical" mode, always use adaptiveHeight to prevent odd behavior
 				if (slider.settings.mode == 'vertical') slider.settings.adaptiveHeight = true;
 				// set the viewport height
-				slider.viewport.height(getViewportHeight());
-				// onSliderLoad callback
-				slider.settings.onSliderLoad(slider.active.index);
+				slider.viewport.animate({height: getViewportHeight()}, 200, function(){
+					// onSliderLoad callback
+					slider.settings.onSliderLoad(slider.active.index);
+				});
 				// if auto is true, start the show
 				if (slider.settings.auto && slider.settings.autoStart) initAuto();
 				// if ticker is true, start the ticker
@@ -251,10 +335,42 @@
 			});
 		}
 
+		Spank.setupScroller = setup;
+
+		Spank.__rescanChildren = function() {
+			$(".bx-clone").remove();
+			slider.children = $(".playlistEntry").removeAttr("style");
+			var slice = slider.settings.mode == 'vertical' ? slider.settings.minSlides : slider.settings.maxSlides;
+			var sliceAppend = slider.children.slice(0, slice).clone().addClass('bx-clone');
+			var slicePrepend = slider.children.slice(-slice).clone().addClass('bx-clone');
+			bindDroppablePlaylists(sliceAppend);
+			bindDroppablePlaylists(slicePrepend);
+			el.append(sliceAppend).prepend(slicePrepend);
+			bindDroppablePlaylists($(".droppablePlaylist "));
+		}
+
+		Head.rescanChildren = function(data){
+			var slider = data.slider;
+			slider.children = data.el.children().removeAttr("style");
+			slider.children.each(function(i,e) {
+				bindDroppablePlaylists(e);
+			});
+			slider.children.css({
+				float: slider.settings.mode == 'horizontal' ? 'left' : 'none',
+				position: 'relative',
+				width: getSlideWidth(),
+				listStyle: 'none',
+				marginRight: slider.settings.mode == 'horizontal' ? slider.settings.slideMargin : 0,
+				marginBottom: slider.settings.mode == 'vertical' ? slider.settings.slideMargin: 0
+			});
+			slider.active.last = slider.settings.startSlide == getPagerQty() - 1;
+		};
+
 		/**
 		 * Returns the calculated height of the viewport, used to determine either adaptiveHeight or the maxHeight value
 		 */
 		var getViewportHeight = function(){
+			return 150;
 			var height = 0;
 			// first determine which children (slides) should be used in our height calculation
 			var children = $();
@@ -297,13 +413,14 @@
 					return $(this).outerHeight(false);
 				}).get());
 			}
-			return height;
+			return height+10;
 		}
 		
 		/**
 		 * Returns the calculated width to be applied to each slide
 		 */
 		var getSlideWidth = function(){
+			return 100;
 			// start with any user-supplied slide width
 			var newElWidth = slider.settings.slideWidth;
 			// get the current viewport width
@@ -318,10 +435,8 @@
 				}else if(wrapWidth < slider.minThreshold){
 					newElWidth = (wrapWidth - (slider.settings.slideMargin * (slider.settings.minSlides - 1))) / slider.settings.minSlides;
 				}
-
-////
-			return 100;	}
-	//		return newElWidth;
+			}
+			return newElWidth;
 		}
 		
 		/**
@@ -374,7 +489,7 @@
 			}
 			return pagerQty;
 		}
-
+		
 		/**
 		 * Returns the number of indivual slides by which to shift the slider
 		 */
@@ -975,6 +1090,14 @@
 		 */
 		el.goToSlide = function(slideIndex, direction){
 			// if plugin is currently in motion, ignore request
+			if (slideIndex<0) {
+				window.notify.error("Beginning of list!");
+				return;
+			}
+			if (slideIndex>getPagerQty()) {
+				window.notify.error("End of list!");
+				return;
+			}
 			if(slider.working || slider.active.index == slideIndex) return;
 			// declare that plugin is in motion
 			slider.working = true;
@@ -1039,14 +1162,17 @@
 					}
 					// horizontal carousel, going previous while on first slide (infiniteLoop mode)
 				}else if(slider.carousel && slider.active.last && direction == 'prev'){
+					//// Pressed prev on the very first
 					// get the last child position
 					var eq = slider.settings.moveSlides == 1 ? slider.settings.maxSlides - getMoveBy() : ((getPagerQty() - 1) * getMoveBy()) - (slider.children.length - slider.settings.maxSlides);
 					var lastChild = el.children('.bx-clone').eq(eq);
 					position = lastChild.position();
 				// if infinite loop and "Next" is clicked on the last slide
 				}else if(direction == 'next' && slider.active.index == 0){
+					//// Pressed next on the very last
 					// get the last clone position
-					position = el.find('.bx-clone').eq(slider.settings.maxSlides).position();
+					///position = el.find('.bx-clone').eq(slider.settings.maxSlides).position();
+					position = slider.children.eq(lastShowingIndex).position()
 					slider.active.last = false;
 				// normal non-zero requests
 				}else if(slideIndex >= 0){
@@ -1163,7 +1289,6 @@
 		});
 		
 		init();
-		
 		// returns the current jQuery object
 		return this;
 	}
