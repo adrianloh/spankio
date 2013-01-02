@@ -224,6 +224,38 @@
 				}
 			};
 
+			self.batchItems = ko.observableArray([]);
+
+			self.deleteBatch = function() {
+				var found = 0,
+					i = self.stream().length,
+					selectedItems = [];
+				while (i--) {
+					if (found===self.batchItems().length) break;
+					var koo = self.stream()[i];
+					if (koo.hasOwnProperty("url") && self.batchItems.indexOf(koo.url())>=0) {
+						selectedItems.push(koo);
+						++found;
+					}
+				}
+				Spank.base.history.transaction(function update(currentData) {
+					var intermediete, invalid = false;
+					selectedItems.forEach(function(koo) {
+						intermediete = self.transaction_deleteFromHistory(ko.toJS(koo), currentData);
+						if (Array.isArray(intermediete)) {
+							currentData = intermediete;
+						} else {
+							invalid = true;
+						}
+					});
+					return invalid ? undefined : currentData;
+				}, function onComplete(success, snapshot) {
+					if (success) {
+						window.notify.success("Deleted " + selectedItems.length + " items from stream");
+					}
+				});
+			};
+
 			self.deleteHistoryItemOnClick = function(koo, event) {
 				// When you click on the red 'minus' icon
 				var li = $(event.target).parent();
@@ -250,9 +282,6 @@
 					setTimeout(function(){
 						self.prependToHistory(koo, true);
 					}, 250);
-//					$(event.target).parent().parent().animate({"top": "-=1000px"}, 500, function() {
-//						self.prependToHistory(koo, true);
-//					});
 				} else {
 					self.prependToHistory(koo, true);
 				}
@@ -275,6 +304,14 @@
 		})();
 
 		ko.applyBindings(Spank.history, document.getElementById('playHistory'));
+
+		$("#history-filter-container .icon-check").click(function() {
+			$(".tweetcheckbox").prop("checked", false);
+		});
+
+		$("#history-filter-container .icon-trash").click(function() {
+			Spank.history.deleteBatch();
+		});
 
 		var firstload = true;
 		Spank.history.stream.subscribe(function saveHistory() {

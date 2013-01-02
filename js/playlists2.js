@@ -13,18 +13,29 @@
 		{title: 'last.fm Top', cover: '/img/last_top.png', url: chartUrls.lastfm_top() },
 		{title: 'last.fm Loved', cover: '/img/last_loved.png', url: chartUrls.lastfm_loved() },
 		{title: 'last.fm Hyped', cover: '/img/last_hyped.png', url: chartUrls.lastfm_hyped() }
-	];
+	],
+	codes = {
+		UK: "UK",
+		US: "US",
+		JP: "Japan",
+		DE: "Germany",
+		IN: "India",
+		AR: "Argentina",
+		FR: "France",
+		SE: "Sweden",
+		ES: "Spain"
+	};
 
-	["JP", "DE", "US", "UK"].forEach(function(code) {
+	["FR", "JP", "DE", "US", "UK"].forEach(function(code) {
 		var bUrl = chartUrls.billboards_base.replace("#", code.toLowerCase()),
 			bCover = '/img/bill_#.jpg'.replace("#", code),
-			bp = {title: 'Billboards ' + code, cover: bCover, url: bUrl};
+			bp = {title: 'Billboard ' + codes[code], cover: bCover, url: bUrl};
 		chartPlaylistItems.unshift(bp);
 	});
 
-	["US", "DE", "JP", "IN", "AR"].forEach(function(code) {
+	["US", "DE", "JP", "IN", "AR", "FR", "SE", "ES"].forEach(function(code) {
 		var iUrl = chartUrls.itunes_base.replace("#", code.toLowerCase()),
-			ip = {title: 'iTunes ' + code, cover: '/img/iTunes.png', url: iUrl };
+			ip = {title: 'iTunes ' + codes[code], cover: '/img/iTunes.png', url: iUrl };
 		chartPlaylistItems.push(ip);
 	});
 
@@ -42,6 +53,7 @@
 			base.root = ref;
 			base.owners = ref.child("owners");
 			base.title = ref.child("title");
+			base.writable = ref.child("writable");
 			base.tracklist = ref.child("list");
 			return base;
 		};
@@ -61,6 +73,7 @@
 						// one of the owners, or the playlist is tagged with "everyone"
 						if (ownersList.indexOf('everyone')>=0 ||
 							ownersList.indexOf(Spank.username)>=0) {
+							if (Head.playlists.itemsByRef.hasOwnProperty(refID)) return;
 							var playlist = {
 								title: ko.observable(""),
 								url: ko.observable("#"),
@@ -103,7 +116,6 @@
 
 		Playlist.watchPlaylistRefsBelongingTo = function(username) {
 			var playlistRefs = Head.users.child(username).child("playlistRefs");
-			//console.log("Watching " + username + "'s playlists");
 			playlistRefs.on('child_added', Playlist.updatePlaylistWithItem);
 		};
 
@@ -130,9 +142,7 @@
 		Playlist.watchPlaylistInfo = function(playlistRef) {
 			var titleRef = playlistRef.child("title"),
 				coverRef = playlistRef.child("list").child("0");
-			// Listen for changes of playlist tiles
 			titleRef.on('value', watchTitle);
-			// Listen for changes of playlist covers
 			coverRef.on('value', watchCover);
 		};
 
@@ -167,17 +177,45 @@
 //			}
 //		});
 
+		Head.playlistProperties = (function() {
+			var self = {};
+			self.title = ko.computed(function() {
+				return Spank.charts.currentPlaylistTitle();
+			});
+			self.owners = ko.observableArray([]);
+			self.writable = ko.observable(null);
+			self.withEveryone = ko.observable(null);
+			self.sharedWith = ko.computed(function() {
+				var everyone = self.owners().indexOf("everyone")>=0,
+					nobody = self.owners().length<=1;
+				if (everyone) {
+					if (self.writable()) {
+						return "Editable by anyone";
+					} else {
+						return "Shared with everyone";
+					}
+				} else if (nobody) {
+					return "Private";
+				} else {
+					return "Shared with " + self.owners().length + " people";
+				}
+			});
+			self.isMine = ko.computed(function() {
+				return self.owners().indexOf(Spank.username)===0;
+			});
+			return self;
+		})();
+
+		ko.applyBindings(Head.playlistProperties, document.getElementById('playlistProperties'));
+
 		Head.playlists = (function () {
 			var self = {};
 			self.visible = ko.observable(true);
-
 			self.bxSliders = {};
-
 			self.chartItems = ko.observableArray([]);
 			chartPlaylistItems.forEach(function(o) {
 				self.chartItems.push(o);
 			});
-
 			self.itemsByRef = {};
 			self.dockItemsMe = ko.observableArray([]);
 			self.dockItemsFriends = ko.observableArray([]);
@@ -207,46 +245,99 @@
 			self.deletePlaylistItemWithRef = function(refID) {
 				var koo = self.getByRef(refID);
 				[self.dockItemsMe, self.dockItemsFriends].forEach(function(dock) {
-					var index = dock.indexOf(koo),
-						lastIndex = dock().length-1;
+					var index = dock.indexOf(koo);
 					if (index>=0) dock.remove(koo);
 				});
 			};
-			self.moveState = (function() {
-				var base = Head.users.child("restbeckett"),
-					playlistRefs = base.child("playlistRefs");
-				var	lastState = null;
-				var refIDList = function(dockItem) {
-					return $.map(dockItem, function(o) {
-						return o.refID;
+			var lastKoo = null,
+				activeListeners = {};
+			self.openPlaylist = function(koo, event) {
+				var thisImage = $(event.target),
+					titleRef = koo.base.title,
+					ownersRef = koo.base.owners,
+					writableRef = koo.base.writable,
+					tracklistRef = koo.base.tracklist;
+				if (lastKoo!==null) {
+					$.each(activeListeners, function(k,v) {
+						lastKoo.base[k].off('value',v);
 					});
-				};
-				return {
-					beforeMovePlaylistItem:function() {
-						lastState = [];
-						$.extend(lastState, self.dockItemsMe());
-					},
-					afterMovePlaylistItem:function() {
-						var currentRefState = refIDList(self.dockItemsMe()),
-							lastRefState = refIDList(lastState);
-						playlistRefs.transaction(function(currentData) {
-							if (JSON.stringify(currentData)!==JSON.stringify(lastRefState)) {
-								self.dockItemsMe(lastState);
-								return undefined;
-							} else {
-								return currentRefState;
-							}
+				}
+				lastKoo = koo;
+				Spank.charts.current_url("#");
+				activeListeners['title'] = titleRef.on('value', function(snapshot) {
+					var title = snapshot.val();
+					if (title!==null) {
+						// NOTE: This is undefined for all results *except* when a user's playlist is open
+						Spank.charts.currentPlaylistTitle(title);
+					}
+				});
+				activeListeners['owners'] = ownersRef.on('value', function(snapshot) {
+					var owners = snapshot.val();
+					if (owners!==null) {
+						Head.playlistProperties.owners(owners);
+						var withEveryone = owners.indexOf("everyone")>=0;
+						Head.playlistProperties.withEveryone(withEveryone);
+						$("#pprop-everyone").prop("checked", withEveryone);
+					}
+				});
+				activeListeners['writable'] = writableRef.on('value', function(snapshot) {
+					var isWritable = snapshot.val();
+					console.log(isWritable);
+					if (isWritable!==null) {
+						Head.playlistProperties.writable(isWritable);
+						$("#pprop-writable").prop("checked", isWritable);
+					} else {
+						Head.playlistProperties.writable(false);
+						$("#pprop-writable").prop("checked", false);
+					}
+				});
+				activeListeners['tracklist'] = tracklistRef.on('value', function(snapshot) {
+					var tracklist = snapshot.val();
+					if (tracklist!==null) {
+						Spank.charts.pushBatch(tracklist, 'replace');
+					}
+				});
+				$(".playlistEntry").removeClass("activePlaylist");
+				thisImage.parent().addClass("activePlaylist");
+			};
+
+			$("#pprop-writable").click(function() {
+				var isTrue = $(this).prop("checked");
+				lastKoo.base.owners.once('value', function(snapshot) {
+					var owners = snapshot.val();
+					if (owners!==null && owners.indexOf(Spank.username)===0) {
+						lastKoo.base.writable.transaction(function(currentData) {
+							return isTrue;
 						});
 					}
-				};
-			})();
+				});
+			});
+
+			$("#pprop-everyone").click(function() {
+				var isTrue = $(this).prop("checked");
+				lastKoo.base.owners.once('value', function(snapshot) {
+					var owners = snapshot.val();
+					if (owners!==null && owners.indexOf(Spank.username)===0) {
+						lastKoo.base.owners.transaction(function(currentData) {
+							if (isTrue) {
+								currentData.push("everyone")
+							} else {
+								currentData = currentData.filter(function(e) {
+									return e!=='everyone';
+								})
+							}
+							return currentData;
+						});
+					}
+				});
+			});
 			return self;
 		})();
 
 		ko.applyBindings(Head.playlists, document.getElementById('playlistScroller'));
 
 		var ppiSelector = ".playlist-type-btn[value='ppi-charts']",
-			pSelector = ".playlistThumb[title='Billboards UK']";
+			pSelector = ".playlistThumb[title='Billboard UK']";
 		$(ppiSelector).trigger("click");
 		$(pSelector).trigger("click");
 

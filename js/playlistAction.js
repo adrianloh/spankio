@@ -28,8 +28,23 @@
 			resultsCache = JSON.parse(localStorage.resultsCache);
 		}
 
+//		function temp() {
+//			if (url==="#") {                            // This is a user playlist
+//				title = this_image.attr("title");       // Note: ONLY USER PLAYLISTS HAVE TITLES!
+//				tracklist = Spank.playlists[title];
+//				//console.warn("Clicked on playlist: " + title);
+//				if (tracklist && tracklist.length>0) {
+//					console.warn("Opening " + title + " with " + tracklist.length + " items.");
+//					appendToResults(title, url, tracklist, this_image, true);
+//				} else {
+//					alert("Drag a cover from your stream to start adding to this playlist!");
+//				}
+//				return false;
+//			}
+//		}
+
 		var last_request_time = new Date().getTime()-5000;
-		$(".playlistThumb").live("click", function onClickPlaylistThumbnail(event, myUrl) {
+		$(".chartThumb").live("click", function onClickPlaylistThumbnail(event, myUrl) {
 			// Note, we also 'artificially' trigger this event when we're autopaging. In
 			// which case myUrl (usually page=2||page=3, etc.) is used, otherwise the url
 			// is gotten from the playlist thumbnail itself.
@@ -42,21 +57,13 @@
 				tracklist,
 				url = myUrl || $(this).attr("url"),
 				timeNow = new Date().getTime(),
-				timeDelta = timeNow - last_request_time,
+				timeDelta = timeNow-last_request_time,
 				fetchNew = true,
 				title;
-			if (url==="#") {                            // This is a user playlist
-				title = this_image.attr("title");       // Note: ONLY USER PLAYLISTS HAVE TITLES!
-				tracklist = Spank.playlists[title];
-				//console.warn("Clicked on playlist: " + title);
-				if (tracklist && tracklist.length>0) {
-					console.warn("Opening " + title + " with " + tracklist.length + " items.");
-					appendToResults(title, url, tracklist, this_image, true);
-				} else {
-					alert("Drag a cover from your stream to start adding to this playlist!");
-				}
-				return false;
-			} else if (url.match(/http/) && resultsCache[url]) {
+			if (typeof(myUrl)==='undefined') {
+				$("#searchField").val($(this).attr("title"));
+			}
+			if (url.match(/http/) && resultsCache[url]) {
 				var stored = resultsCache[url],
 					timeSinceLastCache = new Date().getTime()-stored.timestamp;
 				if (timeSinceLastCache<86400000) { // Keep cache for 24 hours

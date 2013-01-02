@@ -50,7 +50,6 @@
 			Spank.lightBox.lyricsTitle("");
 			Spank.lightBox.lyricsThumb("");
 			$("#lightBox").removeClass("lboxScaleShow");
-//			$("#lightBox").slideUp('fast','swing', function(){});
 			$("html").removeClass("busy");
 			$("#lightBox_jspPane").html("");
 			$(".t_Tooltip_controlButtons2").remove();
@@ -63,7 +62,7 @@
 			}
 		};
 
-		$("#closeButton").click(function() {	// Close the lightbox. Stop playing music.
+		$("#closeButton").click(function() {
 			Spank.tearDownLightBox();
 		});
 
@@ -221,12 +220,6 @@
 			$("#searchField").val("artist: " + artist).trigger("keyup");
 		});
 
-//		var taglineBase = new Firebase("https://wild.firebaseio.com/spank/tagline");
-//		taglineBase.on("value", function(snapshot) {
-//			Spank.tagline = snapshot.val();
-//			$("#searchField").val(snapshot.val());
-//		});
-
 		// Don't allow the form to be submitted or we'll jump away
 		// from the page!
 		$("#searchLyrics").submit(function(e) {
@@ -241,7 +234,6 @@
 		});
 
 		var streamFilterField = $("#history-filter");
-
         streamFilterField.submit(function(e) {
             return false;
         });
@@ -249,10 +241,10 @@
         streamFilterField.livesearch({
 			searchCallback: function(input) {
 				if (input.length===0 || input==='Filter stream') return;
-                var re = new RegExp(input, "i"),
-                    tweetItems = document.getElementsByClassName("tweetItem"),
-                    i = tweetItems.length,
-                    li;
+				var re = new RegExp(input, "i"),
+					tweetItems = document.getElementsByClassName("tweetItem"),
+					i = tweetItems.length,
+					li;
                 while (i--) {
                     li = tweetItems[i];
                     if (li.getAttribute("artist").match(re) || li.getAttribute("songtitle").match(re)) {
@@ -280,13 +272,13 @@
 			var button = $(this),
 				attributes = ["songtitle", "artist", "url", "thumb", "direct"],
 				data = {},
-				that = $(this);
+				that = $(this),
+				ok = true,
+				must_have_keys = ["title", "artist", "url", "thumb", "direct"];
 			$.each(attributes, function(i, attr) {
 				var save_attr = attr.replace(/song/,"");
 				data[save_attr] = that.attr(attr);
 			});
-			var ok = true,
-				must_have_keys = ["title", "artist", "url", "thumb", "direct"];
 			$.each(must_have_keys, function(i, attr) {
 				if (!data.hasOwnProperty(attr)) {
 					console.error(attr);

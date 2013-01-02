@@ -407,16 +407,19 @@
 
         <div id="playHistory">
             <div id="history-filter-container">
-                <div class="history-filter-container2">
-                    <input type="text" id="history-filter" value="" class="text-input" />
-                    <i class="icon-remove-circle historyFilterCancel"></i>
-                </div>
+                <i class="icon-check historyOpIcons"></i>
+                <i class="icon-trash historyOpIcons"></i>
+                <i class="icon-signin historyOpIcons"></i>
+                <i class="icon-save historyOpIcons"></i>
+                <input type="text" id="history-filter" value="" class="text-input" />
+                <i class="icon-remove-circle historyFilterCancel"></i>
             </div>
             <div id="history-stream-list-container">
             <!--<ul id="history-stream-list" data-bind="sortable: {data: stream, afterMove: saveHistory }">-->
             <ul id="history-stream-list" data-bind="foreach: stream">
                 <!-- ko if: typeof($data)==='object' -->
-                <li class="tweetItem tweetShow" data-bind="attr: { url: url, artist: artist, songtitle: title }, cartDeleteIcons:$data">
+                <li class="tweetItem tweetShow" data-bind="attr: {url: url, artist: artist, songtitle: title }, cartDeleteIcons:$data">
+                    <input class="tweetcheckbox" data-bind="attr: {value: url}, checked: $root.batchItems" type="checkbox">
                     <img class="tweetThumb" src="/img/grey.gif" onerror="ImgError(this)" data-bind="pickupStreamItems:$data, attr: { src : thumb }" />
                     <a class="tweetDownloadLink" href="#" data-bind="event: { mouseover: $root.downloadHistoryItemOnClick }">
                         <i class="tweetOpsHide icon-download-alt tweetDownload"></i>
@@ -437,6 +440,23 @@
         <div id="resultsOps">
             <img src="/img/arrowright.png" class="arrowright" />
             <img src="/img/trash.png" class="trash" />
+        </div>
+
+        <div id="playlistProperties" data-bind="visible: title">
+            <i class="icon-group shareIcon"></i>
+            <div id="pTitleText" data-bind="text: title"></div>
+            <i class="icon-edit editableIcon"></i>
+            <div id="sharedWithText" data-bind="text: sharedWith"></div>
+            <div id="pprop-controls" data-bind="visible: isMine">
+                <input id="pprop-everyone" class="pprop-checkbox" type="checkbox">
+                <label class="pprop-checkbox-label" for="pprop-everyone">
+                    Everyone
+                </label>
+                <input id="pprop-writable" class="pprop-checkbox" type="checkbox">
+                <label class="pprop-checkbox-label" for="pprop-writable">
+                    Allow collaboration
+                </label>
+            </div>
         </div>
 
         <div class="resultsBody">
@@ -522,24 +542,24 @@
                     <ul id="playlists-scroller-list-charts" data-bind="foreach: chartItems">
                         <!-- ko if: $data!==undefined -->
                         <li class="playlistEntry">
-                            <img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />
+                            <img class="playlistThumb chartThumb" data-bind="attr: { src: cover, title: title, url: url }" />
                             <div class="playlistName" data-bind="text: title"></div>
                         </li>
                         <!-- /ko -->
                     </ul>
                     <ul id="playlists-scroller-list-me" data-bind="foreach: dockItemsMe">
                         <!-- ko if: $data!==undefined -->
-                        <li class="playlistEntry" data-bind="css: { droppablePlaylist: $data.url==='#' }">
-                            <img class="playlistThumb" data-bind="attr: { src: $data.cover(), title: $data.title(), url: $data.url }" />
+                        <li class="playlistEntry">
+                            <img class="playlistThumb" data-bind="click: $root.openPlaylist, attr: { src: $data.cover(), title: $data.title(), url: $data.url }" />
                             <div class="playlistName" data-bind="text: $data.title()"></div>
                         </li>
                         <!-- /ko -->
                     </ul>
                     <ul id="playlists-scroller-list-friends" data-bind="foreach: dockItemsFriends">
                         <!-- ko if: $data!==undefined -->
-                        <li class="playlistEntry" data-bind="css: { droppablePlaylist: url==='#' }">
-                            <img class="playlistThumb" data-bind="attr: { src: cover, title: title, url: url }" />
-                            <div class="playlistName" data-bind="text: title()"></div>
+                        <li class="playlistEntry">
+                            <img class="playlistThumb" data-bind="click: $root.openPlaylist, attr: { src: $data.cover(), title: $data.title(), url: $data.url }" />
+                            <div class="playlistName" data-bind="text: $data.title()"></div>
                         </li>
                         <!-- /ko -->
                     </ul>

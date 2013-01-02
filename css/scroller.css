@@ -37,7 +37,7 @@
 }
 
 .playlistThumb {
-	height: 100px;
+	height: 90px;
  	border: 1px solid #ccc;
     background-color: white;
     margin: 0px auto 5px auto;
@@ -56,7 +56,7 @@
 .playlistName {
     color: #3D3D3D;
     font: 13px "PT Sans Narrow";
-    clear: both;
+    line-height: 1.2em;
 }
 
 #playlistScroller li {
@@ -74,7 +74,7 @@
 }
 
 .activePlaylist {
-    border: 2px solid rgb(0, 228, 222);
+    border: 2px solid rgb(0, 228, 222) !important;
 }
 
 #playlist-types-buttons {

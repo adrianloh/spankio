@@ -93,7 +93,7 @@
 				window.notify.error("Deleted playlist " + playname);
 				Spank.rescanChildren();
 				if (Spank.charts.currentPlaylistTitle()===playname) {
-					$(".playlistThumb[title='Billboards UK']").trigger("click");
+					$(".playlistThumb[title='Billboard UK']").trigger("click");
 				}
 			});
 
@@ -247,7 +247,7 @@
 				// Populate the playlist bar with charts
 				Spank.playlistScroller.push(o);
 			});
-			var selector = ".playlistThumb[title='Billboards UK']";
+			var selector = ".playlistThumb[title='Billboard UK']";
 			$(selector).trigger("click");
 		});
 

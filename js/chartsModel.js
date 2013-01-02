@@ -33,7 +33,7 @@ Array.prototype.shuffle = function() {
 					if (match) {
 						var next = ++match[1],
 							next_url = self.current_url().replace(/page=(\d+)/,"page="+next);
-						$($(".playlistThumb")[0]).trigger("click",[next_url]);
+						$($(".chartThumb")[0]).trigger("click",[next_url]);
 					}
 				}
 			};
@@ -96,7 +96,7 @@ Array.prototype.shuffle = function() {
 					}
 				});
                 clearTimeout(timeoutPushHistory);
-				var query = $.trim($("#searchField").val()),
+				var query = $.trim($("#searchField").val().toLowerCase()),
 					chartData = {
 						current_url: self.current_url(),
 						ok_to_fetch_more: self.ok_to_fetch_more(),
