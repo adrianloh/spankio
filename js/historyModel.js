@@ -226,10 +226,14 @@
 
 			self.batchItems = ko.observableArray([]);
 
-			self.deleteBatch = function() {
+			self.getCheckedKoos = function() {
 				var found = 0,
 					i = self.stream().length,
 					selectedItems = [];
+				if (!self.batchItems().length>0) {
+					window.notify.error("Nothing selected in stream");
+					return selectedItems;
+				}
 				while (i--) {
 					if (found===self.batchItems().length) break;
 					var koo = self.stream()[i];
@@ -238,6 +242,12 @@
 						++found;
 					}
 				}
+				return selectedItems;
+			};
+
+			self.deleteBatch = function() {
+				var selectedItems = self.getCheckedKoos();
+				if (selectedItems.length===0) return;
 				Spank.base.history.transaction(function update(currentData) {
 					var intermediete, invalid = false;
 					selectedItems.forEach(function(koo) {
@@ -306,7 +316,11 @@
 		ko.applyBindings(Spank.history, document.getElementById('playHistory'));
 
 		$("#history-filter-container .icon-check").click(function() {
-			$(".tweetcheckbox").prop("checked", false);
+			if ($("#history-stream-list").hasClass("history-cbox-show") && ($(".tweetcheckbox:checked").length>0)) {
+				$(".tweetcheckbox").prop("checked", false);
+			} else {
+				$("#history-stream-list").toggleClass("history-cbox-hide history-cbox-show");
+			}
 		});
 
 		$("#history-filter-container .icon-trash").click(function() {

@@ -118,7 +118,7 @@
 				setTimeout(function() {
 					if (document._ignoreDrop===true) return false;
 					var droppedHistoryItem = JSON.parse(JSON.stringify(document._draggedHistoryItem));
-					Spank.playlistScroller.addSongToPlaylist(Spank.charts.currentPlaylistTitle(), droppedHistoryItem);
+					Head.unshiftIntoOpenPlaylist([ko.toJS(droppedHistoryItem)])
 				}, 250);
 			}
 		});

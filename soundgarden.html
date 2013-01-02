@@ -416,7 +416,7 @@
             </div>
             <div id="history-stream-list-container">
             <!--<ul id="history-stream-list" data-bind="sortable: {data: stream, afterMove: saveHistory }">-->
-            <ul id="history-stream-list" data-bind="foreach: stream">
+            <ul id="history-stream-list" class="history-cbox-hide" data-bind="foreach: stream">
                 <!-- ko if: typeof($data)==='object' -->
                 <li class="tweetItem tweetShow" data-bind="attr: {url: url, artist: artist, songtitle: title }, cartDeleteIcons:$data">
                     <input class="tweetcheckbox" data-bind="attr: {value: url}, checked: $root.batchItems" type="checkbox">

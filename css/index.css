@@ -824,8 +824,15 @@ ul.lastfm-buttons {
 }
 
 #history-stream-list {
-    margin-left: -40px;
     margin-top: 0;
+}
+
+.history-cbox-show {
+    margin-left: -38px;
+}
+
+.history-cbox-hide {
+    margin-left: -60px;
 }
 
 .tweetItem {
@@ -883,7 +890,6 @@ ul.lastfm-buttons {
     float: left;
     margin-top: 22px;
     background: red;
-    width: 10px;
 }
 
 .tweetThumb {
@@ -976,7 +982,7 @@ ul.lastfm-buttons {
     width: 60%;
     background: white;
     border-radius: 24px;
-    z-index: 11;
+    z-index: 10;
 }
 
 #sharedwithtext {

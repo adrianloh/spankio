@@ -269,20 +269,20 @@
 					if (index>=0) dock.remove(koo);
 				});
 			};
-			var lastKoo = null,
-				activeListeners = {};
+			self.lastKoo = null;
+			var	activeListeners = {};
 			self.openPlaylist = function(koo, event) {
 				var thisImage = $(event.target),
 					titleRef = koo.base.title,
 					ownersRef = koo.base.owners,
 					writableRef = koo.base.writable,
 					tracklistRef = koo.base.tracklist;
-				if (lastKoo!==null) {
+				if (self.lastKoo!==null) {
 					$.each(activeListeners, function(k,v) {
-						lastKoo.base[k].off('value',v);
+						self.lastKoo.base[k].off('value',v);
 					});
 				}
-				lastKoo = koo;
+				self.lastKoo = koo;
 				Spank.charts.current_url("#");
 				activeListeners['title'] = titleRef.on('value', function(snapshot) {
 					var title = snapshot.val();
@@ -319,41 +319,87 @@
 				$(".playlistEntry").removeClass("activePlaylist");
 				thisImage.parent().addClass("activePlaylist");
 			};
-
-			$("#pprop-writable").click(function() {
-				var isTrue = $(this).prop("checked");
-				lastKoo.base.owners.once('value', function(snapshot) {
-					var owners = snapshot.val();
-					if (owners!==null && owners.indexOf(Spank.username)===0) {
-						lastKoo.base.writable.transaction(function(currentData) {
-							return isTrue;
-						});
-					}
-				});
-			});
-
-			$("#pprop-everyone").click(function() {
-				var isTrue = $(this).prop("checked");
-				lastKoo.base.owners.once('value', function(snapshot) {
-					var owners = snapshot.val();
-					if (owners!==null && owners.indexOf(Spank.username)===0) {
-						lastKoo.base.owners.transaction(function(currentData) {
-							if (isTrue) {
-								currentData.push("everyone")
-							} else {
-								currentData = currentData.filter(function(e) {
-									return e!=='everyone';
-								})
-							}
-							return currentData;
-						});
-					}
-				});
-			});
 			return self;
 		})();
 
 		ko.applyBindings(Head.playlists, document.getElementById('playlistScroller'));
+
+		function strip(e) {
+			return $.trim(e.toLowerCase());
+		}
+
+		Head.unshiftIntoOpenPlaylist = function(selectedHistoryItems) {
+			var isInView = typeof(Spank.charts.currentPlaylistTitle())!=='undefined',
+				isMine = Head.playlistProperties.owners().indexOf(Spank.username)===0,
+				isWritable = Head.playlistProperties.writable();
+			if (selectedHistoryItems.length>0 && isInView && (isMine || isWritable)) {
+				var dx = [], tt;
+				$.each(selectedHistoryItems, function(i,o) {
+					tt = strip(o.artist)+strip(o.title);
+					dx.push(tt);
+					dx.push(o.url);
+				});
+				Head.playlists.lastKoo.base.tracklist.transaction(function(currentData) {
+					var newArray = [];
+					$.each(currentData, function(i, o) {
+						var tt = strip(o.artist)+strip(o.title);
+						if (dx.indexOf(o.url)>=0 || dx.indexOf(tt)>=0 ) {
+							// A track in the existing set matches a track we're trying to insert
+						} else {
+							newArray.push(o);
+						}
+					});
+					newArray.unshift.apply(newArray, selectedHistoryItems);
+					return newArray;
+				});
+			} else {
+				if (!isWritable) {
+					window.notify.error("Sorry, you can't add to this playlist.");
+				}
+			}
+		};
+
+		$("#history-filter-container .icon-signin").click(function() {
+			var selectedHistoryItems = Spank.history.getCheckedKoos();
+			if (selectedHistoryItems.length>0) {
+				var historyItems = $.map(selectedHistoryItems, function(koo) {
+					return ko.toJS(koo);
+				});
+				Head.unshiftIntoOpenPlaylist(historyItems);
+			}
+		});
+
+		$("#pprop-writable").click(function() {
+			var isTrue = $(this).prop("checked");
+			Head.playlists.lastKoo.base.owners.once('value', function(snapshot) {
+				var owners = snapshot.val();
+				if (owners!==null && owners.indexOf(Spank.username)===0) {
+					Head.playlists.lastKoo.base.writable.transaction(function(currentData) {
+						return isTrue;
+					});
+				}
+			});
+		});
+
+		$("#pprop-everyone").click(function() {
+			var isTrue = $(this).prop("checked");
+			Head.playlists.lastKoo.base.owners.once('value', function(snapshot) {
+				var owners = snapshot.val();
+				if (owners!==null && owners.indexOf(Spank.username)===0) {
+					Head.playlists.lastKoo.base.owners.transaction(function(currentData) {
+						if (isTrue) {
+							currentData.push("everyone");
+						} else {
+							currentData = currentData.filter(function(e) {
+								return e!=='everyone';
+							});
+						}
+						return currentData;
+					});
+				}
+			});
+		});
+
 
 		var ppiSelector = ".playlist-type-btn[value='ppi-charts']",
 			pSelector = ".playlistThumb[title='Billboard UK']";
