@@ -408,9 +408,9 @@
         <div id="playHistory">
             <div id="history-filter-container">
                 <i class="icon-check historyOpIcons"></i>
-                <i class="icon-trash historyOpIcons"></i>
                 <i class="icon-signin historyOpIcons"></i>
                 <i class="icon-save historyOpIcons"></i>
+                <i class="icon-trash historyOpIcons"></i>
                 <input type="text" id="history-filter" value="" class="text-input" />
                 <i class="icon-remove-circle historyFilterCancel"></i>
             </div>
@@ -491,19 +491,20 @@
 
         </div>
 
+        <div id="sendSongForm">
+            <form class="form-5 clearfix">
+                <div class="p">
+                    <div class="formTitle" data-bind="text: title"></div>
+                    <input type="text" id="sendMessage" data-bind="attr: {placeholder: placeholder}">
+                </div>
+                <button class="sendMessageButton">
+                    <i class="icon-arrow-right"></i>
+                    <span data-bind="text: submitmessage"></span>
+                </button>
+            </form>
+        </div>
+
         <div id="friendList-container">
-            <div id="sendSongForm">
-                <form class="form-5 clearfix">
-                    <div class="p">
-                        <div class="formTitle">Send it with a message!</div>
-                        <input type="text" id="sendMessage" placeholder="This is aawwwesomee">
-                    </div>
-                    <button id="sendMessageButton">
-                        <i class="icon-arrow-right"></i>
-                        <span>Send</span>
-                    </button>
-                </form>
-            </div>
             <ul id="friendList" data-bind="foreach: friendlist">
                 <li class="friendItem" data-bind="attr: { frequency: frequency }, droppableFriend:$data">
                     <div class="friendDetails">

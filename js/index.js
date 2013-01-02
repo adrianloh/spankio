@@ -39,6 +39,31 @@
 
 		ko.applyBindings(Spank.lightBox, document.getElementById('lightBox'));
 
+		Spank.getInput = {
+			title: ko.observable("Send it with a message!"),
+			placeholder: ko.observable("This is aawwwesomee"),
+			submitmessage: ko.observable("Send")
+		};
+
+		Spank.getInput.show = function(callback, data) {
+			$.each(data, function(k,v) {
+				Spank.getInput[k](v);
+			});
+			var sendSongForm = $("#sendSongForm");
+			sendSongForm.slideDown('fast','swing');
+			sendSongForm.unbind('submit');
+			sendSongForm.submit(function() {
+				var messageField = $("#sendMessage"),
+					message = messageField.val();
+				callback(message);
+				messageField.val("");
+				sendSongForm.slideUp('fast','swing');
+				return false;
+			});
+		};
+
+		ko.applyBindings(Spank.getInput, document.getElementById('sendSongForm'));
+
 		//
 		// When we CLOSE the LIGHTBOX
 		//

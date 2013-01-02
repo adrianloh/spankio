@@ -354,7 +354,9 @@
 				});
 			} else {
 				if (!isWritable) {
-					window.notify.error("Sorry, you can't add to this playlist.");
+					window.notify.error("Sorry, you can't add to this playlist.", 'force');
+				} else if (!isInView) {
+					window.notify.error("Open a playlist first then add to it.", 'force');
 				}
 			}
 		};
@@ -366,6 +368,48 @@
 					return ko.toJS(koo);
 				});
 				Head.unshiftIntoOpenPlaylist(historyItems);
+			}
+		});
+
+		$("#history-filter-container .icon-save").click(function() {
+			var selectedHistoryItems = Spank.history.getCheckedKoos();
+			if (selectedHistoryItems.length>0) {
+				var
+				historyItems = $.map(selectedHistoryItems, function(koo) {
+					return ko.toJS(koo);
+				}),
+				data = {
+					title: "Name your new playlist!",
+					placeholder: "Playlist " + hex_md5(new Date().getTime().toString()).slice(0,5),
+					submitmessage: "OK"
+				};
+				Spank.getInput.show(function(playname) {
+					playname = playname || data.placeholder;
+					var saveData = {
+						title: playname,
+						list: historyItems,
+						owners:[Spank.username, 'everyone']
+					};
+					var newRef = Spank.base.me.child("playlists").push(saveData, function afterSave(ok) {
+						window.notify.success("Created new playlist " + playname);
+						Spank.base.me.child("playlistRefs").transaction(function(currentData) {
+							if (currentData===null) {
+								return [newRef.name()];
+							} else {
+								currentData.push(newRef.name());
+								return currentData;
+							}
+						});
+					});
+				}, data)
+			}
+		});
+
+		Spank.charts.currentPlaylistTitle.subscribe(function(isOpen) {
+			if (typeof(isOpen)==='undefined') {
+				$(".icon-signin.historyOpIcons").hide();
+			} else {
+				$(".icon-signin.historyOpIcons").css({display:'inline-block'});
 			}
 		});
 

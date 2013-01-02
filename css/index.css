@@ -1008,3 +1008,11 @@ ul.lastfm-buttons {
 #pprop-controls {
     display: inline-block;
 }
+
+.icon-signin.historyOpIcons {
+    display: none;
+}
+
+.icon-trash.historyopicons {
+    margin-left: 8px;
+}

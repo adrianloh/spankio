@@ -39,16 +39,6 @@
 		var sentMailSound = new Audio("/static/sounds/mailsent.mp3");
 		sentMailSound.load();
 
-		$("#sendSongForm").submit(function(event) {
-			var messageField = $("#sendMessage"),
-				message = messageField.val();
-			Spank.sendToFriend(message);
-			$(this).hide();
-			messageField.val("");
-			sentMailSound.play();
-			return false;
-		});
-
 		ko.bindingHandlers.droppableFriend = {
 			init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 				$(element).droppable({
@@ -64,13 +54,13 @@
 						},1000);
 //// Serious fucking Jquery UI bug, unresolved even at 1.9.2
 						ui.draggable.detach();
-						document._draggedHistoryItemUIParent.prepend(ui.draggable);
+						ui.draggable.insertAfter(document._draggedHistoryItemUIParent);
+//						document._draggedHistoryItemUIParent.prepend(ui.draggable);
 //// Begin actual...
 						var koo = valueAccessor(),
 							friendData = ko.toJS(koo),
 							friendsHistory = Spank.friends.bases[friendData.username].history,
 							droppedHistoryItem = JSON.parse(JSON.stringify(document._draggedHistoryItem));
-						// This is a callback function for $("#sendSongForm").submit
 						Spank.sendToFriend = function(message) {
 							message = message.length>0 ? message : "This is awwweesooomme!";
 							friendsHistory.transaction(function(currentData) {
@@ -90,7 +80,14 @@
 								});
 							});
 						};
-						$("#sendSongForm").slideDown('fast','swing');
+						Spank.getInput.show(function(message) {
+							Spank.sendToFriend(message);
+							sentMailSound.play();
+						},{
+							title: "Send it with a message!",
+							placeholder: "This is aawwwesomee",
+							submitmessage: "Send"
+						});
 					}
 				});
 			}

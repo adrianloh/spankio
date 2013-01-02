@@ -69,7 +69,7 @@
 //					cursor: '-webkit-grabbing',
 					zIndex:999,
 					start:function( event, ui ) {
-						document._draggedHistoryItemUIParent = $(element).parent();
+						document._draggedHistoryItemUIParent = $(element).prev();
 						// Gets us the object of the history item that was picked up
 						document._draggedHistoryItem = ko.toJS(valueAccessor());
 						var searchZone = $("#playlistSearchZone");

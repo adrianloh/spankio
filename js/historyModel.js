@@ -317,7 +317,7 @@
 
 		$("#history-filter-container .icon-check").click(function() {
 			if ($("#history-stream-list").hasClass("history-cbox-show") && ($(".tweetcheckbox:checked").length>0)) {
-				$(".tweetcheckbox").prop("checked", false);
+				Spank.history.batchItems([])
 			} else {
 				$("#history-stream-list").toggleClass("history-cbox-hide history-cbox-show");
 			}
