@@ -265,14 +265,17 @@
 
         streamFilterField.livesearch({
 			searchCallback: function(input) {
-				if (input.length===0 || input==='Filter stream') return;
 				var re = new RegExp(input, "i"),
 					tweetItems = document.getElementsByClassName("tweetItem"),
 					i = tweetItems.length,
+					showAll = false,
 					li;
+				if (input.length===0 || input==='Filter stream') {
+					showAll = true;
+				}
                 while (i--) {
                     li = tweetItems[i];
-                    if (li.getAttribute("artist").match(re) || li.getAttribute("songtitle").match(re)) {
+                    if (showAll || li.getAttribute("artist").match(re) || li.getAttribute("songtitle").match(re)) {
 	                    li.className = "tweetItem tweetShow";
                     } else {
                         li.className = "tweetItem";
