@@ -1016,3 +1016,17 @@ ul.lastfm-buttons {
 .icon-trash.historyopicons {
     margin-left: 8px;
 }
+
+.icon-trash.pprop-trash {
+    cursor: pointer;
+    position: absolute;
+    right: 13px;
+    color: #CFCFCF;
+    font-size: 25px;
+    margin-right: 13px;
+    margin-top: -22px;
+}
+
+.icon-trash.pprop-trash:hover {
+    color: #FF2525;
+}

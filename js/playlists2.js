@@ -228,6 +228,24 @@
 
 		ko.applyBindings(Head.playlistProperties, document.getElementById('playlistProperties'));
 
+		$(".icon-trash.pprop-trash").click(function() {
+			var koo = Head.playlists.lastKoo,
+				refId = koo.refID;
+			Spank.base.me.child('playlistRefs').transaction(function(currentData) {
+				var i = currentData.indexOf(refId);
+				if (i>=0) {
+					currentData.splice(i,1);
+					return currentData;
+				} else {
+					return undefined;
+				}
+			}, function onComplete(ok) {
+				if (ok) {
+					koo.base.root.remove();
+				}
+			});
+		});
+
 		Head.playlists = (function () {
 			var self = {};
 			self.visible = ko.observable(true);

@@ -110,7 +110,7 @@ Array.prototype.shuffle = function() {
                 if (mode && mode==='unshift') {
 					self.chartTracks.unshift.apply(self.chartTracks, newItems);
 	                setState();
-				} else if (mode && mode==='replace') {
+				} else if (mode && mode.match(/replace/)) {
 					self.chartTracks(newItems);
 					var hash = stateHash();
 	                setState(hash);
