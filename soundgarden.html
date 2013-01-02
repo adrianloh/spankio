@@ -77,7 +77,7 @@
     <script type='text/javascript' src='https://static.firebase.com/v0/firebase.js'></script>
 
     <!-- jQuery and Knockout.JS -->
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.1.0/knockout-min.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.2.0/knockout-min.js"></script>
 
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
@@ -87,8 +87,8 @@
 
      <!--bxSlider CSS file -->
     <link rel="stylesheet" type="text/css" href="/css/scroller.css" />
-    <link href="/js/jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />
-    <script src="/js/jquery.bxslider/jquery.bxslider.mine.js"></script>
+    <!--<link href="/js/jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />-->
+    <!--<script src="/js/jquery.bxslider/jquery.bxslider.mine.js"></script>-->
 
     <!-- Make playlists, a KO observable array, sortable -->
     <script type="text/javascript" src="/js/knockout-sortable.min.js"></script>
@@ -445,7 +445,7 @@
         <div id="playlistProperties" data-bind="visible: title">
             <i class="icon-group shareIcon"></i>
             <div id="pTitleText" data-bind="text: title"></div>
-            <i class="icon-edit editableIcon"></i>
+            <i data-bind="css: editState"></i>
             <div id="sharedWithText" data-bind="text: sharedWith"></div>
             <div id="pprop-controls" data-bind="visible: isMine">
                 <input id="pprop-everyone" class="pprop-checkbox" type="checkbox">

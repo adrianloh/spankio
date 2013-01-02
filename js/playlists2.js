@@ -73,7 +73,11 @@
 						// one of the owners, or the playlist is tagged with "everyone"
 						if (ownersList.indexOf('everyone')>=0 ||
 							ownersList.indexOf(Spank.username)>=0) {
-							if (Head.playlists.itemsByRef.hasOwnProperty(refID)) return;
+							if (Head.playlists.itemsByRef.hasOwnProperty(refID)) {
+								// As the owners list changes, make sure we don't re-add a
+								// playlist we are already watching
+								return;
+							}
 							var playlist = {
 								title: ko.observable(""),
 								url: ko.observable("#"),
@@ -92,21 +96,28 @@
 							Playlist.watchPlaylistInfo(thisPlaylistRef);
 						}
 					} else {
-						// If ownersList is suddenly null, it means a playlistRef we were listening
-						// to has just been deleted. Always true?
+						// If the entire ownersList is suddenly null, it probably means that
+						// a playlistRef we were watching just got deleted. Always true?
 						Playlist.unwatchPlaylistInfo(thisPlaylistRef);
 						Head.playlists.deletePlaylistItemWithRef(refID);
+						delete Head.playlists.itemsByRef[refID];
 					}
 				});
 
 				thisPlaylistRef.child("owners").on("child_removed", function(snapshot) {
-					var username = snapshot.val();
-					if (username===Spank.username || username==='everyone') {
-						// The owner of this playlist has stopped sharing with
-						// either me or, everyone
-						Playlist.unwatchPlaylistInfo(thisPlaylistRef);
-						Head.playlists.deletePlaylistItemWithRef(refID);
-					}
+					var ownerRef = snapshot.ref().parent().child("0"),
+						deletedUser = snapshot.val();
+					ownerRef.on("value", function(snapshot) {
+						if (snapshot.val()!==Spank.username) {
+							// If this is not my playlist and the owner of this playlist
+							// has stopped sharing with either me or, everyone
+							if (deletedUser===Spank.username || deletedUser==='everyone') {
+								Playlist.unwatchPlaylistInfo(thisPlaylistRef);
+								Head.playlists.deletePlaylistItemWithRef(refID);
+								delete Head.playlists.itemsByRef[refID];
+							}
+						}
+					});
 				})
 
 			} else {
@@ -184,6 +195,15 @@
 			});
 			self.owners = ko.observableArray([]);
 			self.writable = ko.observable(null);
+			self.editState = ko.computed(function() {
+				if (self.owners().length<=1) {
+					return "icon-eye-close";
+				} else if (self.writable()!==null) {
+					return self.writable() ? "icon-edit" : "icon-eye-open";
+				} else {
+					return "bogus";
+				}
+			});
 			self.withEveryone = ko.observable(null);
 			self.sharedWith = ko.computed(function() {
 				var everyone = self.owners().indexOf("everyone")>=0,
@@ -192,7 +212,7 @@
 					if (self.writable()) {
 						return "Editable by anyone";
 					} else {
-						return "Shared with everyone";
+						return "Viewable by everyone";
 					}
 				} else if (nobody) {
 					return "Private";
@@ -282,7 +302,6 @@
 				});
 				activeListeners['writable'] = writableRef.on('value', function(snapshot) {
 					var isWritable = snapshot.val();
-					console.log(isWritable);
 					if (isWritable!==null) {
 						Head.playlistProperties.writable(isWritable);
 						$("#pprop-writable").prop("checked", isWritable);

@@ -2,21 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="32ba444c-fc18-4642-a53c-06c7d6e77d49" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/chartsModel.js" afterPath="$PROJECT_DIR$/js/chartsModel.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/historyModel.js" afterPath="$PROJECT_DIR$/js/historyModel.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/index.css" afterPath="$PROJECT_DIR$/css/index.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/index.js" afterPath="$PROJECT_DIR$/js/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/playlistAction.js" afterPath="$PROJECT_DIR$/js/playlistAction.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/playlists.js" afterPath="$PROJECT_DIR$/js/playlists.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/playlists2.js" afterPath="$PROJECT_DIR$/js/playlists2.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/scroller.css" afterPath="$PROJECT_DIR$/css/scroller.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/soundgarden.html" afterPath="$PROJECT_DIR$/soundgarden.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="soundgarden-heroku.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/Dummy.txt" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357006791915" ignored="false" />
-    <file path="/soundgarden.html" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357108359337" ignored="false" />
+    <file path="/soundgarden.html" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357115634175" ignored="false" />
     <file path="/index.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357054955959" ignored="false" />
     <file path="/historyModel.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357089209023" ignored="false" />
     <file path="/chartsModel.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357092971729" ignored="false" />
@@ -27,7 +20,7 @@
     <file path="/draggables.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357073341797" ignored="false" />
     <file path="/index.css" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357107716115" ignored="false" />
     <file path="/snippets.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1356861821563" ignored="false" />
-    <file path="/playlists2.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357112664161" ignored="false" />
+    <file path="/playlists2.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357116220881" ignored="false" />
     <file path="/playlists.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1356893764646" ignored="false" />
     <file path="/scroller.css" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357074641241" ignored="false" />
     <file path="/jquery.bxslider.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357013253270" ignored="false" />
@@ -94,7 +87,7 @@
       <file leaf-file-name="playlists2.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/playlists2.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="377" column="0" selection-start="12749" selection-end="12749" vertical-scroll-proportion="3.2291067">
+            <state line="204" column="0" selection-start="7391" selection-end="7391" vertical-scroll-proportion="0.56340057">
               <folding />
             </state>
           </provider>
@@ -112,7 +105,7 @@
       <file leaf-file-name="soundgarden.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/soundgarden.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="450" column="27" selection-start="20033" selection-end="20047" vertical-scroll-proportion="-19.0">
+            <state line="80" column="0" selection-start="3570" selection-end="3570" vertical-scroll-proportion="-11.761905">
               <folding />
             </state>
           </provider>
@@ -130,7 +123,7 @@
       <file leaf-file-name="index.css" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/css/index.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1003" column="0" selection-start="20994" selection-end="20994" vertical-scroll-proportion="0.0">
+            <state line="1003" column="0" selection-start="20994" selection-end="20994" vertical-scroll-proportion="-14.230769">
               <folding />
             </state>
           </provider>
@@ -538,13 +531,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/historyNav.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="0" selection-start="156" selection-end="156" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/chartsModel.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="119" column="0" selection-start="3917" selection-end="3917" vertical-scroll-proportion="0.0">
@@ -559,23 +545,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/css/scroller.css">
+    <entry file="file://$PROJECT_DIR$/js/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="14" selection-start="680" selection-end="680" vertical-scroll-proportion="0.0">
+        <state line="349" column="0" selection-start="11818" selection-end="11818" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/css/index.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1003" column="0" selection-start="20994" selection-end="20994" vertical-scroll-proportion="0.0">
+        <state line="1003" column="0" selection-start="20994" selection-end="20994" vertical-scroll-proportion="-14.230769">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/index.js">
+    <entry file="file://$PROJECT_DIR$/css/scroller.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="349" column="0" selection-start="11818" selection-end="11818" vertical-scroll-proportion="0.0">
+        <state line="39" column="14" selection-start="680" selection-end="680" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -587,16 +573,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/js/historyNav.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="0" selection-start="156" selection-end="156" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/soundgarden.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="450" column="27" selection-start="20033" selection-end="20047" vertical-scroll-proportion="-19.0">
+        <state line="80" column="0" selection-start="3570" selection-end="3570" vertical-scroll-proportion="-11.761905">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/playlists2.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="377" column="0" selection-start="12749" selection-end="12749" vertical-scroll-proportion="3.2291067">
+        <state line="204" column="0" selection-start="7391" selection-end="7391" vertical-scroll-proportion="0.56340057">
           <folding />
         </state>
       </provider>
