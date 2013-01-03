@@ -11,7 +11,7 @@
 	},
 	chartPlaylistItems = [
 		{title: 'last.fm Top', cover: '/img/lastfm.jpg', url: chartUrls.lastfm_top() },
-		{title: 'last.fm Most Loved', cover: '/img/lastfm.jpg', url: chartUrls.lastfm_loved() },
+		{title: 'last.fm Loved', cover: '/img/lastfm.jpg', url: chartUrls.lastfm_loved() },
 		{title: 'last.fm Hyped', cover: '/img/lastfm.jpg', url: chartUrls.lastfm_hyped() }
 	],
 	codes = {
@@ -30,7 +30,7 @@
 
 	["FR", "JP", "DE", "US", "UK"].forEach(function(code) {
 		var bUrl = chartUrls.billboards_base.replace("#", code.toLowerCase()),
-			bCover = '/img/bill_#.jpg'.replace("#", code.toLowerCase()),
+			bCover = '/img/bill.jpg'.replace("#", code.toLowerCase()),
 			bp = {title: 'Billboard ' + codes[code], cover: bCover, url: bUrl};
 		chartPlaylistItems.unshift(bp);
 	});
