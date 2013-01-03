@@ -30,7 +30,7 @@
 
 	["FR", "JP", "DE", "US", "UK"].forEach(function(code) {
 		var bUrl = chartUrls.billboards_base.replace("#", code.toLowerCase()),
-			bCover = '/img/bill_#.jpg'.replace("#", code),
+			bCover = '/img/bill_#.jpg'.replace("#", code.toLowerCase()),
 			bp = {title: 'Billboard ' + codes[code], cover: bCover, url: bUrl};
 		chartPlaylistItems.unshift(bp);
 	});
