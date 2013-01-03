@@ -363,6 +363,8 @@
 			});
 		};
 
+		Spank.mxMatchOne = mxMatchOne;
+
 		var getLyricsWithMxid = function(track) {
 			mx_get_lyrics_in_progress = true;
 			function getLyrics(mxid) {

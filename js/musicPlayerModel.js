@@ -90,19 +90,32 @@
 				});
 			},
 			applyNewCoverArt: function(o) {
-				var lastfm_trackSearch = "http://ws.audioscrobbler.com/2.0/?method=track.search&artist=@&track=#&limit=1&api_key=0325c588426d1889087a065994d30fa1&format=json",
-					url = lastfm_trackSearch.replace("@", encodeURIComponent(o.artist)).replace("#", encodeURIComponent(o.title));
+				var title = o.title.replace(/spankio/,""),
+					lastfm_trackSearch = "http://ws.audioscrobbler.com/2.0/?method=track.search&artist=@&track=#&limit=1&api_key=0325c588426d1889087a065994d30fa1&format=json",
+					url = lastfm_trackSearch.replace("@", encodeURIComponent(o.artist)).replace("#", encodeURIComponent(title));
+
+				function setImage(newCoverUrl) {
+					var koo = Spank.history.findHistoryItemWithUrl(o.url);
+					if (koo!==null) {
+						koo.title($.trim(title));
+						koo.thumb(newCoverUrl);
+						Spank.history.saveHistory(true);
+						$("#funkyPlayer").css("background-image", "url(" + newCoverUrl + ")");
+					}
+				}
+
 				$.getJSON(url, function(res) {
 					try {
 						var images = res.results.trackmatches.track.image;
 						if (Array.isArray(images) && images.length>0) {
-							var koo = Spank.history.findHistoryItemWithUrl(o.url);
 							var newCoverUrl = images[images.length-1]['#text'];
-							if (koo!==null && newCoverUrl.length>0) {
-								koo.thumb(newCoverUrl);
-								Spank.history.saveHistory(true);
-								$("#funkyPlayer").css("background-image", "url(" + newCoverUrl + ")");
-							}
+							if (newCoverUrl.length>0) setImage(newCoverUrl);
+						} else {
+							Spank.mxMatchOne(title, o.artist, function(mxTrack) {
+								if (mxTrack.hasOwnProperty("album_coverart_350x350")) {
+									setImage(mxTrack.album_coverart_350x350);
+								}
+							});
 						}
 					} catch(err) {
 						console.error("Cannot find new album art.");
