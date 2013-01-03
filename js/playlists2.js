@@ -10,9 +10,9 @@
 		lastfm_loved: function () { return this.lastfm_base.replace("METHOD","chart.getlovedtracks"); }
 	},
 	chartPlaylistItems = [
-		{title: 'last.fm Top', cover: '/img/last_top.png', url: chartUrls.lastfm_top() },
-		{title: 'last.fm Loved', cover: '/img/last_loved.png', url: chartUrls.lastfm_loved() },
-		{title: 'last.fm Hyped', cover: '/img/last_hyped.png', url: chartUrls.lastfm_hyped() }
+		{title: 'last.fm Top', cover: '/img/lastfm.jpg', url: chartUrls.lastfm_top() },
+		{title: 'last.fm Most Loved', cover: '/img/lastfm.jpg', url: chartUrls.lastfm_loved() },
+		{title: 'last.fm Hyped', cover: '/img/lastfm.jpg', url: chartUrls.lastfm_hyped() }
 	],
 	codes = {
 		UK: "UK",
@@ -37,7 +37,7 @@
 
 	["US", "DE", "JP", "IN", "AR", "FR", "SE", "ES"].forEach(function(code) {
 		var iUrl = chartUrls.itunes_base.replace("#", code.toLowerCase()),
-			ip = {title: 'iTunes ' + codes[code], cover: '/img/iTunes.png', url: iUrl };
+			ip = {title: 'iTunes ' + codes[code], cover: '/img/iTunes.jpg', url: iUrl };
 		chartPlaylistItems.push(ip);
 	});
 
