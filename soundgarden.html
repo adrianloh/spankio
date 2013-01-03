@@ -455,7 +455,7 @@
                 </label>
                 <input id="pprop-writable" class="pprop-checkbox" type="checkbox">
                 <label class="pprop-checkbox-label" for="pprop-writable">
-                    Allow others to add
+                    Let others contribute
                 </label>
                 <i class="icon-trash pprop"></i>
             </div>
@@ -481,7 +481,7 @@
                 </div>
                 <div id="playlistDropZone" class="playlistDropZone"><div class="dropSpans">Add to this playlist</div></div>
                 <div id="track_count_current" data-bind="text: totalChartTracks"></div>
-                <ul class="results-list" data-bind="sortable: {data:chartTracks, afterMove: onResort }">
+                <ul class="results-list" data-bind="sortable: {data:chartTracks, beforeMove: saveTrackOrder, afterMove: changeTrackOrder }">
                     <li class="trackEntry unwobbled">
                         <img class="mxThumb" src="/img/grey.gif" onerror="ImgError(this)" data-bind="click: $root.addToShoppingCart, attr: { src: thumb }" />
                         <!--<div class="trackName"><a class="lyricLink" href="#" data-bind="text: title, attr: { mxid: mxid }"></a></div>-->

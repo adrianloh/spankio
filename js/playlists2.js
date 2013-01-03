@@ -217,7 +217,7 @@
 					nobody = self.owners().length<=1;
 				if (everyone) {
 					if (self.writable()) {
-						return "Anyone can add";
+						return "Anyone can contribute";
 					} else {
 						return "Viewable by everyone";
 					}
@@ -244,6 +244,13 @@
 		})();
 
 		ko.applyBindings(Head.playlistProperties, document.getElementById('playlistProperties'));
+
+		Head.playlistProperties.owners.subscribe(function(list) {
+			var writableCheckbox = $("#pprop-writable");
+			if (list.length===1 && writableCheckbox.prop("checked")) {
+				writableCheckbox.prop("checked", false);
+			}
+		});
 
 		Head.playlists = (function () {
 			var self = {};
@@ -594,6 +601,10 @@
 
 		$("#pprop-writable").click(function() {
 			var isTrue = $(this).prop("checked");
+			if (isTrue && Head.playlistProperties.owners().length===1) {
+				isTrue = false;
+				$("#pprop-writable").prop("checked", false);
+			}
 			Head.playlists.lastKoo.base.owners.once('value', function(snapshot) {
 				var owners = snapshot.val();
 				if (owners!==null && owners.indexOf(Spank.username)===0) {

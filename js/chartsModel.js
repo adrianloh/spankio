@@ -28,9 +28,39 @@ Array.prototype.shuffle = function() {
 			self.totalChartTracks = ko.computed(function(){
 				return Spank.utils.padToFour(self.chartTracks().length);
 			});
-			self.onResort = function(o) {
-				if (self.currentPlaylistTitle()) {
-					Spank.playlistScroller.savePlaylist(self.currentPlaylistTitle(), self.chartTracks());
+			var lastState;
+			self.saveTrackOrder = function(arg) {
+				var okToChange = (Head.playlistProperties.isMine() || Head.playlistProperties.writable());
+				lastState = ko.toJSON(self.chartTracks);
+				if (typeof(self.currentPlaylistTitle())==='undefined' || !okToChange) {
+					arg.cancelDrop = true;
+				}
+			};
+			self.changeTrackOrder = function(o) {
+				var okToChange = (Head.playlistProperties.isMine() || Head.playlistProperties.writable()),
+					lastKnownState = JSON.parse(lastState);
+				if (typeof(self.currentPlaylistTitle())!=='undefined' && okToChange) {
+					Head.playlists.lastKoo.base.tracklist.transaction(function(currentData) {
+						if (currentData.length===lastKnownState.length) {
+							var i = currentData.length;
+							while (i--) {
+								if (currentData[i].url!==lastKnownState[i].url) {
+									return undefined;
+								}
+							}
+							return self.chartTracks();
+						} else {
+							return undefined;
+						}
+					}, function onComplete(ok) {
+						if (!ok) {
+							window.notify.error("Playlist was changed before you got to it. Try again!");
+							self.chartTracks(lastKnownState);
+						}
+					});
+				} else {
+					window.notify.error("Sorry, you're no longer allowed to modify this playlist.");
+					self.chartTracks(lastKnownState);
 				}
 			};
 			self.fetchMore = function() {

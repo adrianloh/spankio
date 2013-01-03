@@ -1001,6 +1001,7 @@ ul.lastfm-buttons {
 }
 
 #pprop-controls {
+    margin-left: 10px;
     display: inline-block;
 }
 
