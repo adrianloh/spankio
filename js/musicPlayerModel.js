@@ -96,7 +96,9 @@
 
 				function setImage(newCoverUrl) {
 					var koo = Spank.history.findHistoryItemWithUrl(o.url);
-					if (koo!==null) {
+					if (koo!==null
+						&& typeof(newCoverUrl)==="string"
+						&& newCoverUrl.length>0) {
 						koo.title($.trim(title));
 						koo.thumb(newCoverUrl);
 						Spank.history.saveHistory(true);

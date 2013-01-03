@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="32ba444c-fc18-4642-a53c-06c7d6e77d49" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/index.js" afterPath="$PROJECT_DIR$/js/index.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/musicPlayerModel.js" afterPath="$PROJECT_DIR$/js/musicPlayerModel.js" />
     </list>
     <ignored path="soundgarden-heroku.iws" />
@@ -25,7 +24,7 @@
     <file path="/index.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357243434534" ignored="false" />
     <file path="/soundgarden.html" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357232757054" ignored="false" />
     <file path="/Dummy.txt" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357239274946" ignored="false" />
-    <file path="/musicPlayerModel.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357244393310" ignored="false" />
+    <file path="/musicPlayerModel.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357245373103" ignored="false" />
     <file path="/notifications.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357182332316" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -169,7 +168,7 @@
       <file leaf-file-name="musicPlayerModel.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/musicPlayerModel.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="107" column="20" selection-start="3917" selection-end="3917" vertical-scroll-proportion="0.392">
+            <state line="106" column="0" selection-start="3940" selection-end="3940" vertical-scroll-proportion="0.648">
               <folding />
             </state>
           </provider>
@@ -604,7 +603,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/musicPlayerModel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="107" column="20" selection-start="3917" selection-end="3917" vertical-scroll-proportion="0.392">
+        <state line="106" column="0" selection-start="3940" selection-end="3940" vertical-scroll-proportion="0.648">
           <folding />
         </state>
       </provider>
