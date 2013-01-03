@@ -338,10 +338,18 @@
 #resultsOps {
     top: 35%;
     position: fixed;
-    right: 37%;
+    right: 33%;
     z-index: 9;
     width: 20px;
-    display: none;
+    background: white;
+    font-size: 22px;
+    padding: 8;
+    -webkit-border-radius: 16px;
+}
+
+.ropIcon {
+    margin-top: 10px;
+    display: inline-block;
 }
 
 .trash {
@@ -415,7 +423,7 @@ button:focus {
 }
 
 ul.results-list {
-    margin-top: 110px;
+    margin-top: 120px;
     margin-left: -40px;
 }
 
@@ -857,19 +865,6 @@ ul.lastfm-buttons {
     -webkit-transform: translate(-500px, 0px);
 }
 
-.historyOpIcons {
-    cursor: pointer;
-    font-size: 19px;
-    display: inline-block;
-    width: 20px;
-    height: 12px;
-    margin-top: 8px;
-}
-
-.historyOpIcons:hover {
-    color: #55EEF5;
-}
-
 .tweetShow {
     display: list-item;
 }
@@ -979,7 +974,7 @@ ul.lastfm-buttons {
     padding-top: 0px;
     color: #7CB4D3;
     font: 11px "Oswald";
-    width: 60%;
+    width: 67%;
     background: white;
     border-radius: 24px;
     z-index: 10;
@@ -1009,24 +1004,74 @@ ul.lastfm-buttons {
     display: inline-block;
 }
 
-.icon-signin.historyOpIcons {
-    display: none;
+.historyOpIcons {
+    font-size: 19px;
+    display: inline-block;
+    width: 20px;
+    height: 12px;
+    margin-top: 8px;
+    color: #CFCFCF;
+}
+
+.icon-check.historyOpIcons {
+    cursor: pointer;
+    color: #A3C99B;
+}
+
+.icon-check.historyOpIcons:hover {
+    color: #55EEF5;
+}
+
+.opActive {
+    cursor: pointer;
+    color: #A3C99B;
+}
+
+.opActive:hover {
+    color: #55EEF5;
+}
+
+
+.opTrashActive {
+    cursor: pointer;
+    color:#FF2525;
 }
 
 .icon-trash.historyopicons {
     margin-left: 8px;
 }
 
-.icon-trash.pprop-trash {
+.pprop {
     cursor: pointer;
-    position: absolute;
-    right: 13px;
-    color: #CFCFCF;
+    color: #A3C99B;
     font-size: 25px;
     margin-right: 13px;
     margin-top: -22px;
 }
 
-.icon-trash.pprop-trash:hover {
-    color: #FF2525;
+.pprop:hover {
+    color: #55EEF5;
+}
+
+.icon-trash.pprop {
+    color:#FF2525;
+    cursor: pointer;
+    position: absolute;
+    right: 13px;
+}
+
+#pprop-ops {
+    display: inline-block;
+    float: right;
+    margin-right: 50px;
+    margin-top: 7px;
+}
+
+#pressEscape {
+    position: absolute;
+    right: 100px;
+    bottom: 10px;
+    font: 9px Helvetica, sans-serif;
+    letter-spacing: 0.1em;
+    color: #888;
 }

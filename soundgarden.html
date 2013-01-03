@@ -409,10 +409,10 @@
 
         <div id="playHistory">
             <div id="history-filter-container">
-                <i class="icon-check historyOpIcons"></i>
-                <i class="icon-signin historyOpIcons"></i>
-                <i class="icon-save historyOpIcons"></i>
-                <i class="icon-trash historyOpIcons"></i>
+                <i class="icon-check historyOpIcons" title="Select mode"></i>
+                <i class="icon-save historyOpIcons" title="New playlist from selected"></i>
+                <i class="icon-signin historyOpIcons" title="Add selected to active playlist"></i>
+                <i class="icon-trash historyOpIcons" title="Delete selected"></i>
                 <input type="text" id="history-filter" value="" class="text-input" />
                 <i class="icon-remove-circle historyFilterCancel"></i>
             </div>
@@ -439,16 +439,15 @@
             </div>
         </div>
 
-        <div id="resultsOps">
-            <img src="/img/arrowright.png" class="arrowright" />
-            <img src="/img/trash.png" class="trash" />
-        </div>
-
         <div id="playlistProperties" data-bind="visible: title">
             <i class="icon-group shareIcon"></i>
-            <div id="pTitleText" data-bind="text: title"></div>
+            <div id="pTitleText" data-bind="click: renamePlaylist, text: title"></div>
             <i data-bind="css: editState"></i>
             <div id="sharedWithText" data-bind="text: sharedWith"></div>
+            <div id="pprop-ops">
+                <i class="icon-play pprop"></i>
+                <i class="icon-check pprop"></i>
+            </div>
             <div id="pprop-controls" data-bind="visible: isMine">
                 <input id="pprop-everyone" class="pprop-checkbox" type="checkbox">
                 <label class="pprop-checkbox-label" for="pprop-everyone">
@@ -456,9 +455,9 @@
                 </label>
                 <input id="pprop-writable" class="pprop-checkbox" type="checkbox">
                 <label class="pprop-checkbox-label" for="pprop-writable">
-                    Allow collaboration
+                    Allow others to add
                 </label>
-                <i class="icon-trash pprop-trash"></i>
+                <i class="icon-trash pprop"></i>
             </div>
         </div>
 
@@ -504,6 +503,7 @@
                     <i class="icon-arrow-right"></i>
                     <span data-bind="text: submitmessage"></span>
                 </button>
+                <div id="pressEscape">[esc] to cancel</div>
             </form>
         </div>
 
@@ -554,8 +554,8 @@
                     <ul id="playlists-scroller-list-me" data-bind="foreach: dockItemsMe">
                         <!-- ko if: $data!==undefined -->
                         <li class="playlistEntry">
-                            <img class="playlistThumb" data-bind="click: $root.openPlaylist, attr: { refID: $data.refID, src: $data.cover, title: $data.title, url: $data.url }" />
-                            <div class="playlistName" data-bind="text: $data.title()"></div>
+                            <img class="playlistThumb" data-bind="pickupPlaylistItems: $data, click: $root.openPlaylist, attr: { refID: $data.refID, src: $data.cover, title: $data.title, url: $data.url }" />
+                            <div class="playlistName mine" data-bind="click: $root.renamePlaylist, text: $data.title()"></div>
                         </li>
                         <!-- /ko -->
                     </ul>

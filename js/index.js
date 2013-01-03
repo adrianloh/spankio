@@ -60,6 +60,17 @@
 				sendSongForm.slideUp('fast','swing');
 				return false;
 			});
+			function escape(e) {
+				var messageField = $("#sendMessage");
+				if (e.keyCode===27) {
+					$(document).unbind("keydown",escape);
+					messageField.val("");
+					messageField.trigger("blur");
+					sendSongForm.unbind("submit");
+					sendSongForm.slideUp('fast','swing');
+				}
+			}
+			$(document).bind("keydown", escape);
 		};
 
 		ko.applyBindings(Spank.getInput, document.getElementById('sendSongForm'));

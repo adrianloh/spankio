@@ -23,7 +23,9 @@
 		AR: "Argentina",
 		FR: "France",
 		SE: "Sweden",
-		ES: "Spain"
+		ES: "Spain",
+		BR: "Brazil",
+		RU: "Russia"
 	};
 
 	["FR", "JP", "DE", "US", "UK"].forEach(function(code) {
@@ -116,6 +118,10 @@
 								Playlist.unwatchPlaylistInfo(thisPlaylistRef);
 								Head.playlists.deletePlaylistItemWithRef(refID);
 								delete Head.playlists.itemsByRef[refID];
+								if (typeof(Spank.charts.currentPlaylistTitle())!=='undefined'
+									&& Head.playlists.lastKoo.refID===thisPlaylistRef.name()) {
+									Head.playlists.goHome(true);
+								}
 							}
 						}
 					});
@@ -211,19 +217,29 @@
 					nobody = self.owners().length<=1;
 				if (everyone) {
 					if (self.writable()) {
-						return "Editable by anyone";
+						return "Anyone can add";
 					} else {
 						return "Viewable by everyone";
 					}
 				} else if (nobody) {
 					return "Private";
 				} else {
-					return "Shared with " + self.owners().length + " people";
+					if (self.owners().length===2) {
+						return "Shared with 1 other person";
+					} else {
+						return "Shared with " + self.owners().length-1 + " people";
+					}
 				}
 			});
 			self.isMine = ko.computed(function() {
 				return self.owners().indexOf(Spank.username)===0;
 			});
+			self.renamePlaylist = function(koo) {
+				var elem = $("#playlists-scroller-list-me").find(".playlistEntry.activePlaylist").find(".playlistName.mine");
+				if ((self.owners().indexOf(Spank.username)===0) && elem.length>0) {
+					elem.trigger('click');
+				}
+			};
 			return self;
 		})();
 
@@ -232,13 +248,23 @@
 		Head.playlists = (function () {
 			var self = {};
 			self.visible = ko.observable(true);
-			self.goHome = function() {
+			self.goHome = function(preserveTab) {
 				var countries = ['UK','US','Japan','Germany','Japan','France'],
 					cunt = countries[Math.floor(Math.random()*countries.length)],
 					ppiSelector = ".playlist-type-btn[value='ppi-charts']",
 					pSelector = ".playlistThumb[title='Billboard #']".replace("#",cunt);
-				$(ppiSelector).trigger("click");
-				$(pSelector).trigger("click");
+				var chartThumbs = $(".chartThumb"),
+					i = Math.floor(Math.random()*chartThumbs.length);
+				$(chartThumbs[i]).trigger('click');
+				var offset = (106*3)+(106*i)*-1;
+				offset = offset>0 ? 0 : offset;
+				$("#playlists-scroller-list-charts").css("margin-left", offset);
+				if (preserveTab) {
+
+				} else {
+					$(ppiSelector).trigger("click");
+				}
+
 			};
 			self.bxSliders = {};
 			self.chartItems = ko.observableArray([]);
@@ -280,6 +306,20 @@
 			};
 			self.lastKoo = null;
 			var	activeListeners = {};
+			self.renamePlaylist = function(koo) {
+				var
+				titleRef = koo.base.title,
+				data = {
+					title: "Rename this playlist",
+					placeholder: "New playlist name",
+					submitmessage: "OK"
+				};
+				Spank.getInput.show(function(input) {
+					input = input ||  "Playlist " + hex_md5(new Date().getTime().toString()).slice(0,5);
+					titleRef.set(input);
+				}, data)
+			};
+
 			self.openPlaylist = function(koo, event) {
 				var thisImage = $(event.target),
 					titleRef = koo.base.title,
@@ -292,7 +332,10 @@
 					});
 				}
 				self.lastKoo = koo;
+				Spank.friends.visible(false);
+				Spank.tearDownLightBox();
 				Spank.charts.current_url("#");
+				Spank.charts.resetShoppingCart();
 				activeListeners['title'] = titleRef.on('value', function(snapshot) {
 					var title = snapshot.val();
 					if (title!==null) {
@@ -334,10 +377,13 @@
 
 		ko.applyBindings(Head.playlists, document.getElementById('playlistScroller'));
 
+		Head.playlists.goHome();
+
 		function strip(e) {
 			return $.trim(e.toLowerCase());
 		}
 
+		// Add history items into playlist
 		Head.unshiftIntoOpenPlaylist = function(selectedHistoryItems) {
 			var isInView = typeof(Spank.charts.currentPlaylistTitle())!=='undefined',
 				isMine = Head.playlistProperties.owners().indexOf(Spank.username)===0,
@@ -359,30 +405,19 @@
 							newArray.push(o);
 						}
 					});
-					newArray.unshift.apply(newArray, selectedHistoryItems);
+					newArray.unshift.apply(newArray, selectedHistoryItems.reverse());
 					return newArray;
 				});
 			} else {
-				if (!isWritable) {
-					window.notify.error("Sorry, you can't add to this playlist.", 'force');
-				} else if (!isInView) {
+				if (!isInView) {
 					window.notify.error("Open a playlist first then add to it.", 'force');
+				} else if (selectedHistoryItems.length>0 && !isWritable) {
+					window.notify.error("Sorry, you can't add to this playlist.", 'force');
 				}
 			}
 		};
 
-		// Add selection into open playlist
-		$("#history-filter-container .icon-signin").click(function() {
-			var selectedHistoryItems = Spank.history.getCheckedKoos();
-			if (selectedHistoryItems.length>0) {
-				var historyItems = $.map(selectedHistoryItems, function(koo) {
-					return ko.toJS(koo);
-				});
-				Head.unshiftIntoOpenPlaylist(historyItems);
-			}
-		});
-
-		// New playlist from selection
+		// New playlist from selected history items
 		$("#history-filter-container .icon-save").click(function() {
 			var selectedHistoryItems = Spank.history.getCheckedKoos();
 			if (selectedHistoryItems.length>0) {
@@ -425,20 +460,72 @@
 			}
 		});
 
+		// Add selected history items into open playlist
+		$("#history-filter-container .icon-signin").click(function() {
+			var selectedHistoryItems = Spank.history.getCheckedKoos();
+			if (selectedHistoryItems.length>0) {
+				var historyItems = $.map(selectedHistoryItems, function(koo) {
+					return ko.toJS(koo);
+				});
+				Head.unshiftIntoOpenPlaylist(historyItems);
+			}
+		});
+
+		// Hide the "Add to current playlist" button when we're not
+		// looking at a playlist
 		Spank.charts.currentPlaylistTitle.subscribe(function(isOpen) {
+			var historyOps = $(".icon-signin.historyOpIcons");
 			if (typeof(isOpen)==='undefined') {
-				$(".icon-signin.historyOpIcons").hide();
+				historyOps.removeClass("opActive");
+			} else if (Spank.history.batchItems().length>0) {
+				historyOps.addClass("opActive");
+			}
+		});
+
+		// Playlist play button
+		$(".icon-play.pprop").click(function() {
+			// If no playlist tracks are selected, play the whole list,
+			// otherwise, play selected playlist tracks
+			var shoppingCartItems = Spank.charts.shoppingCart(),
+				itemsToPlay = shoppingCartItems.length===0 ? Spank.charts.chartTracks().slice().reverse() : Spank.charts.shoppingCart();
+			$.each(itemsToPlay, function(i,o) {
+				if (i===(itemsToPlay.length-1)) {
+					// This is the last track, do we play it now?
+					// NOTE threeSixtyPlayer.lastSound.paused is null if
+					// we've not yet played anything before.
+					var playNow = threeSixtyPlayer.lastSound!==null ? threeSixtyPlayer.lastSound.paused : true;
+					Spank.history.prependToHistory(o, playNow);
+				} else {
+					Spank.history.prependToHistory(o, false);
+				}
+			});
+			Spank.charts.resetShoppingCart();
+		});
+
+		// Toggle selection of playlist items
+		$(".icon-check.pprop").click(function() {
+			if (Spank.charts.shoppingCart().length===0) {
+				$(".mxThumb").trigger("click");
 			} else {
-				$(".icon-signin.historyOpIcons").css({display:'inline-block'});
+				Spank.charts.resetShoppingCart();
 			}
 		});
 
 		// Delete this playlist
-		$(".icon-trash.pprop-trash").click(function() {
+		$(".icon-trash.pprop").click(function() {
 			var koo = Head.playlists.lastKoo,
-				refId = koo.refID;
-			window.notify.confirm("Delete this playlist?", function() {
+				refId = koo.refID,
+				shoppingCartItems = Spank.charts.shoppingCart(),
+				playlistItems = Spank.charts.chartTracks();
+
+			function cancel($noty) {
+				$noty.close();
+			}
+
+			function deletePlaylist($noty) {
+				if ($noty) $noty.close();
 				Spank.base.me.child('playlistRefs').transaction(function(currentData) {
+					// First delete the refID from playlistRef
 					var i = currentData.indexOf(refId);
 					if (i>=0) {
 						currentData.splice(i,1);
@@ -448,11 +535,61 @@
 					}
 				}, function onComplete(ok) {
 					if (ok) {
+						// Now delete the actual playlist
 						koo.base.root.remove();
-						Head.playlists.goHome();
 					}
 				});
-			});
+			}
+
+			function deleteCartItems($noty) {
+				$noty.close();
+				if (shoppingCartItems.length===playlistItems.length) {
+					window.notify.confirm("Removing all tracks will delete this playlist", function() {
+						Spank.charts.resetShoppingCart()
+						deletePlaylist();
+					});
+				} else {
+					var dx = [], tt;
+					$.each(shoppingCartItems, function(i,o) {
+						tt = strip(o.artist)+strip(o.title);
+						dx.push(tt);
+						dx.push(o.url);
+					});
+					Head.playlists.lastKoo.base.tracklist.transaction(function(currentData) {
+						var newArray = [];
+						$.each(currentData, function(i, o) {
+							var tt = strip(o.artist)+strip(o.title);
+							if (dx.indexOf(o.url)>=0 || dx.indexOf(tt)>=0 ) {
+								// A track in the existing set matches a track we're trying to insert
+							} else {
+								newArray.push(o);
+							}
+						});
+						return newArray;
+					});
+					Spank.charts.resetShoppingCart();
+				}
+			}
+
+			(function() {
+				var message, buttons = [{addClass: 'btn btn-danger', text: 'Cancel', onClick: cancel}];
+				if (shoppingCartItems.length>0) {
+					message = "Delete selected tracks?";
+					buttons.unshift({addClass: 'btn btn-primary', text: 'OK', onClick: deleteCartItems});
+				} else {
+					message = "Delete this playlist?";
+					buttons.unshift({addClass: 'btn btn-primary', text: 'OK', onClick: deletePlaylist});
+				}
+				var n = noty({
+					text: message,
+					type: 'alert',
+					dismissQueue: true,
+					layout: 'center',
+					theme: 'defaultTheme',
+					buttons: buttons
+				});
+			})();
+
 		});
 
 		$("#pprop-writable").click(function() {
@@ -486,8 +623,6 @@
 			});
 		});
 
-		Head.playlists.goHome();
-
 //		$("#playlists-scroller-list-me, #playlists-scroller-list-friends").bxSlider({
 //			minSlides: 1,
 //			maxSlides: 7,
@@ -509,10 +644,8 @@
 		//Spank.playlistScroller.push({cover:'/img/emptyplaylist.jpg'});
 
 		Head.playlists.visible.subscribe(function(isTrue) {
-			var button = $("#toggle-dock-button"),
-				scroller = $("#playlistScroller"),
+			var scroller = $("#playlistScroller"),
 				modes = {true: 'removeClass', false: 'addClass'};
-			button.children(0).toggleClass("icon-caret-down icon-caret-up");
 			scroller[modes[isTrue]]("docked");
 		});
 

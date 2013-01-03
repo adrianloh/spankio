@@ -48,11 +48,12 @@
 			}
 		};
 
+		$(".giftPopup").bind("hover mouseenter", function() {
+			$(this).hide();
+		});
+
 		var historyDropZones = function(op) {
-			var tipsToShow = ['#searchField','#playlistScroller'];
-			if (!Spank.charts.currentPlaylistTitle()) {
-				tipsToShow.push('#resultsSection');
-			}
+			var tipsToShow = ['#searchField', "#resultsSection"];
 			$.each(tipsToShow, function(i,o) {
 				Tipped[op](o);
 			});
@@ -87,10 +88,29 @@
 						$("#playlistDropZone").hide();
 						$("#playlistSearchZone").hide();
 					}
-				}).hover(function mousein() {
-					historyDropZones('show');
-				}, function mouseout() {
-					historyDropZones('hide');
+				})
+			}
+		};
+
+		ko.bindingHandlers.pickupPlaylistItems = {
+			init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+				$(element).draggable({
+					appendTo: 'body',
+					containment: 'window',
+					scroll: false,
+					helper: 'clone',
+					revert: 'invalid',
+//					cursor: '-webkit-grabbing',
+					zIndex:999,
+					start:function( event, ui ) {
+						document._draggedHistoryItemUIParent = $(element).prev();
+						// Gets us the object of the history item that was picked up
+						document._draggedHistoryItem = valueAccessor();
+					},
+					drag:function( event ) {
+					},
+					stop:function( event ) {
+					}
 				});
 			}
 		};

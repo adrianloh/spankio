@@ -61,6 +61,7 @@
 				fetchNew = true,
 				title;
 			Spank.charts.pushHistoryImmedietly = true;
+			Spank.charts.resetShoppingCart();
 			if (typeof(myUrl)==='undefined') {
 				$("#searchField").val($(this).attr("title").toLowerCase());
 			}

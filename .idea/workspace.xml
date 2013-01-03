@@ -4,35 +4,38 @@
     <list default="true" id="32ba444c-fc18-4642-a53c-06c7d6e77d49" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/chartsModel.js" afterPath="$PROJECT_DIR$/js/chartsModel.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/draggables.js" afterPath="$PROJECT_DIR$/js/draggables.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/friends.js" afterPath="$PROJECT_DIR$/js/friends.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/historyModel.js" afterPath="$PROJECT_DIR$/js/historyModel.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/historyNav.js" afterPath="$PROJECT_DIR$/js/historyNav.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/noty/notifications.js" afterPath="$PROJECT_DIR$/js/noty/notifications.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/index.css" afterPath="$PROJECT_DIR$/css/index.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/index.js" afterPath="$PROJECT_DIR$/js/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/musicPlayerModel.js" afterPath="$PROJECT_DIR$/js/musicPlayerModel.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/playlistAction.js" afterPath="$PROJECT_DIR$/js/playlistAction.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/playlists2.js" afterPath="$PROJECT_DIR$/js/playlists2.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/soundgarden.html" afterPath="$PROJECT_DIR$/soundgarden.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/tooltips.js" afterPath="$PROJECT_DIR$/js/tooltips.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="soundgarden-heroku.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/friends.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357140020651" ignored="false" />
+    <file path="/friends.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357231426252" ignored="false" />
     <file path="/jquery.bxslider.mine.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357019330128" ignored="false" />
     <file path="/jquery.bxslider.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357013253270" ignored="false" />
     <file path="/scroller.css" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357074641241" ignored="false" />
     <file path="/playlists.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1356893764646" ignored="false" />
-    <file path="/playlists2.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357184034792" ignored="false" />
+    <file path="/playlists2.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357234398803" ignored="false" />
     <file path="/snippets.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1356861821563" ignored="false" />
-    <file path="/index.css" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357145274200" ignored="false" />
-    <file path="/draggables.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357139980688" ignored="false" />
+    <file path="/index.css" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357212042043" ignored="false" />
+    <file path="/draggables.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357233776350" ignored="false" />
     <file path="/playlistAction.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357177852749" ignored="false" />
     <file path="/historyNav.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357180567194" ignored="false" />
     <file path="/a.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357170662160" ignored="false" />
-    <file path="/a.dummy" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357184219880" ignored="false" />
-    <file path="/chartsModel.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357184635023" ignored="false" />
-    <file path="/historyModel.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357127203573" ignored="false" />
-    <file path="/index.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357184602591" ignored="false" />
-    <file path="/soundgarden.html" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357182134767" ignored="false" />
-    <file path="/Dummy.txt" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357137967352" ignored="false" />
-    <file path="/musicPlayerModel.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357177221455" ignored="false" />
+    <file path="/a.dummy" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357234353146" ignored="false" />
+    <file path="/chartsModel.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357196150720" ignored="false" />
+    <file path="/historyModel.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357232644478" ignored="false" />
+    <file path="/index.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357211212798" ignored="false" />
+    <file path="/soundgarden.html" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357232757054" ignored="false" />
+    <file path="/Dummy.txt" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357233568416" ignored="false" />
+    <file path="/musicPlayerModel.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357235637312" ignored="false" />
     <file path="/notifications.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357182332316" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -48,6 +51,7 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -82,7 +86,6 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -92,10 +95,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="playlists2.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="playlists2.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/playlists2.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="324" column="24" selection-start="11480" selection-end="11522" vertical-scroll-proportion="0.0">
+            <state line="397" column="16" selection-start="13812" selection-end="13812" vertical-scroll-proportion="0.29971182">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tooltips.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/tooltips.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="54" column="0" selection-start="1108" selection-end="1108" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -104,25 +116,16 @@
       <file leaf-file-name="draggables.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/draggables.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="107" column="73" selection-start="3442" selection-end="3442" vertical-scroll-proportion="0.0">
+            <state line="52" column="0" selection-start="1602" selection-end="1602" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="notifications.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/noty/notifications.js">
+      <file leaf-file-name="friends.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/friends.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="59" column="0" selection-start="1485" selection-end="1485" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="default.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/noty/themes/default.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="1" column="0" selection-start="16" selection-end="16" vertical-scroll-proportion="0.0">
+            <state line="59" column="94" selection-start="2007" selection-end="2007" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -131,25 +134,7 @@
       <file leaf-file-name="playlistAction.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/playlistAction.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="62" column="25" selection-start="2455" selection-end="2455" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="chartsModel.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/js/chartsModel.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="177" column="0" selection-start="6254" selection-end="6254" vertical-scroll-proportion="0.41066283">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="historyNav.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/historyNav.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="65" column="0" selection-start="2333" selection-end="2333" vertical-scroll-proportion="0.0">
+            <state line="53" column="41" selection-start="2165" selection-end="2224" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -158,7 +143,7 @@
       <file leaf-file-name="historyModel.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/historyModel.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="327" column="12" selection-start="10341" selection-end="10377" vertical-scroll-proportion="0.0">
+            <state line="200" column="17" selection-start="5926" selection-end="5926" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -167,7 +152,7 @@
       <file leaf-file-name="index.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="232" column="0" selection-start="8401" selection-end="8401" vertical-scroll-proportion="0.0">
+            <state line="172" column="20" selection-start="6194" selection-end="6194" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -176,7 +161,25 @@
       <file leaf-file-name="soundgarden.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/soundgarden.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="52" column="9" selection-start="2295" selection-end="2295" vertical-scroll-proportion="451.09525">
+            <state line="404" column="20" selection-start="17364" selection-end="17373" vertical-scroll-proportion="-11.423077">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.css" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/css/index.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="976" column="13" selection-start="20569" selection-end="20569" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="musicPlayerModel.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/musicPlayerModel.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="91" column="29" selection-start="3227" selection-end="3227" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -200,29 +203,29 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/js/jquery.bxslider/jquery.bxslider.mine.js" />
         <option value="$PROJECT_DIR$/js/playlists.js" />
         <option value="$PROJECT_DIR$/css/scroller.css" />
         <option value="$PROJECT_DIR$/css/forms.css" />
+        <option value="$PROJECT_DIR$/js/historyNav.js" />
+        <option value="$PROJECT_DIR$/js/noty/notifications.js" />
+        <option value="$PROJECT_DIR$/js/chartsModel.js" />
+        <option value="$PROJECT_DIR$/js/playlistAction.js" />
+        <option value="$PROJECT_DIR$/js/index.js" />
         <option value="$PROJECT_DIR$/js/friends.js" />
+        <option value="$PROJECT_DIR$/js/tooltips.js" />
+        <option value="$PROJECT_DIR$/js/historyModel.js" />
+        <option value="$PROJECT_DIR$/soundgarden.html" />
+        <option value="$PROJECT_DIR$/js/draggables.js" />
+        <option value="$PROJECT_DIR$/js/playlists2.js" />
         <option value="$PROJECT_DIR$/css/index.css" />
         <option value="$PROJECT_DIR$/js/musicPlayerModel.js" />
-        <option value="$PROJECT_DIR$/js/historyNav.js" />
-        <option value="$PROJECT_DIR$/soundgarden.html" />
-        <option value="$PROJECT_DIR$/js/noty/notifications.js" />
-        <option value="$PROJECT_DIR$/js/historyModel.js" />
-        <option value="$PROJECT_DIR$/js/playlistAction.js" />
-        <option value="$PROJECT_DIR$/js/playlists2.js" />
-        <option value="$PROJECT_DIR$/js/draggables.js" />
-        <option value="$PROJECT_DIR$/js/index.js" />
-        <option value="$PROJECT_DIR$/js/chartsModel.js" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="63" />
-    <option name="y" value="125" />
-    <option name="width" value="1394" />
+    <option name="x" value="84" />
+    <option name="y" value="128" />
+    <option name="width" value="1304" />
     <option name="height" value="878" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -267,6 +270,8 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -339,48 +344,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="soundgarden-heroku" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="hidden-bayou-5179" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="noty" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="layouts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="project.structure.last.edited" value="Project" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="88" />
-    <property name="project.structure.proportion" value="0.0" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="90" />
+    <property name="project.structure.proportion" value="0.0" />
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="recentsLimit" value="5" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="90" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
+    <property name="recentsLimit" value="5" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../FG" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="100" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="889" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="888" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="889" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth2" value="95" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth1" value="92" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -393,8 +374,8 @@
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
     <property name="options.lastSelected" value="preferences.sourceCode.JavaScript" />
-    <property name="project.structure.side.proportion" value="0.0" />
     <property name="DefaultHtmlFileTemplate" value="Html5" />
+    <property name="project.structure.side.proportion" value="0.0" />
     <property name="options.searchVisible" value="true" />
   </component>
   <component name="PyConsoleOptionsProvider">
@@ -451,15 +432,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="63" y="125" width="1394" height="878" extended-state="0" />
+    <frame x="84" y="128" width="1304" height="878" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.48680738" sideWeight="0.98556876" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.48548812" sideWeight="0.98556876" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2155477" sideWeight="0.5672823" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15681984" sideWeight="0.5131926" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.167057" sideWeight="0.5145119" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29155672" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
@@ -472,8 +453,8 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3989432" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Command Line Tools Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32948717" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Thumbnails" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Command Line Tools Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32948717" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -534,114 +515,106 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/css/forms.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="0" selection-start="407" selection-end="407" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/playlists.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="95" column="79" selection-start="4047" selection-end="4047" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/css/index.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1019" column="0" selection-start="21158" selection-end="21181" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/friends.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="85" column="24" selection-start="3117" selection-end="3117" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/jquery.editable.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="161" column="24" selection-start="4789" selection-end="4789" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/musicPlayerModel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="24" selection-start="441" selection-end="441" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/noty/themes/default.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="0" selection-start="16" selection-end="16" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="1" column="0" selection-start="16" selection-end="16" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/historyNav.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="65" column="0" selection-start="2333" selection-end="2333" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="65" column="0" selection-start="2333" selection-end="2333" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/noty/notifications.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="0" selection-start="1485" selection-end="1485" vertical-scroll-proportion="0.0">
+        <state line="55" column="0" selection-start="1355" selection-end="1876" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/chartsModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="230" column="0" selection-start="8038" selection-end="8038" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/playlists.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="255" column="51" selection-start="9368" selection-end="9368" vertical-scroll-proportion="0.18299712">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/soundgarden.html">
+    <entry file="file://$PROJECT_DIR$/js/keystrokes.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="9" selection-start="2295" selection-end="2295" vertical-scroll-proportion="451.09525">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/historyModel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="327" column="12" selection-start="10341" selection-end="10377" vertical-scroll-proportion="0.0">
+        <state line="19" column="0" selection-start="340" selection-end="340" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/playlistAction.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="62" column="25" selection-start="2455" selection-end="2455" vertical-scroll-proportion="0.0">
+        <state line="53" column="41" selection-start="2165" selection-end="2224" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/playlists2.js">
+    <entry file="file://$PROJECT_DIR$/js/friends.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="324" column="24" selection-start="11480" selection-end="11522" vertical-scroll-proportion="0.0">
+        <state line="59" column="94" selection-start="2007" selection-end="2007" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/tooltips.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="54" column="0" selection-start="1108" selection-end="1108" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/soundgarden.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="404" column="20" selection-start="17364" selection-end="17373" vertical-scroll-proportion="-11.423077">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/draggables.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="107" column="73" selection-start="3442" selection-end="3442" vertical-scroll-proportion="0.0">
+        <state line="52" column="0" selection-start="1602" selection-end="1602" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/index.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="976" column="13" selection-start="20569" selection-end="20569" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/musicPlayerModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="91" column="29" selection-start="3227" selection-end="3227" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="232" column="0" selection-start="8401" selection-end="8401" vertical-scroll-proportion="0.0">
+        <state line="172" column="20" selection-start="6194" selection-end="6194" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/chartsModel.js">
+    <entry file="file://$PROJECT_DIR$/js/historyModel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="177" column="0" selection-start="6254" selection-end="6254" vertical-scroll-proportion="0.41066283">
+        <state line="200" column="17" selection-start="5926" selection-end="5926" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/playlists2.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="397" column="16" selection-start="13812" selection-end="13812" vertical-scroll-proportion="0.29971182">
           <folding />
         </state>
       </provider>

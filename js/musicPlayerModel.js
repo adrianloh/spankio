@@ -97,8 +97,8 @@
 						var images = res.results.trackmatches.track.image;
 						if (Array.isArray(images) && images.length>0) {
 							var koo = Spank.history.findHistoryItemWithUrl(o.url);
-							if (koo!==null) {
-								var newCoverUrl = images[images.length-1]['#text'];
+							var newCoverUrl = images[images.length-1]['#text'];
+							if (koo!==null && newCoverUrl.length>0) {
 								koo.thumb(newCoverUrl);
 								Spank.history.saveHistory(true);
 								$("#funkyPlayer").css("background-image", "url(" + newCoverUrl + ")");

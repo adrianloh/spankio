@@ -41,6 +41,10 @@
 			skin:'controlButtons'
 		});
 
+		Tipped.create(".historyOpIcons", {
+			skin:'controlButtons'
+		});
+
 		Tipped.create(".ui360", {
 			skin:'controlButtons',
 			target: '.sm2-360btn',
@@ -53,18 +57,18 @@
 			hook: 'bottommiddle'
 		});
 
-		Tipped.create("#playlistScroller", function(element) {
-			if (!Spank.charts.currentPlaylistTitle()) {
-				return "Drop on a playlist thumbnail to add to it";
-			} else {
-				return "Drop to other playlists to add to them";
-			}
-		},{
-			skin:'dropTip',
-			showOn:false,
-			offset: { x: 100, y: 0 },
-			hook: 'topleft'
-		});
+//		Tipped.create("#playlistScroller", function(element) {
+//			if (!Spank.charts.currentPlaylistTitle()) {
+//				return "Drop on a playlist thumbnail to add to it";
+//			} else {
+//				return "Drop to other playlists to add to them";
+//			}
+//		},{
+//			skin:'dropTip',
+//			showOn:false,
+//			offset: { x: 100, y: 0 },
+//			hook: 'topleft'
+//		});
 
 		$(".onoffswitch-label").click(function() {
 			Tipped.hide(".onoffswitch-label");
@@ -86,7 +90,7 @@
 			if (Spank.friends.visible()) {
 				return "Drop a song on a friend to share!"
 			} else {
-				return "Drop here to find similar songs"
+				return "Try dropping me here!"
 			}
 		}, {
 			skin:'dropTip',

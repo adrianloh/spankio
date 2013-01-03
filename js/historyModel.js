@@ -231,7 +231,11 @@
 					i = self.stream().length,
 					selectedItems = [];
 				if (!self.batchItems().length>0) {
-					window.notify.error("Nothing selected in stream");
+					window.notify.error("Nothing selected in stream", 'force');
+					var historyList = $("#history-stream-list");
+					if (historyList.hasClass("history-cbox-hide")) {
+						historyList.removeClass("history-cbox-hide").addClass("history-cbox-show");
+					}
 					return selectedItems;
 				}
 				while (i--) {
@@ -259,8 +263,9 @@
 						}
 					});
 					return invalid ? undefined : currentData;
-				}, function onComplete(success, snapshot) {
-					if (success) {
+				}, function onComplete(ok) {
+					if (ok) {
+						Spank.history.batchItems([]);
 						window.notify.success("Deleted " + selectedItems.length + " items from stream");
 					}
 				});
@@ -314,6 +319,20 @@
 		})();
 
 		ko.applyBindings(Spank.history, document.getElementById('playHistory'));
+
+		Spank.history.batchItems.subscribe(function(list) {
+			if (list.length>0) {
+				$(".icon-save.historyOpIcons").addClass("opActive");
+				if (typeof(Spank.charts.currentPlaylistTitle())!=='undefined') {
+					$(".icon-signin.historyOpIcons").addClass("opActive");
+				}
+				$(".icon-trash.historyOpIcons").addClass("opTrashActive");
+			} else {
+				$(".icon-save.historyOpIcons").removeClass("opActive");
+				$(".icon-signin.historyOpIcons").removeClass("opActive");
+				$(".icon-trash.historyOpIcons").removeClass("opTrashActive");
+			}
+		});
 
 		// Toggle history item selection
 		$("#history-filter-container .icon-check").click(function() {

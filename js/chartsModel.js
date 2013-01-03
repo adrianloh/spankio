@@ -20,6 +20,10 @@ Array.prototype.shuffle = function() {
 			self.current_url = ko.observable(null);
 			self.ok_to_fetch_more = ko.observable(true);
 			self.shoppingCart = ko.observableArray([]);
+			self.resetShoppingCart = function() {
+				$(".mxThumb").removeClass("selectedPlaylistItem");
+				self.shoppingCart([]);
+			};
 			self.chartTracks = ko.observableArray([]);
 			self.totalChartTracks = ko.computed(function(){
 				return Spank.utils.padToFour(self.chartTracks().length);
@@ -218,15 +222,9 @@ Array.prototype.shuffle = function() {
 
 		ko.applyBindings(Spank.charts, document.getElementById('resultsSection'));
 
-		Spank.charts.shoppingCart.subscribe(function(list) {
-			var resultOps = $("#resultsOps"),
-				mode = list.length===0 ? 'hide' : 'show';
-			resultOps[mode]();
-		});
-
 		Spank.charts.chartTracks.subscribe(function(list) {
 			if (list.length===0) {
-				Spank.charts.shoppingCart.removeAll();
+				Spank.charts.resetShoppingCart();
 			}
 			$(".trackEntry.unwobbled").each(function(i,elem) {
 				Spank.utils.wobble(elem,-7,7);

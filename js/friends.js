@@ -43,7 +43,7 @@
 			init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 				$(element).droppable({
 					greedy: true,
-					accept: ".tweetThumb",
+					accept: ".tweetThumb, .playlistThumb",
 					tolerance: "pointer",
 					hoverClass: "friendHover",
 					drop: function(event, ui) {
@@ -52,42 +52,59 @@
 						setTimeout(function() {
 							document._ignoreDrop = false;
 						},1000);
-//// Serious fucking Jquery UI bug, unresolved even at 1.9.2
-						ui.draggable.detach();
-						ui.draggable.insertAfter(document._draggedHistoryItemUIParent);
-//						document._draggedHistoryItemUIParent.prepend(ui.draggable);
-//// Begin actual...
 						var koo = valueAccessor(),
 							friendData = ko.toJS(koo),
-							friendsHistory = Spank.friends.bases[friendData.username].history,
-							droppedHistoryItem = JSON.parse(JSON.stringify(document._draggedHistoryItem));
-						Spank.sendToFriend = function(message) {
-							message = message.length>0 ? message : "This is awwweesooomme!";
-							friendsHistory.transaction(function(currentData) {
-								droppedHistoryItem.gift =
-								{
-									from:FBUserInfo.name,
-									message: message
-								};
-								if (currentData!==null) currentData.push(droppedHistoryItem);
-								return currentData;
-							}, function onSendComplete(success, data) {
-								Spank.friends.bases[friendData.username].base.transaction(function(currentData) {
-									currentData.frequency = currentData.frequency+1;
+							droppedHistoryItem;
+						if (ui.draggable.hasClass('playlistThumb')) {
+							droppedHistoryItem = document._draggedHistoryItem;
+							droppedHistoryItem.base.owners.transaction(function(currentData) {
+								if (currentData.indexOf(friendData.username)>=0) {
+									window.notify.information("Already sharing this playlist with " + friendData.name);
+									return undefined;
+								} else {
+									currentData.push(friendData.username);
 									return currentData;
-								}, function onUpdateFreqComplete(success, data) {
+								}
+							}, function onComplete(ok) {
+								if (ok) {
 									window.notify.information("Shared '" + droppedHistoryItem.title + "' with " + friendData.name);
-								});
+								}
 							});
-						};
-						Spank.getInput.show(function(message) {
-							Spank.sendToFriend(message);
-							sentMailSound.play();
-						},{
-							title: "Send it with a message!",
-							placeholder: "This is aawwwesomee",
-							submitmessage: "Send"
-						});
+						} else if (ui.draggable.hasClass('tweetThumb')) {
+//// Serious fucking Jquery UI bug, unresolved even at 1.9.2
+							ui.draggable.detach();
+							ui.draggable.insertAfter(document._draggedHistoryItemUIParent);
+//// Begin actual...
+							var	friendsHistory = Spank.friends.bases[friendData.username].history;
+							droppedHistoryItem = JSON.parse(JSON.stringify(document._draggedHistoryItem));
+							Spank.sendToFriend = function(message) {
+								message = message.length>0 ? message : "This is awwweesooomme!";
+								friendsHistory.transaction(function(currentData) {
+									droppedHistoryItem.gift =
+									{
+										from:FBUserInfo.name,
+										message: message
+									};
+									if (currentData!==null) currentData.push(droppedHistoryItem);
+									return currentData;
+								}, function onSendComplete(success, data) {
+									Spank.friends.bases[friendData.username].base.transaction(function(currentData) {
+										currentData.frequency = currentData.frequency+1;
+										return currentData;
+									}, function onUpdateFreqComplete(success, data) {
+										window.notify.information("Shared '" + droppedHistoryItem.title + "' with " + friendData.name);
+									});
+								});
+							};
+							Spank.getInput.show(function(message) {
+								Spank.sendToFriend(message);
+								sentMailSound.play();
+							},{
+								title: "Send it with a message!",
+								placeholder: "This is aawwwesomee",
+								submitmessage: "Send"
+							});
+						}
 					}
 				});
 			}
