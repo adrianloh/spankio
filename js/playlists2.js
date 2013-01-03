@@ -53,6 +53,7 @@
 		Playlist.makeBaseObject = function(ref)  {
 			var base = {};
 			base.root = ref;
+			base.viewed = ref.child("viewed");
 			base.owners = ref.child("owners");
 			base.title = ref.child("title");
 			base.writable = ref.child("writable");
@@ -343,6 +344,13 @@
 				Spank.tearDownLightBox();
 				Spank.charts.current_url("#");
 				Spank.charts.resetShoppingCart();
+				koo.base.viewed.transaction(function(currentData) {
+					if (currentData===null) {
+						return 1;
+					} else {
+						return currentData+1;
+					}
+				});
 				activeListeners['title'] = titleRef.on('value', function(snapshot) {
 					var title = snapshot.val();
 					if (title!==null) {
