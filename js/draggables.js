@@ -104,6 +104,7 @@
 					if (!($("#myonoffswitch").is(":checked"))) {
 						searchString = "artist: ".concat(searchString);
 					}
+					Spank.charts.pushHistoryImmedietly = true;
 					$("#searchField").val(searchString).trigger("keyup");
 				}
 			}
@@ -133,6 +134,7 @@
 						var data = document._draggedHistoryItem,
 							searchString = "similarto: " + data.artist + " --- " + data.title;
 						$("#myonoffswitch").prop('checked', false);
+						Spank.charts.pushHistoryImmedietly = true;
 						$("#searchField").val(searchString).trigger("keyup");
 					}
 				}, 250);

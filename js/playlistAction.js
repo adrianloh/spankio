@@ -13,7 +13,7 @@
 				// E.g. the first time we click on a playlist item and load new results...
 				highlightCurrentPlaylistItem(this_image);
 				Spank.charts.pushBatch(tracklist, 'replace');
-				$("#searchField").val("Search");
+//				$("#searchField").val("Search");
 			} else {
 				Spank.charts.pushBatch(tracklist);
 			}
@@ -60,8 +60,9 @@
 				timeDelta = timeNow-last_request_time,
 				fetchNew = true,
 				title;
+			Spank.charts.pushHistoryImmedietly = true;
 			if (typeof(myUrl)==='undefined') {
-				$("#searchField").val($(this).attr("title"));
+				$("#searchField").val($(this).attr("title").toLowerCase());
 			}
 			if (url.match(/http/) && resultsCache[url]) {
 				var stored = resultsCache[url],

@@ -65,9 +65,11 @@
 
     <!-- Notifications with 'noty' plugin
     -->
+    <link rel="stylesheet" type="text/css" href="/js/noty/buttons.css" />
     <script type="text/javascript" src="/js/noty/jquery.noty.js"></script>
     <script type="text/javascript" src="/js/noty/layouts/topLeft.js"></script>
     <script type="text/javascript" src="/js/noty/layouts/topRight.js"></script>
+    <script type="text/javascript" src="/js/noty/layouts/center.js"></script>
     <script type="text/javascript" src="/js/noty/themes/default.js"></script>
     <script type="text/javascript" src="/js/noty/notifications.js"></script>
 
@@ -552,7 +554,7 @@
                     <ul id="playlists-scroller-list-me" data-bind="foreach: dockItemsMe">
                         <!-- ko if: $data!==undefined -->
                         <li class="playlistEntry">
-                            <img class="playlistThumb" data-bind="click: $root.openPlaylist, attr: { src: $data.cover(), title: $data.title(), url: $data.url }" />
+                            <img class="playlistThumb" data-bind="click: $root.openPlaylist, attr: { refID: $data.refID, src: $data.cover, title: $data.title, url: $data.url }" />
                             <div class="playlistName" data-bind="text: $data.title()"></div>
                         </li>
                         <!-- /ko -->
@@ -560,7 +562,7 @@
                     <ul id="playlists-scroller-list-friends" data-bind="foreach: dockItemsFriends">
                         <!-- ko if: $data!==undefined -->
                         <li class="playlistEntry">
-                            <img class="playlistThumb" data-bind="click: $root.openPlaylist, attr: { src: $data.cover(), title: $data.title(), url: $data.url }" />
+                            <img class="playlistThumb" data-bind="click: $root.openPlaylist, attr: { refID: $data.refID, src: $data.cover, title: $data.title, url: $data.url }" />
                             <div class="playlistName" data-bind="text: $data.title()"></div>
                         </li>
                         <!-- /ko -->

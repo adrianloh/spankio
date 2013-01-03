@@ -88,8 +88,9 @@
 							};
 							Head.playlists.itemsByRef[refID] = playlist;
 							if (ownersList.indexOf(Spank.username)===0) {
-								Head.playlists.dockItemsMe()[playlistItemIndex] = playlist;
-								Head.playlists.dockItemsMe.valueHasMutated();
+								Head.playlists.dockItemsMe.unshift(playlist);
+//								Head.playlists.dockItemsMe()[playlistItemIndex] = playlist;
+//								Head.playlists.dockItemsMe.valueHasMutated();
 							} else {
 								Head.playlists.dockItemsFriends.unshift(playlist);
 							}
@@ -228,27 +229,17 @@
 
 		ko.applyBindings(Head.playlistProperties, document.getElementById('playlistProperties'));
 
-		$(".icon-trash.pprop-trash").click(function() {
-			var koo = Head.playlists.lastKoo,
-				refId = koo.refID;
-			Spank.base.me.child('playlistRefs').transaction(function(currentData) {
-				var i = currentData.indexOf(refId);
-				if (i>=0) {
-					currentData.splice(i,1);
-					return currentData;
-				} else {
-					return undefined;
-				}
-			}, function onComplete(ok) {
-				if (ok) {
-					koo.base.root.remove();
-				}
-			});
-		});
-
 		Head.playlists = (function () {
 			var self = {};
 			self.visible = ko.observable(true);
+			self.goHome = function() {
+				var countries = ['UK','US','Japan','Germany','Japan','France'],
+					cunt = countries[Math.floor(Math.random()*countries.length)],
+					ppiSelector = ".playlist-type-btn[value='ppi-charts']",
+					pSelector = ".playlistThumb[title='Billboard #']".replace("#",cunt);
+				$(ppiSelector).trigger("click");
+				$(pSelector).trigger("click");
+			};
 			self.bxSliders = {};
 			self.chartItems = ko.observableArray([]);
 			chartPlaylistItems.forEach(function(o) {
@@ -331,6 +322,7 @@
 				activeListeners['tracklist'] = tracklistRef.on('value', function(snapshot) {
 					var tracklist = snapshot.val();
 					if (tracklist!==null) {
+						Spank.charts.pushHistoryImmedietly = true;
 						Spank.charts.pushBatch(tracklist, 'replace');
 					}
 				});
@@ -379,6 +371,7 @@
 			}
 		};
 
+		// Add selection into open playlist
 		$("#history-filter-container .icon-signin").click(function() {
 			var selectedHistoryItems = Spank.history.getCheckedKoos();
 			if (selectedHistoryItems.length>0) {
@@ -389,6 +382,7 @@
 			}
 		});
 
+		// New playlist from selection
 		$("#history-filter-container .icon-save").click(function() {
 			var selectedHistoryItems = Spank.history.getCheckedKoos();
 			if (selectedHistoryItems.length>0) {
@@ -417,6 +411,14 @@
 								currentData.push(newRef.name());
 								return currentData;
 							}
+						}, function onComplete(ok) {
+							if (!ok) return;
+							var ppiSelector = ".playlist-type-btn[value='ppi-me']",
+								pSelector = ".playlistThumb[title='#']".replace("#",playname);
+							setTimeout(function() {
+								$(ppiSelector).trigger("click");
+								$(pSelector).trigger("click");
+							}, 1000);
 						});
 					});
 				}, data)
@@ -429,6 +431,28 @@
 			} else {
 				$(".icon-signin.historyOpIcons").css({display:'inline-block'});
 			}
+		});
+
+		// Delete this playlist
+		$(".icon-trash.pprop-trash").click(function() {
+			var koo = Head.playlists.lastKoo,
+				refId = koo.refID;
+			window.notify.confirm("Delete this playlist?", function() {
+				Spank.base.me.child('playlistRefs').transaction(function(currentData) {
+					var i = currentData.indexOf(refId);
+					if (i>=0) {
+						currentData.splice(i,1);
+						return currentData;
+					} else {
+						return undefined;
+					}
+				}, function onComplete(ok) {
+					if (ok) {
+						koo.base.root.remove();
+						Head.playlists.goHome();
+					}
+				});
+			});
 		});
 
 		$("#pprop-writable").click(function() {
@@ -462,11 +486,7 @@
 			});
 		});
 
-
-		var ppiSelector = ".playlist-type-btn[value='ppi-charts']",
-			pSelector = ".playlistThumb[title='Billboard UK']";
-		$(ppiSelector).trigger("click");
-		$(pSelector).trigger("click");
+		Head.playlists.goHome();
 
 //		$("#playlists-scroller-list-me, #playlists-scroller-list-friends").bxSlider({
 //			minSlides: 1,

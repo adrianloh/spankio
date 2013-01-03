@@ -23,6 +23,7 @@
 		}
 
 		var types = ['alert', 'information', 'error', 'warning', 'notification', 'success'];
+
 		window.notify = {suspended: false, last_message:"", lastMessageTime:0};
 
 		$.each(types, function(i,k) {
@@ -51,6 +52,28 @@
 				closeWith: ['hover']
 			});
 		};
+
+		window.notify.confirm = function(message, callbackOK, callbackCancel) {
+			var n = noty({
+				text: message,
+				type: 'alert',
+				dismissQueue: true,
+				layout: 'center',
+				theme: 'defaultTheme',
+				buttons: [
+					{addClass: 'btn btn-primary', text: 'OK', onClick: function($noty) {
+						$noty.close();
+						callbackOK();
+					}
+					},
+					{addClass: 'btn btn-danger', text: 'Cancel', onClick: function($noty) {
+						$noty.close();
+						if (callbackCancel) callbackCancel();
+					}
+					}
+				]
+			});
+		}
 
 	});
 

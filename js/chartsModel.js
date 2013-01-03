@@ -14,6 +14,8 @@ Array.prototype.shuffle = function() {
 
 		Spank.charts = (function() {
 			var self = {};
+			self.pushHistoryImmedietly = false;
+			self.dontPushHistory = false;
 			self.currentPlaylistTitle = ko.observable(undefined);
 			self.current_url = ko.observable(null);
 			self.ok_to_fetch_more = ko.observable(true);
@@ -105,18 +107,56 @@ Array.prototype.shuffle = function() {
 					setState = function(hash) {
 						hash = hash || stateHash();
 						chartData.chartTracks = self.chartTracks();
-						History.datastore[hash] = {q:query, chartData: chartData};
+						var playlistTitle = Spank.charts.currentPlaylistTitle();
+						if (typeof(playlistTitle)==='undefined') {
+							History.datastore[hash] = {q:query, chartData: chartData};
+						} else {
+							hash = Head.playlists.lastKoo.refID;
+						}
+						return hash;
 					};
                 if (mode && mode==='unshift') {
 					self.chartTracks.unshift.apply(self.chartTracks, newItems);
 	                setState();
 				} else if (mode && mode.match(/replace/)) {
 					self.chartTracks(newItems);
-					var hash = stateHash();
-	                setState(hash);
-                    timeoutPushHistory = setTimeout(function() {
-	                    History.pushState({stateKey:hash}, null, "?q="+encodeURIComponent(query));
-                    }, 2500);
+					var hash = stateHash(),
+						callbacks = (function(h) {
+			                // Predefine these functions so they are bound to current
+			                // value of hash, in case it changes by the time these
+			                // functions are called by timeoutPushHistory
+							var prefix = "spank.io | ";
+			                return {
+				                pushPlaylistState: function(title) {
+					                if (History.getState().data.stateKey!==h) {
+//						                console.log("HISTORY PUSH Playlist");
+						                History.pushState({stateKey:h}, prefix + title, "?playlistID="+h);
+					                }
+				                },
+				                pushQueryState: function(title) {
+//					                console.log("HISTORY PUSH General");
+					                History.pushState({stateKey:h}, prefix + title, "?q="+encodeURIComponent(title));
+				                }
+			                }
+		                })(setState(hash));
+	                function pushHistory() {
+		                History.firstpush = true;
+		                if (typeof(Spank.charts.currentPlaylistTitle())==='undefined') {
+			                callbacks.pushQueryState(query);
+		                } else {
+			                callbacks.pushPlaylistState(Spank.charts.currentPlaylistTitle());
+		                }
+	                }
+	                if (self.dontPushHistory) {
+		                self.dontPushHistory = false;
+		                return;
+	                }
+	                if (self.pushHistoryImmedietly) {
+		                self.pushHistoryImmedietly = false;
+		                pushHistory();
+	                } else {
+		                timeoutPushHistory = setTimeout(pushHistory, 2500);
+	                }
 				} else {
 					self.chartTracks.push.apply(self.chartTracks, newItems);
 	                setState();
@@ -137,6 +177,7 @@ Array.prototype.shuffle = function() {
 						self.current_url(url);
 						self.pushBatch(tracklist, 'replace');
 					} else {
+						self.pushHistoryImmedietly = false;
 						if (error_callback!==undefined) {
 							error_callback();
 						}

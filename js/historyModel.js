@@ -315,6 +315,7 @@
 
 		ko.applyBindings(Spank.history, document.getElementById('playHistory'));
 
+		// Toggle history item selection
 		$("#history-filter-container .icon-check").click(function() {
 			if ($("#history-stream-list").hasClass("history-cbox-show") && ($(".tweetcheckbox:checked").length>0)) {
 				Spank.history.batchItems([])
@@ -323,6 +324,7 @@
 			}
 		});
 
+		// Delete selected history items
 		$("#history-filter-container .icon-trash").click(function() {
 			Spank.history.deleteBatch();
 		});
