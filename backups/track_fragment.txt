@@ -1,1 +1,0 @@
-<div onclick="" mid="@MID@" class="total-row can-play" artwork="/TotalControl/images/artwork.png" style="background-color: rgb(251, 251, 251); "><div type="checkbox" onclick="" class="total-checked"></div><div class="total-not-playing"></div><div class="total-title" src="@URL@">@TITLE@</div><div class="total-artist">@ARTIST@</div><div style="clear:both;"></div></div>

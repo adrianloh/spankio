@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema name="SpankIO 1.0.x" version="1.0">
+    <types>
+        <fieldType name="string" class="solr.StrField" omitNorms="true"/>
+        <fieldType name="text" class="solr.TextField" omitNorms="false">
+            <analyzer>
+                <tokenizer class="solr.StandardTokenizerFactory"/>
+                <filter class="solr.StandardFilterFactory"/>
+                <filter class="solr.LowerCaseFilterFactory"/>
+            </analyzer>
+        </fieldType>
+        <fieldType name="url" class="solr.StrField" omitNorm="true">
+            <analyzer>
+                <tokenizer class="solr.UAX29URLEmailTokenizerFactory" />
+            </analyzer>
+        </fieldType>
+        <fieldType name="pipeDelimited" class="solr.TextField">
+            <analyzer>
+                <tokenizer class="solr.PatternTokenizerFactory" pattern="|" />
+            </analyzer>
+        </fieldType>
+    </types>
+    <fields>
+        <field name="id" stored="true" type="pipeDelimited" multiValued="false" indexed="true"/>
+        <field name="title" stored="true" type="text" multiValued="false" indexed="true"/>
+        <field name="artist" stored="true" type="text" multiValued="false" indexed="true"/>
+        <field name="album" stored="true" type="text" multiValued="false" indexed="true"/>
+        <field name="thumb" stored="true" type="url" multiValued="false" indexed="false"/>
+        <field name="url" stored="true" type="string" multiValued="false" indexed="true"/>
+        <field name="direct" stored="false" type="url" multiValued="false" indexed="false"/>
+        <field name="preview" stored="false" type="url" multiValued="false" indexed="false"/>
+        <dynamicField name="*_track" stored="true" type="string" multiValued="false" indexed="true"/>
+        <dynamicField name="*_artist" stored="true" type="string" multiValued="false" indexed="true"/>
+        <dynamicField name="*_album" stored="true" type="string" multiValued="false" indexed="true"/>
+    </fields>
+    <uniqueKey>id</uniqueKey>
+    <defaultSearchField>text</defaultSearchField>
+    <solrQueryParser defaultOperator="AND"/>
+</schema>

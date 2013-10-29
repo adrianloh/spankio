@@ -3,7 +3,9 @@ soundManager.setup({
 	url:'./360_files/swf/'
 });
 
-threeSixtyPlayer = new ThreeSixtyPlayer();
+// threeSixtyPlayer = new ThreeSixtyPlayer();
+// threeSixtyPlayer.config.useAmplifier = false;
+threeSixtyPlayer.config.playNext = true;
 threeSixtyPlayer.config.scaleFont = (navigator.userAgent.match(/msie/i)?false:true);
 threeSixtyPlayer.config.showHMSTime = false;
 
@@ -30,6 +32,6 @@ if (threeSixtyPlayer.config.useWaveformData || threeSixtyPlayer.flash9Options.us
 	soundManager.preferFlash = true;
 }
 
-soundManager.onready(function () {
-	threeSixtyPlayer.init("fatManLink");
-});
+//soundManager.onready(function () {
+//	threeSixtyPlayer.init("fatManLink");
+//});

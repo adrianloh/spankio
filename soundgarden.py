@@ -1,15 +1,13 @@
 #! /usr/bin/env python
 
 import os, re, time
-import json
+import simplejson as json
 import tornado.ioloop
 import tornado.web
 import tornado.gen
 import tornado.httpclient
 import tornado.curl_httpclient
-from urllib import urlencode, unquote
-import tornadoredis
-
+from urllib import urlencode, unquote, quote_plus
 
 def extract(q, terms=(), delimiter=":"):
 	"""
@@ -54,43 +52,148 @@ def mx_parse_search(lyrics, page=1):
 def urldecode(string):
 	return unquote(string).decode('utf8')
 
-config = dict(host="pikachu.ec2.myredis.com", port=6449, password="mavN3nb59XyRTfmJtu", selected_db=0)
-#config = dict(host='50.30.35.9', port=2700, password='53163f381734dddac45956b11fc934ea', selected_db=0)
-RED = tornadoredis.Client(**config)
-RED.connect()
-
 async_client = tornado.curl_httpclient.CurlAsyncHTTPClient()
 
 MX_API_KEY = "316bd7524d833bb192d98be44fe43017"
 MX_AGENT = "musiXmatch/211 CFNetwork/596.2.3 Darwin/12.2.0 (x86_64) (MacPro3,1)"
 
+app = open(os.path.dirname(os.path.abspath(__file__))+"/soundgarden.html").read()
+
 class MainHandler(tornado.web.RequestHandler):
 
 	def get(self):
 		self.set_header("Cache-Control", "maxage=0, no-cache, must-revalidate")
-		self.render("soundgarden.html")
+		self.set_header("Expires", time.asctime(time.gmtime(time.time())) + " GMT")
+		agent = self.request.headers.get("User-Agent")
+		if re.search("webkit", agent, re.IGNORECASE):
+			self.render("soundgarden.html")
+		else:
+			self.render("noagent.html")
 
 class FBChannelFileHandler(tornado.web.RequestHandler):
 
 	def get(self):
 		# See following for why we're setting these headers:
 		# https://developers.facebook.com/blog/post/530/
-		import time
 		expire = 60*60*24*365
 		self.set_header("Cache-Control", "maxage=%i" % expire)
 		self.set_header("Pragma", "public")
-		self.set_header("Expires", time.asctime(time.gmtime(time.time()+expire)) + " GMT")
+		self.set_header("Expires", time.asctime(time.gmtime(time.time() + expire)) + " GMT")
 		self.write('<script src="//connect.facebook.net/en_US/all.js"></script>')
+
+class LoaderIOFileHandler(tornado.web.RequestHandler):
+
+	def get(self):
+		self.write('loaderio-4ca8566477b59389b7891dc98b3805f7')
+		self.finish()
 
 class XDomainFileHandler(tornado.web.RequestHandler):
 
 	def get(self):
-		self.write("""<?xml version="1.0"?>
-<!-- http://xerxes.local:8888/crossdomain.xml -->
-<cross-domain-policy>
-<allow-access-from domain="*" />
-</cross-domain-policy>""")
-	
+		self.write("""<?xml version="1.0"?><!-- http://xerxes.local:8888/crossdomain.xml --><cross-domain-policy><allow-access-from domain="*" /></cross-domain-policy>""")
+
+re_feat = re.compile(r" f(ea)?t[\.u]?(ring)? .+$", re.IGNORECASE)
+re_n = re.compile(r"[-']n[-']", re.IGNORECASE)
+re_punc = re.compile(r"[\?\.,\/#%\^&\*;:{}=_`~()]")
+re_dash = re.compile(r"-")
+re_white = re.compile(r" {2,}")
+
+
+def clean(s):
+	s = s.strip()
+	s = re.sub(re_feat, "", s)
+	s = re.sub(re_punc, "", s)
+	s = re.sub(re_n, " ", s)
+	s = re.sub(re_dash, " ", s)
+	s = re.sub(re_white, " ", s)
+	s = s.strip().lower()
+	return s
+
+from fuzzywuzzy import fuzz
+
+def echoKeys():
+	echo_keys = "CZBQSX5JECYPEB7XM 210MLIYFGNSZTZDYP MT9HGSDQ8F1ZQOQIC DNQVLWQKJ7VTE9QGD RHZPOWR8YACOVOSXQ LI5SBSI0ENLSH2DGR CLZOJ7ISIUSOJLVXX GHU2CYVKAKBKJLOIW ETFCITMZHWVQZJHTG IALGWME7AWGMSCPXB 6ON89QRO7UZWFRMJU MW1J0UN5C7W8CURS3 N2EJAAWVBO5GZFRXV RBXIGLLZSVPAGXWEJ TSIAGQPO0IZHLIIVH VZCECTNARTHQIAOR4 74MUPCFKIHK0JFZFL YG9RBULZCBM024XBK CN0BOQA1H2EF843IB C7EUD1QIVX3TYEM8R MR6GW27UFUFUMEUKW QHDBRRVKN4YBOYNFQ QXV2MHAWE2A1QHXB6 6NCKWDT1HTJVVMWRW NS9VC2QTPBGAVAVVD A2P3ZBGJUASTNRHLM HUHHSUWODERJFSO47 9DBOEMPXVHUNLIKAX STNBHELIYPPPLBYIE QA3MCYNWVHGY8KPI8 8Y5LDR7R3XDT5FXOY EWLCZRXMPP9WNGSWA 7YWOJWKLMDTXKJO2A FZFVQ2O1IZAI5BZP6 UYD9SN2MSGUQSO82S YOZZJETAIM4FM5BYD EJQ7UNTKC23ZXGLPH 2E7NDVR4WA6QMJRGT OPNPQMENTX6KZAETA QXIPSAKCZ4WS8VIYI G6L5QU305LXVPA5FI FBFM8TGYODTGXQBVG YZE7HISN59LPNNXGZ SP9LKQVALUHOBAGG6 JASUFOMSHWGDTDI6C BDKZ7REEJKWYHENSV GO7YVBV26PNEHA8KL SFLJR6KAO6E9XTD0F KYGFH9YSV40G8AZDK RKWUASZ4SXAKNFMZ3 VZRJXSDHKVLNP13BX DBTZIJPUOR117WSB5 6SRG356YGTOVI4PHX BUSOCUGWZPTSS3DWT WQXTZ9MGVK8SWW0VB MDSKPZ3TPIMZCW2HV EYUHLX3PDKH9GIKVX T6N1DNMWBSFLP9CHZ VBDNABB6LGA2OV0VS EWL4P7I6Z7QN9NUFJ K20JX07ZFTMQXVY28 AX6V9BIC9VAIUJBHC 678BFNOQNCIU9IX1Q KYC7REVAKKXG9BINO MZ1VIQBDWRXF91RI4 RNRK8TLJWRZYLFFGC W5IUOCLTYTVDDPTUT Y5TUGYCDQ18M6HEZ"
+	echo_keys = echo_keys.split(" ")
+	i = 0
+	while True:
+		i += 1
+		yield echo_keys[i % len(echo_keys)]
+
+echoKeys = echoKeys()
+
+class EchoMatchHandler(tornado.web.RequestHandler):
+
+	@tornado.gen.engine
+	@tornado.web.asynchronous
+	def get(self, count):
+		self.set_header("Content-Type", "application/json")
+		title, artist = self.get_argument("title"), self.get_argument("artist")
+		title, artist = clean(title), clean(artist)
+		url = "http://developer.echonest.com/api/v4/song/search?api_key=%s&format=json&results=100&artist=%s&combined=%s"
+		origin = self.request.remote_ip
+		reqHeader = {'X-Forwarded-For': origin}
+		echoTracks = []
+		try:
+			reqUrl = url % (echoKeys.next(), quote_plus(artist), quote_plus(title + " " + artist))
+			getReq = tornado.httpclient.HTTPRequest(reqUrl, headers=reqHeader)
+			res = yield tornado.gen.Task(async_client.fetch, getReq)
+			response = json.loads(res.body)['response']
+			if len(response['songs'])>0:
+				results = response['songs']
+				for r in results:
+					score = fuzz.ratio(title, clean(r['title'])) + fuzz.ratio(artist, clean(r['artist_name']))
+					r['score'] = (score/200.0)*100
+				sorted_results = sorted(results, key=lambda r: r['score'])[::-1]
+				echoTracks = [d for d in sorted_results if d['score']>=90][0:int(count)]
+		except Exception as e:
+			pass
+		finally:
+			self.write(json.dumps(echoTracks))
+			self.finish()
+
+class EchoTasteProfileHandler(tornado.web.RequestHandler):
+
+	@tornado.gen.engine
+	@tornado.web.asynchronous
+	def post(self):
+		self.set_header("Content-Type", "application/json")
+		tracklist = self.get_argument("tracklist")
+		profiles = (api_key, profileName) = self.get_argument("id").split(":")
+		tasteProfileId = None
+		match = re.findall("SPANK_([A-Z\d]+)", profileName)
+		if len(match)==1: tasteProfileId = match[0]
+		origin = self.request.remote_ip
+		reqHeader = {'X-Forwarded-For': origin}
+		try:
+			if tasteProfileId is None:
+				getTasteProfileUrl = "http://developer.echonest.com/api/v4/catalog/profile?api_key=%s&name=%s" % tuple(profiles)
+				getReq = tornado.httpclient.HTTPRequest(getTasteProfileUrl, headers=reqHeader)
+				res = yield tornado.gen.Task(async_client.fetch, getReq)
+				res = json.loads(res.body)
+				if res['response']['status']['code']==0:
+					tasteProfileId = res['response']['catalog']['id']
+				else:
+					createUrl = "http://developer.echonest.com/api/v4/catalog/create?api_key=%s" % api_key
+					createData = dict(name=profileName, type="song")
+					createReq = tornado.httpclient.HTTPRequest(createUrl, method="POST", headers=reqHeader, body=urlencode(createData))
+					res = yield tornado.gen.Task(async_client.fetch, createReq)
+					res = json.loads(res.body)
+					if res['response']['status']['code']==0:
+						tasteProfileId = res['response']['id']
+			if tasteProfileId is not None:
+				updateUrl = "http://developer.echonest.com/api/v4/catalog/update?api_key=%s&id=%s" % (api_key, tasteProfileId)
+				updateData = dict(data=tracklist)
+				updateReq = tornado.httpclient.HTTPRequest(updateUrl, method="POST", headers=reqHeader, body=urlencode(updateData))
+				res = yield tornado.gen.Task(async_client.fetch, updateReq)
+				res = json.loads(res.body)
+				if res['response']['status']['code']!=0:
+					tasteProfileId = None
+		except: pass
+		finally:
+			pid = None if (tasteProfileId is None) else (api_key + ":SPANK_" + tasteProfileId)
+			self.write(json.dumps({'id':pid}))
+			self.finish()
+
 class MXSearchHandler(tornado.web.RequestHandler):
 
 	@tornado.gen.engine
@@ -102,7 +205,7 @@ class MXSearchHandler(tornado.web.RequestHandler):
 		params = mx_parse_search(search_string, page=page)
 		params['apikey'] = MX_API_KEY
 		params['format'] = 'json'
-		# params['quorum_factor'] = 0.85	# Level of fuzzy logic
+		# params['quorum_factor'] = 0.8	# Level of fuzzy logic
 		# Enabling these two options will sort by popularity
 		# params['g_common_track'] = 1
 		# params['s_track_rating'] = 'desc'
@@ -115,28 +218,37 @@ class MXSearchHandler(tornado.web.RequestHandler):
 class MyStaticHandler(tornado.web.StaticFileHandler):
 
 	def set_extra_headers(self, path):
-		self.set_header("Access-Control-Allow-Origin","*")
-		self.set_header("Accept-Ranges","bytes")
+		self.set_header("Access-Control-Allow-Origin", "*")
+		self.set_header("Accept-Ranges", "bytes")
+		expire = 60 * 60 * 24 * 7
+		self.set_header("Cache-Control", "max-age=%i" % expire)
+		self.set_header("Pragma", "public")
+		self.set_header("Expires", time.asctime(time.gmtime(time.time() + expire)) + " GMT")
+
+class NeverCacheStaticHandler(tornado.web.StaticFileHandler):
+
+	def set_extra_headers(self, path):
+		self.set_header("Cache-Control", "max-age=0, no-cache, must-revalidate")
 
 site_root = os.path.dirname(os.path.abspath(__file__))
 
+server_settings = {'debug': True, 'gzip': True}
+
 application = tornado.web.Application([
-	(r"/", MainHandler),
-	(r"/channel.html", FBChannelFileHandler),
-	(r"/crossdomain.xml", XDomainFileHandler),
-	(r"/mxsearch", MXSearchHandler),
-	(r"/static/(.*)", MyStaticHandler, {"path": site_root}),
-	(r"/js/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/js"}),
-	(r"/css/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/css"}),
-	(r"/img/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/img"}),
-	(r"/360_files/(.*)", tornado.web.StaticFileHandler, {"path": site_root+"/360_files"}),
-	], debug=True)
+		(r"/", MainHandler),
+		(r"/channel.html", FBChannelFileHandler),
+		(r"/loaderio-4ca8566477b59389b7891dc98b3805f7.html", LoaderIOFileHandler),
+		(r"/crossdomain.xml", XDomainFileHandler),
+		(r"/echo/match/(\d+)", EchoMatchHandler),
+		(r"/echo/taste/update", EchoTasteProfileHandler),
+		(r"/mxsearch", MXSearchHandler),
+		(r"/static/(.*)", MyStaticHandler, {"path": site_root + "/static"}),
+		(r"/js/(.*)", NeverCacheStaticHandler, {"path": site_root + "/js"}),
+		(r"/css/(.*)", NeverCacheStaticHandler, {"path": site_root + "/css"}),
+		(r"/img/(.*)", tornado.web.StaticFileHandler, {"path": site_root + "/img"}),
+		(r"/360_files/(.*)", tornado.web.StaticFileHandler, {"path": site_root + "/360_files"}),
+	], debug=True, gzip=True)
 
 if __name__ == "__main__":
-	if "OPENSHIFT_INTERNAL_IP" in os.environ:
-		address = os.environ['OPENSHIFT_INTERNAL_IP']
-		port = os.environ['OPENSHIFT_INTERNAL_PORT']
-		application.listen(port, address=address)
-	else:
-		application.listen(8888)
+	application.listen(80)
 	tornado.ioloop.IOLoop.instance().start()

@@ -74,7 +74,7 @@
 }
 
 .activePlaylist {
-    border: 2px solid rgb(0, 228, 222) !important;
+    background-color: rgb(103, 244, 250) !important;
 }
 
 #playlist-types-buttons {
@@ -87,7 +87,7 @@
 }
 
 #ptcenter {
-    width: 339px;
+    width: 444px;
     margin: 0 auto;
     background: rgba(31, 31, 31, 0.8);
 }
@@ -218,4 +218,8 @@
     position: absolute;
     margin-top: 20px;
     margin-left: -3px;
+}
+
+.playlistMeDropActive {
+    background-color: #55EEF5 !important;
 }

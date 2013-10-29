@@ -1,90 +1,296 @@
+/*global $, ko, Spank */
+
 (function() {
+
+	Spank.normalizeMXData = function(mxTrack) {
+		var mx = {};
+		if (mxTrack.album_name.length>0 && (mxTrack.album_name!==mxTrack.track_name)) mx.album = mxTrack.album_name;
+		mx.thumb = mxTrack.album_coverart_350x350 ? mxTrack.album_coverart_350x350 : Spank.genericAlbumArt;
+		mx.mxid_track = mxTrack.track_id;
+		mx.mxid_artist = mxTrack.artist_id;
+		mx.mxid_album = mxTrack.album_id;
+		if (mxTrack.track_mbid!==null && mxTrack.track_mbid.length>0) mx.mbid_track = mxTrack.track_mbid;
+		if (mxTrack.artist_mbid!==null && mxTrack.artist_mbid.length>0) mx.mbid_artist = mxTrack.artist_mbid;
+		return mx;
+	};
+
+	Spank.attachEchoMetadata = function(snapshot, echoTrack) {
+		snapshot.echoid_track = echoTrack.id;
+		snapshot.echoid_artist = echoTrack.artist_id;
+	};
+
+	Spank.plugTheBitch = function(bitch, tracklistRef) {
+
+		function getMX(koo) {
+			Spank.mxMatchOne(koo.title, koo.artist, function onmatch(mxTrack) {
+				var track = Spank.normalizeMXData(mxTrack),
+					oForItunes = {url: koo.url, artist: koo.artist, title: koo.title};
+				if (track.hasOwnProperty("album")) oForItunes.album = track.album;
+				if (!koo.hasOwnProperty("itms_track")) getItunes(oForItunes);
+				tracklistRef.transaction(function(currentData) {
+					var i = currentData.length;
+					while (i--) {
+						var current = currentData[i];
+						if (current.url===koo.url) {
+							for (var k in track) {
+								if (track.hasOwnProperty(k)) {
+									if (!current.hasOwnProperty(k)) current[k] = track[k];
+									if (k==='thumb' && !current.thumb.match(/apple|7static|musixmatch/) && !v.match(/google/)) current[k] = track[k];
+								}
+							}
+							break;
+						}
+					}
+					return currentData;
+				});
+			});
+		}
+
+		function getECHO(koo) {
+			ECHO.matchOne(koo.title, koo.artist, function onmatch(echoTrack) {
+				tracklistRef.transaction(function(currentData) {
+					var i = currentData.length;
+					while (i--) {
+						var s = currentData[i];
+						if (s.url===koo.url) {
+							Spank.attachEchoMetadata(s, echoTrack);
+							break;
+						}
+					}
+					return currentData;
+				});
+			});
+		}
+
+		function getItunes(track) {
+			var callback_updateFromItunes = function(tracklist) {
+				var iTunesSong = tracklist[0];
+				delete iTunesSong.releaseDate;
+				delete iTunesSong.score;
+				tracklistRef.transaction(function(currentData) {
+					var i = currentData.length;
+					while (i--) {
+						var current = currentData[i];
+						if (current.url===track.url) {
+							for (var k in iTunesSong) {
+								if (iTunesSong.hasOwnProperty(k)) {
+									if (!current.hasOwnProperty(k)) current[k] = iTunesSong[k];
+									if (k==='thumb' && !current.thumb.match(/apple|7static/)) current[k] = iTunesSong[k];
+								}
+							}
+							break;
+						}
+					}
+					return currentData;
+				});
+			};
+			callback_updateFromItunes.limit = 10;
+			ITMS.query(track, callback_updateFromItunes);
+		}
+
+		if (bitch===null) return;
+		if (typeof(bitch.mxid_track)==='undefined' || (bitch.mxid_track.length<4)) {
+			getMX(bitch);
+		} else if (typeof(bitch.itms_track)==='undefined') {
+			getItunes(bitch);
+		}
+		if (typeof(bitch.echoid_track)==='undefined') {
+			getECHO(bitch);
+		}
+	};
+
+	Spank.tasteProfileId = null;
+
+	function echoTasteItem(o, action) {
+		return {
+			action: action,
+			item: {
+				item_id: Spank.username.concat("-", o.echoid_track),
+				song_id: o.echoid_track,
+				artist_id: o.echoid_artist
+			}
+		};
+	}
+
+	function updateTasteProfile(profileHistoryId, tracklist, action, callback) {
+		var echoIds = {},
+			echoTracklist = [];
+		for (var i=0, len=tracklist.length; i<len; i++) {
+			var o = tracklist[i];
+			if (("echoid_track" in o) && ("echoid_artist" in o)) {
+				if (echoIds.hasOwnProperty(o.echoid_track)) {
+					// Pass
+				} else {
+					echoIds[o.echoid_track] = true;
+					echoTracklist.push(echoTasteItem(o, action));
+				}
+			}
+		}
+		if (echoTracklist.length===0) return;
+		var	postData = {
+				id: profileHistoryId,
+				tracklist: JSON.stringify(echoTracklist)
+			};
+		$.ajax({
+			type: "POST",
+			url: "/echo/taste/update",
+			data: postData,
+			success: function(res) {
+				if (callback) callback(res.id);
+			}
+		});
+	}
 
 	$(document).ready(function() {
 
 		$(document).one("login", function() {
 
 			Spank.username = Spank.utils.toFirebaseName(FBUserInfo.username);
-			Spank.base.users = new Firebase('https://wild.firebaseio.com/spank/users');
-			Spank.base.me = Spank.base.users.child(Spank.username);
-			Spank.base.history = Spank.base.me.child("history");
+			var Base = Spank.base;
+			Base.users = new Firebase('https://wild.firebaseio.com/spank/users');
+			Base.me = Base.users.child(Spank.username);
+			Base.history = Base.me.child("history");
+			Base.historyx = Base.me.child("historyx");
+			Base.freshies = Base.me.child("freshies");
 			$(document).trigger("baseReady");
+			Spank.loggedIn = true;
 			var firstPass = true;
 			var ignoreInitial = 0;
+
+			function cleanHistory(snapshot) {
+				var newHistory = snapshot.val(),
+					tracks = [],
+					refresh = false;
+				for (var i=0, len=newHistory.length; i<len; i++) {
+					var track = newHistory[i];
+					if (typeof(track)==='object') {
+						for (var k in track) {
+							if (track.hasOwnProperty(k) &&
+								(track[k].toString().length===0 || track[k].toString()==="na")) {
+								refresh = true;
+								delete track[k];
+								if (k==='album') delete track.mxid;
+							}
+							if (track.hasOwnProperty('mxid')) {
+								track.mxid_track = track.mxid;
+								delete track.mxid;
+								refresh = true;
+							}
+						}
+						tracks.push(track);
+					}
+				}
+				if (!refresh && tracks.length===newHistory.length) {
+					assemble(snapshot);
+				} else {
+					Base.history.set(tracks);
+				}
+			}
+
+			function initHistory(snapshot) {
+				var newHistory = snapshot.val(),
+					koHistory = [],
+					echoHistory = [];
+				for (var i=0, len=newHistory.length; i<len; i++) {
+					var o = newHistory[i], koo = {};
+					if (o.hasOwnProperty("echoid_track") && o.hasOwnProperty("echoid_artist")) {
+						echoHistory.push(o);
+					}
+					for (var k in o) {
+						if (o.hasOwnProperty(k)) {
+							koo[k] = k.match(/thumb|url|direct/) ? ko.observable(o[k]) : o[k];
+						}
+					}
+					koHistory.unshift(koo);
+				}
+				if (echoHistory.length>0) initEchoHistory(echoHistory);
+				ignoreInitial = koHistory.length;
+				Spank.history.stream(koHistory);
+				Spank.history.stream.valueHasMutated();
+				startListeningToBase();
+			}
+
+			function initEchoHistory(echoHistory) {
+				var tasteProfileRef = Base.me.child("echoTasteProfile");
+				tasteProfileRef.once("value", function(snapshot) {
+					var id = snapshot.val();
+					if (id===null) {
+						var name = ECHO.key_random().concat(":", Spank.username);
+						updateTasteProfile(name, echoHistory, "update", function afterUpdateTasteProfile(tasteId) {
+							if (tasteId!==null) {
+								Spank.tasteProfileId = tasteId;
+								ECHO.startRecommendations();
+								tasteProfileRef.set(tasteId);
+							}
+						});
+					} else {
+						Spank.tasteProfileId = id;
+						ECHO.startRecommendations();
+						updateTasteProfile(Spank.tasteProfileId, echoHistory, "update");
+					}
+				});
+			}
+
 			function assemble(snapshot) {
 				var newHistory = snapshot.val();
 				if (Array.isArray(newHistory) && newHistory.length>0) {
 					if (firstPass) {
 						firstPass = false;
-						var tracks = $.map(newHistory, function(o) {
-							if (typeof(o)==='object') return o;
-						});
-						if (tracks.length===newHistory.length) {
-							assemble(snapshot);
-						} else {
-							Spank.base.history.set(tracks);
-						}
+						cleanHistory(snapshot);
 					} else {
-						var koHistory = $.map(newHistory, function(o) {
-							var koo = {};
-							$.each(o, function(k,v) {
-								koo[k] = ko.observable(v);
-							});
-							return koo;
-						});
-						koHistory.reverse();
-						ignoreInitial = koHistory.length;
-						Spank.history.stream(koHistory);
-//						Spank.history.stream(koHistory.slice(0,20));
-//						setTimeout(function() {
-//							Spank.history.stream.push.apply(Spank.history.stream, koHistory.slice(20));
-							start();
-//						}, 250);
+						initHistory(snapshot);
 					}
 				} else {
-					start();
+					startListeningToBase();
 				}
 			}
 
-			Spank.base.history.on("value", assemble);
-			var start = function() {
-				Spank.base.history.off('value', assemble);
-				$("#history-stream-list-container").css("background-image","none");
-				setTimeout(function() {
-                    window.notify.suspended = false;
-					window.notify.information("Go!");
-				}, 2000);
-				Spank.base.history.on('child_changed', updateHistoryItem);
-				Spank.base.history.on('child_added', updateHistoryItem);
-				Spank.base.history.on('child_removed', function(snapshot) {
+			Base.history.on("value", assemble);   // LAUNCH SEQUENCE
+			var streamListContainer = $("#history-stream-list-container"),
+				startListeningToBase = function() {
+				Base.history.off('value', assemble);
+				streamListContainer.css("background-image","none");
+				if (document.height>900) {
+					streamListContainer.addClass("history_fullheight");
+				}
+				Base.history.on('child_changed', updateHistoryItem);
+				Base.history.on('child_added', updateHistoryItem);
+				Base.history.on('child_removed', function(snapshot) {
+					console.log("REMOVED: " + JSON.stringify(snapshot.val()));
 					// Fix for an off-by-one error everytime we remove
 					// something from the history list
 					Spank.history.stream.shift();
 				});
 			};
 
-			var current = 0;
+			var ignored = 0;
 			var updateHistoryItem = function(snapshot) {
-				++current;
-				if (current<=ignoreInitial) return;
+				++ignored;
+				if (ignored<=ignoreInitial) return;
 				var o = snapshot.val();
 				if (o!==null) {
-					var atHistoryIndex = Spank.history.stream().length-1-parseInt(snapshot.name(),10),
+					var stream = Spank.history.saveStream ? Spank.history.stream() : Spank.history.streamBackup,
+						atHistoryIndex = stream.length-1-parseInt(snapshot.name(),10),
 						koo = {};
 					if (typeof(o)==='object') {
-						$.each(o, function(k,v) {
-							koo[k] = ko.observable(v);
-						});
+						for (var k in o) {
+							if (o.hasOwnProperty(k)) {
+								var v = k.match(/thumb|url|direct/) ? ko.observable(o[k]) : o[k];
+								koo[k] = v;
+							}
+						}
+						if (Spank.player.lastPlayedObject.url===o.url) {
+							Spank.player.setCover(o.thumb);
+						}
 					} else {
 						koo = o;
 					}
 					if (atHistoryIndex<0) {
-						Spank.history.stream().unshift(koo);
+						stream.unshift(koo);
 					} else {
-						Spank.history.stream()[atHistoryIndex] = koo;
+						stream[atHistoryIndex] = koo;
 					}
-					Spank.history.stream.valueHasMutated();
-					Spank.history.highlightCurrentlyPlayingSong();
+					if (Spank.history.saveStream) Spank.history.stream.valueHasMutated();
 				} else {
 					console.error(o);
 				}
@@ -93,68 +299,155 @@
 		});
 
 		Spank.history = (function() {
+
 			var self = {};
+			self.renderStream = ko.observableArray([]);
 			self.stream = ko.observableArray([]);
+			self.freshies = ko.observableArray([]);
+			self.freshiesList = ko.observableArray([]);
+			self.batchItems = ko.observableArray([]);
+			self.batchItemsCount = ko.computed(function() {
+				return self.batchItems().length + " tracks selected";
+			});
+			self.batchPics = ko.computed(function() {
+				if (self.batchItems().length>0) {
+					var images = self.batchItems.slice(0,25).map(function(o) { return '<img class="basketpics" src="'+ko.toJS(o.thumb)+'" />' });
+					return images.join("");
+				} else {
+					return "";
+				}
+			});
+			var perPage = 50,
+				atListEnd = ko.observable(false);
+			self.page = ko.observable(1);
+			self.getHead = function() {
+				if (self.stream().length<=perPage) return;
+				self.page(1);
+				atListEnd(false);
+			};
+			self.goPrevPage = function() {
+				if (self.stream().length<=perPage) return;
+				var i = self.page()-1;
+				if (i<1) i = 1;
+				self.page(i);
+				atListEnd(false);
+			};
+			self.goNextPage = function() {
+				if (self.stream().length<=perPage) return;
+				if (atListEnd()) {
+					self.getHead();
+					return;
+				}
+				var i = self.page()+1;
+				if (i<1) i = 1;
+				self.page(i);
+			};
+			self.pageProgress = ko.computed(function() {
+				var historyTotal = 0;
+				for (var i=0, len=self.stream().length; i<len; i++) {
+					if (typeof(self.stream()[i])==='object') historyTotal++;
+				}
+				var total_pages = parseInt(historyTotal/perPage, 10)+1;
+				if (historyTotal%perPage===0) {
+					total_pages = historyTotal/perPage;
+				}
+				return parseInt((self.page()/total_pages)*100, 10)+"%";
+			});
 
-			self.highlightCurrentlyPlayingSong = function() {
-				setTimeout(function() {
-					$(".tweetItem").removeClass("tweetPlay");
-					$(".tweetItem[url='"+ Spank.player.current_ownerid() + "']").addClass("tweetPlay");
-				},10)
+			self.cancelStreamFilter = function() {
+				if (self.filterActive()) {
+					self.saveStream = true;
+					self.filterActive(false);
+					self.page(1);
+					atListEnd(false);
+					self.stream(self.streamBackup);
+					self.stream.valueHasMutated();
+					$("#history-filter").val("").trigger("blur");
+				}
 			};
 
-			var similarArtistAndTitle = function(o1, o2) {
-				var strip = $.trim,
-					o1_artist = strip(o1.artist.toLowerCase()),
-					o2_artist = strip(o2.artist.toLowerCase()),
-					o1_title = strip(o1.title.toLowerCase()),
-					o2_title = strip(o2.title.toLowerCase());
-				return o1_artist===o2_artist && o1_title===o2_title;
-			};
+			self.thumbSource = Spank.lazyLoadImages("#history-stream-list-container", {_iTunes:"60x60-50", _7static:"_50.jpg"});
+
+			var renderPageTimeout = setTimeout(function() {},0),
+				scrollToSongPosition = null;
+			function populateRenderStream(p) {
+				p--;
+				var start = p*perPage,
+					end = start+perPage,
+					items = [];
+				clearTimeout(renderPageTimeout);
+				for (var i=0, len=self.stream().length; i<len; i++) {
+					var o = self.stream()[i];
+					if (typeof(o)==='object') items.push(o);
+				}
+				if (end>=items.length) atListEnd(true);
+				renderPageTimeout = setTimeout(function() {
+					self.renderStream(items.slice(start, end));
+					self.renderStream.valueHasMutated();
+					if (scrollToSongPosition) {
+						setTimeout(function() {
+							$("#history-stream-list-container").scrollTop(scrollToSongPosition);
+							scrollToSongPosition = null;
+						}, 500);
+					}
+				}, 300);
+			}
+
+			self.page.subscribe(populateRenderStream);
+
+			self.currentPlayingUrl = Spank.player.current_ownerid;
+
+			self.streamBackup = [];
+			self.saveStream = true;
+			self.stream.subscribe(function(list) {
+				if (self.saveStream) self.streamBackup = list;
+				populateRenderStream(self.page());
+			});
+
+			var similarArtistAndTitle = Spank.utils.similarArtistAndTitle;
 
 			var isTheSameGift = function(gift, o) {
 				if (o.gift===undefined) {
 					return false;
 				} else {
-					return (similarArtistAndTitle(o, gift)
-						&& o.gift.from===gift.gift.from
-						&& o.gift.message===gift.gift.message);
+					var cond1 = similarArtistAndTitle(o, gift),
+						cond2 = o.gift.from===gift.gift.from,
+						cond3 = o.gift.message===gift.gift.message;
+					return (cond1 && cond2 && cond3);
 				}
 			};
 
-			self.transaction_deleteFromHistory = function(o, array, add) {
-				// This is executed within a Firebase transaction, if *anything*
-				// goes wrong, we must return undefined so the transaction is aborted.
-				var newArray;
-				if ('gift' in o) {
+			self.transaction_deleteFromHistory = function(newTrack, currentHistory, add) {
+				var newHistory = [], i, len, item;
+				if ('gift' in newTrack) {
 					// Note that this branch ONLY happens when we manually delete a gift
-					newArray = $.map(array, function(item) {
-						if (!isTheSameGift(o, item)) {
-							return item;
+					for (i = 0, len = currentHistory.length; i < len; i++) {
+						item = currentHistory[i];
+						if (!isTheSameGift(newTrack, item)) {
+							newHistory.push(item);
 						} else {
-							console.log("Found this gift");
+							newHistory.push('nicegapbaby');
 						}
-					});
+					}
 				} else {
-					newArray = $.map(array, function(item) {
-						if (typeof(item)!=='object') return item;
-						if (item.url===o.url || similarArtistAndTitle(o, item)) {
+					for (i = 0, len = currentHistory.length; i < len; i++) {
+						item = currentHistory[i];
+						if (typeof(item) !== 'object') {
+							newHistory.push(item);
+						} else if (item.url === newTrack.url || similarArtistAndTitle(newTrack, item)) {
 							if ('gift' in item) {
-								return item;
+								newHistory.push(item);
 							} else {
-								return "nicegapbaby"
+								newTrack = $.extend(item, newTrack);
+								newHistory.push("nicegapbaby");
 							}
 						} else {
-							return item;
+							newHistory.push(item);
 						}
-					});
+					}
 				}
-				if (Array.isArray(newArray)) {
-					if (add===true) newArray.push(o);
-					return newArray;
-				} else {
-					return undefined;
-				}
+				if (add===true) newHistory.push(newTrack);
+				return newHistory;
 			};
 
 			self.transaction_addNewHistoryItemAndMakeUnique = function(o, currentData) {
@@ -171,147 +464,275 @@
 				});
 			};
 
-			self.saveHistory = function(moveEvent) {
-				// E.g. the user moved an item
-				if (moveEvent===true || (typeof(moveEvent)!=='undefined' && ('item' in moveEvent) && ('sourceIndex' in moveEvent) && ('targetIndex' in moveEvent))) {
-					Spank.base.history.transaction(function(currentData) {
-						var currentStream = ko.toJS(self.stream);
-						currentStream.reverse();
-						return currentStream;                            //// Back to Vanilla Jane objects
-					});
+			var tweetItem_height = $($(".tweetItem")[0]).height();
+			self.showCurrentlyPlayingTrack = function() {
+				var o, i=0, len = self.stream().length, length=0;
+				while (i<len) {
+					o = self.stream()[i];
+					if (typeof(o)==='object' && self.currentPlayingUrl()===o.url()) {
+						var page = parseInt(length/perPage, 10);
+						scrollToSongPosition = (length%perPage)*tweetItem_height;
+						self.page(page+1);
+						break;
+					} else if (typeof(o)==='object') {
+						length++
+					} else {
+						// Gap left by deleted track
+					}
+					i++
 				}
 			};
 
-			self.prependToHistory = function(xo, playNow) {
-				var koo = {},
-					stop = false;
-				$.each(xo, function(k,v) {
-					if (!stop) {
-						if (ko.isObservable(v)) {
-							koo = xo;
-							stop = true;
-						} else {
-							koo[k] = ko.observable(v);
-						}
+			self.prependToHistory = function(list, playNow) {
+				var listOfTracksToAdd;
+				if (Array.isArray(list)) {
+					// True when adding from playlist, or added from VK search results
+					// e.g. addition of "all new" tracks into history
+					listOfTracksToAdd = list;
+					if (Spank.tasteProfileId!==null) {
+						updateTasteProfile(Spank.tasteProfileId, listOfTracksToAdd, "update");
 					}
-				});
-				if (Spank.player.lastPlayedObject.url===koo.url()) {
-					// When user clicks the currently playing song
-					return false;
+				} else {
+					// True only when user clicks on an item in history list
+					// e.g. no new items are really added to history
+					listOfTracksToAdd = [list];
 				}
-				// WARNING! Only KO observables allowed pass this point!!!
-				Spank.base.history.transaction(function update(currentData) {
-					var o = ko.toJS(koo);                               //// Back to Vanilla Jane objects
-					if (currentData===null) {
-						// currentData is null if history is empty
-						return [o];
-					} else if (Array.isArray(currentData)) {
-						return self.transaction_addNewHistoryItemAndMakeUnique(o, currentData);
-					} else {
-						// Abort the transaction
-						console.error("ERROR: Did not get an array from history.transaction");
-						console.error(currentData);
-						return undefined;
-					}
-				}, function onComplete(success, snapshot) {
-					console.warn("Firebase HISTORY PUSH : " + success);
-				});
+
+				var newHistory = ko.toJS(self.streamBackup).reverse();
+				for (var i = listOfTracksToAdd.length - 1; i >= 0; i--) {
+					var o = ko.toJS(listOfTracksToAdd[i]);
+					newHistory = self.transaction_addNewHistoryItemAndMakeUnique(o, newHistory);
+				}
+
+				Spank.base.history.set(newHistory);
+
 				if (playNow) {
-					Spank.player.playObject(ko.toJS(koo));                      //// Back to Vanilla Jane objects
+					Spank.player.playObject(listOfTracksToAdd[0]);
 					threeSixtyPlayer.config.jumpToTop = false;
 				} else {
 					threeSixtyPlayer.config.jumpToTop = true;
 				}
+
+//				listOfTracksToAdd.forEach(function(o) {
+//					Spank.plugTheBitch(o, Spank.base.history);
+//				});
+
 			};
 
-			self.batchItems = ko.observableArray([]);
-
-			self.getCheckedKoos = function() {
-				var found = 0,
-					i = self.stream().length,
-					selectedItems = [];
-				if (!self.batchItems().length>0) {
-					window.notify.error("Nothing selected in stream", 'force');
-					var historyList = $("#history-stream-list");
-					if (historyList.hasClass("history-cbox-hide")) {
-						historyList.removeClass("history-cbox-hide").addClass("history-cbox-show");
-					}
-					return selectedItems;
+			self.getFirebaseOfKoo = function(koo) {
+				var localIndex, firebaseIndex;
+				localIndex = self.stream.indexOf(koo);
+				if (localIndex>=0) {
+					firebaseIndex = self.stream().length-1-localIndex;
+					return Spank.base.history.child(firebaseIndex);
+				} else {
+					return null;
 				}
-				while (i--) {
-					if (found===self.batchItems().length) break;
-					var koo = self.stream()[i];
-					if (koo.hasOwnProperty("url") && self.batchItems.indexOf(koo.url())>=0) {
-						selectedItems.push(koo);
-						++found;
-					}
-				}
-				return selectedItems;
 			};
 
 			self.deleteBatch = function() {
-				var selectedItems = self.getCheckedKoos();
-				if (selectedItems.length===0) return;
-				Spank.base.history.transaction(function update(currentData) {
-					var intermediete, invalid = false;
-					selectedItems.forEach(function(koo) {
-						intermediete = self.transaction_deleteFromHistory(ko.toJS(koo), currentData);
-						if (Array.isArray(intermediete)) {
-							currentData = intermediete;
-						} else {
-							invalid = true;
-						}
-					});
-					return invalid ? undefined : currentData;
-				}, function onComplete(ok) {
-					if (ok) {
-						Spank.history.batchItems([]);
-						window.notify.success("Deleted " + selectedItems.length + " items from stream");
-					}
-				});
-			};
-
-			self.deleteHistoryItemOnClick = function(koo, event) {
-				// When you click on the red 'minus' icon
-				var li = $(event.target).parent();
-				li.addClass("flyleft");
-				setTimeout(function() {
-					// If we're deleting an item that is currently playing, jump to next track
+				if (!self.saveStream) { $(".historyFilterCancel").click(); }
+				var len = self.batchItems().length,
+					koo, localIndex, firebaseIndex;
+				while (len--) {
+					koo = self.batchItems()[len];
+					self.getFirebaseOfKoo(koo).set("nicegapbaby");
 					if (Spank.player.lastPlayedObject.url===koo.url()) {
 						Spank.player.suspendLoopAndTrigger(function() {
-							$(document).trigger('fatManFinish');
+							$(document).trigger('fatManFinish', localIndex);
 						});
 					}
-					Spank.base.history.transaction(function update(currentData) {
-						return self.transaction_deleteFromHistory(ko.toJS(koo), currentData);
-					}, function onComplete(success, snapshot) {
-						console.warn("Firebase HISTORY DELETE: " + JSON.stringify(success));
-					});
-				},500);
+				}
+				var selectedItems = ko.toJS(self.batchItems);
+				if (Spank.tasteProfileId!==null) {
+					updateTasteProfile(Spank.tasteProfileId, selectedItems, "delete");
+				}
+				self.batchItems([]);
 			};
 
-			self.playHistoryItemOnClick = function(koo, event) { // When clicking a History item, push it to the top and play it
-				if (Spank.history.stream.indexOf(koo)>1) {
-					var li = $(event.target).parent().parent();
-					li.addClass("flyup");
-					setTimeout(function(){
-						self.prependToHistory(koo, true);
-					}, 250);
-				} else {
-					self.prependToHistory(koo, true);
+			// When you click on the red 'minus' icon
+			self.deleteHistoryItemOnClick = function(koo, event) {
+				var stream = self.saveStream ? self.stream() : self.streamBackup,
+					localIndex = stream.indexOf(koo),
+					firebaseIndex = stream.length-1-localIndex,
+					track = ko.toJS(koo),
+					li = $(event.target).parent();
+				li.addClass("flyleft");
+				if (!self.saveStream) { self.stream.remove(koo); }
+				Spank.base.history.child(firebaseIndex).set("nicegapbaby");
+				if (Spank.tasteProfileId!==null) {
+					updateTasteProfile(Spank.tasteProfileId, [track], "delete");
+				}
+				if (Spank.player.lastPlayedObject.url===track.url) {
+					Spank.player.suspendLoopAndTrigger(function() {
+						$(document).trigger('fatManFinish', localIndex);
+					});
+				}
+			};
+
+			self.playHistoryItemOnClick = function(koo, event) {
+				koo = ko.toJS(koo);
+				if (!(Spank.player.lastPlayedObject.url===koo.url)) {
+					$(event.target).parents(".tweetItem").addClass("tweetBlink");
+					Spank.player.playObject(koo);
 				}
 			};
 
 			self.downloadHistoryItemOnClick = function(koo, event) {
-				var owner_id = koo.url().split(".")[0],
+				koo = ko.toJS(koo);
+				var owner_id = koo.url.split(".")[0],
 					url = "https://api.vkontakte.ru/method/audio.getById?audios=" + owner_id + "&access_token=" + VK.getToken() + "&callback=?";
 				$.getJSON(url, function getActualVKLink(data) {
-					if(data.response && data.response.length>0) {
+					if (data.response && data.response.length>0) {
 						var newDirectLink = data.response[0].url;
-						koo.direct(newDirectLink);
 						$(event.target).parent().click(function() { return false; }).attr("href", newDirectLink);
 					}
 				});
+			};
+
+			self.listIndicatorText = ko.observable("Library");
+			self.hideFreshies = ko.observable(true);
+			self.freshies.subscribe(function() {
+				if (!self.hideFreshies()) {
+					self.freshiesList(self.freshies());
+				}
+			});
+			self.hideFreshies.subscribe(function(yes) {
+				if (yes) {
+					self.listIndicatorText("Library");
+					//self.freshiesList([]);
+				} else {
+					self.listIndicatorText("Previously played");
+					self.freshiesList(self.freshies());
+				}
+			});
+			self.toggleHistoryFreshies = function() {
+				Spank.batchOps.batchItems([]);
+				self.hideFreshies(!self.hideFreshies());
+			};
+			self.recentlyPlayedVisible = ko.computed(function() {
+				return !self.hideFreshies() && self.freshies().length>0;
+			});
+
+			self.isNotInLibrary = function(koo) {
+				return Spank.history.findHistoryItemWithUrl(koo.url)===null;
+			};
+
+			self.prependToFreshies = function(koo) {
+				var newRef = Spank.base.freshies.push(),
+					oldRefToDelete,
+					pluggedKoo = Spank.history.findHistoryItemWithUrl(koo.url); // Is this in the library?
+				if (koo.hasOwnProperty('freshiesData')) {
+					oldRefToDelete = koo.freshiesData.ref;
+					Spank.base.freshies.child(oldRefToDelete).remove();
+				} else {
+					var freshiesAtIndex = null;
+					self.freshies().forEach(function(o,i) { if (o.url===koo.url) { freshiesAtIndex=i } });
+					if (freshiesAtIndex!==null) {
+						oldRefToDelete = self.freshies()[freshiesAtIndex].freshiesData.ref;
+						Spank.base.freshies.child(oldRefToDelete).remove();
+					}
+				}
+				if (pluggedKoo!==null) {
+					// Is in the library, grab the "plugged" track
+					koo = ko.toJS(pluggedKoo);
+					koo.freshiesData = {inLibrary: true, ref: newRef.name()};
+				} else {
+					// Playing from the radio
+					koo.freshiesData = {inLibary: false, ref: newRef.name()};
+				}
+				newRef.set(koo, function onComplete() {
+					// Spank.plugTheBitch(koo, Spank.base.freshies);
+				});
+			};
+
+			self.opEnabled = ko.observable(true);
+
+			self.homeActive = ko.computed(function() {
+				return (self.hideFreshies() && self.opEnabled() && self.stream().length>perPage && self.page()>1);
+			});
+
+			self.leftActive = ko.computed(function() {
+				return (self.hideFreshies() && self.page()!==1 && self.opEnabled() && self.stream().length>perPage);
+			});
+
+			self.rightActive = ko.computed(function() {
+				return (self.hideFreshies() && self.opEnabled() && self.stream().length>perPage);
+			});
+
+
+			var streamFilterField = $("#history-filter");
+			streamFilterField.submit(function(e) {
+				return false;
+			});
+
+			self.filterActive = ko.observable(false);
+
+			streamFilterField.livesearch({
+				searchCallback: function(input) {
+					input = $.trim(input);
+					self.filterActive(true);
+					self.saveStream = false;
+					if (input.length===0 || input==="Search library") {
+						return false;
+					} else {
+						var results = [],
+							q = input.replace(" ", ".*"),
+							re = new RegExp(q, "i");
+						for (var i=0, len=self.streamBackup.length; i<len; i++) {
+							var li = self.streamBackup[i];
+							if (typeof(li)==='object' && (li.artist.match(re) || li.title.match(re))) {
+								results.push(li);
+							}
+						}
+						self.page(1);
+						atListEnd(false);
+						self.stream(results);
+						self.stream.valueHasMutated();
+					}
+				},
+				innerText: "Search library",
+				queryDelay: 250,
+				minimumSearchLength: 1
+			});
+
+			function getFresh() {
+				var f = setInterval(function() {
+					if (typeof(Spank.base.freshies)!=='undefined') {
+						Spank.base.freshies.limit(50).on("child_added", function(snapshot) {
+							var o = snapshot.val();
+							if (o!==null && typeof(o)==='object') {
+								self.freshies.unshift(snapshot.val());
+							}
+						});
+						Spank.base.freshies.on("child_removed", function(snapshot) {
+							var atFreshieIndex = null;
+							self.freshies().forEach(function(o,i) {
+								if (o.freshiesData.ref===snapshot.name()) {
+									atFreshieIndex = i;
+								}
+							});
+							if (atFreshieIndex!==null) {
+								self.freshies.splice(atFreshieIndex, 1);
+							}
+						});
+						clearInterval(f);
+					}
+				}, 250);
+			}
+
+			getFresh();      // LAUNCH SEQUENCE
+
+			self.onClickTweetThumb = function(data, event) {
+				Spank.batchOps.saveCartAndEmpty();
+				if (self.batchItems.indexOf(data)>=0) {
+					self.batchItems.remove(data);
+				} else {
+					if (data.hasOwnProperty('gift')) {
+						delete data.gift;
+					}
+					self.batchItems.push(data);
+				}
 			};
 
 			return self;
@@ -319,41 +740,6 @@
 		})();
 
 		ko.applyBindings(Spank.history, document.getElementById('playHistory'));
-
-		Spank.history.batchItems.subscribe(function(list) {
-			if (list.length>0) {
-				$(".icon-save.historyOpIcons").addClass("opActive");
-				if (typeof(Spank.charts.currentPlaylistTitle())!=='undefined') {
-					$(".icon-signin.historyOpIcons").addClass("opActive");
-				}
-				$(".icon-trash.historyOpIcons").addClass("opTrashActive");
-			} else {
-				$(".icon-save.historyOpIcons").removeClass("opActive");
-				$(".icon-signin.historyOpIcons").removeClass("opActive");
-				$(".icon-trash.historyOpIcons").removeClass("opTrashActive");
-			}
-		});
-
-		// Toggle history item selection
-		$("#history-filter-container .icon-check").click(function() {
-			if ($("#history-stream-list").hasClass("history-cbox-show") && ($(".tweetcheckbox:checked").length>0)) {
-				Spank.history.batchItems([])
-			} else {
-				$("#history-stream-list").toggleClass("history-cbox-hide history-cbox-show");
-			}
-		});
-
-		// Delete selected history items
-		$("#history-filter-container .icon-trash").click(function() {
-			Spank.history.deleteBatch();
-		});
-
-		var firstload = true;
-		Spank.history.stream.subscribe(function saveHistory() {
-			firstload = !firstload;
-			if (!firstload) return;
-			Spank.history.saveHistory();
-		});
 
 	});
 

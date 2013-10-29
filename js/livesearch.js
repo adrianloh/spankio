@@ -1,52 +1,3 @@
-/*
- jQuery live search plugin
- Version 1.0 (05/20/2009)
-
- Author: Jeremy Herrman (jherrman@sei.cmu.edu)
-
- About:
- This plugin enables ordinary text inputs to have live seach capabilities.
- As a user types, the plugin calls a specified function.
-
- Features:
- Query Delay:
- Only executes the callback after a delay (default is 250ms) so that
- fast typers won't drown your website with too many calls.
-
- Minimum Search Length:
- Specify a minimum search length (default is 3 characters) so that
- your system doesn't get incomplete and broad searches.
-
- Initial text:
- Display initial text (default is "Search") that is automatically
- cleared when a user focuses on the text input.
- Style this by using the class "inactive_search".
-
- Multiple Instances:
- This plugin written so that you can have multiple live search text
- inputs on the same page.
-
- Usage:
-
- $('#textfield').livesearch({
- searchCallback: searchFunction,
- queryDelay: 250,
- innerText: "Search",
- minimumSearchLength: 3
- });
-
- function searchFunction(searchTerm) {
- //do the search, update the page, etc.
- }
-
- Dual licensed under the MIT and GPL licenses:
- http://www.opensource.org/licenses/mit-license.php
- http://www.gnu.org/licenses/gpl.html
-
- */
-
-
-
 (function($) {
 
 	var LiveSearch = function(element, opts)
@@ -81,7 +32,7 @@
 					DisplayResults("");
 				}
 			}
-		};
+		}
 
 //		function DisplayProgressIndication() {
 //			console.log("wait");
@@ -91,7 +42,7 @@
 			timer = undefined;
 //			console.log("livesearch - " + searchTerm);
 			settings.searchCallback(searchTerm);
-		};
+		}
 
 		if (element.val() == "" || element.val() == settings.innerText) {
 			disableSearch();
@@ -118,7 +69,8 @@
 			element.addClass("inactive_search");
 			element.removeClass("active_search");
 ////
-			var message = settings.innerText === 'Filter stream' ? settings.innerText : Spank.tagline;
+			prevSearchTerm = "";
+			var message = settings.innerText === 'Search library' ? settings.innerText : Spank.tagline;
  			element.val(message);
 		}
 

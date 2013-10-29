@@ -5,3 +5,5 @@ simplejson==2.6.2
 tornado==2.4
 tornado-redis==1.0.0
 wsgiref==0.1.2
+newrelic
+-e git://github.com/seatgeek/fuzzywuzzy.git@775dfbf72782eb0912ad613e52013a4db413fa31#egg=fuzzywuzzy

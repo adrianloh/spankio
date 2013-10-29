@@ -1,3 +1,5 @@
+/*global $, ko, Spank */
+
 (function(){
 
 	$(document).ready(function () {
@@ -23,7 +25,6 @@
 					} else {
 						if (!(snapshot.name() in Spank.friends.bases)) {
 							Spank.friends.addNewFriend(friendData);
-							console.warn("Pulling friend to list: " + friendData.username);
 						} else {
 							var observable = Spank.friends.bases[snapshot.name()].observable;
 							$.each(friendData, function(k,v) {
@@ -36,22 +37,16 @@
 
 		});
 
-		var sentMailSound = new Audio("/static/sounds/mailsent.mp3");
-		sentMailSound.load();
+		var sentMailSound;
 
 		ko.bindingHandlers.droppableFriend = {
 			init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 				$(element).droppable({
 					greedy: true,
-					accept: ".tweetThumb, .playlistThumb",
+					accept: ".tweetItem, .playlistThumb",
 					tolerance: "pointer",
 					hoverClass: "friendHover",
 					drop: function(event, ui) {
-//// Prevent intercept of drop by other elements underneath
-						document._ignoreDrop = true;
-						setTimeout(function() {
-							document._ignoreDrop = false;
-						},1000);
 						var koo = valueAccessor(),
 							friendData = ko.toJS(koo),
 							droppedHistoryItem;
@@ -65,18 +60,14 @@
 									currentData.push(friendData.username);
 									return currentData;
 								}
-							}, function onComplete(ok) {
-								if (ok) {
-									window.notify.information("Shared '" + droppedHistoryItem.title + "' with " + friendData.name);
+							}, function onComplete(error, comitted, snapshot, dummy) {
+								if (comitted) {
+									window.notify.information("Shared '" + droppedHistoryItem.title() + "' with " + friendData.name);
 								}
 							});
-						} else if (ui.draggable.hasClass('tweetThumb')) {
-//// Serious fucking Jquery UI bug, unresolved even at 1.9.2
-							ui.draggable.detach();
-							ui.draggable.insertAfter(document._draggedHistoryItemUIParent);
-//// Begin actual...
+						} else if (ui.draggable.hasClass('tweetItem')) {
+							droppedHistoryItem = ko.toJS(ui.draggable.data("koo"));
 							var	friendsHistory = Spank.friends.bases[friendData.username].history;
-							droppedHistoryItem = JSON.parse(JSON.stringify(document._draggedHistoryItem));
 							Spank.sendToFriend = function(message) {
 								message = message.length>0 ? message : "This is awwweesooomme!";
 								friendsHistory.transaction(function(currentData) {
@@ -87,11 +78,11 @@
 									};
 									if (currentData!==null) currentData.push(droppedHistoryItem);
 									return currentData;
-								}, function onSendComplete(success, data) {
+								}, function onComplete() {
 									Spank.friends.bases[friendData.username].base.transaction(function(currentData) {
 										currentData.frequency = currentData.frequency+1;
 										return currentData;
-									}, function onUpdateFreqComplete(success, data) {
+									}, function onComplete() {
 										window.notify.information("Shared '" + droppedHistoryItem.title + "' with " + friendData.name);
 									});
 								});
@@ -137,18 +128,25 @@
 		ko.applyBindings(Spank.friends, document.getElementById('friendList'));
 
 		Spank.friends.visible.subscribe(function(v) {
-			var p = v ?	"brightness(0)" : "grayscale(1)",
-				mode = v ? "show" : "hide";
-			$("#friends_button").css("webkitFilter", p);
-			var friendList = $("#friendList-container");
+			var mode = v ? "show" : "hide",
+				friendList = $("#friendList-container"),
+				friendButton = $("#friends_button");
 			if (mode==='show') {
-				friendList.slideDown('fast','swing', function() {});
+				Spank.disableDropZones(true);
+				friendButton.data("on")();
+				friendList.fadeIn('fast','swing', function() {});
+				$("#resultsSection, #playlistProperties").addClass("defocus");
 			} else {
-				friendList.slideUp('fast','swing', function(){});
+				Spank.disableDropZones(false);
+				friendButton.data("off")();
+				friendList.fadeOut('fast','swing', function(){});
+				$("#resultsSection, #playlistProperties").removeClass("defocus");
 			}
 		});
 
 		$("#friends_button").click(function() {
+			sentMailSound = new Audio("/static/mailsent.mp3");
+			sentMailSound.load();
 			var current = Spank.friends.visible();
 			Spank.friends.visible(!current);
 		});
@@ -157,4 +155,3 @@
 
 
 })();
-

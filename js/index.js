@@ -1,9 +1,24 @@
+/*global $, ko, Spank */
+
 (function() {
 
 	$(document).ready(function () {
 
+		Spank.busy = {
+			on: function() {
+				$("html").addClass("busy");
+				if (Spank.charts.isQuery===true) {
+					$("#searchField, .Textinput").addClass("busybee");
+				}
+			},
+			off: function() {
+				$("html").removeClass("busy");
+				$("#searchField, .Textinput").removeClass("busybee");
+			}
+		};
+
 		var vk_search_in_progress = false,
-			mx_get_lyrics_in_progress = false;
+			playlistScrollerWasVisible = false;
 
 		$(document).bind("login", function() {
 			$("title").text("Spank.io | " + FBUserInfo.name);
@@ -28,14 +43,206 @@
 			f();
 		});
 
-		Spank.lightBox = {
-			currentArtist: ko.observable(""),
-			currentTitle: ko.observable(""),
-			lyricsTitle: ko.observable(""),
-			lyricsText: ko.observable(""),
-			lyricsThumb: ko.observable(""),
-			vkSearchResults: ko.observableArray()
+		function urlDecode(s) {
+			s = s.replace(/&#36;/gi,"$");
+			s = s.replace(/&#33;/gi,"!");
+			s = s.replace(/&#39;/gi,"'");
+			s = s.replace("&amp;","&");
+			return s;
+		}
+
+		function clean(str) {
+			str = $.trim(str.replace(/[\?\.,\/#%\^&\*;:{}=_`~()]|feat\.?|\d\d\d\d|remastere?d?|album|version| [el]p /gi,"")).toLowerCase();
+			str = str.replace(/-/g," ");
+			str = str.replace(/ö/gi,"o");
+			str = str.replace(/ {2,}/gi," ");
+			return str;
+		}
+
+		function vickisuckme(query_string, limit, Track, callbackWithResults, callbackOnError) {
+			var TrackConstructor = Track,
+				q = clean(query_string),
+				url = "https://api.vkontakte.ru/method/audio.search?q=" + encodeURIComponent(q) + "&count=" + limit,
+			vk_search_in_progress = true;
+			Spank.busy.on();
+			var xhr = VK.api(url, function onSuccess(response) {
+				vk_search_in_progress = false;
+				Spank.busy.off();
+				var trackResults = response.slice(1);  // The first item is an integer of the total results returned
+				var results = [];
+				for (var i=0, len=trackResults.length; i<len; i++) {
+					var vkTrack = trackResults[i],
+						artist = urlDecode(vkTrack.artist),
+						title = urlDecode(vkTrack.title),
+						displayTitle = vkTrack.title.slice(0,60) + ' - ' + vkTrack.artist.slice(0,60);
+					if (displayTitle.length>0 && displayTitle.length<80) {
+						var track = new TrackConstructor();
+						track.direct = vkTrack.url;
+						track.title = title;
+						track.artist = artist;
+						track.url = vkTrack.owner_id + "_" + vkTrack.aid + ".mp3";
+						results.push(track);
+					}
+				}
+				callbackWithResults(results);
+			}, function onError() {
+				vk_search_in_progress = false;
+				Spank.busy.off();
+				if (typeof(callbackOnError)!=='undefined') { callbackOnError() }
+			});
+			$("#closeButton").click(function() { // Crash close lightbox, don't load VK results
+				xhr.abort();
+				Spank.busy.off();
+			});
+		}
+
+		var searchVKWithLightbox = function(q, TrackConstructor) {
+			playlistScrollerWasVisible = Head.playlists.visible();
+			Head.playlists.visible(false);
+			Spank.lightBox.searchComplete(false);
+			$("#lightBox").addClass("lboxScaleShow");
+			vickisuckme(q, 300, TrackConstructor, function onResults(results) {
+				if (results.length===0) {
+					Spank.charts.unavailableTracks.push(TrackConstructor.prototype);
+				}
+				Spank.lightBox.vkTracklist(results);
+				Spank.lightBox.vkTracklist.valueHasMutated();
+				Spank.lightBox.searchComplete(true);
+			}, function onError() {
+				// Really do nothing?
+			});
 		};
+
+		Spank.lightBox = (function() {
+			var self = {};
+			self.lyricsTitle = ko.observable("");
+			self.lyricsText = ko.observable("");
+			self.vkTracklist = ko.observableArray([]);
+			self.searchComplete = ko.observable(false);
+			self.vkMessage = ko.computed(function() {
+				if (self.searchComplete() && self.vkTracklist().length===0) {
+					return "Sorry, we're currently all out of this song!";
+				} else if (self.searchComplete() && self.vkTracklist().length>0) {
+					return "Found " + self.vkTracklist().length + " tracks";
+				} else {
+					return "Searching...";
+				}
+			});
+			self.vickisuckme = vickisuckme;
+
+
+			function stripFeaturing(string) {
+				if (string.match(/([ \(\[]fe?a?t\.?.+)/i)) {
+					return $.trim(string.replace(/([ \(\[]fe?a?t\.?.+)/i, ""));
+				} else {
+					return string;
+				}
+			}
+
+			function stripBrackets(string) {
+				if (string.match(/[\(\[].+[\)\]]/)) {
+					return $.trim(string.replace(/[\(\[].+[\)\]]/ ,""));
+				} else {
+					return string;
+				}
+			}
+
+			var lastCall = Date.now();
+			self.open = function(data, refIdOfOrigin) {
+				var lightBox = $("#lightBox");
+				if (!vk_search_in_progress && !lightBox.hasClass("lboxScaleShow")) {
+					var Track = function() {},
+						title = stripBrackets(data.title),
+						artist = data.artist,
+						query_string = title + " " + artist;
+					Track.prototype = data;
+					if (!data.hasOwnProperty("mxid_track")) {
+						// Songs *not* coming from MusixMatch results/billboards
+						Spank.mxMatchOne(title, artist, function(mxTrack) {
+							var mxData = Spank.normalizeMXData(mxTrack);
+							for (var k in mxData) {
+								if (mxData.hasOwnProperty(k) && !Track.prototype.hasOwnProperty(k)) {
+									Track.prototype[k] = mxData[k];
+								}
+								if (Date.now()-lastCall>5000) {
+									getLyricsWithMxid(mxData.mxid_track);
+									lastCall = Date.now();
+								}
+							}
+						}, function onerr() {
+							// pass
+						});
+					}
+					if (!data.hasOwnProperty("echoid_track")) {
+						// Songs *not* coming from EchoNest playlist
+						ECHO.matchOne(title, artist, function onmatch(echoTrack) {
+							// All songs
+							Spank.attachEchoMetadata(Track.prototype, echoTrack);
+						});
+					}
+					$(".thoughtbot:contains('Musical')").trigger("click");
+					if (data.hasOwnProperty("mxid_track")) {
+						if (Date.now()-lastCall>5000) {
+							getLyricsWithMxid(data.mxid_track);
+							lastCall = Date.now();
+						}
+					}
+					searchVKWithLightbox(query_string, Track);
+				}
+			};
+
+			self.close = function() {
+				$("#lightBox").removeClass("lboxScaleShow");
+				setTimeout(function() {
+					Spank.lightBox.vkTracklist([]);
+					Spank.lightBox.searchComplete(false);
+				}, 500);
+				Spank.lightBox.lyricsTitle("");
+				Spank.lightBox.lyricsText("");
+				Spank.busy.off();
+				$(".t_Tooltip_controlButtons2").remove();
+				$("#myonoffswitch").prop('checked', false);
+				vk_search_in_progress = false;
+				if (playlistScrollerWasVisible) {
+					Head.playlists.visible(true);
+					playlistScrollerWasVisible = false;
+				}
+			};
+
+			self.addSongToStream = function(trackObject, event) {
+				var ok = true,
+					must_have_keys = ["title", "artist", "url", "thumb", "direct"];
+				$.each(must_have_keys, function(i, attr) {
+					if (typeof(trackObject[attr])==='undefined') {
+						console.error("Error. Failed to add track to stream. Missing essential key: " + attr);
+						ok = false;
+					}
+				});
+				if (!ok) return;
+				$.each(trackObject, function(k,v) {
+					if (typeof(v)!=='undefined') {
+						if (v.toString().length===0 || v===null) {
+							if (must_have_keys.indexOf(k)<0) { // This is a non-essential key
+								trackObject[k] = 'na';
+							} else {
+								console.error(k + " > " + v);
+								ok = false;
+							}
+						}
+					} else {
+						console.error("Error. Failed to add track to stream. Got undefined value for key " + k);
+						ok = false;
+					}
+				});
+				trackObject.artist = stripFeaturing(trackObject.artist);
+				if (ok) {
+					var playNow = $(event.target).attr("action")==="play";
+					Spank.history.prependToHistory([trackObject], playNow);
+				}
+			};
+			return self;
+
+		})();
 
 		ko.applyBindings(Spank.lightBox, document.getElementById('lightBox'));
 
@@ -51,6 +258,9 @@
 			});
 			var sendSongForm = $("#sendSongForm");
 			sendSongForm.slideDown('fast','swing');
+			setTimeout(function() {
+				$("#sendMessage").focus();
+			}, 500);
 			sendSongForm.unbind('submit');
 			sendSongForm.submit(function() {
 				var messageField = $("#sendMessage"),
@@ -75,351 +285,152 @@
 
 		ko.applyBindings(Spank.getInput, document.getElementById('sendSongForm'));
 
-		//
-		// When we CLOSE the LIGHTBOX
-		//
-		var playlistScrollerWasVisible = false;
-		Spank.tearDownLightBox = function() {
-			Spank.lightBox.currentArtist("");
-			Spank.lightBox.currentTitle("");
-			Spank.lightBox.lyricsText("");
-			Spank.lightBox.lyricsTitle("");
-			Spank.lightBox.lyricsThumb("");
-			$("#lightBox").removeClass("lboxScaleShow");
-			$("html").removeClass("busy");
-			$("#lightBox_jspPane").html("");
-			$(".t_Tooltip_controlButtons2").remove();
-			$("#myonoffswitch").prop('checked', false);
-			vk_search_in_progress = false;
-			mx_get_lyrics_in_progress = false;
-			if (playlistScrollerWasVisible) {
-				Head.playlists.visible(true);
-				playlistScrollerWasVisible = false;
-			}
-		};
-
-		$("#closeButton").click(function() {
-			Spank.tearDownLightBox();
-		});
-
-		Spank.busy = {
-			on: function() {
-				$("html").addClass("busy");
-				$("#searchField").css("background-color", "rgba(187, 252, 143, 1)");
-			},
-			off: function() {
-				$("html").removeClass("busy");
-				$("#searchField").css("background-color", "rgba(255, 255, 255, 1)");
-			}
-		};
-
-		var images = ['/img/play.png','/img/plus.png'];
-		images.forEach(function(src) {
-			var img = new Image();
-			img.src = src;
-		});
-
-		var attempts = 0;
-		var searchVK = function(params) {
-			vk_search_in_progress = true;
-			$("#vk-results-list").remove();
-			$('<ul id="vk-results-list"></ul>').appendTo('#vk-results-container');
-			var url = "https://api.vkontakte.ru/method/audio.search?q=QUERY&access_token=TOKEN&count=200&callback=?",
-				token = VK.getToken();
-			url = url.replace("TOKEN", token).replace("QUERY", params.q);
-			Spank.busy.on();
-			var xhr = $.getJSON(url, function(data) {
-				vk_search_in_progress = false;
-				Spank.busy.off();
-				var message = "";
-				if (data.error) {
-					if (data.error.error_code===6 && attempts<3) {
-						++attempts;
-						searchVK(params);
-					} else {
-						attempts = 0;
-						message = '<li class="vkMessage">Oops, something went wrong. Try again.</li>';
-						$(message).appendTo("#vk-results-list");
-					}
-				} else {
-					attempts = 0;
-					var trackResults = data.response.slice(1),
-						resultsTotal = trackResults.length,
-						lick = '<i class="icon-play-circle lickButton" src="/img/play.png" thumb="@THUMB@" mxid="@MXID@" artist="@ARTIST@" songtitle="@TITLE@" url="@URL@" direct="@DIRECT@"/></i>',
-						plus = '<i class="icon-plus-sign lickButton" src="/img/plus.png" thumb="@THUMB@" mxid="@MXID@" artist="@ARTIST@" songtitle="@TITLE@" url="@URL@" direct="@DIRECT@"/></i>';
-					trackResults.forEach(function (track) {
-						track.mxid = params.mxid;
-						var trackAttr = [],
-							title = track.title.slice(0,60) + ' - ' + track.artist.slice(0,60);
-						if (title.length>0 && title.length<80) {
-							// VERY VERY IMPORTANT!
-							// The lick button contains ALL the data we need to reconstruct every entry of the playlist
-							// Where: MXID is MusixMatch's ID used in API tracks.get and URL is a VK song's OWNER_ID+TRACK_ID
-							var trackurl = track.owner_id + "_" + track.aid + ".mp3",
-								_lick = lick.replace("@DIRECT@", track.url).replace("@THUMB@", params.thumb).replace("@MXID@", params.mxid).replace("@ARTIST@", track.artist).replace("@TITLE@", track.title).replace("@URL@", trackurl),
-								_plus = plus.replace("@DIRECT@", track.url).replace("@THUMB@", params.thumb).replace("@MXID@", params.mxid).replace("@ARTIST@", track.artist).replace("@TITLE@", track.title).replace("@URL@", trackurl);
-							trackAttr.push('<div class="vkTrackEntry-container">' + '<div class="lickContainer">' + _lick + _plus + '</div>' + '<a class="vkDownloadLink" href="' + track.url +'">' + title + '</a>'+'</div>');
-							$('<li class="vkTrackEntry">' + trackAttr.join('') + '</li>').appendTo("#vk-results-list");
-						} else {
-							--resultsTotal;
-						}
-					});
-					if (resultsTotal<=0) {
-						message = '<li class="vkMessage">Sorry, we\'re all out of this song!</li>';
-					} else {
-						message = '<li class="vkMessage">Found @MESSAGE@ track(s)</li>'.replace("@MESSAGE@", resultsTotal);
-					}
-					$("#vk-results-list").prepend(message);
-					Tipped.create(".lickButton", function(element) {
-						if ($(element).attr("src").match(/plus/)) {
-							return "Save for later";
-						} else {
-							return "Play now";
-						}
-					},{
-						hideAfter: 1000,
-						skin:'controlButtons2',
-						hook: 'topmiddle',
-						hideOn: [
-							{ element: 'self', event: 'mouseleave' },
-							{ element: 'tooltip', event: 'mouseenter' }
-						]
-					});
+		var searchRefIDGen = (function() {
+			var self = {},
+				getNew = true,
+				refID,
+				tOut = setTimeout(function() {},0),
+				method = "replace";
+			self.makeNew = function() {
+				method = "replace";
+				refID = "$q_search|" + Math.uuid(64);
+			};
+			self.getMethod = function() {
+				if (method==="replace") {
+					method = "push";
+					return "replace";
 				}
-			});
-			$("#closeButton").click(function() { // Crash close lightbox, don't load VK results
-				xhr.abort();
-				Spank.busy.off();
-			});
-		};
+				return method;
+			};
+			self.getRef = function() {
+				if (getNew) {
+					getNew = false;
+					self.makeNew();
+				}
+				tOut = setTimeout(function() {
+					getNew = true;
+					$("#searchField").blur();
+				}, 12000);
+				return refID;
+			};
+			self.dontGetNew = function() {
+				clearTimeout(tOut);
+			};
+			return self;
+		})();
 
-		var timeoutUserIsTyping = setTimeout(function(){},0);
-		$.searchByWire = function(search_term) {
-			if (search_term==='Search') return;
-			clearTimeout(timeoutUserIsTyping);
-			Spank._userIsTyping = true;
-			timeoutUserIsTyping = setTimeout(function() {
-				Spank._userIsTyping = false;
-			}, 5000);
+		var searchByWire = function(search_term) {
+			searchRefIDGen.dontGetNew();
 			search_term = $.trim(search_term);
-			var queryVKDirectly = $("#myonoffswitch").is(":checked");
-			if (queryVKDirectly) {
-				setTimeout(function() {
-					var lightBox = $("#lightBox");
-					if (!vk_search_in_progress && !mx_get_lyrics_in_progress) {
-						var query_string = search_term.replace(/\?/,"");
-						searchVK({q:query_string,
-							mxid:'09061980', thumb:Spank.genericAlbumArt});
-						playlistScrollerWasVisible = Head.playlists.visible();
-						Head.playlists.visible(false);
-						lightBox.addClass("lboxScaleShow");
-//						lightBox.slideDown('fast','swing', function() {
-//							$("#closeButton").show();
-//						});
-					}
-				}, 1000);
-			} else {
-				// Each time we start a new search...
-				Spank.charts.ok_to_fetch_more(true);
-				Spank.tearDownLightBox();                                               // Close the lightbox
-				Spank.friends.visible(false);                                           // Close the friends list
-				$(".playlistEntry").removeClass("activePlaylist");                      // Don't highlight any playlist items
-				if (search_term!=='') {
-					Spank.busy.on();
-					if (search_term.match(/similarto/)) {
-						try {
-							var matches = search_term.match(/similarto:(.+)---(.+)/),
-								data = {
-									artist: $.trim(matches[1]).toLowerCase(),
-									title: $.trim(matches[2]).toLowerCase()
-								};
-							Spank.charts.getSimilar(data);
-						} catch(err) { }
-					} else {
-						var url = '/mxsearch?q=#&page=1'.replace("#",search_term);
-						Spank.charts.populateResultsWithUrl(url, function extract(res) {
-							Spank.busy.off();
-							return res.message.body.track_list;
-						}, function onNoResults() {
-							window.notify.error("No results.",'force');
-							Spank.busy.off();
-						});
-					}
+			var newStateObj = {
+				title: search_term,
+				refID: searchRefIDGen.getRef(),
+				url: '/mxsearch?q=#&page=1'.replace("#", search_term)
+			};
+			$("#searchField, .Textinput").addClass("busybee");
+			Spank.charts.resetCharts(newStateObj);
+			$.getJSON(newStateObj.url, function(res) {
+				if (res.message.header.status_code===200) {
+					$("#searchField, .Textinput").removeClass("busybee");
+					var tracklist = res.message.body.track_list;
+					Spank.charts.pushBatch(tracklist, searchRefIDGen.getMethod());
 				} else {
-					return false;
+					//window.notify.error("Crap! We're experiencing server issues. Try again later?");
 				}
+			});
+//			var echoArtistBase = "http://developer.echonest.com/api/v4/artist";
+//			var echosuggest = echoArtistBase + "/suggest?api_key=@&results=1&name=".replace("@", ECHO.key());
+//			var echoextract = echoArtistBase + "/extract?api_key=@&format=json&results=10&sort=familiarity-desc&text=".replace("@", ECHO.key());
+//			$.getJSON(echoextract + search_term, function(res) {
+//				res = res.response;
+//				if (res.status.code===0 && res.artists.length>0) {
+//					console.log(res.artists[0].name);
+//				}
+//			});
+			if (search_term.match(/artist:/) && !search_term.match(/title:/)) {
+				try {
+					var query = search_term.match(/artist: ?(.+)/)[1],
+						callbackWithItunesResults = function(tracklist) {
+							Spank.charts.pushBatch(tracklist, 'unshift');
+						};
+					callbackWithItunesResults.limit = 200;
+					callbackWithItunesResults.attributes = "&attribute=artistTerm";
+					if (query.length>0) ITMS.query(query, callbackWithItunesResults);
+				} catch(err) { }
 			}
 		};
 
-		$(".trackArtist").live("click", function searchWithArtistName() {
-			var artist = $(this).text();
-			$("#searchField").val("artist: " + artist).trigger("keyup");
-		});
-
-		// Don't allow the form to be submitted or we'll jump away
-		// from the page!
 		$("#searchLyrics").submit(function(e) {
 			return false;
 		});
 
 		$("#searchField").livesearch({
-			searchCallback: $.searchByWire,
-			innerText: Spank.tagline,
-			queryDelay: 500,
+			searchCallback: function(search_term) {
+				if (search_term.match(/vk:/)) {
+					var Track = function() {};
+					Track.prototype.thumb = Spank.genericAlbumArt;
+					search_term = $.trim(search_term.split(":")[1]);
+					searchVKWithLightbox(search_term, Track);
+				} else {
+					setTimeout(function() {
+						searchByWire(search_term);
+					},100)
+				}
+			},
+			innerText: "Search by artist, title or lyrics",
+			queryDelay: 200,
 			minimumSearchLength: 3
 		});
 
 		var streamFilterField = $("#history-filter");
-        streamFilterField.submit(function(e) {
+        streamFilterField.submit(function() {
             return false;
         });
 
-        streamFilterField.livesearch({
-			searchCallback: function(input) {
-				var re = new RegExp(input, "i"),
-					tweetItems = document.getElementsByClassName("tweetItem"),
-					i = tweetItems.length,
-					showAll = false,
-					li;
-				if (input.length===0 || input==='Filter stream') {
-					showAll = true;
-				}
-                while (i--) {
-                    li = tweetItems[i];
-                    if (showAll || li.getAttribute("artist").match(re) || li.getAttribute("songtitle").match(re)) {
-	                    li.className = "tweetItem tweetShow";
-                    } else {
-                        li.className = "tweetItem";
-                    }
-                }
-			},
-			innerText: "Filter stream",
-			queryDelay:150,
-			minimumSearchLength: 2
-		});
-
-		$(".historyFilterCancel").click(function() {
-			var tweetItems = document.getElementsByClassName("tweetItem"),
-				i = tweetItems.length;
-			$("#history-filter").val("").trigger("blur");
-			while (i--) {
-				tweetItems[i].className = "tweetItem tweetShow";
-			}
-		});
-
-		$(".lickButton").live('click', function prependVKTrackToHistoryAndPlay() {
-			var button = $(this),
-				attributes = ["songtitle", "artist", "url", "thumb", "direct"],
-				data = {},
-				that = $(this),
-				ok = true,
-				must_have_keys = ["title", "artist", "url", "thumb", "direct"];
-			$.each(attributes, function(i, attr) {
-				var save_attr = attr.replace(/song/,"");
-				data[save_attr] = that.attr(attr);
-			});
-			$.each(must_have_keys, function(i, attr) {
-				if (!data.hasOwnProperty(attr)) {
-					console.error(attr);
-					ok = false;
-				}
-			});
-			$.each(data, function(k,v) {
-				try {
-					if (!v.length>0) {
-						console.error(k + " > " + v);
-						ok = false;
-					}
-				} catch(err) {
-					console.error(k + " > " + v);
-					ok = false;
-				}
-			});
-			if (ok) {
-				if (button.attr("src").match(/play/)) {
-					Spank.history.prependToHistory(data, true);
-				} else {
-					Spank.history.prependToHistory(data, false);
-				}
-			}
-			return false;
-		});
-
-		var mxMatchOne = function(title, artist, callback, err_callback) {
+		Spank.mxMatchOne = function(title, artist, callback, err_callback) {
 			var url = "http://api.musixmatch.com/ws/1.1/matcher.track.get?q_artist=ARTIST&q_track=TRACK&apikey=316bd7524d833bb192d98be44fe43017&format=jsonp&callback=?";
-			artist = encodeURIComponent($.trim(artist));
-			title = encodeURIComponent($.trim(title));
+			artist = encodeURIComponent($.trim(artist.toLowerCase()));
+			title = encodeURIComponent($.trim(title.toLowerCase()));
 			url = url.replace("ARTIST", artist).replace("TRACK", title);
 			$.getJSON(url, function(res) {
 				try {
-					if (res.message.body.track) {
+					if (res.message.body.hasOwnProperty("track")) {
 						callback(res.message.body.track);
 					} else {
-						err_callback();
+						if (err_callback) err_callback();
 					}
 				} catch(err) {
-					err_callback();
+					if (err_callback) err_callback();
 				}
 			});
 		};
 
-		Spank.mxMatchOne = mxMatchOne;
-
-		var getLyricsWithMxid = function(track) {
-			mx_get_lyrics_in_progress = true;
-			function getLyrics(mxid) {
-				var url = "http://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=#&apikey=316bd7524d833bb192d98be44fe43017&format=jsonp&callback=?";
+		var getLyricsWithMxid = function(mxid) {
+			var url = "http://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=#&apikey=316bd7524d833bb192d98be44fe43017&format=jsonp&callback=?",
+				lyrics = sessionStorage[mxid];
+			if (typeof (lyrics)==='string') {
+				Spank.lightBox.lyricsText(lyrics);
+			} else {
 				$.getJSON(url.replace("#", mxid), function(data) {
-					mx_get_lyrics_in_progress = false;
 					try {
 						if (data.message.body && data.message.body.lyrics.lyrics_body) {
-							Spank.lightBox.lyricsText(data.message.body.lyrics.lyrics_body+"\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+							lyrics = data.message.body.lyrics.lyrics_body+"\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+							sessionStorage[mxid] = lyrics;
+							Spank.lightBox.lyricsText(lyrics);
 						}
 					} catch(err) { }
 				});
 			}
-			if (track.mxid==='na') {
-				mxMatchOne(track.title, track.artist, function onmatch(o) {
-					getLyrics(o.track_id);
-				}, function onerr() {
-					mx_get_lyrics_in_progress = false;
-				});
-			} else {
-				getLyrics(track.mxid);
-			}
 		};
 
-//		$("#playlists-scroller-list").sortable({
-//			update : function () {
-//				console.log("Resorting!");
-//				//$(document).trigger("playlistDidChange");
-//			}
-//		});
-
-		$(".lyricLink").live('click', function openLightbox() {
-			var lightBox = $("#lightBox");
-			if (!vk_search_in_progress && !mx_get_lyrics_in_progress && !lightBox.hasClass("lboxScaleShow")) {
-				var anchor = $(this),
-					trackEntry = anchor.parent().parent(),
-					title = anchor.text(),
-					thumb = trackEntry.find(".mxThumb").attr("src"),
-					artist = trackEntry.find(".trackArtist").text(),
-					query_string = title + " " + artist.replace(/\W/," "),
-					mxid = anchor.attr("mxid"),
-					mxData = {artist:artist, title:title, mxid:mxid};
-				getLyricsWithMxid(mxData);
-				query_string = query_string.replace(/\?/,"");
-				searchVK({q:query_string,
-					mxid:mxid, thumb:thumb});
-				Spank.lightBox.lyricsThumb(thumb);
-				Spank.lightBox.currentArtist(artist);
-				Spank.lightBox.currentTitle(title);
-				Spank.lightBox.lyricsTitle(title + " - " + artist);
-				playlistScrollerWasVisible = Head.playlists.visible();
-				Head.playlists.visible(false);
-				lightBox.addClass("lboxScaleShow");
-			}
-			return false;
+		$(".superButtons").each(function(i, button) {
+			button = $(button);
+			button.data('on', function() {
+				button.removeClass("playModeOff");
+			});
+			button.data('off', function() {
+				button.addClass("playModeOff");
+			});
 		});
 
 	});

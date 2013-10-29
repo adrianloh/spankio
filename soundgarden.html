@@ -1,82 +1,52 @@
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="https://www.facebook.com/2008/fbml">
 <head>
     <title>Welcome to Spank!</title>
-    <!-- Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow" rel="stylesheet" type="text/css">
     <link href='http://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
-
+    <link href='http://fonts.googleapis.com/css?family=Roboto:300italic,400,300,100' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="/css/index.css" />
-    <link rel="stylesheet" type="text/css" href="/css/fontawesome/css/font-awesome.css" />
-    <link rel="stylesheet" type="text/css" href="/css/forms.css" />
-    <link rel="stylesheet" type="text/css" href="/css/buttons.css" />
-    <link rel="stylesheet" type="text/css" href="/css/scrollbars.css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 
     <script type="text/javascript">
-        VK = {
-            keys:[
-                "b1661341bae6b03fbae6b03fd4bacddc5abbae6bae88c20ea21e811daf9e2c67fdd8f78",
-                "13e47ebc10ca8da510ca8da57510e1e1c0110ca10c4b1ba407dcd8718254eba6cdd201b",
-                "633b3aa76851ba026851ba0223687ad66766851685f861d38e74dc981cb38cbe200a017",
-                "b63e1d33bf6561b4bf6561b4b9bf4e0dd1bbf65bf6b5dabefccf0d187e2dbaa4ac0b03e",
-                "1d1aa7ae14a55a8e14a55a8e1d148e36eb114a514ab669144121a3185704c3e628ca24d"],
-            pick:0,
-            getToken: function() {
-                return this.keys[++this.pick%this.keys.length];
-            }
-        };
         // The global object/ui components exported by this webapp
         Spank = {
+            loggedIn: false,
             base:{},
+            charts: {},
+            batchOps: {},
             playlists:{},
-            lightBox:null,
-            player: null,
-            playlistScroller: null,
-            history: null,
+            lightBox: {},
+            player: {},
+            playlistScroller: {},
+            history: {},
             utils: {},
-            genericAlbumArt: "https://lh5.googleusercontent.com/-I-hfjhp58Yg/UNiOPdDTi8I/AAAAAAAAXRY/eDxTsIxWlAs/s0/hi-512-5.png",
-            tagline: "Search"
+	        genericAlbumArt: "http://d1vkkvxpc2ia6t.cloudfront.net/albumempty2.png",
+	        tagline: "Search"
         };
 
-        // Load a default image for cover art in case we get 404s
         function ImgError(source) {
             source.src = Spank.genericAlbumArt;
             source.onerror = "";
             return true;
         }
-
-        // Load a default user image in case we get 404s
         function UserImgError(source) {
             source.src = "/img/user.jpg";
             source.onerror = "";
             return true;
         }
-
-        //Parse.initialize("743mZmF65tx9xVPvWWrCeAJuEA2LLNm89VMcNzQm", "8bynNa8lvkA8k6bPdCfGAHb6A1W3oSS1ipjMBVl1");
-        //UserData = Parse.Object.extend("UserData");   // constructor
-
     </script>
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 
-    <!-- Login to Facebook, which triggers the global 'login' event on successful login
-    -->
-    <script type="text/javascript" src="/js/fb.js"></script>
+    <!-- Firebase -->
+    <script type='text/javascript' src='http://d220hult4v35uv.cloudfront.net/firebase06092013Bgz.js'></script>
 
-    <!-- Notifications with 'noty' plugin
-    -->
-    <link rel="stylesheet" type="text/css" href="/js/noty/buttons.css" />
-    <script type="text/javascript" src="/js/noty/jquery.noty.js"></script>
-    <script type="text/javascript" src="/js/noty/layouts/topLeft.js"></script>
-    <script type="text/javascript" src="/js/noty/layouts/topRight.js"></script>
-    <script type="text/javascript" src="/js/noty/layouts/center.js"></script>
-    <script type="text/javascript" src="/js/noty/themes/default.js"></script>
-    <script type="text/javascript" src="/js/noty/notifications.js"></script>
+    <!-- Login to Facebook, which triggers the global 'login' event on successful login -->
+    <!--<script type="text/javascript" src="/js/compiled/compiled.0.js"></script>-->
+    <script type="text/javascript" src="/js/fb.js"></script>            <!-- :::0::: -->
 
     <!--<script src="http://www.parsecdn.com/js/parse-1.1.14.min.js"></script>-->
-
-    <!-- Firebase -->
-    <script type='text/javascript' src='https://static.firebase.com/v0/firebase.js'></script>
 
     <!-- jQuery and Knockout.JS -->
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.2.0/knockout-min.js"></script>
@@ -84,555 +54,416 @@
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
 
-    <!-- Enable 'live searching' in the searchbar -->
-    <script type="text/javascript" src="/js/livesearch.js"></script>
+    <!-- The main scripts that drive this app -->
+    <!--<script type="text/javascript" src="/js/compiled/compiled.3.js"></script>-->
+    <script type="text/javascript" src="/js/utils.js"></script>             <!-- :::2::: -->
+    <script type="text/javascript" src="/js/externals.js"></script>         <!-- :::2::: -->
+    <script type="text/javascript" src="/js/playlists2.js"></script>        <!-- :::2::: -->
+    <script type="text/javascript" src="/js/draggables.js"></script>        <!-- :::2::: -->
+    <script type="text/javascript" src="/js/musicPlayerModel.js"></script>  <!-- :::2::: -->
+    <script type="text/javascript" src="/js/chartsModel.js"></script>       <!-- :::2::: -->
+    <script type="text/javascript" src="/js/historyModel.js"></script>      <!-- :::2::: -->
+    <script type="text/javascript" src="/js/batchOps.js"></script>          <!-- :::2::: -->
 
-     <!--bxSlider CSS file -->
+    <!-- PLUG HEAD -->
+
+    <!--bxSlider CSS file -->
     <link rel="stylesheet" type="text/css" href="/css/scroller.css" />
     <!--<link href="/js/jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />-->
     <!--<script src="/js/jquery.bxslider/jquery.bxslider.mine.js"></script>-->
+    <link rel="stylesheet" type="text/css" href="/js/noty/buttons.css" />
+    <!--<link rel="stylesheet" type="text/css" href="/js/contextMenu/jquery.contextmenu.css" />-->
+    <!--<link rel="stylesheet" type="text/css" href="/js/tipped/tipped.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="/js/tipped/custom.css">-->
 
-    <!-- Make playlists, a KO observable array, sortable -->
-    <script type="text/javascript" src="/js/knockout-sortable.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/forms.css" />
+    <link rel="stylesheet" type="text/css" href="/css/buttons.css" />
+    <link rel="stylesheet" type="text/css" href="/css/scrollbars.css" />
 
-    <!-- The scripts that drive this app
-    -->
-    <script type="text/javascript" src="/js/utils.js"></script>
-    <script type="text/javascript" src="/js/tooltips.js"></script>
-    <!--<script type="text/javascript" src="/js/playlists.js"></script>-->
-    <script type="text/javascript" src="/js/playlists2.js"></script>
-    <script type="text/javascript" src="/js/playlistAction.js"></script>
-    <script type="text/javascript" src="/js/draggables.js"></script>
-    <script type="text/javascript" src="/js/musicPlayerModel.js"></script>
-    <script type="text/javascript" src="/js/historyModel.js"></script>
-    <script type="text/javascript" src="/js/chartsModel.js"></script>
-    <script type="text/javascript" src="/js/index.js"></script>
-    <script type="text/javascript" src="/js/friends.js"></script>
-    <script type="text/javascript" src="/js/keystrokes.js"></script>
-    <script type="text/javascript" src="/js/snippets.js"></script>
-
-    <!-- Edit-in-place Playlist Names -->
-    <script type="text/javascript" src="/js/jquery.editable.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="/js/contextMenu/jquery.contextmenu.css" />
-    <link rel="stylesheet" type="text/css" href="/js/tipped/tipped.css">
-    <link rel="stylesheet" type="text/css" href="/js/tipped/custom.css">
+    <link rel="stylesheet" type="text/css" href="/360_files/flashblock.css">
+    <link rel="stylesheet" type="text/css" href="/360_files/360player.css">
 
 </head>
 <body>
-<div id="config-panel" style="opacity: 0;">
-<div id="config-ui" style="clear: both; position: relative; max-width: 1110px; margin-top: 1em; display: block; ">
-
-<div style="position:relative">
-
-<form action="http://www.schillmania.com/projects/soundmanager2/demo/360-player/canvas-visualization.html#"
-      method="get">
-
-<div id="controls">
-
-<div class="checkbox">
-    <div>
-        <input id="use-waveform" type="checkbox" checked="checked" title="Enable waveform feature."
-               onclick="controller.updateExample();controller.updateExampleCode()" value="Apply">
-        Waveform
-        <input id="disabled-1" type="checkbox" title="Enable EQ (spectrum) feature."
-               onclick="controller.updateExample();controller.updateExampleCode()" value="Apply"
-               style="margin-left:1em" checked="checked"> EQ
-        <input type="checkbox" name="use-amplifier" id="use-amplifier" checked="checked"
-               onclick="controller.updateExample();controller.updateExampleCode()"
-               style="margin-left:1em"> Amplifier
-    </div>
-</div>
-
-<div style="clear:left"></div>
-
-<dl class="col">
-
-    <dt>Circle Diameter</dt>
-    <dd class="title">Size</dd>
-    <dd>1-200</dd>
-    <dd class="control">
-        <div class="bar" title="Click to move here"></div>
-        <div class="slider" title="Size of circle" style="margin-left: 204px; "></div>
-    </dd>
-
-    <dt>Waveform Thickness</dt>
-    <dd class="title">thickness</dd>
-    <dd>1-100</dd>
-    <dd class="control">
-        <div class="bar" title="Click to move here"></div>
-        <div class="slider" title="Thickness of line" style="margin-left: 106.99999999999997px; "></div>
-    </dd>
-
-    <dt>Wave Downsample</dt>
-    <dd class="title">(Scale)</dd>
-    <dd>1-16</dd>
-    <dd class="control">
-        <div class="bar" title="Click to move here"></div>
-        <div class="slider" title="Amount to downsample waveform data by"
-             style="margin-left: 24.999999999999982px; "></div>
-    </dd>
-
-    <dt>EQ Thickness</dt>
-    <dd class="title">thickness</dd>
-    <dd>1-50</dd>
-    <dd class="control">
-        <div class="bar" title="Click to move here"></div>
-        <div class="slider" title="Thickness of line" style="margin-left: 159px; "></div>
-    </dd>
-
-    <dt>EQ Downsample</dt>
-    <dd class="title">(Scale)</dd>
-    <dd>1-16</dd>
-    <dd class="control">
-        <div class="bar" title="Click to move here"></div>
-        <div class="slider" title="Amount to downsample EQ data by" style="margin-left: 137px; "></div>
-    </dd>
-
-    <dt>Ring Thickness</dt>
-    <dd class="title">(Scale)</dd>
-    <dd>1-150</dd>
-    <dd class="control">
-        <div class="bar" title="Click to move here"></div>
-        <div class="slider" title="Scale factor for the ring width"
-             style="margin-left: 92.99999999999997px; "></div>
-    </dd>
-
-</dl>
-
-<div id="options" class="col">
-
-    <div>
-        Waveform position:
-        <input type="radio" name="waveform-inside" id="waveform-inside" value="true" checked="checked"
-               onclick="controller.updateExample();controller.updateExampleCode()"> Inside | <input
-            type="radio" name="waveform-inside" id="waveform-inside" value="false"
-            onclick="controller.updateExample();controller.updateExampleCode()"> Outside
-    </div>
-
-    <div>
-        EQ position:
-        <input type="radio" name="eq-inside" id="eq-inside" value="true"
-               onclick="controller.updateExample();controller.updateExampleCode()"> Inside | <input
-            type="radio" name="eq-inside" id="eq-inside" value="false" checked="checked"
-            onclick="controller.updateExample();controller.updateExampleCode()"> Outside
-    </div>
-
-    <div>
-        Waveform color:
-        <input type="text" name="waveform-color" id="waveform-color" value="#000000"
-               onclick="createCP(this,setWaveformColor)">
-    </div>
-
-    <div>
-        EQ color:
-        <input type="text" name="eq-color" id="eq-color" value="#000000"
-               onclick="createCP(this,setEQColor)">
-    </div>
-
-    <div>
-        Loaded ring color:
-        <input type="text" name="loaded-ring-color" id="loaded-ring-color" value="#000000"
-               onclick="createCP(this,setLoadedRingColor)">
-    </div>
-
-    <div>
-        Progress ring color:
-        <input type="text" name="progress-ring-color" id="progress-ring-color" value="#000000"
-               onclick="createCP(this,setProgressRingColor)">
-    </div>
-
-    <div>
-        Background ring color:
-        <input type="text" name="bg-ring-color" id="bg-ring-color" value="#000000"
-               onclick="createCP(this,setBackgroundRingColor)">
-    </div>
-
-    <p class="compact">
-        <input id="randomizeButton" type="button" onclick="controller.randomize()" value="Randomize controls"
-               title="Assign random control values" style="font-size:x-small">
-    </p>
-
-
-</div>
-
-<div id="cp-container">
-    <!-- color picker stuff goes here -->
-    <div id="yui-picker-bg" class="yui-picker-bg" tabindex="-1"
-         style="background-color: rgb(255, 0, 0); ">
-        <div id="yui-picker-thumb" class="yui-picker-thumb" style="left: -4px; top: -4px; "><img
-                src="./360_files/picker_thumb.png"></div>
-    </div>
-    <div id="yui-picker-hue-bg" class="yui-picker-hue-bg" tabindex="-1">
-        <div id="yui-picker-hue-thumb" class="yui-picker-hue-thumb" style="left: -2px; top: -8px; "><img
-                src="./360_files/hue_thumb.png"></div>
-    </div>
-    <div id="yui-picker-controls" class="yui-picker-controls">
-        <div class="hd"><a id="yui-picker-controls-label"
-                           href="http://www.schillmania.com/projects/soundmanager2/demo/360-player/canvas-visualization.html#"></a>
-        </div>
-        <div class="bd">
-            <ul id="yui-picker-rgb-controls" class="yui-picker-rgb-controls">
-                <li>R <input autocomplete="off" size="3" id="yui-picker-r" class="yui-picker-r"
-                             name="yui-picker-r"></li>
-                <li>G <input autocomplete="off" size="3" id="yui-picker-g" class="yui-picker-g"
-                             name="yui-picker-g"></li>
-                <li>B <input autocomplete="off" size="3" id="yui-picker-b" class="yui-picker-b"
-                             name="yui-picker-b"></li>
-            </ul>
-            <ul id="yui-picker-hsv-controls" class="yui-picker-hsv-controls" style="">
-                <li>H <input autocomplete="off" size="3" id="yui-picker-h" class="yui-picker-h"
-                             name="yui-picker-h"> °
-                </li>
-                <li>S <input autocomplete="off" size="3" id="yui-picker-s" class="yui-picker-s"
-                             name="yui-picker-s"> %
-                </li>
-                <li>V <input autocomplete="off" size="3" id="yui-picker-v" class="yui-picker-v"
-                             name="yui-picker-v"> %
-                </li>
-            </ul>
-            <ul id="yui-picker-hex-summary" class="yui-picker-hex_summary" style="display: none; ">
-                <li id="yui-picker-rhex">FF</li>
-                <li id="yui-picker-ghex">FF</li>
-                <li id="yui-picker-bhex">FF</li>
-            </ul>
-            <div id="yui-picker-hex-controls" class="yui-picker-hex-controls" style=""># <input
-                    autocomplete="off" size="6" id="yui-picker-hex" class="yui-picker-hex"
-                    name="yui-picker-hex"></div>
+<div id="largeBackground"></div>
+<div id="fb-root"></div>
+<div id="loginFacade">
+    <div class="loginContentVerticalCenter">
+        <div class="loginContent">
+            <h1>Human powered music discovery</h1>
+            <h2>We are currently being held hostage. Check back shortly!</h2>
+            <div id="fb-login" class="fb-login-button" data-size="large" data-show-faces="true" data-width="400" data-max-rows="1" scope="email, publish_stream"></div>
         </div>
     </div>
-    <div id="yui-picker-swatch" class="yui-picker-swatch" style="background-color: rgb(255, 255, 255); "
-         title="Currently selected color: #FFFFFF"></div>
-    <div id="yui-picker-websafe-swatch" class="yui-picker-websafe-swatch"
-         style="background-color: rgb(255, 255, 255); "
-         title="Closest websafe color: #FFFFFF. Click to select."></div>
 </div>
 
-<div id="config-code-block" style="float:right;display:inline;margin-left:1em;margin-top:-0.7em">
-    <!--
-              <pre id="config-link" class="block"><code style="cursor:pointer" onclick="document.getElementById('config-link').style.display='none';document.getElementById('config-pre-block').style.display='block';return false"> [click to show code]                 </code></pre>
-          -->
-	<pre id="config-pre-block" class="block"><code id="config-code" style="display: block; ">// 360player.js, config
-        section
-
-        this.config = {
-
-        playNext: <span>false</span>,
-        autoPlay: <span>false</span>,
-        allowMultiple: <span>false</span>,
-        loadRingColor: <span>'#ccc'</span>,
-        playRingColor: <span>'#000'</span>,
-        backgroundRingColor: <span>'#eee'</span>,
-        circleDiameter: <span>256</span>,
-        circleRadius: <span>128</span>,
-        animDuration: <span>500</span>,
-        animTransition: <span>Animator.tx.bouncy</span>,
-        showHMSTime: <span>true</span>,
-
-        useWaveformData: <span>true</span>,
-        waveformDataColor: <span>'#0099ff'</span>,
-        waveformDataDownsample: <span>2</span>,
-        waveformDataOutside: <span>false</span>,
-        waveformDataConstrain: <span>false</span>,
-        waveformDataLineRatio: <span>1.04</span>,
-
-        useEQData: <span>true</span>,
-        eqDataColor: <span>'#339933'</span>,
-        eqDataDownsample: <span>11</span>,
-        eqDataOutside: <span>true</span>,
-        eqDataLineRatio: <span>1.17</span>,
-
-        usePeakData: <span>true</span>,
-        peakDataColor: <span>'#ff33ff'</span>,
-        peakDataOutside: <span>true</span>,
-        peakDataLineRatio: <span>0.5</span>,
-
-        useAmplifier: <span>true</span>
-
-        }</code></pre>
-</div>
-
-</div>
-</form>
-
-</div>
-
-
-</div>
-
-</div>
-
-    <!-- BEGIN MY STUFF -->
-
-    <div id="fb-root"></div>
-    <div id="loginFacade">
-        <div class="loginContentVerticalCenter">
-            <div class="loginContent">
-                <h1>Human powered music discovery</h1>
-                <div id="fb-login" class="fb-login-button" data-size="large" data-show-faces="true" data-width="400" data-max-rows="1" scope="email, publish_stream"></div>
+<div id="applicationBody">
+<!--<div class="logoHolder"><img class="spanklogo" src="https://lh5.googleusercontent.com/-ceR6IKDhwE0/UZpFa5fBObI/AAAAAAAAheM/nnWArccyTuA/w400-h201-no/spanklogo.png" /></div>-->
+<div id="searchForm">
+    <div class="Search_Box main_search">
+        <div class="search_box_container">
+            <div id="searchFieldDrop" class="TextInput unstyled search_input main_search">
+                <input id="searchField" class="unstyled" placeholder="" name="" type="text" value="">
             </div>
+            <a href="#" class="search_clear"></a>
         </div>
     </div>
-
-    <div id="applicationBody">
-
-        <div id="spank-player-controls">
-            <img id="friends_button" class="playModeButtons" title="Friends" src="/img/chat.png" />
-            <img id="random_button" title="Shuffle chart entries [ i ]" class="playModeButtons" src="/css/random_on.png" />
-            <img id="loop_button" title="Loop Mode [ o ]" class="playModeButtons" src="/css/loop_on.png" />
-            <img id="shuffle_button" title="Shuffle Mode [ p ]" class="playModeButtons" src="/css/shuffle_on.png" />
+    <div id="super-controls" style="-webkit-user-select: none;">
+        <i id="echonest_button" class="icon-lightbulb superButtons playModeOff"><span class="topIconLabel">Discover</span></i>
+        <!--<i id="moodswing_button" class="icon-smile superButtons playModeOff"><span class="topIconLabel">Moodswing</span></i>-->
+        <i id="friends_button" class="icon-envelope superButtons playModeOff"><span class="topIconLabel">Share</span></i>
+        <!--<img id="echonest_button" title="Your recommendations" class="superButtons playModeOff" src="/css/echonest.png" />-->
+        <!--<img id="moodswing_button" title="Have a moodswing!" class="superButtons playModeOff" src="/css/moodswing.png" />-->
+        <!--<img id="friends_button" title="Friends" class="superButtons playModeOff" src="/img/chat.png" />-->
+    </div>
+</div>
+<div id="funkyPlayer" style="-webkit-user-select: none;">
+    <div id="playerSources">
+        <div class="sourceButton" data-bind="css:{ source_on: $root.playCharts, source_stash_on: $root.stashActive() }"><i id="playCharts_button" class="icon-th" data-bind="click: $root.toggleMode"></i></div>
+        <div class="sourceButton" data-bind="css:{ source_on: $root.playLibrary }"><i id="playLibrary_button" class="icon-list" data-bind="click: $root.toggleMode"></i></div>
+    </div>
+    <div id="spank-player-controls">
+        <button id="shuffle_button" class="rjf" data-bind="css:{ shuffleloop_on : $root.shuffle }, click: $root.toggleMode"></button>
+        <button id="loop_button" class="rjf" data-bind="css:{ shuffleloop_on : $root.loop }, click: $root.toggleMode"></button>
+    </div>
+    <div class="360mover">
+        <div class="ui360">
+            <a class="fatManLink" data-bind="attr: { href: current_url }"></a>
         </div>
+    </div>
+    <div class="transportControls">
+        <div class="addCurrentToLibraryButton" data-bind="click: addCurrentlyPlayingToLibrary, visible: isPlaying() && isNotPlayingFromLibrary()">
+            <span class="addToLibraryButton"><i class="icon-plus"></i></span>
+        </div>
+        <div class="addCurrentToLibraryButton" data-bind="visible: isPlaying() && isPlayingFromLibrary()">
+            <span class="bigBullseye"><i class="icon-bullseye" data-bind="click: $root.showCurrentlyPlayingTrack"></i></span>
+        </div>
+        <div id="prevTrackButton" class="transportButton"><i class="icon-rotate-left transportIcon" data-bind="click: goToPrevTrack"></i></div>
+        <div id="nextTrackButton" class="transportButton"><i class="icon-rotate-right transportIcon" data-bind="click: goToNextTrack"></i></div>
+    </div>
+    <div id="songTitleCard">
+        <div id="titleCardArtist"></div>
+        <div id="titleCardSong"></div>
+    </div>
+    <div id="coverArtHolder" data-bind="style:{ 'background-image': coverurl() }"></div>
+</div>
 
-        <div id="searchForm">
-            <form id="searchLyrics">
-                <input type="text" name="lyrics" id="searchField" size="120" value="" class="text-input" />
-                <div class="onoffswitch">
-                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
-                    <label class="onoffswitch-label" for="myonoffswitch">
-                        <div class="onoffswitch-inner"></div>
-                        <div class="onoffswitch-switch"></div>
-                    </label>
+<div class="giftPopup">
+    <div class="giftFrom"></div>
+    <div class="giftMessage"></div>
+</div>
+
+<div id="moodswings" class="moodUnder">
+    <div class="moodTitle" data-bind="html: $root.title()"></div>
+    <ul id="mood-list" data-bind="foreach: $root.moods">
+        <li>
+            <input type="checkbox" data-bind="attr:{value:$data, id:$data, name:$data}, checked: $root.feelingNow" />
+            <label class="mood-label" data-bind="attr:{for:$data}, text:$data"></label>
+        </li>
+    </ul>
+</div>
+<div id="playHistory">
+    <div id="history-filter-container" style="-webkit-user-select: none;">
+        <i class="icon-arrow-left hNav historyOpIcons" data-bind="css: { opActive: leftActive() }, click: goPrevPage"></i>
+        <i class="icon-home hNav historyOpIcons" data-bind="css: { opActive: homeActive() }, click: getHead"></i>
+        <i class="icon-arrow-right hNav historyOpIcons" data-bind="css: { opActive: rightActive() }, click: goNextPage"></i>
+        <!--<i class="icon-bullseye pOps historyOpIcons" data-bind="css: { opActive: true }, click: showCurrentlyPlayingTrack" title="Go to currently playing song"></i>-->
+        <i class="icon-time pOps nops historyOpIcons" data-bind="css: { opActive: !hideFreshies() }, click: toggleHistoryFreshies"></i>
+        <input type="text" id="history-filter" tabindex="2" value="" class="text-input" />
+        <span class="ds3qa"><i class="icon-remove-circle historyOpIcons" data-bind="click: cancelStreamFilter, css: { historyFilterCancel: filterActive }"></i></span>
+    </div>
+    <div id="listIndicatorBar"><div class="listIndicatorBarText" data-bind="text: listIndicatorText"></div></div>
+    <div id="hProgressCurrent" data-bind="visible: hideFreshies(), style: {width: pageProgress }"></div>
+    <div id="hProgressTotal" data-bind="visible: hideFreshies()"></div>
+    <div id="history-stream-list-container" style="-webkit-user-select: none;">
+        <div id="basketcase" class="baskethide">
+            <div class="basketpics-container" data-bind="html: $root.batchPics"></div>
+            <div class="baskettext" data-bind="text: $root.batchItemsCount"></div>
+        </div>
+        <ul id="history-stream-list" class="history-cbox-show" data-bind="visible: hideFreshies(), foreach: renderStream">
+            <!-- ko if: typeof($data)==='object' -->
+            <li class="tweetItem tweetShow" data-bind="pickupStreamItems:$data, css: { tweetPlay: $root.currentPlayingUrl()===url() }, attr: {url: url, artist: artist, songtitle: title }">
+                <!--<img class="tweetThumb veiled" src="/img/grey.gif" onerror="ImgError(this)" data-bind="attr: { 'data-src' : thumb }" />-->
+                <img class="tweetThumb" src="/img/grey.gif" onerror="ImgError(this)" data-bind="click: $root.onClickTweetThumb, attr: { 'data-src' : $root.thumbSource($data, $element) }" />
+                <a class="tweetDownloadLink" href="#" target="_blank" data-bind="event: { mouseover: $root.downloadHistoryItemOnClick }">
+                    <i class="tweetOpsHide icon-cloud-download tweetDownload"></i>
+                </a>
+                <span class="rJ1Qad" data-bind="css: { rJ1Qad_active: $root.batchItems.indexOf($data)>=0 }"></span>
+                <i class="tweetOpsHide icon-remove-sign tweetDelete" data-bind="click: $root.deleteHistoryItemOnClick"></i>
+                <div class="tweetDetails" data-bind="click: $root.playHistoryItemOnClick">
+                    <div class="tweetTrackName" data-bind="text: title"></div>
+                    <div class="tweetTrackArtist" data-bind="text: artist"></div>
                 </div>
-            </form>
-        </div>
-
-        <div id="funkyPlayer">
-            <div class="ui360 ui360-vis funkyPlayer-container" title="Play/Pause [ space ]">
-                <a class="fatManLink" data-bind="attr: { href: current_url }"></a>
-            </div>
-        </div>
-
-        <div class="giftPopup">
-            <div class="giftFrom"></div>
-            <div class="giftMessage"></div>
-        </div>
-
-        <div id="playHistory">
-            <div id="history-filter-container">
-                <i class="icon-check historyOpIcons" title="Select mode"></i>
-                <i class="icon-save historyOpIcons" title="New playlist from selected"></i>
-                <i class="icon-signin historyOpIcons" title="Add selected to active playlist"></i>
-                <i class="icon-trash historyOpIcons" title="Delete selected"></i>
-                <input type="text" id="history-filter" value="" class="text-input" />
-                <i class="icon-remove-circle historyFilterCancel"></i>
-            </div>
-            <div id="history-stream-list-container">
-            <!--<ul id="history-stream-list" data-bind="sortable: {data: stream, afterMove: saveHistory }">-->
-            <ul id="history-stream-list" class="history-cbox-hide" data-bind="foreach: stream">
-                <!-- ko if: typeof($data)==='object' -->
-                <li class="tweetItem tweetShow" data-bind="attr: {url: url, artist: artist, songtitle: title }, cartDeleteIcons:$data">
-                    <input class="tweetcheckbox" data-bind="attr: {value: url}, checked: $root.batchItems" type="checkbox">
-                    <img class="tweetThumb" src="/img/grey.gif" onerror="ImgError(this)" data-bind="pickupStreamItems:$data, attr: { src : thumb }" />
-                    <a class="tweetDownloadLink" href="#" data-bind="event: { mouseover: $root.downloadHistoryItemOnClick }">
-                        <i class="tweetOpsHide icon-download-alt tweetDownload"></i>
-                        <!--<img class="tweetDownload" src="/img/cart.png" />-->
-                    </a>
-                    <i class="tweetOpsHide icon-remove-sign tweetDelete" data-bind="click: $root.deleteHistoryItemOnClick"></i>
-                    <!--<img class="tweetDelete" src="/img/deleteTweet.png" data-bind="click: $root.deleteHistoryItemOnClick" />-->
-                    <div class="tweetDetails" data-bind="click: $root.playHistoryItemOnClick">
-                        <div class="tweetTrackName" data-bind="text: title"></div>
-                        <div class="tweetTrackArtist" data-bind="text: artist"></div>
-                    </div>
-                </li>
-                <!-- /ko -->
-            </ul>
-            </div>
-        </div>
-
-        <div id="playlistProperties" data-bind="visible: title">
-            <i class="icon-group shareIcon"></i>
-            <div id="pTitleText" data-bind="click: renamePlaylist, text: title"></div>
-            <i data-bind="css: editState"></i>
-            <div id="sharedWithText" data-bind="text: sharedWith"></div>
-            <div id="pprop-ops">
-                <i class="icon-play pprop"></i>
-                <i class="icon-check pprop"></i>
-            </div>
-            <div id="pprop-controls" data-bind="visible: isMine">
-                <input id="pprop-everyone" class="pprop-checkbox" type="checkbox">
-                <label class="pprop-checkbox-label" for="pprop-everyone">
-                    Everyone
-                </label>
-                <input id="pprop-writable" class="pprop-checkbox" type="checkbox">
-                <label class="pprop-checkbox-label" for="pprop-writable">
-                    Let others contribute
-                </label>
-                <i class="icon-trash pprop"></i>
-            </div>
-        </div>
-
-        <div class="resultsBody">
-            <div id="lightBox" class="lboxScaleHide">
-                <i id="closeButton" class="icon-remove-sign"></i>
-                <!--<div id="lyricsTitle" data-bind="text : lyricsTitle"></div>-->
-                <img id="lyricsThumb" data-bind="attr: { src: lyricsThumb }" />
-                <div id="lyricsButtons">
-                    <button class="thoughtbot">Musical</button>
-                    <button class="thoughtbot">Lyrical</button>
+            </li>
+            <!-- /ko -->
+        </ul>
+        <ul id="recently-played-list" class="history-cbox-show" data-bind="visible: !hideFreshies(), foreach: freshiesList">
+            <!-- ko if: typeof($data)==='object' -->
+            <li class="tweetItem tweetShow" data-bind="pickupStreamItems:$data, css: { tweetPlay: $root.currentPlayingUrl()===url }, attr: {url: url, artist: artist, songtitle: title }">
+                <img class="tweetThumb" src="/img/grey.gif" onerror="ImgError(this)" data-bind="attr: { src : thumb }" />
+                <a class="tweetDownloadLink" href="#" target="_blank" data-bind="event: { mouseover: $root.downloadHistoryItemOnClick }">
+                    <i class="tweetOpsHide icon-cloud-download tweetDownload"></i>
+                </a>
+                <span class="rJ1Qad" data-bind="css: { rJ1Qad_active: $root.batchItems.indexOf($data)>=0 }"></span>
+                <i class="tweetOpsHide icon-plus-sign tweetDelete" data-bind="visible: $root.isNotInLibrary($data)"></i>
+                <!--<i class="tweetOpsHide icon-bullseye tweetDelete" data-bind="visible: !$root.isNotInLibrary($data)"></i>-->
+                <div class="tweetDetails" data-bind="click: $root.playHistoryItemOnClick">
+                    <div class="tweetTrackName" data-bind="text: title"></div>
+                    <div class="tweetTrackArtist" data-bind="text: artist"></div>
                 </div>
-                <div id="lightBox-content-container">
-                    <pre id="lyricsText" data-bind="text : lyricsText"></pre>
-                    <div id="vk-results-container"></div>
-                </div>
+            </li>
+            <!-- /ko -->
+        </ul>
+    </div>
+</div>
+<div id="batchSection">
+    <div id="batchOperations" class="batchOperations_hide" data-bind="visible: $root.batchOpsActive(), css: {batchOpsStream: $root.batchItems().length>$root.shoppingCart().length}">
+        <div class="batchCount batchTable">
+            <span id="shoppingCartIcon"><i class="icon-shopping-cart icon-2x batchIcon"></i></span>
+            <span id="batchCountNumber" data-bind="text: $root.shoppingCartCount()"></span>
+        </div>
+        <div class="batchControls batchTable" style="-webkit-user-select: none;">
+            <div id="batchNewMixButton" role="button" class="a-f-e c-b c-b-u dEPAPb batchControlsButton" data-bind="click:$root.newMixFromBatch">New mix</div>
+            <div id="batchAddToStream" role="button" class="a-f-e c-b c-b-u dEPAPb batchControlsButton" data-bind="visible: $root.hasItemsToAddToStream(), click:$root.addToStream">+Library</div>
+            <div id="batchCopyButton" role="button" class="a-f-e c-b c-b-u dEPAPb batchControlsButton ccpBatchOps" data-bind="visible: $root.isCuttable(), click:$root.batchCopy">
+                <i class="icon-copy icon-2x batchIcon"></i>
             </div>
-            <div id="resultsSection">
-                <div id="playlistSearchZone" class="playlistSearchZone searchFullWidth">
-                    <div class="dropSpans">Search for similar tracks</div>
-                </div>
-                <div id="playlistDropZone" class="playlistDropZone"><div class="dropSpans">Add to this playlist</div></div>
-                <div id="track_count_current" data-bind="text: totalChartTracks"></div>
-                <ul class="results-list" data-bind="sortable: {data:chartTracks, beforeMove: saveTrackOrder, afterMove: changeTrackOrder }">
-                    <li class="trackEntry unwobbled">
-                        <img class="mxThumb" src="/img/grey.gif" onerror="ImgError(this)" data-bind="click: $root.addToShoppingCart, attr: { src: thumb }" />
-                        <!--<div class="trackName"><a class="lyricLink" href="#" data-bind="text: title, attr: { mxid: mxid }"></a></div>-->
-                        <div class="trackName"><a class="lyricLink" href="#" data-bind="text: title, attr: { mxid: mxid }"></a></div>
-                        <div class="trackArtist" data-bind="text: artist"></div>
+            <div id="batchCutButton" role="button" class="a-f-e c-b c-b-u dEPAPb batchControlsButton ccpBatchOps" data-bind="visible: $root.isCuttable(), click:$root.cutCartItems">
+                <i class="icon-cut icon-2x batchIcon"></i>
+            </div>
+            <div id="batchAddButton" role="button" class="a-f-e c-b c-b-u dEPAPb batchControlsButton ccpBatchOps" data-bind="visible: $root.isPastable(), click:$root.pasteToMix">
+                <i class="icon-paste icon-2x batchIcon"></i>
+            </div>
+            <div id="batchDeleteButton" role="button" class="a-f-e c-b c-b-u dEPAPb batchControlsButton" data-bind="visible: $root.hasDeletableItems(), click:$root.deleteBatch">Delete</div>
+        </div>
+        <div class="batchCancel batchTable">
+            <div role="button" class="a-f-e c-b c-b-T batchCancelButton" style="-webkit-user-select: none;" data-bind="click: $root.emptyAllBatches">Cancel</div>
+        </div>
+    </div>
+    <!--<div id="batchItems" data-bind="visible: $root.showBatchItems">-->
+    <!--<ul class="batch-list" data-bind="foreach: $root.batchItems">-->
+    <!--<li class="trackEntry">-->
+    <!--<img class="mxThumb" src="/img/grey.gif" onerror="ImgError(this)" data-bind="click: $root.onClickBatchItem, attr: { src: thumb }" />-->
+    <!--<div class="trackName" data-bind="click: $root.onClickBatchItem, text: title"></div>-->
+    <!--<div class="trackArtist" data-bind="text: artist"></div>-->
+    <!--</li>-->
+    <!--</ul>-->
+    <!--</div>-->
+</div>
+<div class="resultsBody">
+    <div id="lightBox" class="lboxScaleHide">
+        <i id="closeButton" class="icon-remove-sign" data-bind="click:$root.close"></i>
+        <!--<div id="lyricsTitle" data-bind="text : lyricsTitle"></div>-->
+        <img id="lyricsThumb" />
+        <div id="lyricsButtons">
+            <button class="thoughtbot">Musical</button>
+            <button class="thoughtbot">Lyrical</button>
+        </div>
+        <div id="lightBox-content-container">
+            <pre id="lyricsText" data-bind="text : lyricsText"></pre>
+            <div id="vk-results-container">
+                <div class="vkMessage" data-bind="text: vkMessage"></div>
+                <ul id="vk-results-list" data-bind="foreach: vkTracklist">
+                    <li class="vkTrackEntry">
+                        <div class="vkTrackEntry-container">
+                            <div class="lickContainer">
+                                <i class="icon-play-circle lickButton" action="play" data-bind="click: $root.addSongToStream"></i>
+                                <i class="icon-plus-sign lickButton" action="add" data-bind="click: $root.addSongToStream"></i>
+                            </div>
+                            <a class="vkDownloadLink" data-bind="attr: {href: $data.direct}">
+                                <div style="display: inline-block" data-bind="text: $data.title"></div> -
+                                <div style="display: inline-block" data-bind="text: $data.artist"></div>
+                            </a>
+                        </div>
                     </li>
                 </ul>
             </div>
-
         </div>
-
-        <div id="sendSongForm">
-            <form class="form-5 clearfix">
-                <div class="p">
-                    <div class="formTitle" data-bind="text: title"></div>
-                    <input type="text" id="sendMessage" data-bind="attr: {placeholder: placeholder}">
+    </div>
+    <div id="resultsSection">
+        <div id="playlistSearchZone" class="playlistSearchZone searchFullWidth"><div class="dropSpans">Search for similar tracks</div></div>
+        <div id="playlistDropZone" class="playlistDropZone"><div class="dropSpans">Add to this playlist</div></div>
+        <div id="playlistProperties" data-bind="visible: userPlaylistIsOpen()">
+            <!--<img class="casette" src="https://lh4.googleusercontent.com/-p37z6qyFxG0/UZokPVu3WGI/AAAAAAAAhd0/-5XGHGFb-bI/w142-h120-no/cassette_tape.png" />-->
+            <!--<div id="pTitleText" data-bind="click: $root.renamePlaylist, text: title"></div>-->
+            <!--<i data-bind="css: editState"></i>-->
+            <!--<div id="sharedWithText" data-bind="text: sharedWith"></div>-->
+            <!--<div id="pprop-ops">-->
+            <!--Play <span>all</span><span class="playOption">in order</span>/<span class="playOption">randomly</span>-->
+            <!--</div>-->
+            <div id="pprop-controls" data-bind="visible: isMine">
+                <input id="pprop-everyone" class="pprop-checkbox" type="checkbox">
+                <label class="pprop-checkbox-label" for="pprop-everyone">Public</label>
+                <input id="pprop-writable" class="pprop-checkbox" type="checkbox">
+                <label class="pprop-checkbox-label" for="pprop-writable">Invite others to contribute</label>
+                <!--<i class="icon-trash icon-2x pprop"></i>-->
+                <span class="trash-me pprop" data-bind="click: $root.destroyPlaylist">Delete this playlist</span>
+            </div>
+        </div>
+        <div id="resultsSectionBindMe" data-bind="css: { bookmark_active: $root.isPinned() }">
+            <div class="stashControls" data-bind="visible: $root.stashID() && $root.stashID()!==$root.refID()">
+                <!--<div class="pinButton"><i class="icon-pushpin pushpin"></i></div>-->
+                <div class="pinOps">
+                    <i class="icon-circle-arrow-right icon-pushpin-indicator" data-bind="click: $root.goToPinnedState"></i>
+                    <i class="icon-remove-circle icon-pushpin-indicator" data-bind="click: $root.deletePinnedState"></i>
                 </div>
-                <button class="sendMessageButton">
-                    <i class="icon-arrow-right"></i>
-                    <span data-bind="text: submitmessage"></span>
-                </button>
-                <div id="pressEscape">[esc] to cancel</div>
-            </form>
+            </div>
+            <div id="playlistInfo" class="defocusOnDrag1" style="-webkit-user-select: none;">
+                    <span class="bookmark" data-bind="css: { bookmark_active: $root.isPinned() }">
+                        <i class="icon-pushpin bookmarkPlusMinus" data-bind="click: $root.onClickPin"></i>
+                    </span>
+                <div class="bigTitle" data-bind="text: $root.bigTitle, css: { bigTitle_userPlaylist: $root.userPlaylistIsOpen() }"></div>
+                <div id="track_count_current" data-bind="text: totalChartTracks, css: {chartLoading: $root.loading}"></div>
+            </div>
+            <div class="selectableItems-container">
+                <ul id="autopageContent" class="results-list results-charts defocusOnDrag1" data-bind="sortable: {data:chartTracks, beforeMove: saveTrackOrder, afterMove: changeTrackOrder }">
+                    <li class="trackEntry" data-bind="css: {'ui-selected':$root.shoppingCart.indexOf($data)>=0}, koChartItems:$data">
+                        <span class="tick_chartItem" data-bind="click: $root.onClickAddToShoppingCart, css:{'tick_chartItem_active':$root.shoppingCart.indexOf($data)>=0}"></span>
+                        <div class="unavailableTrack" data-bind="visible: $root.unavailableTracks.indexOf($data)>=0"><span class="unavailableTrackInner">UNAVAILABLE</span></div>
+                        <div class="moremoremore" data-bind="click: $root.openLightbox"><span class="dotdotdot">...</span></div>
+                        <div class="sideTrack" data-bind="click: $root.radioPlay"><i class="icon-play icon-2x"></i></div>
+                        <!--<img class="mxThumb veiled" src="/img/grey.gif" onerror="ImgError(this)" data-bind="click: $root.radioPlay, attr: { 'data-src' : thumb }" />-->
+                        <!--<img class="mxThumb" src="/img/grey.gif" onerror="ImgError(this)" data-bind="click: $root.radioPlay, attr: { 'data-src' : thumb }, visible: $root.isSad($element)" />-->
+                        <img class="mxThumb" src="/img/grey.gif" onerror="ImgError(this)" data-bind="click: $root.radioPlay, attr: { 'data-src' : $root.thumbSource($data, $element) }" />
+                        <div class="trackName" data-bind="text: title"></div>
+                        <div class="trackArtist" data-bind="text: artist, click: $root.onClickFindArtist"></div>
+                    </li>
+                </ul>
+            </div>
         </div>
+    </div>
+</div>
+<div id="sendSongForm">
+    <form class="form-5 clearfix">
+        <div class="p">
+            <div class="formTitle" data-bind="text: title"></div>
+            <input type="text" id="sendMessage" data-bind="attr: {placeholder: placeholder}">
+        </div>
+        <button class="sendMessageButton">
+            <i class="icon-arrow-right"></i>
+            <span data-bind="text: submitmessage"></span>
+        </button>
+        <div id="pressEscape">[esc] to cancel</div>
+    </form>
+</div>
 
-        <div id="friendList-container">
-            <ul id="friendList" data-bind="foreach: friendlist">
-                <li class="friendItem" data-bind="attr: { frequency: frequency }, droppableFriend:$data">
-                    <div class="friendDetails">
-                        <img class="friendPic" onerror="UserImgError(this)" data-bind="attr: { src: picture} " />
-                        <div class="friendName" data-bind="text: name"></div>
-                    </div>
+<div id="friendList-container">
+    <ul id="friendList" data-bind="foreach: friendlist">
+        <li class="friendItem" data-bind="attr: { frequency: frequency }, droppableFriend:$data">
+            <div class="friendDetails">
+                <img class="friendPic" onerror="UserImgError(this)" data-bind="attr: { src: picture} " />
+                <div class="friendName" data-bind="text: name"></div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div id="playlistScroller">
+    <div class="sliderNavLeft">
+        <div class="sbox-valign" data-direction="left">
+            <i class="icon-caret-left navButton"></i>
+        </div>
+        <div class="square-one-valign">
+            <i class="icon-home square-one-inner"></i>
+        </div>
+        <div class="sbox-valign" data-direction="right">
+            <i class="icon-caret-right navButton"></i>
+        </div>
+    </div>
+    <div class="sliderNavRight">
+        <div class="sbox-valign" data-direction="left">
+            <i class="icon-caret-left navButton"></i>
+        </div>
+        <div class="square-one-valign">
+            <i class="icon-home square-one-inner"></i>
+        </div>
+        <div class="sbox-valign" data-direction="right">
+            <i class="icon-caret-right navButton"></i>
+        </div>
+    </div>
+    <div class="viewport">
+        <div class="slider-container">
+            <ul id="playlists-scroller-list-discover" data-bind="foreach: dockItemsDiscover">
+                <!-- ko if: $data!==undefined -->
+                <li class="playlistEntry" data-bind="css: {activePlaylist: $data.refID===$root.activeChartRefID() }">
+                    <img class="playlistThumb chartThumb" data-bind="click: $root.openPlaylist, attr: { refID: $data.refID, src: $data.cover, title: $data.title, url: $data.url }" />
+                    <div class="playlistName" data-bind="text: title"></div>
                 </li>
+                <!-- /ko -->
+            </ul>
+            <ul id="playlists-scroller-list-charts" data-bind="foreach: dockItemsCharts">
+                <!-- ko if: $data!==undefined -->
+                <li class="playlistEntry" data-bind="css: {activePlaylist: $data.refID===$root.activeChartRefID() }">
+                    <img class="playlistThumb chartThumb" data-bind="click: $root.openPlaylist, attr: { refID: $data.refID, src: $data.cover, title: $data.title, url: $data.url }" />
+                    <div class="playlistName" data-bind="text: title"></div>
+                </li>
+                <!-- /ko -->
+            </ul>
+            <ul id="playlists-scroller-list-me" data-bind="foreach: dockItemsMe">
+                <!-- ko if: $root.docksVisible.me() && $data!==undefined -->
+                <li class="playlistEntry mine" data-bind="dropIntoPlaylist: $data, css: {activePlaylist: $data.refID===$root.activeChartRefID() }">
+                    <img class="playlistThumb mine" data-bind="click: $root.openPlaylist, pickupPlaylistItems: $data, attr: { refID: $data.refID, src: $data.cover, title: $data.title, url: $data.url }" />
+                    <div class="playlistName mine" data-bind="click: $root.renamePlaylist, text: $data.title()"></div>
+                </li>
+                <!-- /ko -->
+            </ul>
+            <ul id="playlists-scroller-list-friends" data-bind="foreach: dockItemsFriends">
+                <!-- ko if: $root.docksVisible.friends() && $data!==undefined -->
+                <li class="playlistEntry" data-bind="css: {activePlaylist: $data.refID===$root.activeChartRefID() }">
+                    <img class="playlistThumb" data-bind="click: $root.openPlaylist, attr: { refID: $data.refID, src: $data.cover, title: $data.title, url: $data.url }" />
+                    <div class="playlistName" data-bind="text: $data.title()"></div>
+                </li>
+                <!-- /ko -->
             </ul>
         </div>
-
-        <div id="playlistScroller">
-            <div class="sliderNavLeft">
-                <div class="sbox-valign" data-direction="left">
-                    <i class="icon-caret-left navButton"></i>
-                </div>
-                <div class="square-one-valign">
-                    <i class="icon-home square-one-inner"></i>
-                </div>
-                <div class="sbox-valign" data-direction="right">
-                    <i class="icon-caret-right navButton"></i>
-                </div>
-            </div>
-            <div class="sliderNavRight">
-                <div class="sbox-valign" data-direction="left">
-                    <i class="icon-caret-left navButton"></i>
-                </div>
-                <div class="square-one-valign">
-                    <i class="icon-home square-one-inner"></i>
-                </div>
-                <div class="sbox-valign" data-direction="right">
-                    <i class="icon-caret-right navButton"></i>
-                </div>
-            </div>
-            <div class="viewport">
-                <div class="slider-container">
-                    <ul id="playlists-scroller-list-charts" data-bind="foreach: chartItems">
-                        <!-- ko if: $data!==undefined -->
-                        <li class="playlistEntry">
-                            <img class="playlistThumb chartThumb" data-bind="attr: { src: cover, title: title, url: url }" />
-                            <div class="playlistName" data-bind="text: title"></div>
-                        </li>
-                        <!-- /ko -->
-                    </ul>
-                    <ul id="playlists-scroller-list-me" data-bind="foreach: dockItemsMe">
-                        <!-- ko if: $data!==undefined -->
-                        <li class="playlistEntry">
-                            <img class="playlistThumb" data-bind="pickupPlaylistItems: $data, click: $root.openPlaylist, attr: { refID: $data.refID, src: $data.cover, title: $data.title, url: $data.url }" />
-                            <div class="playlistName mine" data-bind="click: $root.renamePlaylist, text: $data.title()"></div>
-                        </li>
-                        <!-- /ko -->
-                    </ul>
-                    <ul id="playlists-scroller-list-friends" data-bind="foreach: dockItemsFriends">
-                        <!-- ko if: $data!==undefined -->
-                        <li class="playlistEntry">
-                            <img class="playlistThumb" data-bind="click: $root.openPlaylist, attr: { refID: $data.refID, src: $data.cover, title: $data.title, url: $data.url }" />
-                            <div class="playlistName" data-bind="text: $data.title()"></div>
-                        </li>
-                        <!-- /ko -->
-                    </ul>
-                </div>
-            </div>
-            <div id="playlist-types-buttons">
-                <div id="ptcenter">
-                    <div id="toggle-dock-button" class="toggle-playlist-btn"><i class="icon-caret-down"></i></div>
-                    <input type="radio" id="ppi-charts" data-target="#playlists-scroller-list-charts" name="ppi" class="ppi-checkbox">
-                    <label class="playlist-type-btn" value="ppi-charts" for="ppi-charts">
-                        <i class="icon-music ppi"></i>Charts
-                    </label>
-                    <input type="radio" id="ppi-me" data-target="#playlists-scroller-list-me" name="ppi" class="ppi-checkbox">
-                    <label class="playlist-type-btn" value="ppi-me" for="ppi-me">
-                        <i class="icon-music ppi"></i>Mine
-                    </label>
-                    <input type="radio" id="ppi-friends" data-target="#playlists-scroller-list-friends" name="ppi" class="ppi-checkbox">
-                    <label class="playlist-type-btn" value="ppi-friends" for="ppi-friends">
-                        <i class="icon-music ppi"></i>Friends
-                    </label>
-                </div>
-            </div>
+    </div>
+    <div id="playlist-types-buttons">
+        <div id="ptcenter">
+            <div id="toggle-dock-button" class="toggle-playlist-btn"><i class="icon-caret-down"></i></div>
+            <!-- ko foreach: dockNames -->
+            <input type="radio" name="ppi" class="ppi-checkbox" data-bind="attr:{id:'ppi-'+$data, 'data-target':'#playlists-scroller-list-'+$data}">
+            <label class="playlist-type-btn" data-bind="attr:{value:'ppi-'+$data, for:'ppi-'+$data}">
+                <i class="icon-music ppi"></i><span class="uppercaseTitle" data-bind="text: $data"></span>
+            </label>
+            <!-- /ko -->
         </div>
+    </div>
+</div>
 
-    </div> <!-- #applicationBody END -->
+</div> <!-- #applicationBody END -->
 
-    <!-- Context menu plugin -->
-    <script type="text/javascript" src="/js/contextMenu/jquery.contextmenu.js"></script>
+<!--<script type="text/javascript" src="/js/jquery.unveil.min.js"></script>-->
+<script type="text/javascript" src="/js/index.js"></script>                                 <!-- :::3::: -->
+<script type="text/javascript" src="/js/friends.js"></script>                               <!-- :::3::: -->
+<script type="text/javascript" src="/js/keystrokes.js"></script>                            <!-- :::3::: -->
 
-    <!-- A library to generate md5 hashes  -->
-    <script type="text/javascript" src="/js/md5-min.js"></script>
+<!-- Notifications with 'noty' plugin -->
+<script type="text/javascript" src="/js/noty/jquery.noty.js"></script>                      <!-- :::4::: -->
+<script type="text/javascript" src="/js/noty/layouts/topLeft.js"></script>                  <!-- :::4::: -->
+<script type="text/javascript" src="/js/noty/layouts/center.js"></script>                   <!-- :::4::: -->
+<script type="text/javascript" src="/js/noty/themes/default.js"></script>                   <!-- :::4::: -->
+<script type="text/javascript" src="/js/noty/notifications.js"></script>                    <!-- :::4::: -->
 
-    <!-- Tooltips  -->
-    <script type="text/javascript" src="/js/tipped/tipped.js"></script>
+<script type="text/javascript" src="/js/knockout-sortable.min.js"></script>
+<script type="text/javascript" src="/js/Math.uuid.js"></script>
+<script type="text/javascript" src="/js/livesearch.js"></script>
+<!--<script type="text/javascript" src="/js/lz-string-1.1.0.js"></script>-->
 
-    <!-- 360 Player STUFF START-->
+<!-- 360 Player -->
+<script type="text/javascript" src="/360_files/berniecode-animator.js"></script>            <!-- :::5::: -->
+<script type="text/javascript" src="/360_files/soundmanager2-nodebug-jsmin.js"></script>    <!-- :::5::: -->
+<script type="text/javascript" src="/360_files/360player.js"></script>                      <!-- :::5::: -->
+<script type="text/javascript" src="/js/init360.js"></script>                               <!-- :::5::: -->
 
-    <link rel="stylesheet" type="text/css" href="./360_files/flashblock.css">
-    <link rel="stylesheet" type="text/css" href="./360_files/360player.css">
-    <link rel="stylesheet" type="text/css" href="./360_files/360player-visualization.css">
-    <link rel="stylesheet" type="text/css" href="./360_files/slider.css">
-    <link rel="stylesheet" type="text/css" href="./360_files/colorpicker.css">
-    <link rel="stylesheet" type="text/css" href="./360_files/demo-slider-controls.css">
-    <script type="text/javascript" src="./360_files/berniecode-animator.js"></script>
-    <script type="text/javascript" src="./360_files/soundmanager2-nodebug-jsmin.js"></script>
-    <script type="text/javascript" src="./360_files/360player_custom.js"></script>
-    <script type="text/javascript" src="./360_files/yahoo-dom-event.js"></script>
-    <script type="text/javascript" src="./360_files/animation-min.js"></script>
-    <script type="text/javascript" src="./360_files/dragdrop-min.js"></script>
-    <script type="text/javascript" src="./360_files/slider-min.js"></script>
-    <script type="text/javascript" src="./360_files/element-min.js"></script>
-    <script type="text/javascript" src="./360_files/colorpicker-min.js"></script>
-    <script type="text/javascript" src="./360_files/demo-slider-controls.js"></script>
-    <!--<script type="text/javascript" src="./360_files/init.js"></script>-->
-    <!-- Init 360 with our settings instead of the one (above) that came with the demo -->
-    <script type="text/javascript" src="/js/init360.js"></script>
-    <style>
-        /* Hide player's running time, glitchy if done programmatically  */
-        .sm2-timing.alignTweak {
-            display: none;
-        }
-        /* Hide the customization panel of 360 player  */
-        #config-panel { display:none; }
-    </style>
+<!-- History.js-->
+<script type="text/javascript" src="/js/jquery.history.js"></script>
+<script type="text/javascript" src="/js/historyNav.js"></script>                            <!-- :::3::: -->
 
-    <!-- 360 Player STUFF END-->
+<!-- Context menu plugin -->
+<!--<script type="text/javascript" src="/js/snippets.js"></script>      &lt;!&ndash; :::1::: &ndash;&gt;-->
+<!--<script type="text/javascript" src="/js/contextMenu/jquery.contextmenu.js"></script>        &lt;!&ndash; :::2::: &ndash;&gt;-->
 
-    <script type="text/javascript" src="/js/history.js/scripts/bundled/html5/jquery.history.js"></script>
-    <script type="text/javascript" src="/js/historyNav.js"></script>
+<!-- PLUG BUTT -->
 
 </body>
 

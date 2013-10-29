@@ -1,66 +1,74 @@
-window.fbAsyncInit = function checkFacebookStatus() {
-	// init the FB JS SDK
+/*global $, FB */
 
-	var production_settings = {
-		appId      : '412279742177294', // App ID from the App Dashboard
-		channelUrl : '//spank.io/channel.html', // Channel File for x-domain communication
-		status     : true, // check the login status upon init?
-		cookie     : true, // set sessions cookies to allow your server to access the session?
-		xfbml      : true  // parse XFBML tags on this page?
-	};
+var FBUserInfo = null;
+var shutdown = new Firebase("https://wild.firebaseio.com/spank/shutdown");
 
-	var production_settings2 = {
-		appId      : '412279742177294', // App ID from the App Dashboard
-		channelUrl : '//singular-merovingian.rhcloud.com/channel.html', // Channel File for x-domain communication
-		status     : true, // check the login status upon init?
-		cookie     : true, // set sessions cookies to allow your server to access the session?
-		xfbml      : true  // parse XFBML tags on this page?
-	};
-
-	var dev_settings = function(url) {
-		return {
-			appId      : '	573967942630120', // App ID from the App Dashboard
-			channelUrl : '//' + url + '/channel.html',
-			status     : true, // check the login status upon init?
-			cookie     : true, // set sessions cookies to allow your server to access the session?
-			xfbml      : true  // parse XFBML tags on this page?
-		};
-	};
-
-	var settings = {
-		"spank.io": production_settings,
-		"singular-merovingian.rhcloud.com": production_settings2
-	};
-
-	["xerxes.local:8888", "matterhorn.local:8888"].forEach(function(url) {
-		settings[url] = dev_settings(url);
-	});
-
-	FB.init(settings[window.location.host]);
-
-	function initFB(response) {
-		// Refer to:
-		// http://developers.facebook.com/docs/reference/javascript/FB.getLoginStatus/
-		FB.api('/me', function(info) {
-			FBUserInfo = info;
-			if (FBUserInfo.username==='') {
-				FBUserInfo.username = FBUserInfo.id;
-			}
-//			FBUserInfo.username = "sam_beckett_92102";
-			FBUserInfo.accessToken = response.authResponse.accessToken;
+function initApp(info) {
+	FBUserInfo = info;
+	shutdown.on("value", function(snapshot) {
+		var isTrue = snapshot.val();
+		if (isTrue && !window.location.host.match(/8888/)) {
+			$("#applicationBody").hide();
+			$("h2").show();
+			$("#fb-login").hide();
+			$("#loginFacade").css("background","url(/img/loginpics/1.jpg)").show();
+		} else {
+			$("h2").hide();
+			$("#fb-login").show();
 			$("#loginFacade").addClass("flipper");
 			setTimeout(function() {
 				$("#loginFacade").removeClass("flipper").hide();
 			}, 2000);
 			$("#applicationBody").show();
 			var q = "SELECT name,username,uid FROM user WHERE uid in (SELECT uid2 FROM friend WHERE uid1=me()) and is_app_user='1'";
-			FB.api('fql',{q:q}, function(res) {
-				FBUserInfo.friends = res.data;
-				window.notify.success("Logged in!");
-				window.notify.suspended = true;
+			if (typeof(FB)!=='undefined') {
+				FB.api('fql',{q:q}, function(res) {
+					FBUserInfo.friends = res.data;
+					FBUserInfo.last_update = Date.now();
+					$(document).trigger("login");
+					localStorage.spank = JSON.stringify(FBUserInfo);
+				});
+			} else {
 				$(document).trigger("login");
-				localStorage.spank = JSON.stringify(FBUserInfo);
-			});
+			}
+		}
+	});
+}
+
+window.fbAsyncInit = function checkFacebookStatus() {
+	// init the FB JS SDK
+
+	var settings = {},
+		get_settings = function(url, development) {
+			var appId = development ? '573967942630120' : '412279742177294';
+			return {
+				appId      : appId, // App ID from the App Dashboard
+				channelUrl : '//' + url + '/channel.html',
+				status     : true, // check the login status upon init?
+				cookie     : true, // set sessions cookies to allow your server to access the session?
+				xfbml      : true  // parse XFBML tags on this page?
+			};
+		};
+
+	["spank.io", "pythonandpussy.com"].forEach(function(url) {
+		settings[url] = get_settings(url, false);
+	});
+
+	["xerxes.local:8888", "prometheus.local:8888"].forEach(function(url) {
+		settings[url] = get_settings(url, true);
+	});
+
+	FB.init(settings[window.location.host]);
+
+	function initFB(response) {
+		// Refer to: http://developers.facebook.com/docs/reference/javascript/FB.getLoginStatus
+		FB.api('/me', function(info) {
+			if (info.username==='') {
+				info.username = info.id;
+			}
+			//	FBUserInfo.username = "sam_beckett_92102";      // Login as another user
+			info.accessToken = response.authResponse.accessToken;
+			initApp(info);
 		});
 	}
 
@@ -78,67 +86,51 @@ window.fbAsyncInit = function checkFacebookStatus() {
 	var fblogout = function() {
 		FB.logout(function(response) {
 			$(document).trigger("logout");
-			FB_userInfo = null;
+			FBUserInfo = null;
 			document.location.reload(true);
 		});
 	};
-
-	function mine_updateButton(response) {
-		var loginTimeout = setTimeout(function(){
-			if (typeof(FBUserInfo)==='undefined' && typeof(localStorage.spank)==='string') {
-				FBUserInfo = JSON.parse(localStorage.spank);
-				$(document).trigger("login");
-			}
-			clearTimeout(loginTimeout);
-		},5000);
-		var button = document.getElementById('fb-auth');
-		if (response.status === 'connected') {
-			//user is already logged in and connected
-			initFB(response);
-			button.innerHTML = 'Logout';
-			button.onclick = function() {
-				FB.logout(function(response) {
-					$(document).trigger("logout");
-					FB_userInfo = null;
-					document.location.reload(true);
-				});
-			};
-		} else {
-			clearTimeout(loginTimeout);
-			//user is not connected to your app or logged out
-			button.innerHTML = 'Login';
-			button.onclick = function() {
-				FB.login(function(response) {
-					if (response.status === 'connected') {
-						initFB(response);
-					} else {
-						//user cancelled login or did not grant authorization
-						console.log("User cancelled login/authorization.");
-					}
-				}, {scope:'email, publish_stream'});
-			};
-		}
-	}
 
 	function updateButton(response) {
 		if (response.status === 'connected') {
 			//user is already logged in and connected
 			initFB(response);
 		} else {
-			//user is not connected to your app or logged out
-			$("#applicationBody").hide();
-			$("#loginFacade").show();
+			shutdown.on("value", function(snapshot) {
+				var isTrue = snapshot.val();
+				if (isTrue && !window.location.host.match(/8888/)) {
+					$("h2").show();
+					$("#loginFacade").css("background","url(/img/loginpics/1.jpg)").show();
+					$("#fb-login").hide();
+				} else {
+					$("h2").hide();
+					$("#fb-login").show();
+					$("#loginFacade").css("background","url(/img/loginpics/1.jpg)").show();
+				}
+			});
 		}
 	}
+
 	// run once with current status and whenever the status changes
 	FB.getLoginStatus(updateButton);
 	FB.Event.subscribe('auth.statusChange', updateButton);
+
 };
 
-(function(d, debug){
-	var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-	if (d.getElementById(id)) {return;}
-	js = d.createElement('script'); js.id = id; js.async = true;
-	js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
-	ref.parentNode.insertBefore(js, ref);
+(function start(d, debug){
+	if (localStorage.hasOwnProperty("spank")) {
+		var info = JSON.parse(localStorage.spank);
+		if (typeof(info.last_update)==='undefined' || (Date.now()-info.last_update)/1000>86400) {
+			delete localStorage.spank;
+			start(d, debug);
+		} else {
+			initApp(info);
+		}
+	} else {
+		var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+		if (d.getElementById(id)) {return;}
+		js = d.createElement('script'); js.id = id; js.async = true;
+		js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
+		ref.parentNode.insertBefore(js, ref);
+	}
 }(document, /*debug*/ false));

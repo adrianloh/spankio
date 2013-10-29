@@ -1,3 +1,5 @@
+/*global document, window, Spank */
+
 (function(window, undefined){
 
 	// Prepare
@@ -8,71 +10,54 @@
 		return false;
 	}
 
-	History.datastore = {};
+	var originalHistoryPushState = History.pushState;
+	History.stack = [];
+
+	History.goToRefID = function(destRefID) {
+		var currentRefID = History.getState().data.refID,
+			currentPosition = History.stack.indexOf(currentRefID),
+			nextPosition = History.stack.indexOf(destRefID),
+			stateObjext;
+		if (typeof(currentRefID)!=='undefined' && currentPosition>=0 && nextPosition>=0 && currentPosition!==nextPosition) {
+			window.history.go(nextPosition-currentPosition);
+		} else if (sessionStorage.hasOwnProperty(destRefID)) {
+			/*  WARNING: This is a brute-force hack. Noticed a bug where a pinned state can
+				get "lost" from the history stack, but the data remains in sessionStorage.
+			*/
+			stateObjext = sessionStorage[destRefID];
+			Spank.charts.restoreStateFromHistory(stateObjext);
+		}
+	};
+
+	var lastPushedRefID = "";
+	History.pushState = function(data, title, url) {
+		if (data.hasOwnProperty("refID")) {
+			if (History.stack.length<=1) {
+				History.stack.push(data.refID);
+				lastPushedRefID = data.refID;
+			} else {
+				if (History.stack.indexOf(data.refID)>=0) {
+					// We've moved back somewhere into the stack
+					lastPushedRefID = data.refID;
+				} else {
+					// This is "all new"
+					if (History.stack.indexOf(lastPushedRefID)!==History.stack.length-1) {
+						// Browser is in the middle of the stack, not the top
+						History.stack.splice(History.stack.indexOf(lastPushedRefID)+1);
+					}
+					lastPushedRefID = data.refID;
+					History.stack.push(data.refID);
+				}
+			}
+			originalHistoryPushState(data, title, url);
+		}
+	};
 
 	// Bind to StateChange Event
 	History.Adapter.bind(window, 'statechange', function() { // Note: We are using statechange instead of popstate
 		var State = History.getState(); // Note: We are using History.getState() instead of event.state
-//		History.log(State.data, State.title, State.url);
-		var k = State.data.stateKey,
-			searchField = $("#searchField"),
-			selector, playlistThumb, re;
-		if (History.firstpush) {
-			History.firstpush = false;
-			return;
-		}
-		if (History.datastore.hasOwnProperty(k)) {
-			var data = History.datastore[k];
-			if (data.hasOwnProperty('chartData')) {
-//				console.log("HISTORY GET from DATASTORE General");
-				$.each(data.chartData, function(k,v) {
-					Spank.charts[k](v);
-					Spank.charts[k].valueHasMutated();
-				});
-				Spank.charts.currentPlaylistTitle(undefined);
-				if (data.hasOwnProperty('q')) {
-					re = new RegExp(data.q, "i");
-					$(".playlistEntry").removeClass("activePlaylist");
-					$(".chartThumb").filter(function() { return this.title.match(re); }).first().parent().addClass("activePlaylist");
-					if (!Spank._userIsTyping) {
-						searchField.val(data.q);
-					}
-					//console.log($(document.activeElement)[0].tagName);
-				}
-			}
-		} else {
-			var queries = {};
-			$.each(document.location.search.substr(1).split('&'),function(c,q) {
-				try {
-					var i = q.split('=');
-					queries[i[0].toString()] = decodeURIComponent(i[1].toString());
-				} catch(err) {}
-			});
-			if (queries.hasOwnProperty("q")) {
-//				console.log("HISTORY GET from URL General");
-				if (queries.q!=='Search') {
-					re = new RegExp(queries.q, "i");
-					var chart = $(".chartThumb").filter(function() { return this.title.match(re); });
-					Spank.charts.dontPushHistory = true;
-					if (chart.length>0) {
-						searchField.val(queries.q);
-						chart.first().trigger('click');
-					} else {
-						searchField.val(queries.q).trigger("keyup");
-					}
-				}
-			} else if (queries.hasOwnProperty("playlistID")) {
-//				console.log("HISTORY GET from URL Playlist");
-				Spank.charts.dontPushHistory = true;
-				selector = ".playlistThumb[refid='#']".replace("#", queries.playlistID);
-				playlistThumb = $(selector);
-				if (playlistThumb.length>0) {
-					playlistThumb.trigger('click');
-				} else {
-					window.notify.error("This playlist has been deleted.")
-				}
-			}
-		}
+		//console.log(State.data);
+		Spank.charts.restoreStateFromHistory(State.data);
 	});
 
 })(window);

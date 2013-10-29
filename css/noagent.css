@@ -1,0 +1,69 @@
+#loginFacade {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f5f5dc;
+    z-index: 1000;
+    /*background: url(https://lh4.googleusercontent.com/-v0lHlEgJbsc/Tz6i4eth_bI/AAAAAAAACe4/i5p6RFtgyAw/s0/tumblr_lotg3aRslc1qzq5nno1_1280.jpg) no-repeat center center fixed;*/
+    background: url(/img/loginpics/1.jpg) no-repeat top right fixed;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    perspective: 1000;
+}
+
+.message {
+	font-size: 13px;
+	background-color: white;
+	padding: 10px;
+	line-height: 23px;
+	border-radius: 12px;
+}
+
+.loginContentVerticalCenter {
+    position: absolute;
+    top: 30%;
+    width: 100%;
+}
+
+.loginContent {
+    width: 480px;
+    height: 100px;
+    margin-right: auto;
+    margin-left: auto;
+    font-family: "Open Sans",Arial,Helvetica,sans-serif;
+}
+
+.loginContent h1 {
+    margin: 0;
+    font-weight: 300;
+    margin-bottom: 12px;
+    color: white;
+}
+
+.logincontent h2 {
+    display: none;
+    font-size: 14px;
+    margin: 0;
+    font-weight: 300;
+    margin-bottom: 25px;
+    color: white;
+    background: rgba(0, 0, 0, 0.41);
+    padding: 10px;
+}
+
+.chromeIcon {
+    width: 105px;
+}
+
+.safariIcon {
+    width: 78px;
+    margin-bottom: 3px;
+    margin-left: 7px;
+}
+
+.browserIcons-container {
+    margin-top: 7px;
+}

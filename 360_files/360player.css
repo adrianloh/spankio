@@ -2,7 +2,11 @@
 
 .ui360, /* entire UI */
 .sm2-360ui { /* canvas container */
- position:relative;
+    position: relative;
+/* My additions */
+    display: inline-block;
+    top: -4px;
+    left: 1px;
 }
 
 .ui360,
@@ -35,6 +39,10 @@
 .sm2-360ui.sm2_paused {
  /* bump on top when active */
  z-index:10;
+}
+
+.sm2_playing {
+    cursor: -webkit-grab;
 }
 
 .ui360 a { /* .sm2_link class added to playable links by SM2 */
@@ -148,7 +156,7 @@
 .ui360,
 .ui360 .sm2-360btn-default,
 .ui360 .sm2-360ui.sm2_paused .sm2-360btn {
- background:transparent url(360-button-play.png) no-reoeat;
+ background:transparent url(360-button-play.png) no-repeat;
  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAABoUlEQVR42sWVu2oCQRhGU/s8gpVYJeQJNkZSbiH4QNuLlQZS21sJayGYaOEFVFDxNiremj9zig2uzk5YQpKFg8PMd75ZZle9E5Ff4e+Ll8tlQuNoPI2vUcCYOdbIxCmm9F5T0YgNMmS/LebSwWdNa7VayXq9ls1mI9vtVna7nQBj5lgjQxYHN7KY3QkiUbDf7+V4PMrpdArBHGtkyOJc3/n1mVaUUl+F5/PZSrABDi4dpmKH3QkixQEHlw5TsccZmsRCoSD1et1ajkuHqdg/HA5GKZPJCOTzeanVasYMLh2mYsXDIGAoDuG6rlSr1WCdBxrcsTIWazgrQiHS6bSRYJ3XDzeq2O/3+9Ltdm9IpVIhstmslEqlUAY36ii8ZrMpjUbjhmQyKeA4jhSLRWMGN+rhOZ1Oh8ANuVxOyuUy40hwo163RK/XeyPQbrdjgYNr/ILAYDB41Gf1wZnFAQfX+iM0HA5fxuPx+2g0Ej22QoYsDq61mGsymTxMp9NX/Sk2yJDFsRZfXpzXbDZ7WiwW3nw+9zUKGDPHGpkL5V//mn7OJyJZApyzeUS5AAAAAElFTkSuQmCC);
  *background-image: url(360-button-play.png);
  background-repeat: no-repeat;
@@ -161,6 +169,9 @@
  */
  background-position: 14px 50%;
  _background:transparent url(360-button-play.gif) no-repeat 14px 50%; /* IE 6-only: special crap GIF */
+ position: absolute;
+ top: 12px;
+ left: 45px;
 }
 
 .ui360 .sm2-360btn-default,

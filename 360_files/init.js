@@ -3,6 +3,11 @@ soundManager.setup({
 	url:'./360_files/swf/'
 });
 
+soundManager.currentlyPlayingID = function() {
+	soundManager.sounds
+
+}
+
 threeSixtyPlayer.config.scaleFont = (navigator.userAgent.match(/msie/i) ? false : true);
 threeSixtyPlayer.config.showHMSTime = true;
 

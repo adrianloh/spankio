@@ -34,7 +34,7 @@ function ThreeSixtyPlayer() {
       isSafari = (uA.match(/safari/i)),
       isChrome = (uA.match(/chrome/i)),
       isFirefox = (uA.match(/firefox/i)),
-      isTouchDevice = (uA.match(/ipad|iphone/i)),
+      isTouchDevice = (uA.match(/ipad|iphone|android/i)),
       hasRealCanvas = (typeof window.G_vmlCanvasManager === 'undefined' && typeof document.createElement('canvas').getContext('2d') !== 'undefined'),
       // I dunno what Opera doesn't like about this. I'm probably doing it wrong.
       fullCircle = (isOpera||isChrome?359.9:360);
@@ -62,7 +62,7 @@ function ThreeSixtyPlayer() {
     allowMultiple: false,  // let many sounds play at once (false = only one sound playing at a time)
     loadRingColor: '#ccc', // how much has loaded
     playRingColor: '#000', // how much has played
-    backgroundRingColor: '#eee', // color shown underneath load + play ("not yet loaded" color)
+    backgroundRingColor: 'rgba(255,255,255,0.0)', // color shown underneath load + play ("not yet loaded" color)
 
     // optional segment/annotation (metadata) stuff..
     segmentRingColor: 'rgba(255,255,255,0.33)', // metadata/annotation (segment) colors
@@ -310,6 +310,7 @@ function ThreeSixtyPlayer() {
     // handlers for sound events as they're started/stopped/played
 
     play: function() {
+      $(document).trigger("fatManPlay", this);      //// ADRIAN: Custom global event
       pl.removeClass(this._360data.oUIBox,this._360data.className);
       this._360data.className = pl.css.sPlaying;
       pl.addClass(this._360data.oUIBox,this._360data.className);
@@ -331,10 +332,11 @@ function ThreeSixtyPlayer() {
     resume: function() {
       pl.removeClass(this._360data.oUIBox,this._360data.className);
       this._360data.className = pl.css.sPlaying;
-      pl.addClass(this._360data.oUIBox,this._360data.className);      
+      pl.addClass(this._360data.oUIBox,this._360data.className);
     },
 
     finish: function() {
+      $(document).trigger("fatManFinish", this);    //// ADRIAN: Trigger global event to initiate my own player logic
       var nextLink;
       pl.removeClass(this._360data.oUIBox,this._360data.className);
       this._360data.className = '';
@@ -343,6 +345,7 @@ function ThreeSixtyPlayer() {
       self.fanIn(this);
       if (pl.config.playNext) {
         nextLink = (pl.indexByURL[this._360data.oLink.href]+1);
+        if (pl.config.loop) { nextLink--; }         //// ADRIAN: Addition, to enable looping
         if (nextLink<pl.links.length) {
           pl.handleClick({'target':pl.links[nextLink]});
         }
@@ -453,6 +456,7 @@ function ThreeSixtyPlayer() {
        onresume:self.events.resume,
        onfinish:self.events.finish,
        onbufferchange:self.events.bufferchange,
+       type:(o.type||null),
        whileloading:self.events.whileloading,
        whileplaying:self.events.whileplaying,
        useWaveformData:(has_vis && self.config.useWaveformData),
@@ -464,6 +468,7 @@ function ThreeSixtyPlayer() {
 
       diameter = parseInt(self.getElementsByClassName('sm2-360ui','div',oContainer)[0].offsetWidth, 10);
 
+      thisSound._ondataerror()
       thisSound._360data = {
         oUI360: self.getParentByClassName(o,'ui360'), // the (whole) entire container
         oLink: o, // DOM node for reference within SM2 object event handlers
@@ -768,7 +773,7 @@ function ThreeSixtyPlayer() {
   this.getArcEndpointCoords = function(radius, radians) {
 
     return {
-      x: radius * Math.cos(radians), 
+      x: radius * Math.cos(radians),
       y: radius * Math.sin(radians)
     };
 
@@ -1073,7 +1078,7 @@ function ThreeSixtyPlayer() {
           oUI.appendChild(o2);
           window.G_vmlCanvasManager.initElement(o2); // Apply ExCanvas compatibility magic
           oCanvas = document.getElementById(oID);
-        } else { 
+        } else {
           // add a handler for the button
           oCanvas = oLinks[i].parentNode.getElementsByTagName('canvas')[0];
         }
@@ -1204,7 +1209,7 @@ ThreeSixtyPlayer.prototype.VUMeter = function(oParent) {
         // for debugging VU images
         /*
         var o = document.createElement('img');
-        o.style.marginRight = '5px'; 
+        o.style.marginRight = '5px';
         o.src = vuMeterData[i][j];
         document.documentElement.appendChild(o);
         */
@@ -1391,19 +1396,4 @@ window.ThreeSixtyPlayer = ThreeSixtyPlayer; // constructor
 threeSixtyPlayer = new ThreeSixtyPlayer();
 
 // hook into SM2 init
-soundManager.onready(function(){
-	console.log("Initing!");
-	threeSixtyPlayer.init();
-});
-
-
-
-
-
-
-
-
-
-
-
-
+soundManager.onready(threeSixtyPlayer.init);
