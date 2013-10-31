@@ -604,7 +604,7 @@ ko.bindingHandlers.koChartItems = {
 					artist = koo.artist,
 					query_string = title + " " + artist;
 				Track.prototype = koo;
-				Spank.lightBox.vickisuckme(query_string, 1, Track, function playChartItemInPlace(results) {
+				Spank.lightBox.vickisuckme(query_string, 5, Track, function playChartItemInPlace(results) {
 					if (results.length===0) {
 						onZeroVKResults(data);
 					} else {

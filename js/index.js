@@ -63,13 +63,22 @@
 			var TrackConstructor = Track,
 				q = clean(query_string),
 				url = "https://api.vkontakte.ru/method/audio.search?q=" + encodeURIComponent(q) + "&count=" + limit,
-			vk_search_in_progress = true;
+				vk_search_in_progress = true,
+				perfectScore = 0,
+				scoreFunction = function(string) {
+					return Spank.utils.stripToLowerCase(string).replace(/ /g, "").length
+				},
+				sortResults = typeof(TrackConstructor.prototype.artist)!=='undefined'; // This is undefined if we're searching VK directly
 			Spank.busy.on();
 			var xhr = VK.api(url, function onSuccess(response) {
+				var results = [],
+					sortedResults,
+					trackResults = response.slice(1);  // The first item is an integer of the total results returned
 				vk_search_in_progress = false;
 				Spank.busy.off();
-				var trackResults = response.slice(1);  // The first item is an integer of the total results returned
-				var results = [];
+				if (sortResults) {
+					perfectScore = scoreFunction(TrackConstructor.prototype.artist + TrackConstructor.prototype.title);
+				}
 				for (var i=0, len=trackResults.length; i<len; i++) {
 					var vkTrack = trackResults[i],
 						artist = urlDecode(vkTrack.artist),
@@ -77,12 +86,25 @@
 						displayTitle = vkTrack.title.slice(0,60) + ' - ' + vkTrack.artist.slice(0,60);
 					if (displayTitle.length>0 && displayTitle.length<80) {
 						var track = new TrackConstructor();
-						track.direct = vkTrack.url;
+						// Why the split? VK started returning urls like this: http://cs536513.vk.me/u17120923/audios/6362cb37e2c3.mp3?extra=atDlhVLq2Tl8ByzkidYJDvfe..."
+						track.direct = vkTrack.url.split("?")[0];
 						track.title = title;
 						track.artist = artist;
 						track.url = vkTrack.owner_id + "_" + vkTrack.aid + ".mp3";
+						track.score = Math.abs(perfectScore - scoreFunction(artist + title));
 						results.push(track);
+						//results.splice(trackScore, 0, track);
 					}
+				}
+				if (sortResults) {
+					results = results.sort(function (a, b) {
+						if (a.score > b.score)
+							return 1;
+						if (a.score < b.score)
+							return -1;
+						// a must be equal to b
+						return 0;
+					});
 				}
 				callbackWithResults(results);
 			}, function onError() {
@@ -101,7 +123,7 @@
 			Head.playlists.visible(false);
 			Spank.lightBox.searchComplete(false);
 			$("#lightBox").addClass("lboxScaleShow");
-			vickisuckme(q, 300, TrackConstructor, function onResults(results) {
+			vickisuckme(q, 100, TrackConstructor, function onResults(results) {
 				if (results.length===0) {
 					Spank.charts.unavailableTracks.push(TrackConstructor.prototype);
 				}
