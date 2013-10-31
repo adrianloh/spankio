@@ -595,14 +595,18 @@
 
 			self.downloadHistoryItemOnClick = function(koo, event) {
 				koo = ko.toJS(koo);
-				var owner_id = koo.url.split(".")[0],
-					url = "https://api.vkontakte.ru/method/audio.getById?audios=" + owner_id + "&access_token=" + VK.getToken() + "&callback=?";
-				$.getJSON(url, function getActualVKLink(data) {
-					if (data.response && data.response.length>0) {
-						var newDirectLink = data.response[0].url;
-						$(event.target).parent().click(function() { return false; }).attr("href", newDirectLink);
-					}
-				});
+				if (koo.url.match(/^@/)) {
+					$(event.target).parent().click(function() { return false; }).attr("href", koo.direct);
+				} else {
+					var owner_id = koo.url.split(".")[0],
+						url = "https://api.vkontakte.ru/method/audio.getById?audios=" + owner_id + "&access_token=" + VK.getToken() + "&callback=?";
+					$.getJSON(url, function getActualVKLink(data) {
+						if (data.response && data.response.length>0) {
+							var newDirectLink = data.response[0].url;
+							$(event.target).parent().click(function() { return false; }).attr("href", newDirectLink);
+						}
+					});
+				}
 			};
 
 			self.listIndicatorText = ko.observable("Library");
