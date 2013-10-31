@@ -50,7 +50,7 @@ window.fbAsyncInit = function checkFacebookStatus() {
 			};
 		};
 
-	["spank.io", "geewyz.com"].forEach(function(url) {
+	["spank.io", "moozyx.com"].forEach(function(url) {
 		settings[url] = get_settings(url, false);
 	});
 
