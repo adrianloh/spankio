@@ -69,14 +69,32 @@
 				return !self.isPlayingFromLibrary();
 			});
 			var timeoutToAddToFreshies = setTimeout(function(){},0);
+
+			Spank.getTrackLink = function(url, onSuccessCallback, onErrorCallback) {
+				var track = {},
+					info = url.split("_"),
+					server = Spank.servers[info[0]];
+				track.url = server + "/" + info[1];
+				onSuccessCallback([track]);
+			};
+
 			self.playObject = function(o, refIdOfOrigin) {
 				o = ko.toJS(o);             // Double make sure we are dealing with Plain Janes here and not koo's
 				self.lastLastPlayedObject = this.lastPlayedObject;
 				self.lastPlayedObject = o;
 				clearTimeout(timeoutToAddToFreshies);
-				var owner_id = o.url.split(".")[0],
+
+				var lookupMethod, url;
+				if (o.url.match(/^@/)) {
+					lookupMethod = Spank.getTrackLink;
+					url = o.url;
+				} else {
+					lookupMethod = VK.api;
+					var owner_id = o.url.split(".")[0];
 					url = "https://api.vkontakte.ru/method/audio.getById?audios=" + owner_id;
-				VK.api(url, function onSuccess(res) {
+				}
+
+				lookupMethod(url, function onSuccess(res) {
 					if (res.length>0) {
 						var pushData = {track:o, position:0},
 							newDirectLink = res[0].url, koo;

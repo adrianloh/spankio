@@ -65,14 +65,35 @@
 				url = "https://api.vkontakte.ru/method/audio.search?q=" + encodeURIComponent(q) + "&count=" + limit,
 				vk_search_in_progress = true,
 				perfectScore = 0,
+				stripLower = Spank.utils.stripToLowerCase,
 				scoreFunction = function(string) {
-					return Spank.utils.stripToLowerCase(string).replace(/ /g, "").length
+					return stripLower(string).replace(/ /g, "").length
 				},
 				sortResults = typeof(TrackConstructor.prototype.artist)!=='undefined'; // This is undefined if we're searching VK directly
+
 			Spank.busy.on();
+
+			var spankTrack = null;
+			if (sortResults) {
+				// Check to see whether we have this song in our library
+				var artist = stripLower(TrackConstructor.prototype.artist),
+					title = stripLower(TrackConstructor.prototype.title);
+				if (typeof(Spank.library[artist])!=='undefined' && typeof(Spank.library[artist][title])!=='undefined') {
+					var track = new TrackConstructor(),
+						trackFromLibrary = Spank.library[artist][title],
+						serverCode = trackFromLibrary.server,
+						serverActual = Spank.servers[serverCode],
+						user = trackFromLibrary['user'],
+						filename = trackFromLibrary['filename'];
+					track.direct = serverActual + "/" + user + "/" + filename;
+					track.url = serverCode + "_" + user + "/" + filename;
+					spankTrack = track;
+				}
+			}
+
+			// Get songs from VK
 			var xhr = VK.api(url, function onSuccess(response) {
 				var results = [],
-					sortedResults,
 					trackResults = response.slice(1);  // The first item is an integer of the total results returned
 				vk_search_in_progress = false;
 				Spank.busy.off();
@@ -89,7 +110,9 @@
 						// Why the split? VK started returning urls like this: http://cs536513.vk.me/u17120923/audios/6362cb37e2c3.mp3?extra=atDlhVLq2Tl8ByzkidYJDvfe..."
 						track.direct = vkTrack.url.split("?")[0];
 						track.title = title;
-						track.artist = artist;
+						if (!sortResults) {
+							track.artist = artist
+						}
 						track.url = vkTrack.owner_id + "_" + vkTrack.aid + ".mp3";
 						track.score = Math.abs(perfectScore - scoreFunction(artist + title));
 						results.push(track);
@@ -105,6 +128,9 @@
 						// a must be equal to b
 						return 0;
 					});
+				}
+				if (spankTrack) {
+					results.splice(0,0,spankTrack);
 				}
 				callbackWithResults(results);
 			}, function onError() {

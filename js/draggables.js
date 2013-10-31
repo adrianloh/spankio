@@ -39,31 +39,6 @@
 			$(this).siblings(".tweetThumb").click();
 		});
 
-		ko.bindingHandlers.cartDeleteIcons = {
-			init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-				var data = ko.toJS(valueAccessor()),
-					li = $(element);
-				if (data.hasOwnProperty("gift")) {
-					var img = '<img class="tweetGift" src="/img/gift.png" from="@" message="#" />';
-					img = img.replace("@", data.gift.from).replace("#", data.gift.message);
-					li.prepend(img);
-					li.find(".tweetGift").mouseover(function() {
-						var thisGift = li.find('.tweetGift');
-						if (thisGift.length>0) {
-							$(".giftFrom:first").text("from: " + thisGift.attr("from"));
-							$(".giftMessage:first").text(thisGift.attr("message"));
-							var pos = li.offset(),
-								top = parseInt(pos.top-70, 10),
-								left = parseInt(pos.left, 10);
-							$(".giftPopup").css("top", top).css("left", left).show();
-						}
-					}).mouseout(function() {
-						$(".giftPopup").hide();
-					});
-				}
-			}
-		};
-
 		$(".giftPopup").bind("hover mouseenter", function() {
 			$(this).hide();
 		});
@@ -167,12 +142,13 @@
 					var img = '<img class="tweetGift" src="/img/gift.png" from="@" message="#" />';
 					img = img.replace("@", data.gift.from).replace("#", data.gift.message);
 					li.prepend(img);
-					$(img).mouseover(function() {
-						$(".giftFrom:first").text("from: " + this.attr("from"));
-						$(".giftMessage:first").text(this.attr("message"));
+					li.find(".tweetGift").mouseover(function() {
+						var img = $(this);
+						$(".giftFrom:first").text("from: " + img.attr("from"));
+						$(".giftMessage:first").text(img.attr("message"));
 						var pos = li.offset(),
 							top = parseInt(pos.top-70, 10),
-							left = parseInt(pos.left, 10);
+							left = parseInt(pos.left+100, 10);
 						$(".giftPopup").css("top", top).css("left", left).show();
 					}).mouseout(function() {
 						$(".giftPopup").hide();

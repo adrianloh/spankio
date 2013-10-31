@@ -4,41 +4,51 @@ SPANKREV = "10292013";
 CLOUDFRONT_BASE = "http://d1em6qf217sgaq.cloudfront.net";
 CLOUDFRONT_S3_BASE = "http://d1vkkvxpc2ia6t.cloudfront.net";
 
-VK = {
-	token_user:{},
-	keys: [],
-	pick:0,
-	init: function() {
-		var self = this,
-			url = CLOUDFRONT_S3_BASE + "/vktokens90212gz.json?origin=" + window.location.host;
-		$.getJSON(url, function(res) {
-			var tokens = [];
-			for (var app_id in res) {
-				var theseTokens = res[app_id].tokens;
-				for (var login in theseTokens) {
-					tokens.push(theseTokens[login]);
-				}
+Spank.servers = {
+	'@aspasia':"https://aspasia.s3-ap-southeast-1.amazonaws.com"
+};
+
+Spank.library = {};
+$.getJSON(Spank.servers['@aspasia'] + "/library.json", function(res) {
+	Spank.library = res;
+});
+
+VK = (function() {
+
+	var self = {},
+		pick = 0,
+		url = CLOUDFRONT_S3_BASE + "/vktokens90212gz.json?origin=" + window.location.host;
+	self.token_user = {};
+	self.keys = [];
+
+	$.getJSON(url, function(res) {
+		var tokens = [];
+		for (var app_id in res) {
+			var theseTokens = res[app_id].tokens;
+			for (var login in theseTokens) {
+				tokens.push(theseTokens[login]);
 			}
-			var i = tokens.length;
-			while (i--) {
-				var token_string = tokens[i].split(":"),
-					token = token_string[0],
-					user_id = token_string[1];
-				self.token_user[token] = user_id;
-				self.keys.push(token);
-			}
-		});
-	},
-	getToken: function() {
+		}
+		var i = tokens.length;
+		while (i--) {
+			var token_string = tokens[i].split(":"),
+				token = token_string[0],
+				user_id = token_string[1];
+			self.token_user[token] = user_id;
+			self.keys.push(token);
+		}
+	});
+
+	self.getToken = function() {
 		if (localStorage.hasOwnProperty('vktoken')) {
 			return localStorage['vktoken']
 		} else {
-			return this.keys[++this.pick%this.keys.length];
+			return self.keys[++pick%self.keys.length];
 		}
-	},
-	api: function(url, successCallback, errorCallback) {
-		var self = this,
-			attempts = 0,
+	};
+
+	self.api = function(url, successCallback, errorCallback) {
+		var attempts = 0,
 			token = self.getToken();
 		url = url + "&access_token=" + token + "&callback=?";
 		return (function get() {
@@ -67,10 +77,11 @@ VK = {
 				}
 			});
 		})();
-	}
-};
+	};
 
-VK.init();
+	return self;
+
+})();
 
 ECHO = {
 	keys: "X2OROKI8NWEDHYDTM GK22IF7L5GLQQBLEL WVAZVRHOG59HOWTNC RADDG7GQBG1VPMGDN DW9KSGOM2CLAJHTXX LIJSXT5QXXZCA3RJ9 VCNSBSPZ1ECBZHLN1 RB3XH5KYICWMGZ4MC KCCO9G9N8YE2WM6OI IALGWME7AWGMSCPXB",
