@@ -377,8 +377,8 @@ Spank.moodSwings = (function() {
 		chartUrls = {
 			lastfm_base: "http://ws.audioscrobbler.com/2.0/?api_key=0325c588426d1889087a065994d30fa1&page=1&limit=100&method=#&format=json",
 			billboards_base: "http://api.musixmatch.com/ws/1.1/chart.tracks.get?page=1&page_size=100&country=#&f_has_lyrics=0&apikey=316bd7524d833bb192d98be44fe43017&format=jsonp&callback=?",
-			itunes_base: CLOUDFRONT_BASE + "/itunes?country=#&page=1&limit=100&rev=" + SPANKREV,
-			itunes_genre_base: CLOUDFRONT_BASE + "/itunes?genre=#&page=1&limit=100&rev=" + SPANKREV
+			itunes_base: "/itunes?country=#&page=1&limit=100&rev=" + SPANKREV,
+			itunes_genre_base: "/itunes?genre=#&page=1&limit=100&rev=" + SPANKREV
 		},
 		chartPlaylistItems = [
 			{title: 'last.fm Top', cover: '/img/lastfm.jpg', url: chartUrls.lastfm_base.replace("#","chart.gettoptracks"), refID:"@lastfm-topcharts-all" },

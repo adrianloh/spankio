@@ -9,6 +9,7 @@ import tornado.httpclient
 import tornado.curl_httpclient
 from urllib import urlencode, unquote, quote_plus
 
+
 def extract(q, terms=(), delimiter=":"):
 	"""
 	Takes an arbitrary query string that *may* contain modifiers and creates a dict from it.
@@ -81,11 +82,13 @@ class FBChannelFileHandler(tornado.web.RequestHandler):
 		self.set_header("Expires", time.asctime(time.gmtime(time.time() + expire)) + " GMT")
 		self.write('<script src="//connect.facebook.net/en_US/all.js"></script>')
 
+
 class LoaderIOFileHandler(tornado.web.RequestHandler):
 
 	def get(self):
 		self.write('loaderio-4ca8566477b59389b7891dc98b3805f7')
 		self.finish()
+
 
 class XDomainFileHandler(tornado.web.RequestHandler):
 
@@ -111,8 +114,9 @@ def clean(s):
 
 from fuzzywuzzy import fuzz
 
+
 def echoKeys():
-	echo_keys = "CZBQSX5JECYPEB7XM 210MLIYFGNSZTZDYP MT9HGSDQ8F1ZQOQIC DNQVLWQKJ7VTE9QGD RHZPOWR8YACOVOSXQ LI5SBSI0ENLSH2DGR CLZOJ7ISIUSOJLVXX GHU2CYVKAKBKJLOIW ETFCITMZHWVQZJHTG IALGWME7AWGMSCPXB 6ON89QRO7UZWFRMJU MW1J0UN5C7W8CURS3 N2EJAAWVBO5GZFRXV RBXIGLLZSVPAGXWEJ TSIAGQPO0IZHLIIVH VZCECTNARTHQIAOR4 74MUPCFKIHK0JFZFL YG9RBULZCBM024XBK CN0BOQA1H2EF843IB C7EUD1QIVX3TYEM8R MR6GW27UFUFUMEUKW QHDBRRVKN4YBOYNFQ QXV2MHAWE2A1QHXB6 6NCKWDT1HTJVVMWRW NS9VC2QTPBGAVAVVD A2P3ZBGJUASTNRHLM HUHHSUWODERJFSO47 9DBOEMPXVHUNLIKAX STNBHELIYPPPLBYIE QA3MCYNWVHGY8KPI8 8Y5LDR7R3XDT5FXOY EWLCZRXMPP9WNGSWA 7YWOJWKLMDTXKJO2A FZFVQ2O1IZAI5BZP6 UYD9SN2MSGUQSO82S YOZZJETAIM4FM5BYD EJQ7UNTKC23ZXGLPH 2E7NDVR4WA6QMJRGT OPNPQMENTX6KZAETA QXIPSAKCZ4WS8VIYI G6L5QU305LXVPA5FI FBFM8TGYODTGXQBVG YZE7HISN59LPNNXGZ SP9LKQVALUHOBAGG6 JASUFOMSHWGDTDI6C BDKZ7REEJKWYHENSV GO7YVBV26PNEHA8KL SFLJR6KAO6E9XTD0F KYGFH9YSV40G8AZDK RKWUASZ4SXAKNFMZ3 VZRJXSDHKVLNP13BX DBTZIJPUOR117WSB5 6SRG356YGTOVI4PHX BUSOCUGWZPTSS3DWT WQXTZ9MGVK8SWW0VB MDSKPZ3TPIMZCW2HV EYUHLX3PDKH9GIKVX T6N1DNMWBSFLP9CHZ VBDNABB6LGA2OV0VS EWL4P7I6Z7QN9NUFJ K20JX07ZFTMQXVY28 AX6V9BIC9VAIUJBHC 678BFNOQNCIU9IX1Q KYC7REVAKKXG9BINO MZ1VIQBDWRXF91RI4 RNRK8TLJWRZYLFFGC W5IUOCLTYTVDDPTUT Y5TUGYCDQ18M6HEZ"
+	echo_keys = "X2OROKI8NWEDHYDTM GK22IF7L5GLQQBLEL WVAZVRHOG59HOWTNC RADDG7GQBG1VPMGDN DW9KSGOM2CLAJHTXX LIJSXT5QXXZCA3RJ9 VCNSBSPZ1ECBZHLN1 RB3XH5KYICWMGZ4MC KCCO9G9N8YE2WM6OI IALGWME7AWGMSCPXB"
 	echo_keys = echo_keys.split(" ")
 	i = 0
 	while True:
@@ -120,6 +124,7 @@ def echoKeys():
 		yield echo_keys[i % len(echo_keys)]
 
 echoKeys = echoKeys()
+
 
 class EchoMatchHandler(tornado.web.RequestHandler):
 
@@ -150,6 +155,7 @@ class EchoMatchHandler(tornado.web.RequestHandler):
 		finally:
 			self.write(json.dumps(echoTracks))
 			self.finish()
+
 
 class EchoTasteProfileHandler(tornado.web.RequestHandler):
 
@@ -194,6 +200,7 @@ class EchoTasteProfileHandler(tornado.web.RequestHandler):
 			self.write(json.dumps({'id':pid}))
 			self.finish()
 
+
 class MXSearchHandler(tornado.web.RequestHandler):
 
 	@tornado.gen.engine
@@ -214,6 +221,48 @@ class MXSearchHandler(tornado.web.RequestHandler):
 		res = yield tornado.gen.Task(async_client.fetch, req)
 		self.write(res.body)
 		self.finish()
+
+
+oneday = 86400
+oneweek = 60 * 60 * 24 * 7
+CACHE = {}
+
+def getSlice(aList, page, limit):
+	page = int(page)
+	limit = int(limit)
+	return aList[(page - 1) * limit:page * limit]
+
+class iTunesHandler(tornado.web.RequestHandler):
+
+	@tornado.gen.engine
+	@tornado.web.asynchronous
+	def get(self):
+		self.set_header("Content-Type", "application/json")
+		self.set_header("Access-Control-Allow-Origin", "*")
+		self.set_header("Cache-Control", "max-age=%i" % oneweek)
+		if re.search("genre=", self.request.uri):
+			url = "https://itunes.apple.com/us/rss/topsongs/limit=300/genre=@/explicit=true/json"
+			code = self.get_argument("genre")
+		else:
+			url = "https://itunes.apple.com/@/rss/topsongs/limit=300/explicit=true/json"
+			code = self.get_argument("country")
+		code = code.lower()
+		url = re.sub("@", code, url)
+		req = tornado.httpclient.HTTPRequest(url, connect_timeout=10.0, request_timeout=10.0)
+		res = yield tornado.gen.Task(async_client.fetch, req)
+		refresh = True
+		if (code in CACHE) and ((time.time()-CACHE[code]['lastUpdate']) < oneweek):
+			refresh = False
+		if refresh:
+			h = dict(lastUpdate=time.time(), tracklist=json.loads(res.body)['feed']['entry'])
+			CACHE[code] = h
+		page = self.get_argument("page")
+		limit = self.get_argument("limit")
+		tracklist = CACHE[code]['tracklist']
+		h = dict(response="OK", spanklist=getSlice(tracklist, page, limit))
+		self.write(json.dumps(h, sort_keys=True, indent=4))
+		self.finish()
+
 
 class MyStaticHandler(tornado.web.StaticFileHandler):
 
@@ -242,6 +291,7 @@ application = tornado.web.Application([
 		(r"/echo/match/(\d+)", EchoMatchHandler),
 		(r"/echo/taste/update", EchoTasteProfileHandler),
 		(r"/mxsearch", MXSearchHandler),
+		(r"/itunes", iTunesHandler),
 		(r"/static/(.*)", MyStaticHandler, {"path": site_root + "/static"}),
 		(r"/js/(.*)", NeverCacheStaticHandler, {"path": site_root + "/js"}),
 		(r"/css/(.*)", NeverCacheStaticHandler, {"path": site_root + "/css"}),

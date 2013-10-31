@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="32ba444c-fc18-4642-a53c-06c7d6e77d49" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/externals.js" afterPath="$PROJECT_DIR$/js/externals.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/historyModel.js" afterPath="$PROJECT_DIR$/js/historyModel.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/soundgarden-heroku.iml" afterPath="$PROJECT_DIR$/.idea/soundgarden-heroku.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/soundgarden.py" afterPath="$PROJECT_DIR$/soundgarden.py" />
     </list>
     <ignored path="soundgarden-heroku.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,6 +29,9 @@
     <file path="/musicPlayerModel.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357245373103" ignored="false" />
     <file path="/notifications.js" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1357182332316" ignored="false" />
     <file path="/a.html" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1383169529178" ignored="false" />
+    <file path="/soundgarden.py" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1383204877830" ignored="false" />
+    <file path="/a.py" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1383204728782" ignored="false" />
+    <file path="/start_script.py" changelist="32ba444c-fc18-4642-a53c-06c7d6e77d49" time="1383204732831" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,10 +92,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="historyModel.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="historyModel.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/historyModel.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="121" column="0" selection-start="3516" selection-end="3516" vertical-scroll-proportion="0.94772726">
+            <state line="88" column="47" selection-start="2845" selection-end="2845" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -106,6 +106,28 @@
           <provider selected="true" editor-type-id="text-editor">
             <state line="92" column="24" selection-start="3392" selection-end="3392" vertical-scroll-proportion="0.0">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="externals.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/js/externals.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="401" column="0" selection-start="11662" selection-end="11662" vertical-scroll-proportion="0.7208766">
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="soundgarden.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/soundgarden.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="247" column="47" selection-start="9355" selection-end="9355" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="e#24#43#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -128,7 +150,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/css/scroller.css" />
         <option value="$PROJECT_DIR$/css/forms.css" />
         <option value="$PROJECT_DIR$/js/historyNav.js" />
         <option value="$PROJECT_DIR$/js/noty/notifications.js" />
@@ -142,8 +163,9 @@
         <option value="$PROJECT_DIR$/css/index.css" />
         <option value="$PROJECT_DIR$/soundgarden.html" />
         <option value="$PROJECT_DIR$/js/playlists2.js" />
-        <option value="$PROJECT_DIR$/js/externals.js" />
         <option value="$PROJECT_DIR$/js/historyModel.js" />
+        <option value="$PROJECT_DIR$/soundgarden.py" />
+        <option value="$PROJECT_DIR$/js/externals.js" />
       </list>
     </option>
   </component>
@@ -160,10 +182,16 @@
           <State>
             <id />
           </State>
+          <State>
+            <id>Google App Engine (Python)</id>
+          </State>
+          <State>
+            <id>Python</id>
+          </State>
         </expanded-state>
         <selected-state>
           <State>
-            <id>Class structure</id>
+            <id>PyPep8Inspection</id>
           </State>
         </selected-state>
       </profile-state>
@@ -258,7 +286,7 @@
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
-    <property name="options.lastSelected" value="JavaScript.Libraries" />
+    <property name="options.lastSelected" value="Errors" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="DefaultHtmlFileTemplate" value="Html5" />
     <property name="options.searchVisible" value="true" />
@@ -423,13 +451,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/css/index.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1004" column="0" selection-start="22923" selection-end="22923" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/musicPlayerModel.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="106" column="0" selection-start="3801" selection-end="3801" vertical-scroll-proportion="0.0">
@@ -510,12 +531,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/externals.js">
+    <entry file="file://$PROJECT_DIR$/js/historyModel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="355" column="0" selection-start="10051" selection-end="10051" vertical-scroll-proportion="6.2076125">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
+        <state line="88" column="47" selection-start="2845" selection-end="2845" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
@@ -526,10 +545,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/historyModel.js">
+    <entry file="file://$PROJECT_DIR$/soundgarden.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="121" column="0" selection-start="3516" selection-end="3516" vertical-scroll-proportion="0.94772726">
-          <folding />
+        <state line="247" column="47" selection-start="9355" selection-end="9355" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#24#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/externals.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="401" column="0" selection-start="11662" selection-end="11662" vertical-scroll-proportion="0.7208766">
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
