@@ -21,6 +21,11 @@
 
 	Spank.plugTheBitch = function(bitch, tracklistRef) {
 
+		var getAlbumArt = false;
+		if (typeof(bitch.thumb)!=='undefined' && !bitch.thumb.match(/mzstatic|7static|musixmatch/)) {
+			getAlbumArt = true;
+		}
+
 		function getMX(koo) {
 			Spank.mxMatchOne(koo.title, koo.artist, function onmatch(mxTrack) {
 				var track = Spank.normalizeMXData(mxTrack),
@@ -34,8 +39,12 @@
 						if (current.url===koo.url) {
 							for (var k in track) {
 								if (track.hasOwnProperty(k)) {
-									if (!current.hasOwnProperty(k)) current[k] = track[k];
-									if (k==='thumb' && !current.thumb.match(/apple|7static|musixmatch/) && !v.match(/google/)) current[k] = track[k];
+									if (!current.hasOwnProperty(k)) {
+										current[k] = track[k];
+									}
+									if (k==='thumb' && !current.thumb.match(/mzstatic|7static|musixmatch/)) {
+										current[k] = track[k];
+									}
 								}
 							}
 							break;
@@ -74,8 +83,12 @@
 						if (current.url===track.url) {
 							for (var k in iTunesSong) {
 								if (iTunesSong.hasOwnProperty(k)) {
-									if (!current.hasOwnProperty(k)) current[k] = iTunesSong[k];
-									if (k==='thumb' && !current.thumb.match(/apple|7static/)) current[k] = iTunesSong[k];
+									if (!current.hasOwnProperty(k)) {
+										current[k] = iTunesSong[k];
+									}
+									if (k==='thumb' && !current.thumb.match(/mzstatic|7static|musixmatch/)) {
+										current[k] = iTunesSong[k];
+									}
 								}
 							}
 							break;
@@ -89,14 +102,16 @@
 		}
 
 		if (bitch===null) return;
-		if (typeof(bitch.mxid_track)==='undefined' || (bitch.mxid_track.length<4)) {
+		if (typeof(bitch.mxid_track)==='undefined') {
 			getMX(bitch);
-		} else if (typeof(bitch.itms_track)==='undefined') {
+		}
+		if (typeof(bitch.itms_track)==='undefined' || getAlbumArt) {
 			getItunes(bitch);
 		}
-		if (typeof(bitch.echoid_track)==='undefined') {
+		if (typeof(bitch.echoid_track)==='undefined' || getAlbumArt) {
 			getECHO(bitch);
 		}
+
 	};
 
 	Spank.tasteProfileId = null;

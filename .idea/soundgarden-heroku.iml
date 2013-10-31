@@ -5,7 +5,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="jquery-ui" level="application" />
-    <orderEntry type="library" name="knockout" level="application" />
     <orderEntry type="library" name="jQuery-1.8.2" level="application" />
     <orderEntry type="library" name="jQuery UI-1.9.1" level="application" />
     <orderEntry type="library" name="Knockout-2.1.0" level="application" />

@@ -399,7 +399,7 @@ Spank.moodSwings = (function() {
 			RU: "Russia"
 		};
 
-	["FR", "JP", "DE", "US", "UK"].forEach(function(code) {
+	["FR", "DE", "US", "UK"].forEach(function(code) {
 		var bUrl = chartUrls.billboards_base.replace("#", code.toLowerCase()),
 			bCover = '/img/bill.jpg'.replace("#", code.toLowerCase()),
 			bp = {title: 'Billboard ' + codes[code], cover: bCover, url: bUrl, refID:"@musix-billboard-geo-"+code.toLowerCase() };
