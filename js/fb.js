@@ -50,7 +50,7 @@ window.fbAsyncInit = function checkFacebookStatus() {
 			};
 		};
 
-	["spank.io", "pythonandpussy.com"].forEach(function(url) {
+	["spank.io", "geewyz.com"].forEach(function(url) {
 		settings[url] = get_settings(url, false);
 	});
 
