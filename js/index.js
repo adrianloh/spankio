@@ -76,18 +76,31 @@
 			var spankTrack = null;
 			if (sortResults) {
 				// Check to see whether we have this song in our library
-				var artist = stripLower(TrackConstructor.prototype.artist),
-					title = stripLower(TrackConstructor.prototype.title);
-				if (typeof(Spank.library[artist])!=='undefined' && typeof(Spank.library[artist][title])!=='undefined') {
-					var track = new TrackConstructor(),
-						trackFromLibrary = Spank.library[artist][title],
-						serverCode = trackFromLibrary.server,
-						serverActual = Spank.servers[serverCode],
-						user = trackFromLibrary['user'],
-						filename = trackFromLibrary['filename'];
-					track.direct = serverActual + "/" + user + "/" + filename;
-					track.url = serverCode + "_" + user + "/" + filename;
-					spankTrack = track;
+				var library = Spank.library,
+					artist = stripLower(TrackConstructor.prototype.artist),
+					title = stripLower(TrackConstructor.prototype.title),
+					trackFromLibrary = null;
+				if (typeof(library[artist])!=='undefined') {
+					if (typeof(library[artist][title])!=='undefined') {
+						trackFromLibrary = library[artist][title];
+					} else {
+						var localResults = Spank.libraryIndex[artist].get(title);
+						if (localResults.length>0) {
+							var matchScore = localResults[0][0],
+								firstHit = localResults[0][1];
+							if (matchScore>0.5) trackFromLibrary = library[artist][firstHit];
+						}
+					}
+					if (trackFromLibrary) {
+						var track = new TrackConstructor(),
+							serverCode = trackFromLibrary.server,
+							serverActual = Spank.servers[serverCode],
+							user = trackFromLibrary['user'],
+							filename = trackFromLibrary['filename'];
+						track.direct = serverActual + "/" + user + "/" + filename;
+						track.url = serverCode + "_" + user + "/" + filename;
+						spankTrack = track;
+					}
 				}
 			}
 
