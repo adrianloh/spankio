@@ -21,30 +21,31 @@ VK = (function() {
 	self.token_user = {};
 	self.keys = [];
 
-	$.getJSON(url, function(res) {
-		var tokens = [];
-		for (var app_id in res) {
-			var theseTokens = res[app_id].tokens;
-			for (var login in theseTokens) {
-				tokens.push(theseTokens[login]);
-			}
-		}
-		var i = tokens.length;
-		while (i--) {
-			var token_string = tokens[i].split(":"),
-				token = token_string[0],
-				user_id = token_string[1];
-			self.token_user[token] = user_id;
-			self.keys.push(token);
-		}
-	});
+//	$.getJSON(url, function(res) {
+//		var tokens = [];
+//		for (var app_id in res) {
+//			var theseTokens = res[app_id].tokens;
+//			for (var login in theseTokens) {
+//				tokens.push(theseTokens[login]);
+//			}
+//		}
+//		var i = tokens.length;
+//		while (i--) {
+//			var token_string = tokens[i].split(":"),
+//				token = token_string[0],
+//				user_id = token_string[1];
+//			self.token_user[token] = user_id;
+//			self.keys.push(token);
+//		}
+//	});
 
 	self.getToken = function() {
-		if (localStorage.hasOwnProperty('vktoken')) {
-			return localStorage['vktoken']
-		} else {
-			return self.keys[++pick%self.keys.length];
-		}
+		return "d7125fb025264a7e8f1107789d332c23901af26b82e25be5c0e05f32e401dd4a330cc7781e9ad79585e18";
+//		if (localStorage.hasOwnProperty('vktoken')) {
+//			return localStorage['vktoken']
+//		} else {
+//			return self.keys[++pick%self.keys.length];
+//		}
 	};
 
 	self.api = function(url, successCallback, errorCallback) {
