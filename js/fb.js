@@ -1,5 +1,32 @@
 /*global $, FB */
 
+Spank.vkTokens = [
+	"3ad019d3028e29cef3bc4809b3e78f38b8811cec7e50ad478f63a7a6d690f9a6f13d08d6fbecd5e1fe49f",
+	"d7125fb025264a7e8f1107789d332c23901af26b82e25be5c0e05f32e401dd4a330cc7781e9ad79585e18",
+	"8814974a7e5487011dc9fcef8554dfc948f2e8ae2453dda138a3f390ab5193dd541463013988d7070953c"
+];
+
+function checkVK() {
+	var url = "https://api.vkontakte.ru/method/audio.getById?audios=-156990599_907d6c68fd78&access_token=@".replace(/@/, Spank.vkTokens[0]),
+		tries = 0;
+	(function testVK(url) {
+		$.getJSON(url + "&callback=?", function(res) {
+			var sid, retryUrl;
+			if (res.hasOwnProperty("error") && tries<=2) {
+				sid = res.error.captcha_sid;
+				console.warn("Authenticating VK captcha: sid " + sid);
+				$.getJSON("/decode/" + sid, function(res) {
+					console.log(res);
+					if (res.hasOwnProperty('text')) {
+						retryUrl = url + "&captcha_sid=SID&captcha_key=TEXT".replace(/SID/, sid).replace(/TEXT/, res.text);
+						testVK(retryUrl);
+					}
+				});
+			}
+		});
+	})(url);
+}
+
 var FBUserInfo = null;
 var shutdown = new Firebase("https://wild.firebaseio.com/spank/shutdown");
 

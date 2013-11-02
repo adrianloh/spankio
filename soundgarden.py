@@ -223,6 +223,28 @@ class MXSearchHandler(tornado.web.RequestHandler):
 		self.finish()
 
 
+import deathbycaptcha
+from uuid import uuid4
+
+captcha_client = deathbycaptcha.SocketClient("cockupyourbumper", "nadine")
+class Base64ImageEncoderHandler(tornado.web.RequestHandler):
+
+	@tornado.gen.engine
+	@tornado.web.asynchronous
+	def get(self, sid):
+		self.set_header("Content-Type", "application/json")
+		url = "http://api.vk.com/captcha.php?sid=" + sid
+		print url
+		getReq = tornado.httpclient.HTTPRequest(url)
+		res = yield tornado.gen.Task(async_client.fetch, getReq)
+		fn = "/Users/adrianloh/Desktop/" + uuid4().hex + ".jpg"
+		with open(fn, "wb") as f:
+			f.write(res.body)
+		captcha = captcha_client.decode(fn, 10)
+		self.write(json.dumps(captcha))
+		self.finish()
+
+
 oneday = 86400
 oneweek = 60 * 60 * 24 * 7
 CACHE = {}
@@ -293,6 +315,7 @@ application = tornado.web.Application([
 		(r"/echo/taste/update", EchoTasteProfileHandler),
 		(r"/mxsearch", MXSearchHandler),
 		(r"/itunes", iTunesHandler),
+		(r"/decode/(.*)", Base64ImageEncoderHandler),
 		(r"/static/(.*)", MyStaticHandler, {"path": site_root + "/static"}),
 		(r"/js/(.*)", NeverCacheStaticHandler, {"path": site_root + "/js"}),
 		(r"/css/(.*)", NeverCacheStaticHandler, {"path": site_root + "/css"}),
