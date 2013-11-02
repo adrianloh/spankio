@@ -267,7 +267,7 @@ var Head = {
 				});
 			};
 
-			self.randomChart = function(preserveTab) {
+			self.randomChart = function() {
 				var nonUserPlaylistDocks = Head.playlists.dockItemsCharts().concat(Head.playlists.dockItemsDiscover()),
 					chartRefIDs = nonUserPlaylistDocks.map(function(o) { return o.refID; }),
 					i = Math.floor(Math.random()*chartRefIDs.length);
@@ -496,27 +496,6 @@ var Head = {
 				return newArray;
 			});
 		};
-
-		// Playlist play button
-		$(".icon-play.pprop").click(function() {
-			// If no playlist tracks are selected, play the whole list,
-			// otherwise, play selected playlist tracks
-			var shoppingCartItems = Spank.charts.shoppingCart(),
-				itemsToPlay = shoppingCartItems.length===0 ? Spank.charts.chartTracks().slice() : shoppingCartItems.slice().reverse();
-			Spank.history.prependToHistory(itemsToPlay, true);
-//			$.each(itemsToPlay, function(i,o) {
-//				if (i===(itemsToPlay.length-1)) {
-//					// This is the last track, do we play it now?
-//					// NOTE threeSixtyPlayer.lastSound.paused is null if
-//					// we've not yet played anything before.
-//					var playNow = threeSixtyPlayer.lastSound!==null ? threeSixtyPlayer.lastSound.paused : true;
-//					Spank.history.prependToHistory(o, playNow);
-//				} else {
-//					Spank.history.prependToHistory(o, false);
-//				}
-//			});
-			Spank.charts.resetShoppingCart();
-		});
 
 		$("#pprop-writable").click(function() {
 			var isTrue = $(this).prop("checked");

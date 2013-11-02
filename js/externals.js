@@ -529,7 +529,7 @@ Spank.moodSwings = (function() {
 	Spank.lazyLoadImages = function(containerSelector, res) {
 		var document_height = $(document).height() + 200,
 			content_top = ko.observable(true), // A dummy we're using to trick thumbSource into evaluating each time we scroll
-			re_apple = new RegExp(/\d+x\d+-75/);
+			re_apple = /\d+x\d+-75/;
 		$(containerSelector).scroll(function() {
 			content_top(!content_top());
 		});
