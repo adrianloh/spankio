@@ -239,10 +239,13 @@ class Base64ImageEncoderHandler(tornado.web.RequestHandler):
 		fn = "/tmp/" + uuid4().hex + ".jpg"
 		with open(fn, "wb") as f:
 			f.write(res.body)
-		captcha = captcha_client.decode(fn, 10)
+		captcha = yield tornado.gen.Task(self.solveCaptcha, fn)
 		self.write(json.dumps(captcha))
 		self.finish()
 
+	def solveCaptcha(self, fn, callback):
+		captcha = captcha_client.decode(fn, 20)
+		return callback(captcha)
 
 oneday = 86400
 oneweek = 60 * 60 * 24 * 7

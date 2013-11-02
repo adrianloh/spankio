@@ -17,7 +17,7 @@ function checkVK() {
 				console.warn("Authenticating VK captcha: sid " + sid);
 				$.getJSON("/decode/" + sid, function(res) {
 					console.log(res);
-					if (res.hasOwnProperty('text')) {
+					if (res!==null && res.hasOwnProperty('text')) {
 						retryUrl = url + "&captcha_sid=SID&captcha_key=TEXT".replace(/SID/, sid).replace(/TEXT/, res.text);
 						testVK(retryUrl);
 					}

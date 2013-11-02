@@ -58,7 +58,9 @@ VK = (function() {
 	};
 
 	vk.getToken = function() {
-		return Spank.vkTokens[0];
+		var tokens = Spank.vkTokens;
+		return tokens[++pick % tokens.length];
+		//return Spank.vkTokens[0];
 	};
 
 	vk.api = function(url, successCallback, errorCallback) {
