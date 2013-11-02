@@ -21,11 +21,11 @@
 			playlistScrollerWasVisible = false;
 
 		$(document).bind("login", function() {
-			$("title").text("Spank.io | " + FBUserInfo.name);
+			$("title").text("Moozyx | " + FBUserInfo.name);
 		});
 
 		$(document).bind("logout", function() {
-			$("title").text("Welcome to Spank!");
+			$("title").text("Moozyx");
 		});
 
 		$(".thoughtbot").click(function toggleBetweenMusicalLyrical(){
