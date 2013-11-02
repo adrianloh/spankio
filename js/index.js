@@ -80,10 +80,11 @@
 					artist = stripLower(TrackConstructor.prototype.artist),
 					title = stripLower(TrackConstructor.prototype.title),
 					trackFromLibrary = null;
-				if (typeof(library[artist])!=='undefined') {
-					if (typeof(library[artist][title])!=='undefined') {
+				if (typeof(library[artist])!=='undefined') {            // Match the artist precisely
+					if (typeof(library[artist][title])!=='undefined') { // Match title precisely
 						trackFromLibrary = library[artist][title];
 					} else {
+						// Use FuzzySet to find a song title match
 						var localResults = Spank.libraryIndex[artist].get(title);
 						if (localResults.length>0) {
 							var matchScore = localResults[0][0],
@@ -120,7 +121,8 @@
 						displayTitle = vkTrack.title.slice(0,60) + ' - ' + vkTrack.artist.slice(0,60);
 					if (displayTitle.length>0 && displayTitle.length<80) {
 						var track = new TrackConstructor();
-						// Why the split? VK started returning urls like this: http://cs536513.vk.me/u17120923/audios/6362cb37e2c3.mp3?extra=atDlhVLq2Tl8ByzkidYJDvfe..."
+						// Why the split? VK started returning urls like this:
+						// http://cs536513.vk.me/u17120923/audios/6362cb37e2c3.mp3?extra=atDlhVLq2Tl8ByzkidYJDvfe..."
 						track.direct = vkTrack.url.split("?")[0];
 						track.title = title;
 						if (!sortResults) {
@@ -142,6 +144,8 @@
 						return 0;
 					});
 				}
+
+				// If we have the song on S3, append it to the top of the results list
 				if (spankTrack) {
 					results.splice(0,0,spankTrack);
 				}
@@ -174,6 +178,32 @@
 			});
 		};
 
+		function stripFeaturing(string) {
+			var re = /([ \(\[]fe?a?t\.?.+)/i,
+				retStr;
+			if (string.match(re)) {
+				retStr = $.trim(string.replace(re, ""));
+			} else {
+				retStr = string;
+			}
+			return retStr;
+		}
+
+		function removeBrackets(string) {
+			var re = /[\(\[].+[\)\]]/,
+				retStr;
+			if (string.match(re)) {
+				retStr = $.trim(string.replace(re, ""));
+			} else {
+				retStr = string;
+			}
+			return retStr
+		}
+
+		function stripAndRemoveAllNonAscii(string) {
+			return string.replace(/[^ -~]/g,"").replace(/^ +/,"").replace(/ +$/,"");
+		}
+
 		Spank.lightBox = (function() {
 			var self = {};
 			self.lyricsTitle = ko.observable("");
@@ -191,29 +221,15 @@
 			});
 			self.vickisuckme = vickisuckme;
 
-
-			function stripFeaturing(string) {
-				if (string.match(/([ \(\[]fe?a?t\.?.+)/i)) {
-					return $.trim(string.replace(/([ \(\[]fe?a?t\.?.+)/i, ""));
-				} else {
-					return string;
-				}
-			}
-
-			function stripBrackets(string) {
-				if (string.match(/[\(\[].+[\)\]]/)) {
-					return $.trim(string.replace(/[\(\[].+[\)\]]/ ,""));
-				} else {
-					return string;
-				}
-			}
-
+			// WARNING: There's a bug where multiple calls are made to MusixMatch every
+			// time we open the lightbox. Just use lastCall to make sure we don't
+			// send out too many requests.
 			var lastCall = Date.now();
 			self.open = function(data, refIdOfOrigin) {
 				var lightBox = $("#lightBox");
 				if (!vk_search_in_progress && !lightBox.hasClass("lboxScaleShow")) {
 					var Track = function() {},
-						title = stripBrackets(data.title),
+						title = removeBrackets(data.title),
 						artist = data.artist,
 						query_string = title + " " + artist;
 					Track.prototype = data;
@@ -280,11 +296,18 @@
 					}
 				});
 				if (!ok) return;
+				if (trackObject.artist.match(/[a-z]/i)) {
+					trackObject.artist = stripFeaturing(trackObject.artist);
+					trackObject.artist = stripAndRemoveAllNonAscii(trackObject.artist);
+				}
+				if (trackObject.title.match(/[a-z]/i)) {
+					trackObject.title = stripAndRemoveAllNonAscii(trackObject.title);
+				}
 				$.each(trackObject, function(k,v) {
 					if (typeof(v)!=='undefined') {
 						if (v.toString().length===0 || v===null) {
-							if (must_have_keys.indexOf(k)<0) { // This is a non-essential key
-								trackObject[k] = 'na';
+							if (must_have_keys.indexOf(k)<0) { // This is a non-essential key so delete it
+								delete trackObject[k];
 							} else {
 								console.error(k + " > " + v);
 								ok = false;
@@ -295,7 +318,6 @@
 						ok = false;
 					}
 				});
-				trackObject.artist = stripFeaturing(trackObject.artist);
 				if (ok) {
 					var playNow = $(event.target).attr("action")==="play";
 					Spank.history.prependToHistory([trackObject], playNow);
