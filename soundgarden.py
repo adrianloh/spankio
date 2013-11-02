@@ -293,6 +293,7 @@ application = tornado.web.Application([
 		(r"/mxsearch", MXSearchHandler),
 		(r"/itunes", iTunesHandler),
 		(r"/static/(.*)", MyStaticHandler, {"path": site_root + "/static"}),
+		(r"/(favicon.ico)", MyStaticHandler, {"path": site_root + "/static/favicon16.ico"}),
 		(r"/js/(.*)", NeverCacheStaticHandler, {"path": site_root + "/js"}),
 		(r"/css/(.*)", NeverCacheStaticHandler, {"path": site_root + "/css"}),
 		(r"/img/(.*)", tornado.web.StaticFileHandler, {"path": site_root + "/img"}),
