@@ -234,10 +234,9 @@ class Base64ImageEncoderHandler(tornado.web.RequestHandler):
 	def get(self, sid):
 		self.set_header("Content-Type", "application/json")
 		url = "http://api.vk.com/captcha.php?sid=" + sid
-		print url
 		getReq = tornado.httpclient.HTTPRequest(url)
 		res = yield tornado.gen.Task(async_client.fetch, getReq)
-		fn = "/Users/adrianloh/Desktop/" + uuid4().hex + ".jpg"
+		fn = "/tmp/" + uuid4().hex + ".jpg"
 		with open(fn, "wb") as f:
 			f.write(res.body)
 		captcha = captcha_client.decode(fn, 10)
