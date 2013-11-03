@@ -49,14 +49,6 @@ VK = (function() {
 		});
 	}
 
-	vk.deprecated_getToken = function() {
-		if (localStorage.hasOwnProperty('vktoken')) { // A workaround for overseas clients
-			return localStorage['vktoken']
-		} else {
-			return vk.keys[++pick % vk.keys.length];
-		}
-	};
-
 	vk.getToken = function() {
 		var tokens = Spank.vkTokens;
 		return tokens[++pick % tokens.length];

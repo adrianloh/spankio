@@ -7,27 +7,37 @@ Spank.vkTokens = [
 ];
 
 function checkVK() {
-	var url = "https://api.vkontakte.ru/method/audio.getById?audios=-156990599_907d6c68fd78&access_token=@".replace(/@/, Spank.vkTokens[0]),
+	var q = "https://api.vkontakte.ru/method/audio.getById?audios=-156990599_907d6c68fd78",
+		url = q + "&access_token=" + Spank.vkTokens[0],
 		tries = 0;
 	(function testVK(url) {
 		$.getJSON(url + "&callback=?", function(res) {
 			var sid, retryUrl;
+			//res.error = {'captcha_sid':961373820056};
 			if (res.hasOwnProperty("error") && tries<=2) {
 				sid = res.error.captcha_sid;
 				console.warn("Authenticating VK captcha: sid " + sid);
 				$.getJSON("/decode/" + sid, function(res) {
-					console.log(res);
 					if (res!==null && res.hasOwnProperty('text')) {
 						retryUrl = url + "&captcha_sid=SID&captcha_key=TEXT".replace(/SID/, sid).replace(/TEXT/, res.text);
+						tries+=1;
 						testVK(retryUrl);
+					} else {
+						console.error("ERROR: VK Authentication failed.")
 					}
 				});
+			} else if (tries>2) {
+				console.error("ABORT: VK Authentication failed.")
+			} else {
+				console.log("OK: VK Authentication");
 			}
 		});
 	})(url);
 }
 
 var FBUserInfo = null;
+
+// The global switch, when set to True, will shutdown Spank for all users
 var shutdown = new Firebase("https://wild.firebaseio.com/spank/shutdown");
 
 function initApp(info) {
@@ -51,7 +61,6 @@ function initApp(info) {
 			if (typeof(FB)!=='undefined') {
 				FB.api('fql',{q:q}, function(res) {
 					FBUserInfo.friends = res.data;
-					FBUserInfo.last_update = Date.now();
 					$(document).trigger("login");
 					localStorage.spank = JSON.stringify(FBUserInfo);
 				});
