@@ -58,7 +58,8 @@
 		ko.bindingHandlers.pickupStreamItems = {
 			init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 				var data = valueAccessor(),
-					li = $(element);
+					li = $(element),
+					dockIsVisible, lastActiveDock;
 				li.data('koo', data);
 				li.draggable({
 					appendTo: 'body',
@@ -104,7 +105,20 @@
 					zIndex:999,
 					addClasses: false,
 					start:function( event, ui ) {
-						$(".playlist-type-btn[value='ppi-me']").click();
+
+						// When a user drags a stream item, we want to jump over
+						// to our playlists to make it easy for them to add songs
+						dockIsVisible = Head.playlists.visible();
+						lastActiveDock = null;
+						$.each(Head.playlists.docksVisible, function(dockName, isOpen) {
+							if (isOpen()) {
+								lastActiveDock = dockName;
+							}
+						});
+						if (Head.playlists.dockItemsMe().length>0) {
+							$(".playlist-type-btn[value='ppi-me']").click();
+						}
+
 						var defocus = true,
 							playlistDropZone = $("#playlistDropZone"),
 							searchZone = $("#playlistSearchZone");
@@ -136,6 +150,12 @@
 						}
 						$("#playlistDropZone").removeClass("zoneShow");
 						$("#playlistSearchZone").removeClass("zoneShow");
+						if (dockIsVisible) {
+							var selector = ".playlist-type-btn[value='ppi-WHICH']".replace(/WHICH/, lastActiveDock);
+							$(selector).click();
+						} else {
+							Head.playlists.visible(false);
+						}
 					}
 				});
 				if (data.hasOwnProperty("gift")) {

@@ -725,7 +725,8 @@
 			function getFresh() {
 				var f = setInterval(function() {
 					if (typeof(Spank.base.freshies)!=='undefined') {
-						Spank.base.freshies.limit(50).on("child_added", function(snapshot) {
+						clearInterval(f);
+						Spank.base.freshies.limit(100).on("child_added", function(snapshot) {
 							var o = snapshot.val();
 							if (o!==null && typeof(o)==='object') {
 								self.freshies.unshift(snapshot.val());
@@ -742,7 +743,6 @@
 								self.freshies.splice(atFreshieIndex, 1);
 							}
 						});
-						clearInterval(f);
 					}
 				}, 250);
 			}
