@@ -124,12 +124,13 @@
 						getNewTrack(o);
 					}
 				}, function onError() {
-					document.trigger("fatManFinish");
+					$(document).trigger("fatManFinish");
 				});
 			};
 
 			self.addCurrentlyPlayingToLibrary = function() {
-				Spank.history.prependToHistory([self.lastPlayedObject], false);
+				Spank.lightBox.addSongToStream(self.lastPlayedObject);
+				Spank.player.isPlayingFromLibrary(true);
 			};
 
 			self.suspendLoopAndTrigger = function(callback) {

@@ -319,8 +319,12 @@
 					}
 				});
 				if (ok) {
-					var playNow = $(event.target).attr("action")==="play";
-					Spank.history.prependToHistory([trackObject], playNow);
+					if (typeof(event)!=='undefined') {
+						var playNow = $(event.target).attr("action")==="play";
+						Spank.history.prependToHistory([trackObject], playNow);
+					} else {
+						Spank.history.prependToHistory([trackObject]);
+					}
 				}
 			};
 			return self;

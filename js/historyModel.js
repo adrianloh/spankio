@@ -530,16 +530,14 @@
 
 				Spank.base.history.set(newHistory);
 
-				if (playNow) {
-					Spank.player.playObject(listOfTracksToAdd[0]);
-					threeSixtyPlayer.config.jumpToTop = false;
-				} else {
-					threeSixtyPlayer.config.jumpToTop = true;
+				if (typeof(playNow)!=='undefined') {
+					if (playNow) {
+						Spank.player.playObject(listOfTracksToAdd[0]);
+						threeSixtyPlayer.config.jumpToTop = false;
+					} else {
+						threeSixtyPlayer.config.jumpToTop = true;
+					}
 				}
-
-//				listOfTracksToAdd.forEach(function(o) {
-//					Spank.plugTheBitch(o, Spank.base.history);
-//				});
 
 			};
 
