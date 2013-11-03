@@ -94,7 +94,12 @@ VK = (function() {
 ECHO = {
 	keys: "X2OROKI8NWEDHYDTM GK22IF7L5GLQQBLEL WVAZVRHOG59HOWTNC RADDG7GQBG1VPMGDN DW9KSGOM2CLAJHTXX LIJSXT5QXXZCA3RJ9 VCNSBSPZ1ECBZHLN1 RB3XH5KYICWMGZ4MC KCCO9G9N8YE2WM6OI IALGWME7AWGMSCPXB",
 	init: function() {
-		this.keys = this.keys.split(" ")
+		this.keys = this.keys.split(" ");
+		this.playlistBase = "http://developer.echonest.com/api/v4/playlist/static?api_key=TOLKIEN" +
+			"&format=json&results=100" + "REPLACE_ME" +
+			"&artist_min_familiarity=#&adventurousness=NOFEARFACTOR" +
+			"&bucket=tracks&bucket=id:7digital-US" +
+			"&page=1";
 	},
 	pick:0,
 	key_random: function() {
@@ -121,7 +126,7 @@ ECHO = {
 	},
 	startRecommendations: function() {
 		var catalog_id = Spank.tasteProfileId.match(/SPANK_(.+)/)[1],
-			url = "http://developer.echonest.com/api/v4/playlist/static?api_key=FILDTEOIK2HBORODV&results=100&type=catalog-radio&seed_catalog=CATALOG_ID&adventurousness=NOFEARFACTOR&bucket=id:7digital-US&bucket=tracks&page=1".replace("CATALOG_ID", catalog_id),
+			url = "http://developer.echonest.com/api/v4/playlist/static?api_key=IALGWME7AWGMSCPXB&results=100&type=catalog-radio&seed_catalog=CATALOG_ID&adventurousness=NOFEARFACTOR&bucket=id:7digital-US&bucket=tracks&page=1".replace("CATALOG_ID", catalog_id),
 			item = {title: 'Recommendations', cover: '/img/echo.jpg', url: url, refID:"@echonest-recommended" };
 		Head.playlists.dockItemsDiscover.unshift(item);
 		$("#echonest_button").show();
@@ -499,8 +504,9 @@ Spank.moodSwings = (function() {
 		"Vocal House"
 	];
 
+	// EchoNest genre playlists
 	var discoverDockItems = echonestGenres.map(function(genre) {
-		var url = "http://developer.echonest.com/api/v4/playlist/static?api_key=FILDTEOIK2HBORODV&genre=@&format=json&results=100&type=genre-radio&bucket=id:7digital-US&bucket=tracks&page=1",
+		var url = ECHO.playlistBase.replace("REPLACE_ME", "&genre=@&type=genre-radio"),
 			genre_lower = genre.toLowerCase();
 		url = url.replace("@", encodeURIComponent(genre_lower));
 		return {
@@ -510,6 +516,21 @@ Spank.moodSwings = (function() {
 			refID:"@echonest-genre-" + genre_lower.replace(/\W/g,"")
 		};
 	});
+
+	// EchoNest playlists of music by the decades
+	(function() {
+		var url =  ECHO.playlistBase.replace("REPLACE_ME", "&description=@&type=artist-description");
+		["50s", "60s", "70s", "80s", "90s", "00s"].forEach(function(decade, i) {
+			var dUrl = url.replace("@", decade),
+				item = {
+					title: decade,
+					cover: '/img/echo.jpg',
+					url: dUrl,
+					refID:"@echonest-genre-" + decade
+				};
+			discoverDockItems.push(item);
+		});
+	})();
 
 	var f = setInterval(function populateDockItems() {
 		try {   // Head.playlists may *not* have been defined yet

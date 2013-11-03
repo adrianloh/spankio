@@ -446,9 +446,10 @@ ko.bindingHandlers.koChartItems = {
 				// replace the useless "&page=" part with a useless callback with
 				// a random name each time to prevent $.getJSON from caching the response
 				var randomCallback = "&callback=f" + Math.uuid(16);
-				url = url.replace("NOFEARFACTOR", Number(randrange(0,1,2))); // How "adventurous" is the playlist?
+				url = url.replace("#", randrange(25,80)/100);
+				url = url.replace("NOFEARFACTOR", randrange(25,90)/100); // How "adventurous" is the playlist?
 				url = url.replace(/&page=\d+/, randomCallback);
-				url = url.replace("FILDTEOIK2HBORODV", ECHO.key());
+				url = url.replace("TOLKIEN", ECHO.key());
 				last_url = originalFakeUrl;
 			} else {
 				last_url = url;
