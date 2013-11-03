@@ -80,10 +80,19 @@
 
 			self.playObject = function(o, refIdOfOrigin) {
 				o = ko.toJS(o);             // Double make sure we are dealing with Plain Janes here and not koo's
+
+				// BUG: If user adds a currently playing song with the "+/bullseye"
+				// and then immedietly deletes it afterwards, o is "nicegapbaby"
+				if (typeof(o)!=='object') {
+					threeSixtyPlayer.config.jumpToTop = false;
+					$(document).trigger("fatManFinish");
+					return;
+				}
+
 				self.lastLastPlayedObject = this.lastPlayedObject;
 				self.lastPlayedObject = o;
 				clearTimeout(timeoutToAddToFreshies);
-
+				
 				var lookupMethod, url;
 				if (o.url.match(/^@/)) {
 					lookupMethod = Spank.getTrackLink;
