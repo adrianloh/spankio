@@ -436,7 +436,7 @@
             <!-- ko foreach: dockNames -->
             <input type="radio" name="ppi" class="ppi-checkbox" data-bind="attr:{id:'ppi-'+$data, 'data-target':'#playlists-scroller-list-'+$data}">
             <label class="playlist-type-btn" data-bind="attr:{value:'ppi-'+$data, for:'ppi-'+$data}">
-                <i class="icon-music ppi"></i><span class="uppercaseTitle" data-bind="text: $data"></span>
+				<span class="uppercaseTitle ppi" data-bind="text: $data"></span>
             </label>
             <!-- /ko -->
         </div>

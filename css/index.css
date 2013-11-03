@@ -1929,6 +1929,7 @@ ul.lastfm-buttons {
 }
 
 .uppercaseTitle {
+	margin-left: 32px;
     text-transform: capitalize !important;
 }
 
