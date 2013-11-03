@@ -385,6 +385,14 @@
 
 			var renderPageTimeout = setTimeout(function() {},0),
 				scrollToSongPosition = null;
+
+			function scrollToVerticalPositionOfCurrentTrack() {
+				setTimeout(function() {
+					$("#history-stream-list-container").scrollTop(scrollToSongPosition);
+					scrollToSongPosition = null;
+				}, 500);
+			}
+
 			function populateRenderStream(p) {
 				p--;
 				var start = p*perPage,
@@ -400,10 +408,7 @@
 					self.renderStream(items.slice(start, end));
 					self.renderStream.valueHasMutated();
 					if (scrollToSongPosition) {
-						setTimeout(function() {
-							$("#history-stream-list-container").scrollTop(scrollToSongPosition);
-							scrollToSongPosition = null;
-						}, 500);
+						scrollToVerticalPositionOfCurrentTrack();
 					}
 				}, 300);
 			}
@@ -487,7 +492,11 @@
 					if (typeof(o)==='object' && self.currentPlayingUrl()===o.url()) {
 						var page = parseInt(length/perPage, 10);
 						scrollToSongPosition = (length%perPage)*tweetItem_height;
-						self.page(page+1);
+						if (self.page()===(page+1)) {
+							scrollToVerticalPositionOfCurrentTrack();
+						} else {
+							self.page(page+1);
+						}
 						break;
 					} else if (typeof(o)==='object') {
 						length++
