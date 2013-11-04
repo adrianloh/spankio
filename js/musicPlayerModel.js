@@ -55,7 +55,8 @@
 			self.echoPlayNext = null;
 
 			function getNewTrack(o) {
-				$(document).trigger("fatManFinish", {});
+				$(".tweetBlink").removeClass("tweetBlink");
+				$(document).trigger("fatManFinish");
 				window.notify.error("Crap! I've misplaced this audio file. Get a new one!", 10000);
 				var query = "vk: " + o.artist + " " + o.title;
 				setTimeout(function() {
@@ -70,13 +71,13 @@
 			});
 			var timeoutToAddToFreshies = setTimeout(function(){},0);
 
-			Spank.getTrackLink = function(url, onSuccessCallback, onErrorCallback) {
+			function getAmazonS3Link(url, onSuccessCallback, onErrorCallback) {
 				var track = {},
 					info = url.split("_"),
 					server = Spank.servers[info[0]];
 				track.url = server + "/" + info[1];
 				onSuccessCallback([track]);
-			};
+			}
 
 			self.playObject = function(o, refIdOfOrigin) {
 				o = ko.toJS(o);             // Double make sure we are dealing with Plain Janes here and not koo's
@@ -92,10 +93,10 @@
 				self.lastLastPlayedObject = this.lastPlayedObject;
 				self.lastPlayedObject = o;
 				clearTimeout(timeoutToAddToFreshies);
-				
+
 				var lookupMethod, url;
 				if (o.url.match(/^@/)) {
-					lookupMethod = Spank.getTrackLink;
+					lookupMethod = getAmazonS3Link;
 					url = o.url;
 				} else {
 					lookupMethod = VK.api;
@@ -133,6 +134,7 @@
 						getNewTrack(o);
 					}
 				}, function onError() {
+					$(".tweetBlink").removeClass("tweetBlink");
 					$(document).trigger("fatManFinish");
 				});
 			};
@@ -398,7 +400,9 @@
 				// Normal play, no modes
 				var koo = Spank.history.findHistoryItemWithUrl(Spank.player.lastPlayedObject.url),
 					next_index = Spank.history.stream.indexOf(koo)+1;
-				if (typeof(deletedSongIndex)==='number' && deletedSongIndex) { next_index = deletedSongIndex+1 }
+				if (typeof(deletedSongIndex)==='number') {
+					next_index = deletedSongIndex+1
+				}
 				return (function pickNextSong() {
 					next_play_index = next_index < underlyingArray.length && next_index || 0;
 					var next_song = Spank.history.stream()[next_play_index];

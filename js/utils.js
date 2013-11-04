@@ -44,7 +44,8 @@ Spank.utils.padToFour = function(number) {
 };
 
 Spank.utils.randomHexColor = function() {
-	return '#'+Math.floor(Math.random()*16777215).toString(16);
+	return '#' + ('000000' + Math.floor(Math.random() * 0xFFFFFF).toString(16)).substr(-6);
+//	return '#'+(Math.random().toString(16) + '000000').slice(2, 8);
 };
 
 Spank.utils.toFirebaseName = function(name) {

@@ -308,11 +308,13 @@ ko.bindingHandlers.koChartItems = {
 			if (refID===self.refID()) return;
 			DeepFeeze.get(refID, function(oldStateObj) {
 				if (oldStateObj!==null) {
+					Spank.busy.on();
 					if (oldStateObj.query!==null) {
 						$("#searchField").focus().val(oldStateObj.query);
 					}
 					self.resetCharts(oldStateObj);
 					self.pushBatch(oldStateObj.tracklist, "replace");
+					Spank.busy.off();
 				}
 			});
 		};
@@ -506,19 +508,19 @@ ko.bindingHandlers.koChartItems = {
 			}).done(function() {
 				killXHR = false;
 			}).fail(function() {
-				//window.notify.error("Awwww honey, I've got a run in my pantyhose!");
+				// window.notify.error("Uh-oh, I've got a run in my pantyhose!");
 			}).always(function() {
 				self.loading(false);
 			});
 			setTimeout(function() {
 				if (killXHR) {
-					//window.notify.information("Awwww honey, I've got a run in my pantyhose!");
+					// window.notify.information("Awwww honey, I've got a run in my pantyhose!");
 					xhr.abort();
 					if (self.refID().match(/^@/) && url.match(/page=1/) && self.chartTracks().length===0) {
 						Head.playlists.randomChart();
 					}
 				}
-			}, 5000);
+			}, 7500);
 		};
 
 		self.openChartItem = function(data, event) {     // Called from Head.playlists.openPlaylist
