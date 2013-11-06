@@ -20,6 +20,7 @@
 				havePermission,
 				notification = null,
 				closeNotificationTimeout = setTimeout(function() {}, 1000);
+
 			self.notifyCurrentlyPlaying = function(koo) {
 				clearTimeout(closeNotificationTimeout);
 				havePermission = window.webkitNotifications.checkPermission();
@@ -46,6 +47,10 @@
 				} else {
 					window.webkitNotifications.requestPermission();
 				}
+			};
+
+			self.closeNotification = function() {
+				if (notification!==null) notification.close();
 			};
 
 			return self;
@@ -303,6 +308,7 @@
 			$("#titleCardSong").text(Spank.player.lastPlayedObject.title);
 			Spank.player.setCover(Spank.player.lastPlayedObject.thumb);
 			$(".tweetBlink").removeClass("tweetBlink");
+			Spank.growl.closeNotification();
 			setTimeout(function() {
 				Spank.growl.notifyCurrentlyPlaying(Spank.player.lastPlayedObject);
 			}, 5000);
