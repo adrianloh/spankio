@@ -50,7 +50,10 @@
 			};
 
 			self.closeNotification = function() {
-				if (notification!==null) notification.close();
+				if (notification!==null) {
+					notification.cancel();
+					notification.close();
+				}
 			};
 
 			return self;
@@ -304,13 +307,18 @@
 			threeSixtyPlayer.sounds = [];
 			threeSixtyPlayer.soundsByURL = {};
 			threeSixtyPlayer.handleClick({target:playLink,preventDefault:function(){}});
-			$("#titleCardArtist").text(Spank.player.lastPlayedObject.artist);
-			$("#titleCardSong").text(Spank.player.lastPlayedObject.title);
-			Spank.player.setCover(Spank.player.lastPlayedObject.thumb);
+
+			var currentPlayingTrack = Spank.player.lastPlayedObject;
+
+			$("#titleCardArtist").text(currentPlayingTrack.artist);
+			$("#titleCardSong").text(currentPlayingTrack.title);
+			Spank.player.setCover(currentPlayingTrack.thumb);
 			$(".tweetBlink").removeClass("tweetBlink");
+
+			Spank.base.live.child("track").set(currentPlayingTrack);
 			Spank.growl.closeNotification();
 			setTimeout(function() {
-				Spank.growl.notifyCurrentlyPlaying(Spank.player.lastPlayedObject);
+				Spank.growl.notifyCurrentlyPlaying(currentPlayingTrack);
 			}, 5000);
 		});
 
