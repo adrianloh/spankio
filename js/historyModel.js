@@ -487,6 +487,7 @@
 			var tweetItem_height = $($(".tweetItem")[0]).height();
 			self.showCurrentlyPlayingTrack = function() {
 				var o, i=0, len = self.stream().length, length=0;
+				self.hideFreshies(true);
 				while (i<len) {
 					o = self.stream()[i];
 					if (typeof(o)==='object' && self.currentPlayingUrl()===o.url()) {
@@ -638,7 +639,7 @@
 					self.listIndicatorText("Library");
 					//self.freshiesList([]);
 				} else {
-					self.listIndicatorText("Previously played");
+					self.listIndicatorText("Recently played");
 					self.freshiesList(self.freshies());
 				}
 			});
@@ -655,6 +656,10 @@
 			};
 
 			self.prependToFreshies = function(koo) {
+				if (self.freshies()[0].url === koo.url) {
+					// The track is already at the top of "Recently played"
+					return;
+				}
 				var newRef = Spank.base.freshies.push(),
 					oldRefToDelete,
 					pluggedKoo = Spank.history.findHistoryItemWithUrl(koo.url), // Is this in the library?
@@ -725,12 +730,22 @@
 
 			function getFresh() {
 				var f = setInterval(function() {
+					var firstFreshies = [];
 					if (typeof(Spank.base.freshies)!=='undefined') {
 						clearInterval(f);
-						Spank.base.freshies.limit(100).on("child_added", function(snapshot) {
+						Spank.base.freshies.limit(100).once("value", function(s) {
+							$.each(s.val(), function(k,v) {
+								if (v!==null && typeof(v)==='object') {
+									firstFreshies.unshift(v);
+								}
+							});
+							self.freshies(firstFreshies);
+						});
+						Spank.base.freshies.limit(1).on("child_added", function(snapshot) {
 							var o = snapshot.val();
 							if (o!==null && typeof(o)==='object') {
-								self.freshies.unshift(snapshot.val());
+								self.freshies.splice(99,100);
+								self.freshies.unshift(o);
 							}
 						});
 						Spank.base.freshies.on("child_removed", function(snapshot) {

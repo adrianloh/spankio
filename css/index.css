@@ -1382,6 +1382,7 @@ ul.lastfm-buttons {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+	text-transform: capitalize;
 }
 
 .tweetTrackName {
@@ -1390,6 +1391,7 @@ ul.lastfm-buttons {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+	text-transform: capitalize;
 }
 
 .tweetDetails {
