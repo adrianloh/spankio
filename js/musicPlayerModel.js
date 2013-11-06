@@ -14,6 +14,44 @@
 //			});
 		});
 
+		Spank.growl = (function() {
+
+			var self = {},
+				havePermission,
+				notification = null,
+				closeNotificationTimeout = setTimeout(function() {}, 1000);
+			self.notifyCurrentlyPlaying = function(koo) {
+				clearTimeout(closeNotificationTimeout);
+				havePermission = window.webkitNotifications.checkPermission();
+				if (havePermission === 0) {
+					// 0 is PERMISSION_ALLOWED
+					if (notification!==null) {
+						notification.cancel();
+					}
+					notification = window.webkitNotifications.createNotification(
+						koo.thumb,
+						koo.artist,
+						koo.title
+					);
+					closeNotificationTimeout = setTimeout(function() {
+						clearTimeout(closeNotificationTimeout);
+						notification.close();
+					}, 15000);
+					notification.onclick = function () {
+						Spank.player.goToNextTrack();
+						clearTimeout(closeNotificationTimeout);
+						notification.close();
+					};
+					notification.show();
+				} else {
+					window.webkitNotifications.requestPermission();
+				}
+			};
+
+			return self;
+
+		})();
+
 		var fakeSource = "/static/silence.mp3";
 		Spank.player = (function() {
 			var self = {},
@@ -215,7 +253,7 @@
 			self.goToPrevTrack = function() {
 				if (self.lastPlayedObject && self.lastPlayedObject.hasOwnProperty('url')) {
 					var currentUrl = self.lastPlayedObject.url,
-						recentlyPlayed = Spank.history.freshiesList(),
+						recentlyPlayed = Spank.history.freshies(),
 						urls = recentlyPlayed.map(function(o) {
 							return o.url;
 						}),
@@ -265,6 +303,9 @@
 			$("#titleCardSong").text(Spank.player.lastPlayedObject.title);
 			Spank.player.setCover(Spank.player.lastPlayedObject.thumb);
 			$(".tweetBlink").removeClass("tweetBlink");
+			setTimeout(function() {
+				Spank.growl.notifyCurrentlyPlaying(Spank.player.lastPlayedObject);
+			}, 5000);
 		});
 
 		function echoPlaylistFromCurrent() {

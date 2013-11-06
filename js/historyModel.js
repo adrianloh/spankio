@@ -598,12 +598,21 @@
 				}
 			};
 
-			self.playHistoryItemOnClick = function(koo, event) {
+			function playHistoryItemOnClick(koo, event) {
 				koo = ko.toJS(koo);
 				if (!(Spank.player.lastPlayedObject.url===koo.url)) {
 					$(event.target).parents(".tweetItem").addClass("tweetBlink");
 					Spank.player.playObject(koo);
 				}
+			}
+
+			self.playHistoryItemOnClick = function(koo, event) {
+				var havePermission = window.webkitNotifications.checkPermission();
+				if (havePermission > 0) {
+					window.webkitNotifications.requestPermission();
+				}
+				self.playHistoryItemOnClick = playHistoryItemOnClick;
+				self.playHistoryItemOnClick(koo, event);
 			};
 
 			self.addFreshiesOnClick = function(koo, event) {

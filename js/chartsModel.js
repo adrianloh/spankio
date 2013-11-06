@@ -588,7 +588,7 @@ ko.bindingHandlers.koChartItems = {
 			$(document).trigger("fatManFinish");
 		}
 
-		self.radioPlay = function(data, event) {
+		 function radioPlay(data, event) {
 			var e = $(event.target);
 			if (!e.hasClass("spinBitch")) { e.addClass("spinBitch"); }
 			e.css("-webkit-transform", "rotate(#deg)".replace("#", randrange(328,384)));
@@ -618,6 +618,15 @@ ko.bindingHandlers.koChartItems = {
 					onZeroVKResults(data);
 				});
 			}
+		}
+
+		self.radioPlay = function(koo, event) {
+			var havePermission = window.webkitNotifications.checkPermission();
+			if (havePermission > 0) {
+				window.webkitNotifications.requestPermission();
+			}
+			self.radioPlay = radioPlay;
+			self.radioPlay(koo, event);
 		};
 
 		self.openLightbox = function(data, event) {

@@ -1182,7 +1182,7 @@ ul.lastfm-buttons {
 
 .tweetBlink {
     -webkit-animation-name: blinker;
-    -webkit-animation-duration: .2s;
+    -webkit-animation-duration: .3s;
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-timing-function: ease-in-out;
 }
