@@ -600,6 +600,11 @@
 				}
 			};
 
+			self.addFreshiesOnClick = function(koo, event) {
+				koo = ko.toJS(koo);
+				Spank.lightBox.addSongToStream(koo);
+			};
+
 			self.downloadHistoryItemOnClick = function(koo, event) {
 				koo = ko.toJS(koo);
 				if (koo.url.match(/^@/)) {
@@ -648,17 +653,12 @@
 				var newRef = Spank.base.freshies.push(),
 					oldRefToDelete,
 					pluggedKoo = Spank.history.findHistoryItemWithUrl(koo.url); // Is this in the library?
-				if (koo.hasOwnProperty('freshiesData')) {
-					oldRefToDelete = koo.freshiesData.ref;
-					Spank.base.freshies.child(oldRefToDelete).remove();
-				} else {
-					var freshiesAtIndex = null;
-					self.freshies().forEach(function(o,i) { if (o.url===koo.url) { freshiesAtIndex=i } });
-					if (freshiesAtIndex!==null) {
-						oldRefToDelete = self.freshies()[freshiesAtIndex].freshiesData.ref;
+				self.freshies().forEach(function(o) {
+					if (o.url===koo.url && o.hasOwnProperty('freshiesData')) {
+						oldRefToDelete = o.freshiesData.ref;
 						Spank.base.freshies.child(oldRefToDelete).remove();
 					}
-				}
+				});
 				if (pluggedKoo!==null) {
 					// Is in the library, grab the "plugged" track
 					koo = ko.toJS(pluggedKoo);
@@ -685,7 +685,6 @@
 			self.rightActive = ko.computed(function() {
 				return (self.hideFreshies() && self.opEnabled() && self.stream().length>perPage);
 			});
-
 
 			var streamFilterField = $("#history-filter");
 			streamFilterField.submit(function(e) {

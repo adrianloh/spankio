@@ -218,7 +218,7 @@
                     <i class="tweetOpsHide icon-cloud-download tweetDownload"></i>
                 </a>
                 <span class="rJ1Qad" data-bind="css: { rJ1Qad_active: $root.batchItems.indexOf($data)>=0 }"></span>
-                <i class="tweetOpsHide icon-plus-sign tweetDelete" data-bind="visible: $root.isNotInLibrary($data)"></i>
+                <i class="tweetOpsHide icon-plus-sign tweetDelete" data-bind="visible: $root.isNotInLibrary($data), click: $root.addFreshiesOnClick"></i>
                 <!--<i class="tweetOpsHide icon-bullseye tweetDelete" data-bind="visible: !$root.isNotInLibrary($data)"></i>-->
                 <div class="tweetDetails" data-bind="click: $root.playHistoryItemOnClick">
                     <div class="tweetTrackName" data-bind="text: title"></div>

@@ -124,6 +124,7 @@
 						} else {
 							koo = o;
 						}
+						// If a song plays for longer than 30 seconds, then add it to "Recently played"
 						timeoutToAddToFreshies = setTimeout(function() {
 							Spank.history.prependToFreshies(koo);
 						}, 30000);

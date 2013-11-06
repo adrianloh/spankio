@@ -296,6 +296,7 @@
 					}
 				});
 				if (!ok) return;
+
 				if (trackObject.artist.match(/[a-z]/i)) {
 					trackObject.artist = stripFeaturing(trackObject.artist);
 					trackObject.artist = stripAndRemoveAllNonAscii(trackObject.artist);
@@ -303,6 +304,10 @@
 				if (trackObject.title.match(/[a-z]/i)) {
 					trackObject.title = stripAndRemoveAllNonAscii(trackObject.title);
 				}
+
+				delete trackObject.score;
+				delete trackObject.freshiesData;
+
 				$.each(trackObject, function(k,v) {
 					if (typeof(v)!=='undefined') {
 						if (v.toString().length===0 || v===null) {
@@ -318,6 +323,7 @@
 						ok = false;
 					}
 				});
+
 				if (ok) {
 					if (typeof(event)!=='undefined') {
 						var playNow = $(event.target).attr("action")==="play";
@@ -327,6 +333,7 @@
 					}
 				}
 			};
+
 			return self;
 
 		})();

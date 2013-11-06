@@ -304,17 +304,18 @@ ko.bindingHandlers.koChartItems = {
 			 to the current state, make sure the refID we're restoring
 			 is different from the existing one
 			 */
-			var refID = historyStateObj.refID;
+			var refID = historyStateObj.refID,
+				html = $("html");
 			if (refID===self.refID()) return;
 			DeepFeeze.get(refID, function(oldStateObj) {
 				if (oldStateObj!==null) {
-					Spank.busy.on();
+					html.addClass("busy");
 					if (oldStateObj.query!==null) {
 						$("#searchField").focus().val(oldStateObj.query);
 					}
 					self.resetCharts(oldStateObj);
 					self.pushBatch(oldStateObj.tracklist, "replace");
-					Spank.busy.off();
+					html.removeClass("busy");
 				}
 			});
 		};
