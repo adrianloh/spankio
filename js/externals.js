@@ -93,6 +93,7 @@ VK = (function() {
 
 ECHO = {
 	keys: "X2OROKI8NWEDHYDTM GK22IF7L5GLQQBLEL WVAZVRHOG59HOWTNC RADDG7GQBG1VPMGDN DW9KSGOM2CLAJHTXX LIJSXT5QXXZCA3RJ9 VCNSBSPZ1ECBZHLN1 RB3XH5KYICWMGZ4MC KCCO9G9N8YE2WM6OI IALGWME7AWGMSCPXB",
+	primary_key: "IALGWME7AWGMSCPXB",
 	init: function() {
 		this.keys = this.keys.split(" ");
 		this.playlistBase = "http://developer.echonest.com/api/v4/playlist/static?api_key=TOLKIEN" +

@@ -230,7 +230,7 @@
 				tasteProfileRef.once("value", function(snapshot) {
 					var id = snapshot.val();
 					if (id===null) {
-						var name = ECHO.key_random().concat(":", Spank.username);
+						var name = ECHO.primary_key.concat(":", Spank.username);
 						updateTasteProfile(name, echoHistory, "update", function afterUpdateTasteProfile(tasteId) {
 							if (tasteId!==null) {
 								Spank.tasteProfileId = tasteId;
@@ -578,10 +578,15 @@
 					localIndex = stream.indexOf(koo),
 					firebaseIndex = stream.length-1-localIndex,
 					track = ko.toJS(koo),
-					li = $(event.target).parent();
+					li = $(event.target).parent(),
+					checkPosition = setInterval(function() {
+						if (li.position().left < -400) {
+							clearInterval(checkPosition);
+							if (!self.saveStream) { self.stream.remove(koo); }
+							Spank.base.history.child(firebaseIndex).set("nicegapbaby");
+						}
+					}, 50);
 				li.addClass("flyleft");
-				if (!self.saveStream) { self.stream.remove(koo); }
-				Spank.base.history.child(firebaseIndex).set("nicegapbaby");
 				if (Spank.tasteProfileId!==null) {
 					updateTasteProfile(Spank.tasteProfileId, [track], "delete");
 				}
@@ -652,21 +657,18 @@
 			self.prependToFreshies = function(koo) {
 				var newRef = Spank.base.freshies.push(),
 					oldRefToDelete,
-					pluggedKoo = Spank.history.findHistoryItemWithUrl(koo.url); // Is this in the library?
+					pluggedKoo = Spank.history.findHistoryItemWithUrl(koo.url), // Is this in the library?
+					inLibrary = pluggedKoo!==null;
 				self.freshies().forEach(function(o) {
 					if (o.url===koo.url && o.hasOwnProperty('freshiesData')) {
 						oldRefToDelete = o.freshiesData.ref;
 						Spank.base.freshies.child(oldRefToDelete).remove();
 					}
 				});
-				if (pluggedKoo!==null) {
-					// Is in the library, grab the "plugged" track
+				if (inLibrary) {
 					koo = ko.toJS(pluggedKoo);
-					koo.freshiesData = {inLibrary: true, ref: newRef.name()};
-				} else {
-					// Playing from the radio
-					koo.freshiesData = {inLibary: false, ref: newRef.name()};
 				}
+				koo.freshiesData = {inLibrary: inLibrary, ref: newRef.name()};
 				newRef.set(koo, function onComplete() {
 					// Spank.plugTheBitch(koo, Spank.base.freshies);
 				});
