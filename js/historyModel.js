@@ -716,6 +716,9 @@
 					self.saveStream = false;
 					if (input.length===0 || input==="Search library") {
 						return false;
+					} else if (input.match(/yesstately/)) {
+						Spank.dropBabyDrop();
+						self.cancelStreamFilter();
 					} else {
 						var results = [],
 							q = input.replace(" ", ".*"),
