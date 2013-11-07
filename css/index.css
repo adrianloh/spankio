@@ -1982,3 +1982,29 @@ ul.lastfm-buttons {
 .icon-circle-arrow-right.icon-pushpin-indicator:hover {
     color: rgb(232, 116, 4);
 }
+
+.dropzoneContainer {
+	top: 67px;
+	left: 0;
+	position: absolute;
+	background-color: rgb(233, 233, 15);
+	z-index: 10;
+	width: 67.6%;
+	display: none;
+}
+
+#closeUploadZone {
+	font-size: 37px;
+	z-index: 10;
+	cursor: pointer;
+	position: fixed;
+	left: 31.5%;
+	top: 43%;
+	color: white;
+	-webkit-border-radius: 31px;
+	background-color: rgba(29, 29, 29, 0.86);
+	height: 38px;
+	border: 1px solid rgba(29, 29, 29, 0.86);
+	text-align: center;
+	width: 38px;
+}

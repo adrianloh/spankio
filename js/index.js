@@ -465,10 +465,12 @@
 					Track.prototype.thumb = Spank.genericAlbumArt;
 					search_term = $.trim(search_term.split(":")[1]);
 					searchVKWithLightbox(search_term, Track);
+				} else if (search_term.match(/yesstately/)) {
+					Spank.dropBabyDrop();
 				} else {
 					setTimeout(function() {
 						searchByWire(search_term);
-					},100)
+					}, 100)
 				}
 			},
 			innerText: "Search by artist, title or lyrics",

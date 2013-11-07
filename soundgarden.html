@@ -96,6 +96,9 @@
     <link rel="stylesheet" type="text/css" href="/360_files/flashblock.css">
     <link rel="stylesheet" type="text/css" href="/360_files/360player.css">
 
+	<link rel="stylesheet" type="text/css" href="/css/dropzone/basic.css" />
+	<link rel="stylesheet" type="text/css" href="/css/dropzone/dropzone.css" />
+
 </head>
 <body>
 <div id="largeBackground"></div>
@@ -175,6 +178,13 @@
         </li>
     </ul>
 </div>
+
+<div class="dropzoneContainer">
+	<form action="uploadServer" class="dropzone" id="my-awesome-dropzone">
+	</form>
+	<i id="closeUploadZone" class="icon-remove-sign"></i>
+</div>
+
 <div id="playHistory">
     <div id="history-filter-container" style="-webkit-user-select: none;">
         <i class="icon-arrow-left hNav historyOpIcons" data-bind="css: { opActive: leftActive() }, click: goPrevPage"></i>
@@ -471,6 +481,10 @@
 <!-- History.js-->
 <script type="text/javascript" src="/js/jquery.history.js"></script>
 <script type="text/javascript" src="/js/historyNav.js"></script>                            <!-- :::3::: -->
+
+<script type="text/javascript" src="/js/dropzone/dropzone.js"></script>                     <!-- :::3::: -->
+<script type="text/javascript" src="/js/dropzone/id3-minimized.js"></script>                <!-- :::3::: -->
+<script type="text/javascript" src="/js/droptoyourknees.js"></script>                <!-- :::3::: -->
 
 <!-- Context menu plugin -->
 <!--<script type="text/javascript" src="/js/snippets.js"></script>      &lt;!&ndash; :::1::: &ndash;&gt;-->
