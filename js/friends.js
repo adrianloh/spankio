@@ -70,22 +70,34 @@
 							var	friendsHistory = Spank.friends.bases[friendData.username].history;
 							Spank.sendToFriend = function(message) {
 								message = message.length>0 ? message : "This is awwweesooomme!";
-								friendsHistory.transaction(function(currentData) {
-									droppedHistoryItem.gift =
-									{
-										from:FBUserInfo.name,
-										message: message
-									};
-									if (currentData!==null) currentData.push(droppedHistoryItem);
-									return currentData;
-								}, function onComplete() {
-									Spank.friends.bases[friendData.username].base.transaction(function(currentData) {
-										currentData.frequency = currentData.frequency+1;
-										return currentData;
-									}, function onComplete() {
-										window.notify.information("Shared '" + droppedHistoryItem.title + "' with " + friendData.name);
+								if (droppedHistoryItem.url.match(/^@.*ogg/)) {
+									Spank.alembic.clone(droppedHistoryItem.direct, "mp3", function(res) {
+										if (res.ok) {
+											friendsHistory.transaction(function(currentData) {
+												droppedHistoryItem.url = droppedHistoryItem.url.replace(/...$/, "mp3");
+												droppedHistoryItem.direct = droppedHistoryItem.direct.replace(/...$/, "mp3");
+												droppedHistoryItem.gift =
+												{
+													from:FBUserInfo.name,
+													message: message
+												};
+												if (currentData!==null) currentData.push(droppedHistoryItem);
+												return currentData;
+											}, function onComplete(error) {
+												if (!error) {
+													Spank.friends.bases[friendData.username].base.transaction(function(currentData) {
+														currentData.frequency = currentData.frequency+1;
+														return currentData;
+													}, function onComplete() {
+														window.notify.information("Shared '" + droppedHistoryItem.title + "' with " + friendData.name);
+													});
+												} else {
+													console.error("Cannot deliver");
+												}
+											});
+										}
 									});
-								});
+								}
 							};
 							Spank.getInput.show(function(message) {
 								Spank.sendToFriend(message);

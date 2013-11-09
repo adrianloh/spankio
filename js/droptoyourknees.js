@@ -12,7 +12,7 @@ $(document).ready(function() {
 			uploadZone,
 			fileNames = [],
 			uploadForm = $("#my-awesome-dropzone");
-		uploadZone = new Dropzone("#my-awesome-dropzone", {url: uploadServer});
+		uploadZone = new Dropzone("#my-awesome-dropzone", {url: Spank.alembic.getUploadServer() });
 
 		$("#closeUploadZone").click(function() {
 			$(".dropzoneContainer").hide();
@@ -23,19 +23,22 @@ $(document).ready(function() {
 		};
 
 		uploadZone.on("sending", function(file, xhr, formData) {
-			file.uuidName = Spank.utils.guid().replace(/-/g,"") + ".mp3";
-			formData.append("key", keyBase + file.uuidName);
-			formData.append("Content-Type", file.type);
-			formData.append("x-amz-storage-class", "REDUCED_REDUNDANCY");
-			formData.append("acl", "public-read-write");
-			formData.append("Cache-Control", "public, max-age=31536000");
+			file.uuidName = Spank.utils.guid().replace(/-/g,"") + ".ogg";
+			formData.append("server", uploadServer);
+			formData.append("format", "opus");
+			formData.append("s3key", keyBase + file.uuidName);
 		});
 
-		uploadZone.on("success", function(file) {
+		uploadZone.on("success", function(file, xhr) {
 			if (file.hasOwnProperty('songData') && file.hasOwnProperty("uuidName")) {
 				var koo = {}, songData = file.songData;
-				koo.artist = songData.artist;
-				koo.title = songData.title;
+				["artist", "title"].forEach(function(p) {
+					if (typeof(songData[p])==='undefined' && xhr[p]!==null) {
+						koo[p] = xhr[p];
+					} else {
+						koo[p] = songData[p];
+					}
+				});
 				koo.thumb = "http://d1vkkvxpc2ia6t.cloudfront.net/albumempty2.png";
 				koo.url = server + "_" + Spank.username + "/" + file.uuidName;
 				koo.direct = uploadServer + "/" + keyBase + file.uuidName;

@@ -2,6 +2,13 @@
 
 (function() {
 
+	var canPlayOpus = false,
+		testOpus = document.createElement('audio');
+	testOpus.src = "/static/silence.ogg";
+	testOpus.play();
+	testOpus.pause();
+	canPlayOpus = testOpus.error===null;
+
 	$(document).ready(function() {
 
 		$(document).one("baseReady", function() {
@@ -64,6 +71,7 @@
 		Spank.player = (function() {
 			var self = {},
 				coverImg = new Image();
+			self.canPlayOpus = canPlayOpus;
 			self.current_url = ko.observable(fakeSource);
 			self.current_ownerid =  ko.observable("");
 			self.coverurl = ko.observable(Spank.genericAlbumArt);

@@ -21,6 +21,47 @@ $.getJSON(Spank.servers['@aspasia'] + "/library.json", function(res) {
 	});
 });
 
+Spank.alembic = (function() {
+
+	var self = {},
+		server = "http://alembic.herokuapp.com";
+
+	self.getUploadServer = function() {
+		return server + "/upload";
+	};
+
+	function getCloneServer() {
+		return server + "/clone"
+	}
+
+	self.clone = function(urlToClone, format, okCallback) {
+
+		var urlToCheck = urlToClone.replace(/...$/, format);
+
+		function ifNotExists(xhr, errorType, errorMessage) {
+			var cloneReq = getCloneServer() + "/" + format + "/" + urlToClone;
+			$.getJSON(cloneReq, function(res) {
+				okCallback(res);
+			});
+		}
+
+		function ifExists() {
+			okCallback({url: urlToCheck});
+		}
+
+		$.ajax({
+			url: urlToCheck,
+			type:"HEAD",
+			success: ifExists,
+			error: ifNotExists
+		});
+
+	};
+
+	return self;
+
+})();
+
 VK = (function() {
 
 	var vk = {},

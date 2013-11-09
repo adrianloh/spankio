@@ -468,7 +468,7 @@ function ThreeSixtyPlayer() {
 
       diameter = parseInt(self.getElementsByClassName('sm2-360ui','div',oContainer)[0].offsetWidth, 10);
 
-      thisSound._ondataerror()
+      thisSound._ondataerror();
       thisSound._360data = {
         oUI360: self.getParentByClassName(o,'ui360'), // the (whole) entire container
         oLink: o, // DOM node for reference within SM2 object event handlers

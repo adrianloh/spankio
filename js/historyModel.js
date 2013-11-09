@@ -716,7 +716,7 @@
 					self.saveStream = false;
 					if (input.length===0 || input==="Search library") {
 						return false;
-					} else if (input.match(/yesstately/)) {
+					} else if (input.match(/yesstately/) && Spank.player.canPlayOpus) {
 						Spank.dropBabyDrop();
 						self.cancelStreamFilter();
 					} else {

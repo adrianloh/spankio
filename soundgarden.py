@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-import os, re, time
+import os, re, time, sys
 import simplejson as json
 import tornado.ioloop
 import tornado.web
@@ -9,6 +9,13 @@ import tornado.httpclient
 import tornado.curl_httpclient
 from urllib import urlencode, unquote, quote_plus
 from fuzzywuzzy import fuzz
+from tornado.process import Subprocess as Popen
+from uuid import uuid4
+import shlex
+import requests
+
+site_root = os.path.dirname(os.path.abspath(__file__))
+__TEMP__ = "/tmp/"
 
 
 def extract(q, terms=(), delimiter=":"):
@@ -233,10 +240,8 @@ class MXSearchHandler(tornado.web.RequestHandler):
 
 
 import deathbycaptcha
-from uuid import uuid4
 
 captcha_client = deathbycaptcha.SocketClient("cockupyourbumper", "nadine")
-
 
 # Perform captha resolution when VK prompts
 class VKCaptchaHandler(tornado.web.RequestHandler):
@@ -316,10 +321,7 @@ class NeverCacheStaticHandler(tornado.web.StaticFileHandler):
 		self.set_header("Cache-Control", "max-age=0, no-cache, must-revalidate")
 
 
-site_root = os.path.dirname(os.path.abspath(__file__))
-
 server_settings = {'debug': True, 'gzip': True}
-
 application = tornado.web.Application([
 		(r"/", MainHandler),
 		(r"/channel.html", FBChannelFileHandler),
@@ -338,5 +340,5 @@ application = tornado.web.Application([
 	], debug=True, gzip=True)
 
 if __name__ == "__main__":
-	application.listen(80)
+	application.listen(8888)
 	tornado.ioloop.IOLoop.instance().start()

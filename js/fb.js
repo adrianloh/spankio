@@ -74,9 +74,9 @@ function initApp(info) {
 window.fbAsyncInit = function checkFacebookStatus() {
 	// init the FB JS SDK
 
-	var settings = {},
-		get_settings = function(url, development) {
-			var appId = development ? '573967942630120' : '412279742177294';
+	var domain = window.location.host,
+		get_settings = function(url, isProduction) {
+			var appId = isProduction ? '412279742177294' : '573967942630120';
 			return {
 				appId      : appId, // App ID from the App Dashboard
 				channelUrl : '//' + url + '/channel.html',
@@ -84,17 +84,11 @@ window.fbAsyncInit = function checkFacebookStatus() {
 				cookie     : true, // set sessions cookies to allow your server to access the session?
 				xfbml      : true  // parse XFBML tags on this page?
 			};
-		};
+		},
+		isProduction = (["spank.io", "moozyx.com"].indexOf(domain) >= 0),
+		settings = get_settings(domain, isProduction);
 
-	["spank.io", "moozyx.com"].forEach(function(url) {
-		settings[url] = get_settings(url, false);
-	});
-
-	["xerxes.local:8888", "prometheus.local:8888"].forEach(function(url) {
-		settings[url] = get_settings(url, true);
-	});
-
-	FB.init(settings[window.location.host]);
+	FB.init(settings);
 
 	function initFB(response) {
 		// Refer to: http://developers.facebook.com/docs/reference/javascript/FB.getLoginStatus
