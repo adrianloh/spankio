@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-import os, re, time, sys
+import os, re, time
 import simplejson as json
 import tornado.ioloop
 import tornado.web
@@ -9,10 +9,7 @@ import tornado.httpclient
 import tornado.curl_httpclient
 from urllib import urlencode, unquote, quote_plus
 from fuzzywuzzy import fuzz
-from tornado.process import Subprocess as Popen
 from uuid import uuid4
-import shlex
-import requests
 
 site_root = os.path.dirname(os.path.abspath(__file__))
 __TEMP__ = "/tmp/"
