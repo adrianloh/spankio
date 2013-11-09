@@ -84,7 +84,11 @@
 											from:FBUserInfo.name,
 											message: message
 										};
-										if (currentData!==null) currentData.push(droppedHistoryItem);
+										if (currentData!==null) {
+											currentData.push(droppedHistoryItem);
+										} else {
+											currentData = [droppedHistoryItem];
+										}
 										return currentData;
 									}, function onComplete(error) {
 										if (!error) {
