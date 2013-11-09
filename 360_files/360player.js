@@ -850,7 +850,7 @@ function ThreeSixtyPlayer() {
     if (timeNow !== this._360data.lastTime) {
       this._360data.lastTime = timeNow;
       this._360data.oTiming.innerHTML = timeNow;
-	  Spank.base.live.child("position").set(timeNow);
+////	  Spank.base.live.child("position").set(timeNow);
     }
 
     // draw spectrum, if applicable

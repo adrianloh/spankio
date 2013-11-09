@@ -23,7 +23,7 @@ $(document).ready(function() {
 		};
 
 		uploadZone.on("sending", function(file, xhr, formData) {
-			file.uuidName = Spank.utils.guid().replace(/-/g,"") + ".ogg";
+			file.uuidName = "AAAAA-" + Spank.utils.guid().replace(/-/g,"") + ".ogg";
 			formData.append("server", uploadServer);
 			formData.append("format", "opus");
 			formData.append("s3key", keyBase + file.uuidName);

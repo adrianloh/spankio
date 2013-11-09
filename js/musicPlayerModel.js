@@ -26,9 +26,10 @@
 			var self = {},
 				havePermission,
 				notification = null,
-				closeNotificationTimeout = setTimeout(function() {}, 1000);
+				closeNotificationTimeout = setTimeout(function() {}, 1000),
+				showNotificationTimeout = setTimeout(function() {}, 1000);
 
-			self.notifyCurrentlyPlaying = function(koo) {
+			function notifyCurrentlyPlaying(koo) {
 				clearTimeout(closeNotificationTimeout);
 				havePermission = window.webkitNotifications.checkPermission();
 				if (havePermission === 0) {
@@ -54,9 +55,16 @@
 				} else {
 					window.webkitNotifications.requestPermission();
 				}
+			}
+
+			self.notifyCurrentlyPlaying = function(track) {
+				showNotificationTimeout = setTimeout(function() {
+					notifyCurrentlyPlaying(track);
+				}, 5000);
 			};
 
 			self.closeNotification = function() {
+				clearTimeout(showNotificationTimeout);
 				if (notification!==null) {
 					notification.cancel();
 					notification.close();
@@ -125,17 +133,21 @@
 			});
 			var timeoutToAddToFreshies = setTimeout(function(){},0);
 
-			function getAmazonS3Link(url, onSuccessCallback, onErrorCallback) {
-				var track = {},
-					info = url.split("_"),
-					server = Spank.servers[info[0]];
-				track.url = server + "/" + info[1];
-				onSuccessCallback([track]);
+			function getAmazonS3Link(url) {
+				var info = url.split("_"),
+					re = new RegExp(Spank.username),
+					server = Spank.servers[info[0]],
+					playUrl;
+				playUrl = server + "/" + info[1];
+				if (canPlayOpus && playUrl.match(re)) {
+					playUrl = playUrl.replace(/...$/,"ogg");
+				}
+				return playUrl;
 			}
 
 			self.playObject = function(o, refIdOfOrigin) {
-				o = ko.toJS(o);             // Double make sure we are dealing with Plain Janes here and not koo's
-
+				// Double make sure we are dealing with Plain Janes here and not koo's
+				o = ko.toJS(o);
 				// BUG: If user adds a currently playing song with the "+/bullseye"
 				// and then immedietly deletes it afterwards, o is "nicegapbaby"
 				if (typeof(o)!=='object') {
@@ -146,22 +158,26 @@
 
 				self.lastLastPlayedObject = this.lastPlayedObject;
 				self.lastPlayedObject = o;
+
+				Spank.growl.closeNotification();
 				clearTimeout(timeoutToAddToFreshies);
 
-				var lookupMethod, url;
 				if (o.url.match(/^@/)) {
-					lookupMethod = getAmazonS3Link;
-					url = o.url;
+					var fakeVKObject;
+					fakeVKObject = {url: getAmazonS3Link(o.url)};
+					playOnSuccess([fakeVKObject]);
 				} else {
-					lookupMethod = VK.api;
-					var owner_id = o.url.split(".")[0];
+					var url,
+						owner_id = o.url.split(".")[0];
 					url = "https://api.vkontakte.ru/method/audio.getById?audios=" + owner_id;
+					VK.api(url, playOnSuccess, onError);
 				}
 
-				lookupMethod(url, function onSuccess(res) {
+				function playOnSuccess(res) {
 					if (res.length>0) {
 						var pushData = {track:o, position:0},
-							newDirectLink = res[0].url, koo;
+							newDirectLink = res[0].url,
+							koo;
 						self.lastPlayedObject.direct = newDirectLink;
 						self.current_url(newDirectLink);  // This starts playback
 						koo = Spank.history.findHistoryItemWithUrl(o.url);
@@ -170,7 +186,6 @@
 						self.current_ownerid(o.url);
 						o.direct = newDirectLink;
 						Spank.base.live.set(pushData);
-						koo = Spank.history.findHistoryItemWithUrl(o.url);
 						if (self.isPlayingFromLibrary()) {
 							koo.direct(newDirectLink);
 							koo = ko.toJS(koo);
@@ -188,10 +203,13 @@
 					} else {
 						getNewTrack(o);
 					}
-				}, function onError() {
+				}
+
+				function onError() {
 					$(".tweetBlink").removeClass("tweetBlink");
 					$(document).trigger("fatManFinish");
-				});
+				}
+
 			};
 
 			self.addCurrentlyPlayingToLibrary = function() {
@@ -324,10 +342,7 @@
 			$(".tweetBlink").removeClass("tweetBlink");
 
 			Spank.base.live.child("track").set(currentPlayingTrack);
-			Spank.growl.closeNotification();
-			setTimeout(function() {
-				Spank.growl.notifyCurrentlyPlaying(currentPlayingTrack);
-			}, 5000);
+			Spank.growl.notifyCurrentlyPlaying(currentPlayingTrack);
 		});
 
 		function echoPlaylistFromCurrent() {

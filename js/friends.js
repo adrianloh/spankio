@@ -50,7 +50,57 @@
 						var koo = valueAccessor(),
 							friendData = ko.toJS(koo),
 							droppedHistoryItem;
-						if (ui.draggable.hasClass('playlistThumb')) {
+						if (ui.draggable.hasClass('tweetItem')) {
+							var	friendsHistory = Spank.friends.bases[friendData.username].history;
+							droppedHistoryItem = ko.toJS(ui.draggable.data("koo"));
+
+							Spank.getInput.show(function(message) {
+								sendToFriend(message);
+								sentMailSound.play();
+							},{
+								title: "Send it with a message!",
+								placeholder: "This is aawwwesomee",
+								submitmessage: "Send"
+							});
+
+							function sendToFriend(message) {
+								var userRe = new RegExp(Spank.username);
+								message = message.length>0 ? message : "This is awwweesooomme!";
+
+								if (droppedHistoryItem.url.match(/^@.*ogg/) && droppedHistoryItem.url.match(userRe)) {
+									Spank.alembic.clone(droppedHistoryItem.direct, "mp3", function(res) {
+										if (res.ok) { sendOut(); }
+									});
+								} else {
+									sendOut();
+								}
+
+								function sendOut() {
+									friendsHistory.transaction(function(currentData) {
+										droppedHistoryItem.url = droppedHistoryItem.url.replace(/...$/, "mp3");
+										droppedHistoryItem.direct = droppedHistoryItem.direct.replace(/...$/, "mp3");
+										droppedHistoryItem.gift =
+										{
+											from:FBUserInfo.name,
+											message: message
+										};
+										if (currentData!==null) currentData.push(droppedHistoryItem);
+										return currentData;
+									}, function onComplete(error) {
+										if (!error) {
+											Spank.friends.bases[friendData.username].base.transaction(function(currentData) {
+												currentData.frequency = currentData.frequency+1;
+												return currentData;
+											}, function onComplete() {
+												window.notify.information("Shared '" + droppedHistoryItem.title + "' with " + friendData.name);
+											});
+										} else {
+											console.error("Cannot deliver");
+										}
+									});
+								}
+							}
+						} else if (ui.draggable.hasClass('playlistThumb')) {
 							droppedHistoryItem = document._draggedHistoryItem;
 							droppedHistoryItem.base.owners.transaction(function(currentData) {
 								if (currentData.indexOf(friendData.username)>=0) {
@@ -64,48 +114,6 @@
 								if (comitted) {
 									window.notify.information("Shared '" + droppedHistoryItem.title() + "' with " + friendData.name);
 								}
-							});
-						} else if (ui.draggable.hasClass('tweetItem')) {
-							droppedHistoryItem = ko.toJS(ui.draggable.data("koo"));
-							var	friendsHistory = Spank.friends.bases[friendData.username].history;
-							Spank.sendToFriend = function(message) {
-								message = message.length>0 ? message : "This is awwweesooomme!";
-								if (droppedHistoryItem.url.match(/^@.*ogg/)) {
-									Spank.alembic.clone(droppedHistoryItem.direct, "mp3", function(res) {
-										if (res.ok) {
-											friendsHistory.transaction(function(currentData) {
-												droppedHistoryItem.url = droppedHistoryItem.url.replace(/...$/, "mp3");
-												droppedHistoryItem.direct = droppedHistoryItem.direct.replace(/...$/, "mp3");
-												droppedHistoryItem.gift =
-												{
-													from:FBUserInfo.name,
-													message: message
-												};
-												if (currentData!==null) currentData.push(droppedHistoryItem);
-												return currentData;
-											}, function onComplete(error) {
-												if (!error) {
-													Spank.friends.bases[friendData.username].base.transaction(function(currentData) {
-														currentData.frequency = currentData.frequency+1;
-														return currentData;
-													}, function onComplete() {
-														window.notify.information("Shared '" + droppedHistoryItem.title + "' with " + friendData.name);
-													});
-												} else {
-													console.error("Cannot deliver");
-												}
-											});
-										}
-									});
-								}
-							};
-							Spank.getInput.show(function(message) {
-								Spank.sendToFriend(message);
-								sentMailSound.play();
-							},{
-								title: "Send it with a message!",
-								placeholder: "This is aawwwesomee",
-								submitmessage: "Send"
 							});
 						}
 					}

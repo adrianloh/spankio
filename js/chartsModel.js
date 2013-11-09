@@ -46,8 +46,8 @@ ko.bindingHandlers.koChartItems = {
 			}
 			if (target==="S3") {
 				$.ajax({
-					type: "PUT",
 					url: "https://spankio-bookmarks.s3.amazonaws.com/" + refID + ".json",
+					type: "PUT",
 					headers: {
 						"Cache-Control":"max-age=315360000",
 						"x-amz-storage-class": "REDUCED_REDUNDANCY"
