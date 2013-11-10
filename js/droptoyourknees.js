@@ -10,9 +10,14 @@ $(document).ready(function() {
 			uploadServer = Spank.servers[server],
 			keyBase = Spank.username + "/",
 			uploadZone,
-			fileNames = [],
-			uploadForm = $("#my-awesome-dropzone");
-		uploadZone = new Dropzone("#my-awesome-dropzone", {url: Spank.alembic.getUploadServer() });
+			options = {
+				url: Spank.alembic.getUploadServer(),
+				maxFilesize: 200,
+				acceptedFiles: ".m4a, .mp3, .ogg",
+				parallelUploads: 2
+			};
+
+		uploadZone = new Dropzone("#my-awesome-dropzone", options);
 
 		$("#closeUploadZone").click(function() {
 			$(".dropzoneContainer").hide();

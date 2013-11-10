@@ -83,6 +83,8 @@
 			self.current_url = ko.observable(fakeSource);
 			self.current_ownerid =  ko.observable("");
 			self.coverurl = ko.observable(Spank.genericAlbumArt);
+			self.bitrate = ko.observable(64);
+			self.isStreaming = ko.observable(false);
 			self.isPlaying = function() {
 				var playedTracks = threeSixtyPlayer.sounds.map(function(o) { return o.paused });
 				return playedTracks.length>0 && playedTracks.indexOf(true)===-1;
@@ -169,8 +171,12 @@
 				} else {
 					var url,
 						owner_id = o.url.split(".")[0];
-					url = "https://api.vkontakte.ru/method/audio.getById?audios=" + owner_id;
-					VK.api(url, playOnSuccess, onError);
+					if (self.isStreaming()) {
+						playOnSuccess([{url: "http://kali-1.herokuapp.com/" + self.bitrate() + "/" + owner_id + ".ogg"}]);
+					} else {
+						url = "https://api.vkontakte.ru/method/audio.getById?audios=" + owner_id;
+						VK.api(url, playOnSuccess, onError);
+					}
 				}
 
 				function playOnSuccess(res) {
