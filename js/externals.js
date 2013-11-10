@@ -46,7 +46,10 @@ Spank.alembic = (function() {
 		}
 
 		function ifExists() {
-			okCallback({url: urlToCheck});
+			okCallback({
+				ok: "already exists",
+				url: urlToCheck
+			});
 		}
 
 		$.ajax({

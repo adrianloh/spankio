@@ -39,6 +39,10 @@
 
 		var sentMailSound;
 
+		function notifyCannotShare(droppedHistoryItem, friendName) {
+			window.notify.error("Crap! Delivery of " + droppedHistoryItem.title + " to " + friendName + " failed. Try again later.", 5000);
+		}
+
 		ko.bindingHandlers.droppableFriend = {
 			init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 				$(element).droppable({
@@ -64,12 +68,15 @@
 							});
 
 							function sendToFriend(message) {
-								var userRe = new RegExp(Spank.username);
+								var isUserOgg = new RegExp("^@.*" + Spank.username + "/.*ogg$");
 								message = message.length>0 ? message : "This is awwweesooomme!";
-
-								if (droppedHistoryItem.url.match(/^@.*ogg/) && droppedHistoryItem.url.match(userRe)) {
+								if (droppedHistoryItem.url.match(isUserOgg)) {
 									Spank.alembic.clone(droppedHistoryItem.direct, "mp3", function(res) {
-										if (res.ok) { sendOut(); }
+										if (res.ok) {
+											sendOut();
+										} else {
+											notifyCannotShare(droppedHistoryItem, friendData.name);
+										}
 									});
 								} else {
 									sendOut();
@@ -99,7 +106,7 @@
 												window.notify.information("Shared '" + droppedHistoryItem.title + "' with " + friendData.name);
 											});
 										} else {
-											console.error("Cannot deliver");
+											notifyCannotShare(droppedHistoryItem, friendData.name);
 										}
 									});
 								}
