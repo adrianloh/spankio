@@ -136,7 +136,7 @@
 			var timeoutToAddToFreshies = setTimeout(function(){},0);
 
 			function getAmazonS3Link(url) {
-				var info = url.split("_"),
+				var info = url.split(":::"),
 					re = new RegExp(Spank.username),
 					server = Spank.servers[info[0]],
 					playUrl;
