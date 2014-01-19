@@ -1138,7 +1138,7 @@ ul.lastfm-buttons {
     z-index: 9;
     left: 68%;
     top: 80px;
-    height: 90%;
+    height: 100%;
 }
 
 #history-stream-list-container {
