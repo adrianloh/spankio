@@ -66,7 +66,7 @@
 								placeholder: "This is aawwwesomee",
 								submitmessage: "Send"
 							});
-
+							
 							function sendToFriend(message) {
 								var isUserOgg = new RegExp("^@.*" + Spank.username + "/.*ogg$");
 								message = message.length>0 ? message : "This is awwweesooomme!";
@@ -106,6 +106,7 @@
 												window.notify.information("Shared '" + droppedHistoryItem.title + "' with " + friendData.name);
 											});
 										} else {
+											console.log(error);
 											notifyCannotShare(droppedHistoryItem, friendData.name);
 										}
 									});

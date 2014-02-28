@@ -348,7 +348,7 @@
 			$(".tweetBlink").removeClass("tweetBlink");
 
 			Spank.base.live.child("track").set(currentPlayingTrack);
-			Spank.growl.notifyCurrentlyPlaying(currentPlayingTrack);
+			// Spank.growl.notifyCurrentlyPlaying(currentPlayingTrack);
 		});
 
 		function echoPlaylistFromCurrent() {
