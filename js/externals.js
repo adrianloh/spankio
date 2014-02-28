@@ -378,7 +378,6 @@ ITMS = (function() {
 		"Rock",
 		"Rock 'n Roll",
 		"Rock Steady",
-		"Indie Shoegaze",
 		"Shoegaze",
 		"Stoner Rock",
 		"Soft Rock",
