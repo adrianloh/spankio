@@ -45,7 +45,7 @@ $(document).ready(function() {
 					}
 				});
 				koo.thumb = "http://d1vkkvxpc2ia6t.cloudfront.net/albumempty2.png";
-				koo.url = server + "_" + Spank.username + "/" + file.uuidName;
+				koo.url = server + ":::" + Spank.username + "/" + file.uuidName;
 				koo.direct = uploadServer + "/" + keyBase + file.uuidName;
 				Spank.lightBox.addSongToStream(koo);
 				uploadZone.removeFile(file);
