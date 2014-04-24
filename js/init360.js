@@ -1,6 +1,9 @@
 soundManager.setup({
 	// path to directory containing SM2 SWF
-	url:'./360_files/swf/'
+	url:'./360_files/swf/',
+	defaultOptions: {
+		volume: 33
+	}
 });
 
 // threeSixtyPlayer = new ThreeSixtyPlayer();
