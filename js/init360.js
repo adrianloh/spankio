@@ -2,7 +2,7 @@ soundManager.setup({
 	// path to directory containing SM2 SWF
 	url:'./360_files/swf/',
 	defaultOptions: {
-		volume: 33
+		volume: 25
 	}
 });
 
