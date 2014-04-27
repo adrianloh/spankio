@@ -316,7 +316,7 @@ class MobileHandler(tornado.web.RequestHandler):
 		res = yield tornado.gen.Task(async_client.fetch, req)
 		history = json.loads(res.body)
 		playlist = []
-		for track in history:
+		for track in history[::-1]:
 			url = "http://%s/%i/%s.ogg" % (conversion_server, int(bitrate), os.path.splitext(track['url'])[0])
 			if re.search("ogg", track['direct']):
 				url = track['direct']
