@@ -320,7 +320,7 @@ class MobileHandler(tornado.web.RequestHandler):
 			url = "http://%s/%i/%s.ogg" % (conversion_server, int(bitrate), os.path.splitext(track['url'])[0])
 			if re.search("ogg", track['direct']):
 				url = track['direct']
-			line = "#EXTINF:0,%s - %s\n%s" % (track['artist'], track['title'], url)
+			line = "#EXTINF:-1,%s - %s\n%s" % (track['artist'], track['title'], url)
 			playlist.append(line)
 		body = ["#EXTM3U"] + playlist
 		self.write("\n".join(body).encode("utf8"))
