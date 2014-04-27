@@ -302,6 +302,31 @@ class iTunesHandler(tornado.web.RequestHandler):
 		self.finish()
 
 
+class MobileHandler(tornado.web.RequestHandler):
+
+	@tornado.gen.engine
+	@tornado.web.asynchronous
+	def get(self, bitrate, username):
+		username = os.path.splitext(username)[0]
+		conversion_server = "kali-1.herokuapp.com"
+		self.set_header("Content-Type", "application/x-winamp-playlist")
+		self.set_header("Access-Control-Allow-Origin", "*")
+		url = "https://wild.firebaseio.com/spank/users/%s/history.json" % username
+		req = tornado.httpclient.HTTPRequest(url, connect_timeout=10.0, request_timeout=10.0)
+		res = yield tornado.gen.Task(async_client.fetch, req)
+		history = json.loads(res.body)
+		playlist = []
+		for track in history:
+			url = "http://%s/%i/%s.ogg" % (conversion_server, int(bitrate), os.path.splitext(track['url'])[0])
+			if re.search("ogg", track['direct']):
+				url = track['direct']
+			line = "#EXTINF:0,%s - %s\n%s" % (track['artist'], track['title'], url)
+			playlist.append(line)
+		body = ["#EXTM3U"] + playlist
+		self.write("\n".join(body).encode("utf8"))
+		self.finish()
+
+
 class MyStaticHandler(tornado.web.StaticFileHandler):
 
 	def set_extra_headers(self, path):
@@ -327,6 +352,7 @@ application = tornado.web.Application([
 		(r"/echo/match/(\d+)", EchoMatchHandler),
 		(r"/echo/taste/update", EchoTasteProfileHandler),
 		(r"/mxsearch", MXSearchHandler),
+		(r"/mobile/(\d+)/(.*)", MobileHandler),
 		(r"/itunes", iTunesHandler),
 		(r"/decode/(.*)", VKCaptchaHandler),
 		(r"/static/(.*)", MyStaticHandler, {"path": site_root + "/static"}),
