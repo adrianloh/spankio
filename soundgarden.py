@@ -317,7 +317,7 @@ class MobileHandler(tornado.web.RequestHandler):
 		history = json.loads(res.body)
 		playlist = []
 		for track in history[::-1]:
-			ext = "ogg" if format.search("opus") else "mp3"
+			ext = "ogg" if re.search("opus", format) else "mp3"
 			url = "http://%s/%s/%i/%s.%s" % (conversion_server, format, int(bitrate), os.path.splitext(track['url'])[0], ext)
 			if re.search("ogg", track['direct']):
 				url = track['direct']
