@@ -94,7 +94,7 @@ VK = (function() {
 	}
 
 	vk.getToken = function() {
-		var tokens = Spank.vkTokens;
+		var tokens = ["4a8449a2f0c33fa66d0665f3859353bac44d1c3e948ce54c9b38b76e21cd3fcf714923336d6f9da836bb7","6c4b468e00a34decbc7b82ffa019c7c80865e1f30c150df3484a22c1f925d40c4fed087173fd084f4baf6"];
 		return tokens[++pick % tokens.length];
 		//return Spank.vkTokens[0];
 	};
