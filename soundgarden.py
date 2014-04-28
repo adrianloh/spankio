@@ -317,12 +317,18 @@ class MobileHandler(tornado.web.RequestHandler):
 		history = json.loads(res.body)
 		playlist = []
 		for track in history[::-1]:
+			convert = True
 			if re.search("aspasia", track['direct']):
 				url = track['direct']
+				if format == "opus" and re.search("ogg",track['direct']):
+					convert = False
+				elif format == "mp3" and re.search("mp3",track['direct']):
+					convert = False
 			else:
 				ext = ".ogg" if re.search("opus", format) else ".mp3"
 				url = os.path.splitext(track['url'])[0] + ext
-			url = "http://%s/%s/%i/%s" % (conversion_server, format, int(bitrate), url)
+			if convert:
+				url = "http://%s/%s/%i/%s" % (conversion_server, format, int(bitrate), url)
 			line = "#EXTINF:-1,%s - %s\n%s" % (track['artist'], track['title'], url)
 			playlist.append(line)
 		body = ["#EXTM3U"] + playlist
