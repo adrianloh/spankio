@@ -306,7 +306,7 @@ class MobileHandler(tornado.web.RequestHandler):
 
 	@tornado.gen.engine
 	@tornado.web.asynchronous
-	def get(self, bitrate, username):
+	def get(self, format, bitrate, username):
 		username = os.path.splitext(username)[0]
 		conversion_server = "kali-1.herokuapp.com"
 		self.set_header("Content-Type", "application/x-winamp-playlist")
@@ -317,7 +317,7 @@ class MobileHandler(tornado.web.RequestHandler):
 		history = json.loads(res.body)
 		playlist = []
 		for track in history[::-1]:
-			url = "http://%s/%i/%s.ogg" % (conversion_server, int(bitrate), os.path.splitext(track['url'])[0])
+			url = "http://%s/%s/%i/%s.ogg" % (conversion_server, format, int(bitrate), os.path.splitext(track['url'])[0])
 			if re.search("ogg", track['direct']):
 				url = track['direct']
 			line = "#EXTINF:-1,%s - %s\n%s" % (track['artist'], track['title'], url)
@@ -352,7 +352,7 @@ application = tornado.web.Application([
 		(r"/echo/match/(\d+)", EchoMatchHandler),
 		(r"/echo/taste/update", EchoTasteProfileHandler),
 		(r"/mxsearch", MXSearchHandler),
-		(r"/mobile/(\d+)/(.*)", MobileHandler),
+		(r"/mobile/(\w+)/(\d+)/(.*)", MobileHandler),
 		(r"/itunes", iTunesHandler),
 		(r"/decode/(.*)", VKCaptchaHandler),
 		(r"/static/(.*)", MyStaticHandler, {"path": site_root + "/static"}),
