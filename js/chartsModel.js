@@ -226,7 +226,7 @@ ko.bindingHandlers.koChartItems = {
 					o = o.track;
 					track.artist = o.artist_name;
 					track.title = o.track_name;
-					$.extend(track, Spank.normalizeMXData(o));
+					$.extend(track, Spank.utils.normalizeMXData(o));
 				} else if ("streamable" in o) {
 					// This is a last.fm track object
 					// http://ws.audioscrobbler.com/2.0/?method=chart.gethypedtracks&api_key=0325c588426d1889087a065994d30fa1&format=json
@@ -549,8 +549,10 @@ ko.bindingHandlers.koChartItems = {
 			self.loading(true);
 			self.resetCharts(newStateObj);
 			$.getJSON(lastFMUrl, function(res) {
-				if (res.similartracks.track.length>0) {
+				if (res.hasOwnProperty('similartracks') && res.similartracks.track.length>0) {
 					self.pushBatch(res.similartracks.track, methods.pop());
+				} else {
+					console.warn("LastFM did not return similar tracks.");
 				}
 			}).always(function() {
 				self.loading(false);
@@ -748,27 +750,7 @@ ko.bindingHandlers.koChartItems = {
 			self.stashID(null);
 		};
 
-//		var document_height = $(document).height() + 200,
-//			content_top = ko.observable(null), // A dummy we're using to trick thumbSource into evaluating each time we scroll
-//			re_apple = new RegExp(/\d+x\d+-75/);
-//		self._thumbSource = function(data, e) {
-//			var p = content_top(), thumb;
-//			if (e.getAttribute("src").match(/grey\.gif/)) {
-//				if ($(e).offset().top < document_height) {
-//					if (data.thumb.match(/7static/)) {
-//						thumb = data.thumb.replace(/_200\.jpg/,"_100.jpg");
-//					} else if (data.thumb.match(re_apple)) {
-//						thumb = data.thumb.replace(re_apple, "150x150-75");
-//					} else {
-//						thumb = data.thumb;
-//					}
-//					e.setAttribute("src", thumb);
-//				}
-//			}
-//			return "ok";
-//		};
-
-		self.thumbSource = Spank.lazyLoadImages("#resultsSection", {_iTunes:"150x150-75", _7static:"_175.jpg"});
+		self.thumbSource = Spank.utils.lazyLoadImages("#resultsSection", {_iTunes:"150x150-75", _7static:"_175.jpg"});
 
 		ko.applyBindings(Spank.charts, document.getElementById('resultsSectionBindMe'));
 

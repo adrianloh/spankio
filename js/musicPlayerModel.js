@@ -9,6 +9,101 @@
 	testOpus.pause();
 	canPlayOpus = testOpus.error===null;
 
+	function plugTheBitch(bitch, tracklistRef) {
+
+		var getAlbumArt = false;
+		if (typeof(bitch.thumb)!=='undefined' && !bitch.thumb.match(/mzstatic|7static|musixmatch/)) {
+			getAlbumArt = true;
+		}
+
+		function getMX(koo) {
+			Spank.mxMatchOne(koo.title, koo.artist, function onmatch(mxTrack) {
+				var track = Spank.utils.normalizeMXData(mxTrack),
+					oForItunes = {url: koo.url, artist: koo.artist, title: koo.title};
+				if (track.hasOwnProperty("album")) oForItunes.album = track.album;
+				if (!koo.hasOwnProperty("itms_track")) getItunes(oForItunes);
+				tracklistRef.transaction(function(currentData) {
+					var i = currentData.length;
+					while (i--) {
+						var current = currentData[i];
+						if (current.url===koo.url) {
+							for (var k in track) {
+								if (track.hasOwnProperty(k)) {
+									if (!current.hasOwnProperty(k)) {
+										current[k] = track[k];
+									}
+									if (k==='thumb' && !current.thumb.match(/mzstatic|7static|musixmatch/)) {
+										current[k] = track[k];
+									}
+								}
+							}
+							break;
+						}
+					}
+					return currentData;
+				});
+			});
+		}
+
+		function getECHO(koo) {
+			ECHO.matchOne(koo.title, koo.artist, function onmatch(echoTrack) {
+				tracklistRef.transaction(function(currentData) {
+					var i = currentData.length;
+					while (i--) {
+						var s = currentData[i];
+						if (s.url===koo.url) {
+							Spank.utils.attachEchoMetadata(s, echoTrack);
+							break;
+						}
+					}
+					return currentData;
+				});
+			});
+		}
+
+		function getItunes(track) {
+			var callback_updateFromItunes = function(tracklist) {
+				var iTunesSong = tracklist[0];
+				delete iTunesSong.releaseDate;
+				delete iTunesSong.score;
+				tracklistRef.transaction(function(currentData) {
+					var i = currentData.length;
+					while (i--) {
+						var current = currentData[i];
+						if (current.url===track.url) {
+							for (var k in iTunesSong) {
+								if (iTunesSong.hasOwnProperty(k)) {
+									if (!current.hasOwnProperty(k)) {
+										current[k] = iTunesSong[k];
+									}
+									if (k==='thumb' && !current.thumb.match(/mzstatic|7static|musixmatch/)) {
+										current[k] = iTunesSong[k];
+									}
+								}
+							}
+							break;
+						}
+					}
+					return currentData;
+				});
+			};
+			callback_updateFromItunes.limit = 10;
+			ITMS.query(track, callback_updateFromItunes);
+		}
+
+		if (bitch===null) return;
+		if (typeof(bitch.mxid_track)==='undefined') {
+			getMX(bitch);
+		}
+		if (typeof(bitch.itms_track)==='undefined' || getAlbumArt) {
+			getItunes(bitch);
+		}
+		if (typeof(bitch.echoid_track)==='undefined' || getAlbumArt) {
+			getECHO(bitch);
+		}
+
+	}
+
 	$(document).ready(function() {
 
 		$(document).one("baseReady", function() {
@@ -195,7 +290,7 @@
 						if (self.isPlayingFromLibrary()) {
 							koo.direct(newDirectLink);
 							koo = ko.toJS(koo);
-							Spank.plugTheBitch(koo, Spank.base.history);
+							plugTheBitch(koo, Spank.base.history);
 						} else {
 							koo = o;
 						}

@@ -6,6 +6,50 @@ String.prototype.title = function(){
 
 Spank.utils = {};
 
+Spank.utils.normalizeMXData = function(mxTrack) {
+	var mx = {};
+	if (mxTrack.album_name.length>0 && (mxTrack.album_name!==mxTrack.track_name)) mx.album = mxTrack.album_name;
+	mx.thumb = mxTrack.album_coverart_350x350 ? mxTrack.album_coverart_350x350 : Spank.genericAlbumArt;
+	mx.mxid_track = mxTrack.track_id;
+	mx.mxid_artist = mxTrack.artist_id;
+	mx.mxid_album = mxTrack.album_id;
+	if (mxTrack.track_mbid!==null && mxTrack.track_mbid.length>0) mx.mbid_track = mxTrack.track_mbid;
+	if (mxTrack.artist_mbid!==null && mxTrack.artist_mbid.length>0) mx.mbid_artist = mxTrack.artist_mbid;
+	return mx;
+};
+
+Spank.utils.attachEchoMetadata = function(snapshot, echoTrack) {
+	snapshot.echoid_track = echoTrack.id;
+	snapshot.echoid_artist = echoTrack.artist_id;
+};
+
+Spank.utils.lazyLoadImages = function(containerSelector, res) {
+	var document_height = $(document).height() + 200,
+		content_top = ko.observable(true), // A dummy we're using to trick thumbSource into evaluating each time we scroll
+		re_apple = /\d+x\d+-75/;
+	$(containerSelector).scroll(function() {
+		content_top(!content_top());
+	});
+	return function(data, e) {
+		var p = content_top(),
+			thumbUrl = typeof(data.thumb)==='string' ? data.thumb : data.thumb(),
+			thumb;
+		if (e.getAttribute("src").match(/grey\.gif/)) {
+			if ($(e).offset().top < document_height) {
+				if (thumbUrl.match(/7static/)) {
+					thumb = thumbUrl.replace(/_200\.jpg/,res._7static);
+				} else if (thumbUrl.match(re_apple)) {
+					thumb = thumbUrl.replace(re_apple, res._iTunes);
+				} else {
+					thumb = thumbUrl;
+				}
+				e.setAttribute("src", thumb);
+			}
+		}
+		return "ok";
+	};
+};
+
 Spank.utils.shuffle = function(array) {
 	var i=array.length,
 		newArray = array.slice(0, i),

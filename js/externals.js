@@ -68,40 +68,63 @@ Spank.alembic = (function() {
 VK = (function() {
 
 	var vk = {},
-		pick = 0,
-		url = CLOUDFRONT_S3_BASE + "/vktokens90212gz.json?origin=" + window.location.host;
-	vk.token_user = {};
-	vk.keys = [];
+		token = null,
+		tokenBase = null;
 
-	function deprecated_init() {
-		$.getJSON(url, function(res) {
-			var tokens = [];
-			for (var app_id in res) {
-				var theseTokens = res[app_id].tokens;
-				for (var login in theseTokens) {
-					tokens.push(theseTokens[login]);
-				}
+	$(document).one("baseReady", function validateToken() {
+		tokenBase = Spank.base.me.child("vktoken");
+		tokenBase.on("value", function(snapshot) {
+			token = snapshot.val();
+			if (token===null) {
+				console.log("Getting new token for VK");
+				$.getJSON("/vk", function(res) {
+					if (res.hasOwnProperty('token')) {
+						console.log("OK: Acquired VK token");
+						tokenBase.set(res.token);
+					} else {
+						console.error("FATAL: Cannot acquire new VK token from server");
+					}
+				});
+			} else {
+				testToken();
 			}
-			var i = tokens.length;
-			while (i--) {
-				var token_string = tokens[i].split(":"),
-					token = token_string[0],
-					user_id = token_string[1];
-				vk.token_user[token] = user_id;
-				vk.keys.push(token);
+		});
+	});
+
+	function testToken(captcha) {
+		var testBaseUrl = "https://api.vkontakte.ru/method/audio.getById?audios=-1_190442705&access_token=",
+			testUrl = testBaseUrl + token;
+		if (captcha) {
+			testUrl += "&captcha_sid=SID&captcha_key=TEXT".replace(/SID/, captcha.sid).replace(/TEXT/, captcha.text);
+		}
+		$.getJSON(testUrl + "&callback=?", function(res) {
+			if (res.hasOwnProperty("error") && res.error.hasOwnProperty('sid')) {
+				//res.error = {'captcha_sid':961373820056};
+				var sid = res.error.captcha_sid;
+				console.warn("VK token failed: " + token);
+				console.warn("Authenticating VK captcha: sid " + sid);
+				$.getJSON("/decode/" + sid, function(res) {
+					if (res!==null && res.hasOwnProperty('text')) {
+						testToken({
+							sid: sid,
+							text: res.text
+						});
+					} else {
+						tokenBase.remove(); // This will cause us to reacquire a new token
+					}
+				});
+			} else if (res.hasOwnProperty("error")) {
+				console.error("UNKNOWN VK ERROR while testing token");
+				console.error(res);
+				tokenBase.remove(); // This will cause us to reacquire a new token
+			} else {
+				console.log("OK: VK Authentication");
 			}
 		});
 	}
 
-	vk.getToken = function() {
-		var tokens = ["4a8449a2f0c33fa66d0665f3859353bac44d1c3e948ce54c9b38b76e21cd3fcf714923336d6f9da836bb7","6c4b468e00a34decbc7b82ffa019c7c80865e1f30c150df3484a22c1f925d40c4fed087173fd084f4baf6"];
-		return tokens[++pick % tokens.length];
-		//return Spank.vkTokens[0];
-	};
-
 	vk.api = function(url, successCallback, errorCallback) {
-		var attempts = 0,
-			token = vk.getToken();
+		var attempts = 0;
 		url = url + "&access_token=" + token + "&callback=?";
 		return (function get() {
 			return $.getJSON(url, function(res) {
@@ -111,7 +134,6 @@ VK = (function() {
 				} else {
 					if (res.hasOwnProperty('error')) {
 						if (res.error.error_code===5) {
-							// TODO: Invalidate the access_token in question
 							console.error("ERROR: Invalid VK access token: " + token);
 							if (typeof(errorCallback)!=='undefined') { errorCallback(); }
 						} else if (res.error.error_code===6 && attempts<=4) {
@@ -147,9 +169,6 @@ ECHO = {
 			"&page=1";
 	},
 	pick:0,
-	key_random: function() {
-		return this.keys[Math.floor(Math.random() * this.keys.length)];
-	},
 	key: function() {
 		return this.keys[++this.pick % this.keys.length];
 	},
@@ -429,32 +448,5 @@ ITMS = (function() {
 			clearInterval(f);
 		} catch(e) { /* Keep sucking my dick, bitch */ }
 	}, 50);
-
-	Spank.lazyLoadImages = function(containerSelector, res) {
-		var document_height = $(document).height() + 200,
-			content_top = ko.observable(true), // A dummy we're using to trick thumbSource into evaluating each time we scroll
-			re_apple = /\d+x\d+-75/;
-		$(containerSelector).scroll(function() {
-			content_top(!content_top());
-		});
-		return function(data, e) {
-			var p = content_top(),
-				thumbUrl = typeof(data.thumb)==='string' ? data.thumb : data.thumb(),
-				thumb;
-			if (e.getAttribute("src").match(/grey\.gif/)) {
-				if ($(e).offset().top < document_height) {
-					if (thumbUrl.match(/7static/)) {
-						thumb = thumbUrl.replace(/_200\.jpg/,res._7static);
-					} else if (thumbUrl.match(re_apple)) {
-						thumb = thumbUrl.replace(re_apple, res._iTunes);
-					} else {
-						thumb = thumbUrl;
-					}
-					e.setAttribute("src", thumb);
-				}
-			}
-			return "ok";
-		};
-	}
 
 })();

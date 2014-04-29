@@ -236,6 +236,27 @@ class MXSearchHandler(tornado.web.RequestHandler):
 		self.finish()
 
 
+class VKTokenHandler(tornado.web.RequestHandler):
+
+	@tornado.gen.engine
+	@tornado.web.asynchronous
+	def get(self):
+		self.set_header("Content-Type", "application/json")
+		refresh_script = site_root + "/vkrefresh.js"
+		cmd = """casperjs --ignore-ssl-errors=yes %s 2>/dev/null""" % refresh_script
+		stdout = yield tornado.gen.Task(self.popen, cmd)
+		if re.search("OK", stdout):
+			res = {"token": stdout.split(" ")[1]}
+		else:
+			res = {"error": stdout}
+		self.write(json.dumps(res))
+		self.finish()
+
+	def popen(self, cmd, callback):
+		stdout = os.popen(cmd).read()
+		return callback(stdout)
+
+
 import deathbycaptcha
 
 captcha_client = deathbycaptcha.SocketClient("cockupyourbumper", "nadine")
@@ -315,8 +336,9 @@ class MobileHandler(tornado.web.RequestHandler):
 		req = tornado.httpclient.HTTPRequest(url, connect_timeout=10.0, request_timeout=10.0)
 		res = yield tornado.gen.Task(async_client.fetch, req)
 		history = json.loads(res.body)
+		history.reverse()
 		playlist = []
-		for track in history[::-1]:
+		for track in history:
 			convert = True
 			if re.search("aspasia", track['direct']):
 				url = track['direct']
@@ -363,6 +385,7 @@ application = tornado.web.Application([
 		(r"/mxsearch", MXSearchHandler),
 		(r"/mobile/(\w+)/(\d+)/(.*)", MobileHandler),
 		(r"/itunes", iTunesHandler),
+		(r"/vk", VKTokenHandler),
 		(r"/decode/(.*)", VKCaptchaHandler),
 		(r"/static/(.*)", MyStaticHandler, {"path": site_root + "/static"}),
 		(r"/js/(.*)", NeverCacheStaticHandler, {"path": site_root + "/js"}),
