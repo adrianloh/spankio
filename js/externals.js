@@ -76,6 +76,7 @@ VK = (function() {
 		tokenBase.on("value", function(snapshot) {
 			token = snapshot.val();
 			if (token===null) {
+				$("#authenticationModalHolder").show();
 				console.log("Getting new token for VK");
 				$.getJSON("/vk", function(res) {
 					if (res.hasOwnProperty('token')) {
@@ -118,6 +119,7 @@ VK = (function() {
 				console.error(res);
 				tokenBase.remove(); // This will cause us to reacquire a new token
 			} else {
+				$("#authenticationModalHolder").hide();
 				console.log("OK: VK Authentication");
 			}
 		});

@@ -2008,3 +2008,30 @@ ul.lastfm-buttons {
 	text-align: center;
 	width: 38px;
 }
+
+div#authenticationModalHolder {
+	display: none;
+}
+
+div#authenticationModal {
+	left: 36%;
+	position: absolute;
+	width: 400px;
+	background: rgb(255, 254, 252);
+	z-index: 5;
+	text-align: center;
+	height: 170px;
+	border-radius: 18px;
+	border: 1px solid rgb(151, 151, 151);
+}
+
+div#authenticationPic {
+	top: 30px;
+	position: relative;
+}
+
+div#authenticationText {
+	position: relative;
+	top: 45px;
+	font-family: "Open Sans",Arial,Helvetica,sans-serif;
+}

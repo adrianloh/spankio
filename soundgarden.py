@@ -243,7 +243,7 @@ class VKTokenHandler(tornado.web.RequestHandler):
 	def get(self):
 		self.set_header("Content-Type", "application/json")
 		refresh_script = site_root + "/vkrefresh.js"
-		cmd = """/usr/local/bin/casperjs --ignore-ssl-errors=yes %s 2>/tmp/errorme.log""" % refresh_script
+		cmd = """casperjs --ignore-ssl-errors=yes %s 2>/tmp/errorme.log""" % refresh_script
 		stdout = yield tornado.gen.Task(self.popen, cmd)
 		if re.search("OK", stdout):
 			res = {"token": stdout.split(" ")[1]}
