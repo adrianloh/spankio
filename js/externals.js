@@ -69,20 +69,35 @@ VK = (function() {
 
 	var vk = {},
 		token = null,
-		tokenBase = null;
+		tokenBase = null,
+		authenticationModal = null,
+		authenticationText = null,
+		authenticationPic = null;
+
+	function crapOutMessage(message) {
+		authenticationPic.attr("src", "/img/korn_teddy.gif");
+		authenticationText.text(message);
+	}
 
 	$(document).one("baseReady", function validateToken() {
+		// DOM is ready when this executes, so grab the elements we need
+		authenticationModal = $("#authenticationModalHolder");
+		authenticationText = $("#authenticationText");
+		authenticationPic = $("#authenticationGif");
 		tokenBase = Spank.base.me.child("vktoken");
+
 		tokenBase.on("value", function(snapshot) {
 			token = snapshot.val();
 			if (token===null) {
-				$("#authenticationModalHolder").show();
+				authenticationText.text("Checking your current location");
+				authenticationModal.show();
 				console.log("Getting new token for VK");
 				$.getJSON("/vk", function(res) {
 					if (res.hasOwnProperty('token')) {
 						console.log("OK: Acquired VK token");
 						tokenBase.set(res.token);
 					} else {
+						crapOutMessage("Crapped out. Cannot continue.");
 						console.error("FATAL: Cannot acquire new VK token from server");
 					}
 				});
@@ -100,6 +115,8 @@ VK = (function() {
 		}
 		$.getJSON(testUrl + "&callback=?", function(res) {
 			if (res.hasOwnProperty("error") && res.error.hasOwnProperty('sid')) {
+				authenticationText.text("Resolving location. This could take a while...");
+				authenticationModal.show();
 				//res.error = {'captcha_sid':961373820056};
 				var sid = res.error.captcha_sid;
 				console.warn("VK token failed: " + token);
@@ -115,11 +132,13 @@ VK = (function() {
 					}
 				});
 			} else if (res.hasOwnProperty("error")) {
+				authenticationText.text("Hmmm, this could take a while...");
+				authenticationModal.show();
 				console.error("UNKNOWN VK ERROR while testing token");
 				console.error(res);
 				tokenBase.remove(); // This will cause us to reacquire a new token
 			} else {
-				$("#authenticationModalHolder").hide();
+				authenticationModal.hide();
 				console.log("OK: VK Authentication");
 			}
 		});
@@ -137,7 +156,10 @@ VK = (function() {
 					if (res.hasOwnProperty('error')) {
 						if (res.error.error_code===5) {
 							console.error("ERROR: Invalid VK access token: " + token);
-							if (typeof(errorCallback)!=='undefined') { errorCallback(); }
+							tokenBase.remove();
+							if (typeof(errorCallback)!=='undefined') {
+								errorCallback();
+							}
 						} else if (res.error.error_code===6 && attempts<=4) {
 							attempts++;
 							setTimeout(function() {
@@ -148,6 +170,7 @@ VK = (function() {
 							if (typeof(errorCallback)!=='undefined') { errorCallback(); }
 						}
 					} else {
+						attempts = 0;
 						successCallback(res.response)
 					}
 				}

@@ -418,7 +418,7 @@ $(document).ready(function() {
 		};
 
 		self.prependToFreshies = function(koo) {
-			if (self.freshies()[0].url === koo.url) {
+			if (self.freshies().length>0 && (self.freshies()[0].url === koo.url)) {
 				// The track is already at the top of "Recently played"
 				return;
 			}
