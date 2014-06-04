@@ -362,10 +362,10 @@ $(document).ready(function() {
 		}
 
 		self.playHistoryItemOnClick = function(koo, event) {
-			var havePermission = window.webkitNotifications.checkPermission();
-			if (havePermission > 0) {
-				window.webkitNotifications.requestPermission();
-			}
+//			var havePermission = window.webkitNotifications.checkPermission();
+//			if (havePermission > 0) {
+//				window.webkitNotifications.requestPermission();
+//			}
 			self.playHistoryItemOnClick = playHistoryItemOnClick;
 			self.playHistoryItemOnClick(koo, event);
 		};
