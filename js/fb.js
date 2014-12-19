@@ -50,8 +50,7 @@ window.fbAsyncInit = function checkFacebookStatus() {
 				xfbml      : true  // parse XFBML tags on this page?
 			};
 		},
-		isProduction = (["adrian.wtf"].indexOf(domain) >= 0),
-		settings = get_settings(domain, isProduction);
+		settings = get_settings(domain, true);
 
 	FB.init(settings);
 
