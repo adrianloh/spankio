@@ -592,7 +592,9 @@ ko.bindingHandlers.koChartItems = {
 
 		 function radioPlay(data, event) {
 			var e = $(event.target);
-			if (!e.hasClass("spinBitch")) { e.addClass("spinBitch"); }
+			if (!e.hasClass("spinBitch")) {
+				e.addClass("spinBitch");
+			}
 			e.css("-webkit-transform", "rotate(#deg)".replace("#", randrange(328,384)));
 			var koo = ko.toJS(data);
 			if (koo.hasOwnProperty('url')) {
