@@ -355,23 +355,23 @@ ITMS = (function() {
 			RU: "Russia"
 		};
 
-	["FR", "DE", "US", "UK"].forEach(function(code) {
-		var bUrl = chartUrls.billboards_base.replace("#", code.toLowerCase()),
-			bCover = '/img/bill.jpg'.replace("#", code.toLowerCase()),
-			bp = {title: 'Billboard ' + codes[code], cover: bCover, url: bUrl, refID:"@musix-billboard-geo-"+code.toLowerCase() };
-		chartPlaylistItems.unshift(bp);
-	});
-
-	["US", "DE", "FR", "SE", "ES"].forEach(function(code) {
-		var iUrl = chartUrls.itunes_base.replace("#", code.toLowerCase()),
-			ip = {title: 'iTunes '.concat(codes[code]), cover: '/img/iTunes.jpg', url: iUrl, refID:"@itunes-geo-"+code.toLowerCase() };
-		chartPlaylistItems.push(ip);
-	});
-
-	$.each(iTmsSubGenres, function(name, code) {
-		var data = {title: "iTunes " + name, cover: '/img/iTunes.jpg', url: chartUrls.itunes_genre_base.replace("#",code), refID:"@itunes-genre-"+code };
-		chartPlaylistItems.push(data);
-	});
+	//["FR", "DE", "US", "UK"].forEach(function(code) {
+	//	var bUrl = chartUrls.billboards_base.replace("#", code.toLowerCase()),
+	//		bCover = '/img/bill.jpg'.replace("#", code.toLowerCase()),
+	//		bp = {title: 'Billboard ' + codes[code], cover: bCover, url: bUrl, refID:"@musix-billboard-geo-"+code.toLowerCase() };
+	//	chartPlaylistItems.unshift(bp);
+	//});
+	//
+	//["US", "DE", "FR", "SE", "ES"].forEach(function(code) {
+	//	var iUrl = chartUrls.itunes_base.replace("#", code.toLowerCase()),
+	//		ip = {title: 'iTunes '.concat(codes[code]), cover: '/img/iTunes.jpg', url: iUrl, refID:"@itunes-geo-"+code.toLowerCase() };
+	//	chartPlaylistItems.push(ip);
+	//});
+	//
+	//$.each(iTmsSubGenres, function(name, code) {
+	//	var data = {title: "iTunes " + name, cover: '/img/iTunes.jpg', url: chartUrls.itunes_genre_base.replace("#",code), refID:"@itunes-genre-"+code };
+	//	chartPlaylistItems.push(data);
+	//});
 
 	// Get from: http://developer.echonest.com/api/v4/artist/list_genres?api_key=FILDTEOIK2HBORODV&format=json
 	var echonestGenres = [
