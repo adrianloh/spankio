@@ -355,12 +355,12 @@ ITMS = (function() {
 			RU: "Russia"
 		};
 
-	//["FR", "DE", "US", "UK"].forEach(function(code) {
-	//	var bUrl = chartUrls.billboards_base.replace("#", code.toLowerCase()),
-	//		bCover = '/img/bill.jpg'.replace("#", code.toLowerCase()),
-	//		bp = {title: 'Billboard ' + codes[code], cover: bCover, url: bUrl, refID:"@musix-billboard-geo-"+code.toLowerCase() };
-	//	chartPlaylistItems.unshift(bp);
-	//});
+	["FR", "DE", "US", "UK"].forEach(function(code) {
+		var bUrl = chartUrls.billboards_base.replace("#", code.toLowerCase()),
+			bCover = '/img/bill.jpg'.replace("#", code.toLowerCase()),
+			bp = {title: 'Billboard ' + codes[code], cover: bCover, url: bUrl, refID:"@musix-billboard-geo-"+code.toLowerCase() };
+		chartPlaylistItems.unshift(bp);
+	});
 	//
 	//["US", "DE", "FR", "SE", "ES"].forEach(function(code) {
 	//	var iUrl = chartUrls.itunes_base.replace("#", code.toLowerCase()),
