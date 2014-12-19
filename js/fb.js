@@ -50,7 +50,7 @@ window.fbAsyncInit = function checkFacebookStatus() {
 				xfbml      : true  // parse XFBML tags on this page?
 			};
 		},
-		isProduction = (["spank.io", "moozyx.com"].indexOf(domain) >= 0),
+		isProduction = (["adrian.wtf"].indexOf(domain) >= 0),
 		settings = get_settings(domain, isProduction);
 
 	FB.init(settings);
