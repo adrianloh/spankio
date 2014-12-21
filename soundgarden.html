@@ -1,6 +1,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="https://www.facebook.com/2008/fbml">
 <head>
     <title>Moozyx</title>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:500,600,700,400' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Karla:700,400' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow" rel="stylesheet" type="text/css">
     <link href='http://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
@@ -193,6 +195,7 @@
 </div>
 
 <div id="playHistory">
+    <div class="pploader" data-bind="visible: renderStream().length===0"></div>
     <div id="history-filter-container" style="-webkit-user-select: none;">
         <i class="icon-arrow-left hNav historyOpIcons" data-bind="css: { opActive: leftActive() }, click: goPrevPage"></i>
         <i class="icon-home hNav historyOpIcons" data-bind="css: { opActive: homeActive() }, click: getHead"></i>

@@ -118,7 +118,7 @@ ko.bindingHandlers.koChartItems = {
 					var opacity = opsActive ? 1 : 1-(new_pos-newMax)/(first_pos-newMax),
 						shadowOpacity = ((opacity*100)/100)*0.15;
 					shadowOpacity = "-6px 8px 6px -6px rgba(0,0,0,#)".replace("#", shadowOpacity);
-					var bgColor = self.userPlaylistIsOpen() ? "rgba(255, 255, 255, 1)" : "rgba(255, 255, 255, #)".replace("#", opacity);
+					var bgColor = self.userPlaylistIsOpen() ? "rgba(28, 28, 28, 1)" : "rgba(28, 28, 28, #)".replace("#", opacity);
 					var ee = self.userPlaylistIsOpen() ? $ee : $e;
 					ee.css({
 						"-webkit-box-shadow": shadowOpacity
@@ -144,7 +144,7 @@ ko.bindingHandlers.koChartItems = {
 				return;
 			}
 			$("#resultsSection").scrollTop(0);
-			var pInfo_bgColor = self.userPlaylistIsOpen() ? 'rgba(255,255,255,1)':'rgba(255,255,255,0)';
+			var pInfo_bgColor = self.userPlaylistIsOpen() ? 'rgba(15,15,15,1)':'rgba(15,15,15,0)';
 			$("#playlistInfo").css({
 				top: playlistInfoTop(),
 				'background-color': pInfo_bgColor,
@@ -592,10 +592,10 @@ ko.bindingHandlers.koChartItems = {
 
 		 function radioPlay(data, event) {
 			var e = $(event.target);
-			if (!e.hasClass("spinBitch")) {
-				e.addClass("spinBitch");
-			}
-			e.css("-webkit-transform", "rotate(#deg)".replace("#", randrange(328,384)));
+			//if (!e.hasClass("spinBitch")) {
+			//	e.addClass("spinBitch");
+			//}
+			//e.css("-webkit-transform", "rotate(#deg)".replace("#", randrange(328,384)));
 			var koo = ko.toJS(data);
 			if (koo.hasOwnProperty('url')) {
 				/*

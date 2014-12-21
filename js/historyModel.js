@@ -389,7 +389,7 @@ $(document).ready(function() {
 			}
 		};
 
-		self.listIndicatorText = ko.observable("Library");
+		self.listIndicatorText = ko.observable("LIBRARY");
 		self.hideFreshies = ko.observable(true);
 		self.freshies.subscribe(function() {
 			if (!self.hideFreshies()) {
@@ -398,7 +398,7 @@ $(document).ready(function() {
 		});
 		self.hideFreshies.subscribe(function(yes) {
 			if (yes) {
-				self.listIndicatorText("Library");
+				self.listIndicatorText("LIBRARY");
 				//self.freshiesList([]);
 			} else {
 				self.listIndicatorText("Recently played");

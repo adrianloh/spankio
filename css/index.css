@@ -147,9 +147,9 @@ html.busy, html.busy * {
 }
 
 @-webkit-keyframes chartBlinker {
-    0% { background-color: rgb(221, 255, 228); }
-    50% { background-color: #8eff96; }
-    100% { background-color: rgb(221, 255, 228); }
+    0% { background-color: rgba(0, 0, 0, 0); }
+    50% { background-color: #7ec687; }
+    100% { background-color: rgba(0, 0, 0, 0); }
 }
 
 .chartLoading {
@@ -223,7 +223,7 @@ html.busy, html.busy * {
     top: 50px;
     left: 0;
     /*background-image: url(/img/textures/white_texture.png);*/
-    background-color: rgba(255, 255, 255, 0.55);
+    background-color: rgba(0, 0, 0, 0.55);
     color: #111;
     font: 800 14px "PT Sans Narrow";
     overflow-y: auto;
@@ -328,10 +328,10 @@ html.busy, html.busy * {
     width: 53%;
     top: 0;
     left: 181px;
-    color: rgb(50, 50, 50);
+    color: rgb(170, 170, 170);
     font-family: "Open Sans",Arial,Helvetica,sans-serif;
     white-space: nowrap;
-    background-color: rgb(243, 243, 243);
+    background-color: rgb(24, 24, 24);
     padding-top: 13;
     padding-bottom: 14;
     padding-left: 11;
@@ -458,7 +458,7 @@ html.busy, html.busy * {
 
 body {
     overflow: hidden;
-    background-color: rgb(241, 241, 241);
+    background-color: rgb(27, 27, 27);
     /*background-image: url(/img/textures/noise_pattern_with_crosslines.jpg);*/
 }
 a {
@@ -645,6 +645,7 @@ input.unstyled, textarea.unstyled {
     top: 8px;
     left: 107px;
     cursor: pointer;
+    -webkit-filter: saturate(0.7);
 }
 .transportButton {
     top: 0;
@@ -680,7 +681,7 @@ input.unstyled, textarea.unstyled {
     top: 11px;
     left: 11px;
     font-size: 26px;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(47, 47, 47);
     border-radius: 26px;
     width: 28px;
     height: 28px;
@@ -710,6 +711,7 @@ input.unstyled, textarea.unstyled {
     padding: 12px 3px 12px 10px;
     top: 2px;
     display: inline-block;
+    -webkit-filter: saturate(0.7);
 }
 
 .sourceButton {
@@ -767,9 +769,10 @@ input:-ms-input-placeholder {
     height: 67px;
     width: 100%;
     z-index: 200;
+    background-color: rgb(47, 47, 47);
     -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.07);
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAABHCAMAAAAJKiY9AAAABGdBTUEAALGPC/xhBQAAAFFQTFRFAAAA////////////////////////////////////////////////////////////////////////////////////////////////////////CDfnXgAAABp0Uk5TEvT29ffw8e/z7ub5+uvs8vjt++r86P3p5/73TI3NAAAAVklEQVQoz6XGNxKAQAADMXLOGf7/ULrFjecKVCl6EP3vjXAPmG4wXWDaQdtCO8E0gzaBNoU2hraCdoRpAW0ObQltDe0M0wHaHtoVpidMd5heCLeB9vMCecgrA9Bgm/sAAAAASUVORK5CYII=);
-}
+/*    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAABHCAMAAAAJKiY9AAAABGdBTUEAALGPC/xhBQAAAFFQTFRFAAAA////////////////////////////////////////////////////////////////////////////////////////////////////////CDfnXgAAABp0Uk5TEvT29ffw8e/z7ub5+uvs8vjt++r86P3p5/73TI3NAAAAVklEQVQoz6XGNxKAQAADMXLOGf7/ULrFjecKVCl6EP3vjXAPmG4wXWDaQdtCO8E0gzaBNoU2hraCdoRpAW0ObQltDe0M0wHaHtoVpidMd5heCLeB9vMCecgrA9Bgm/sAAAAASUVORK5CYII=);
+*/}
 
 /* Navigation & Page Number
 ==================================================*/
@@ -813,12 +816,17 @@ input:-ms-input-placeholder {
 }
 
 .trackEntry {
+    font: 12px "Raleway";
     width: 140px;
     display: inline-block;
     margin-bottom: 22px;
     margin-left: 12px;
     height: 180px;
     padding: 5px 0 0 5px;
+    color: rgb(140, 140, 140);
+    font-weight: 700;
+    text-rendering: geometricPrecision;
+    letter-spacing: -0.01em;
 }
 
 .ui-selecting { background-color: rgb(255, 252, 211); }
@@ -832,8 +840,8 @@ input:-ms-input-placeholder {
     width: 130px;
     height: 130px;
     cursor: pointer;
-    border: 1px solid rgb(216, 216, 216);
-    margin-bottom: -2px;
+    border: 1px solid rgba(0, 0, 0, 0);
+    margin-bottom: 5px;
     z-index: 0;
     opacity: 100;
     /*-webkit-transition-property: -webkit-transform, opacity;*/
@@ -869,7 +877,6 @@ input:-ms-input-placeholder {
     position: relative;
     text-align: left;
     width: 130px;
-    font: 12px "Open Sans";
     display: inline-block;
     clear: both;
     height: 19px;
@@ -885,12 +892,12 @@ input:-ms-input-placeholder {
     display: inline-block;
     text-align: left;
     width: 134px;
-    font: 12px "Open Sans";
     overflow: hidden;
     height: 16px;
     white-space: nowrap;
     text-overflow: ellipsis;
     z-index: 1;
+    top: -2px;
 }
 
 .trackArtist:hover {
@@ -922,7 +929,7 @@ input:-ms-input-placeholder {
 /* The thing that pops up to display lyrics
 ==================================================*/
 #lightBox {
-    background-color: rgba(235, 235, 235, 0.98);
+    background-color: rgba(0, 0, 0, 0.80);
     z-index: 13;
     position: fixed;
     left: 10%;
@@ -995,6 +1002,7 @@ input:-ms-input-placeholder {
 #lyricsButtons {
     width: 293px;
     margin: 10px auto;
+    opacity: 0;
 }
 
 #lyricsTitle {
@@ -1028,7 +1036,7 @@ input:-ms-input-placeholder {
     position: relative;
     left: 10%;
     font: 12px/22px Helvetica, Arial, sans-serif;
-    color: rgb(53, 53, 53);
+    color: rgb(220, 220, 220);
     letter-spacing: 1px;
 }
 
@@ -1046,6 +1054,7 @@ input:-ms-input-placeholder {
     border: 1px solid rgba(29, 29, 29, 0.86);
     text-align: center;
     width: 38px;
+    -webkit-filter: invert(1.0);
 }
 /* List items of tracks from VK
 ==================================================*/
@@ -1069,15 +1078,15 @@ input:-ms-input-placeholder {
 }
 
 .vkTrackEntry {
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(50, 50, 50);
     height: 36px;
     width: 96%;
     margin-bottom: 4px;
 }
 .vkdownloadlink {
     margin-left: 6px;
-    font: 300 12px "Roboto";
-    color: #252525;
+    font: 12px "Karla";
+    color: #0CA5DD;
     vertical-align: 6px;
 }
 .lickContainer {
@@ -1087,7 +1096,7 @@ input:-ms-input-placeholder {
 }
 
 .lickButton {
-    color: #AFAFAF;
+    color: #4D4D4D;
     font-size: 25px;
     height: 25px;
     cursor: pointer;
@@ -1131,7 +1140,7 @@ ul.lastfm-buttons {
 }
 
 #playHistory {
-    background-color: whitesmoke;
+    background-color: rgb(37, 37, 37);
     color: #111111;
     width: 32%;
     position: fixed;
@@ -1146,9 +1155,6 @@ ul.lastfm-buttons {
     overflow-x: hidden;
     overflow-y: auto;
     margin-top: 60px;
-    background-image: url(/img/loading.gif);
-    background-repeat: no-repeat;
-    background-position: center 35%;
 }
 
 #recently-played-list {
@@ -1175,9 +1181,9 @@ ul.lastfm-buttons {
 }
 
 @-webkit-keyframes blinker {
-    0% { background-color: white; }
-    50% { background-color: #72ff77; }
-    100% { background-color: white; }
+    0% { background-color: rgba(0,0,0,0); }
+    50% { background-color: #44b769; }
+    100% { background-color: rgba(0,0,0,0); }
 }
 
 .tweetBlink {
@@ -1189,14 +1195,14 @@ ul.lastfm-buttons {
 
 .tweetItem {
     /* These three are neccessary to slide out*/
-    font: 300 13px "Roboto";
+    font: 13px "Karla";
     position: relative;
     left: 20px;
     width: 100%;
     /* Essential */
     height: 54px;
     color: black;
-    background-color: white;
+    background-color: rgb(47, 47, 47);
     margin-top: 2px;
     margin-bottom: 2px;
 }
@@ -1314,8 +1320,7 @@ ul.lastfm-buttons {
 
 .tweetPlay {
     color:white;
-    background-color: rgb(21, 172, 75);
-    /*background-color: rgb(201, 24, 95);*/
+    background-color: rgb(66, 98, 77);
 }
 
 .tweetItem_drag {
@@ -1340,7 +1345,7 @@ ul.lastfm-buttons {
     height: 45px;
     float: left;
     margin: 5px 15px 4px 10px;
-    border: 1px solid rgb(105, 105, 105);
+    border: 1px solid rgba(0, 0, 0, 0);
     -webkit-transition: opacity 1s ease-in-out;
 }
 
@@ -1387,7 +1392,6 @@ ul.lastfm-buttons {
 
 .tweetTrackName {
     height: 20px;
-    font-weight: 400;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1400,6 +1404,7 @@ ul.lastfm-buttons {
     text-align: left;
     width: 65%;
     margin-left: 73px;
+    color: rgb(218, 218, 218)
 }
 
 .playModeButtons {
@@ -1419,6 +1424,7 @@ ul.lastfm-buttons {
     left: 93px;
     position: absolute;
     top: 6px;
+    -webkit-filter: saturate(0.7);
 }
 
 #playlistProperties {
@@ -1433,7 +1439,7 @@ ul.lastfm-buttons {
     text-align: left;
     z-index: 10;
     margin-top: 0;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(11, 11, 11);
     -webkit-transition: all 0.18s ease-in;
 }
 
@@ -1457,8 +1463,8 @@ ul.lastfm-buttons {
 }
 
 #pprop-controls {
-    font: 100 13px "Roboto",arial,sans-serif;
-    margin-top: 8px;
+    font: 13px "Karla",arial,sans-serif;
+    margin-top: 13px;
     margin-left: 11px;
 }
 
@@ -1470,9 +1476,9 @@ ul.lastfm-buttons {
     z-index: 1;
     min-width: 350px;
     -webkit-user-select: none;
-    background-color: white;
+    background-color: rgb(47, 47, 47);
     height: 30px;
-    top: -13;
+    top: -13px;
 }
 
 #listIndicatorBar {
@@ -1480,15 +1486,13 @@ ul.lastfm-buttons {
     height: 25px;
     margin-top: 32px;
     z-index: 2;
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgb(247,247,247)), color-stop(21%,rgb(252,252,252)), color-stop(100%,rgb(229,229,229))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, rgb(247,247,247) 0%,rgb(252,252,252) 21%,rgb(229,229,229) 100%); /* Chrome10+,Safari5.1+ */
-    background: linear-gradient(to bottom, rgb(247,247,247) 0%,rgb(252,252,252) 21%,rgb(229,229,229) 100%);
     width: 100%;
-    font: 400 13px "Roboto";
-    color: rgb(32, 32, 32);
-    border: 1px solid rgb(219, 219, 219);
+    font: 700 13px "Karla";
+    color: rgb(197, 197, 197);
     cursor: default;
     -webkit-user-select: none;
+    background-color: rgb(47, 47, 47);
+    letter-spacing: 0.2em;
 }
 
 .listIndicatorBarText {
@@ -1518,7 +1522,7 @@ ul.lastfm-buttons {
 }
 
 .historyOpIcons {
-    color: rgb(228, 228, 228);
+    color: rgb(76, 76, 76);
     font-size: 19px;
     margin-right: 4px;
 }
@@ -1543,7 +1547,7 @@ ul.lastfm-buttons {
 
 .opActive {
     cursor: pointer;
-    color: rgb(21, 172, 75) !important;
+    color: rgb(30, 150, 63) !important;
 }
 
 .opActive:hover {
@@ -1573,13 +1577,13 @@ ul.lastfm-buttons {
 .trash-me.pprop {
     position: fixed;
     right: 34%;
-    letter-spacing: -0.8px;
     color: #FF2525;
-    font: 200 13px "Roboto";
+    font: 200 13px "Karla";
     border-radius: 2px;
     padding-left: 5px;
     padding-right: 5px;
     cursor: pointer;
+    margin-top: 3px;
 }
 
 .disabled_trash-me.pprop {
@@ -1634,7 +1638,7 @@ ul.lastfm-buttons {
 #hprogresstotal {
     position: absolute;
     width: 100%;
-    background: #D8D8D8;
+    background: #696969;
     height: 3px;
     margin-top: 59px;
     z-index: 1;
@@ -2034,4 +2038,90 @@ div#authenticationText {
 	position: relative;
 	top: 45px;
 	font-family: "Open Sans",Arial,Helvetica,sans-serif;
+}
+
+.pploader {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    height: 10px;
+    width: 10px;
+    -webkit-animation: loader-rotate 1.5s linear infinite;
+    animation: loader-rotate 1.5s linear infinite;
+}
+.pploader:before,
+.pploader:after {
+    content: '';
+    position: absolute;
+    -webkit-transform: translate3d(-5px, -5px, 0);
+    transform: translate3d(-5px, -5px, 0);
+    height: 10px;
+    width: 10px;
+    background: #bf4040;
+    opacity: .5;
+    border-radius: 50%;
+    -webkit-animation: loader-position 0.75s ease-in-out infinite;
+    animation: loader-position 0.75s ease-in-out infinite;
+}
+.pploader:after {
+    -webkit-animation-delay: 0.375s;
+    animation-delay: 0.375s;
+    -webkit-transform: translate3d(5px, 5px, 0);
+    transform: translate3d(5px, 5px, 0);
+}
+@-webkit-keyframes loader-position {
+    0% {
+        -webkit-transform: translate3d(-5px, -5px, 0);
+        transform: translate3d(-5px, -5px, 0);
+    }
+    50% {
+        -webkit-transform: translate3d(5px, 5px, 0);
+        transform: translate3d(5px, 5px, 0);
+    }
+    100% {
+        -webkit-transform: translate3d(-5px, -5px, 0);
+        transform: translate3d(-5px, -5px, 0);
+    }
+}
+@keyframes loader-position {
+    0% {
+        -webkit-transform: translate3d(-5px, -5px, 0);
+        transform: translate3d(-5px, -5px, 0);
+    }
+    50% {
+        -webkit-transform: translate3d(5px, 5px, 0);
+        transform: translate3d(5px, 5px, 0);
+    }
+    100% {
+        -webkit-transform: translate3d(-5px, -5px, 0);
+        transform: translate3d(-5px, -5px, 0);
+    }
+}
+@-webkit-keyframes loader-rotate {
+    0% {
+        -webkit-transform: rotate(0);
+        transform: rotate(0);
+        -webkit-filter: hue-rotate(0deg);
+        filter: hue-rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+        -webkit-filter: hue-rotate(360deg);
+        filter: hue-rotate(360deg);
+    }
+}
+@keyframes loader-rotate {
+    0% {
+        -webkit-transform: rotate(0);
+        transform: rotate(0);
+        -webkit-filter: hue-rotate(0deg);
+        filter: hue-rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+        -webkit-filter: hue-rotate(360deg);
+        filter: hue-rotate(360deg);
+    }
 }
