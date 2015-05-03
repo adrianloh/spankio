@@ -2,7 +2,7 @@
 
 $(document).ready(function () {
 
-	$(document).one("baseReady", function () {
+	$(document).one("deprecated_baseReady", function () {
 
 		Spank.base.myFriends = Spank.base.me.child("friends");
 

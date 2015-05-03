@@ -514,7 +514,7 @@ $(document).ready(function() {
 
 	$(document).one("login", function() {
 
-		Spank.username = Spank.utils.toFirebaseName(FBUserInfo.username);
+		Spank.username = Spank.utils.toFirebaseName(FBUserInfo.id);
 		var Base = Spank.base;
 		Base.users = new Firebase('https://wild.firebaseio.com/spank/users');
 		Base.me = Base.users.child(Spank.username);

@@ -92,10 +92,15 @@ Spank.utils.randomHexColor = function() {
 //	return '#'+(Math.random().toString(16) + '000000').slice(2, 8);
 };
 
+USERNAME_LOOKUP = {
+	682921200: "restbeckett"
+};
+
 Spank.utils.toFirebaseName = function(name) {
 	if (typeof(name)==='number') {
-		name = "fbuid_" + JSON.stringify(name);
+		name = USERNAME_LOOKUP[name];
 	}
+	name = USERNAME_LOOKUP[name];
 	return name.replace(/[\.#\$\[\]]/g,"_");
 };
 
