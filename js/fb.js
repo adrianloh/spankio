@@ -114,12 +114,13 @@ window.fbAsyncInit = function checkFacebookStatus() {
 (function start(d, debug){
 	if (localStorage.hasOwnProperty("spank")) {
 		var info = JSON.parse(localStorage.spank);
-		if (typeof(info.last_update)==='undefined' || (Date.now()-info.last_update)/1000>86400) {
-			delete localStorage.spank;
-			start(d, debug);
-		} else {
-			initApp(info);
-		}
+		initApp(info);
+		//if (typeof(info.last_update)==='undefined' || (Date.now()-info.last_update)/1000>86400) {
+		//	delete localStorage.spank;
+		//	start(d, debug);
+		//} else {
+		//	initApp(info);
+		//}
 	} else {
 		var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
 		if (d.getElementById(id)) {return;}
