@@ -44,7 +44,7 @@ $(document).ready(function() {
 						koo[p] = songData[p];
 					}
 				});
-				koo.thumb = "http://d1vkkvxpc2ia6t.cloudfront.net/albumempty2.png";
+				koo.thumb = "http://d1vkkvxpc2ia6t.cloudfront.net/albumempty4.png";
 				koo.url = server + ":::" + Spank.username + "/" + file.uuidName;
 				koo.direct = uploadServer + "/" + keyBase + file.uuidName;
 				Spank.lightBox.addSongToStream(koo);
