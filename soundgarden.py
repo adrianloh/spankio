@@ -395,5 +395,7 @@ application = tornado.web.Application([
 	], debug=True, gzip=True)
 
 if __name__ == "__main__":
-	application.listen(8888)
+	PORT = 18888
+	print("spank.io up @ http://rubicon.local:%i" % PORT)
+	application.listen(PORT)
 	tornado.ioloop.IOLoop.instance().start()
